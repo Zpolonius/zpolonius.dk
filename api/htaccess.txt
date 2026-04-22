@@ -1,0 +1,17 @@
+# Beskyt config.php mod direkte adgang
+<Files "config.php">
+    Order allow,deny
+    Deny from all
+</Files>
+
+# Beskyt auth.php mod direkte adgang
+<Files "auth.php">
+    Order allow,deny
+    Deny from all
+</Files>
+
+# Tillad kun PHP-filer at blive eksekveret
+<FilesMatch "\.php$">
+    Order allow,deny
+    Allow from all
+</FilesMatch>

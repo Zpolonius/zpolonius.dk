@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Om mig — Zacharias Polonius</title>
+  <meta name="description" content="Zacharias Polonius — Technical Account Manager, AI-entusiast og amatørfotograf fra Bjæverskov.">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    /* SPLIT HERO */
+    .about-hero {
+      display: grid; grid-template-columns: 1fr 400px;
+      border-bottom: 0.5px solid var(--border); min-height: 480px;
+    }
+    .about-hero-left {
+      padding: 52px 40px; border-right: 0.5px solid var(--border);
+      display: flex; flex-direction: column; justify-content: space-between;
+    }
+    .about-hero-label { font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--blue); margin-bottom: 14px; }
+    .about-hero-name  { font-size: 44px; font-weight: 700; letter-spacing: -0.04em; color: var(--text); line-height: 1.0; margin-bottom: 20px; }
+    .about-hero-bio   { font-size: 14px; color: var(--text-muted); line-height: 1.8; max-width: 480px; }
+    .about-hero-actions { display: flex; gap: 12px; margin-top: 32px; }
+    .about-hero-btn-p { background: var(--blue); color: #fff; border: none; padding: 10px 22px; font-size: 13px; font-weight: 500; cursor: pointer; font-family: var(--font); transition: opacity 0.2s; }
+    .about-hero-btn-p:hover { opacity: 0.85; }
+    .about-hero-btn-s { background: transparent; color: var(--text-muted); border: 0.5px solid var(--border-md); padding: 10px 22px; font-size: 13px; font-weight: 500; font-family: var(--font); transition: all 0.2s; display: inline-block; }
+    .about-hero-btn-s:hover { color: var(--text); border-color: var(--text-muted); }
+
+    .about-hero-right {
+      position: relative; overflow: hidden; background: var(--bg-card);
+    }
+    .about-photo { width: 100%; height: 100%; object-fit: cover; object-position: center top; filter: grayscale(20%); }
+    .about-photo-fallback {
+      width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;
+      background: var(--bg-card);
+    }
+    .about-photo-initials {
+      font-size: 80px; font-weight: 700; letter-spacing: -0.05em;
+      color: var(--border-md); line-height: 1;
+    }
+
+    /* INFO GRID */
+    .info-grid { display: grid; grid-template-columns: repeat(4, 1fr); border-bottom: 0.5px solid var(--border); }
+    .info-cell { padding: 22px 28px; border-right: 0.5px solid var(--border); }
+    .info-cell:last-child { border-right: none; }
+    .info-cell-label { font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-faint); margin-bottom: 8px; }
+    .info-cell-val   { font-size: 13px; color: var(--text-muted); line-height: 1.6; }
+    .info-cell-val strong { color: var(--text); font-weight: 500; display: block; font-size: 14px; margin-bottom: 2px; }
+
+    /* BIO SECTION */
+    .bio-wrap { display: grid; grid-template-columns: 1fr 300px; border-bottom: 0.5px solid var(--border); }
+    .bio-main { padding: 40px; border-right: 0.5px solid var(--border); }
+    .bio-para { font-size: 14px; color: var(--text-muted); line-height: 1.85; margin-bottom: 18px; }
+    .bio-para:last-child { margin-bottom: 0; }
+    .bio-sidebar { padding: 40px 28px; }
+    .bio-sidebar-block { margin-bottom: 24px; }
+    .bio-sidebar-label { font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-faint); margin-bottom: 10px; }
+    .bio-sidebar-item { font-size: 12px; color: var(--text-muted); padding: 5px 0; border-bottom: 0.5px solid var(--border); }
+    .bio-sidebar-item:last-child { border-bottom: none; }
+
+    /* PERSONTYPE */
+    .persontype-wrap { display: grid; grid-template-columns: 1fr 1fr; border-bottom: 0.5px solid var(--border); }
+    .persontype-cell { padding: 32px 40px; border-right: 0.5px solid var(--border); }
+    .persontype-cell:last-child { border-right: none; }
+    .persontype-title { font-size: 16px; font-weight: 600; color: var(--text); letter-spacing: -0.02em; margin-bottom: 12px; }
+    .persontype-desc  { font-size: 13px; color: var(--text-muted); line-height: 1.75; }
+    .persontype-tags  { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 14px; }
+  </style>
+</head>
+<body>
+
+  <nav class="nav">
+    <a href="index.html" class="nav-logo">Z<span>.</span>Polonius</a>
+    <ul class="nav-links">
+      <li><a href="about.html" class="active">Om</a></li>
+      <li><a href="projects.html">Projekter</a></li>
+      <li><a href="cv.html">CV</a></li>
+      <li><a href="contact.html">Kontakt</a></li>
+    </ul>
+    <div class="nav-right">
+      <button class="theme-switch" onclick="toggleTheme()">☀</button>
+      <button class="nav-btn" data-contact>Kontakt</button>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <div class="about-hero">
+    <div class="about-hero-left fade-up fade-up-1">
+      <div>
+        <div class="about-hero-label">Om mig</div>
+        <h1 class="about-hero-name" id="heroName">Zacharias<br>Polonius</h1>
+        <p class="about-hero-bio" id="heroBio">Indlæser...</p>
+        <div class="about-hero-actions">
+          <button class="about-hero-btn-p" data-contact>Tag kontakt →</button>
+          <a href="cv.html" class="about-hero-btn-s">Se CV →</a>
+        </div>
+      </div>
+    </div>
+    <div class="about-hero-right fade-up fade-up-2">
+      <img class="about-photo" id="aboutPhoto" src="" alt="Zacharias Polonius"
+        onerror="this.style.display='none'; document.getElementById('photoFallback').style.display='flex';">
+      <div class="about-photo-fallback" id="photoFallback" style="display:none;">
+        <div class="about-photo-initials">ZP</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- INFO STRIP -->
+  <div class="info-grid" id="infoGrid">
+    <div class="info-cell">
+      <div class="info-cell-label">Bopæl</div>
+      <div class="info-cell-val"><strong>Bjæverskov</strong>Danmark</div>
+    </div>
+    <div class="info-cell">
+      <div class="info-cell-label">Familie</div>
+      <div class="info-cell-val"><strong>Gift</strong>To sønner</div>
+    </div>
+    <div class="info-cell">
+      <div class="info-cell-label">Nuværende rolle</div>
+      <div class="info-cell-val"><strong>Technical Account Manager</strong>Bring · 2023 — nu</div>
+    </div>
+    <div class="info-cell">
+      <div class="info-cell-label">Erfaring</div>
+      <div class="info-cell-val"><strong>10+ år</strong>Tech, support og ledelse</div>
+    </div>
+  </div>
+
+  <!-- BIO + SIDEBAR -->
+  <div class="bio-wrap">
+    <div class="bio-main">
+      <div class="section-lbl" style="font-size:9px;letter-spacing:0.15em;text-transform:uppercase;color:var(--text-faint);padding-bottom:14px;border-bottom:0.5px solid var(--border);margin-bottom:22px;">Biografi</div>
+      <div id="bioContent">
+        <!-- Rendered by JS -->
+      </div>
+    </div>
+    <div class="bio-sidebar">
+      <div class="bio-sidebar-block">
+        <div class="bio-sidebar-label">Sprog</div>
+        <div id="sprogList"><!-- JS --></div>
+      </div>
+      <div class="bio-sidebar-block">
+        <div class="bio-sidebar-label">Interesser</div>
+        <div id="interesserList"><!-- JS --></div>
+      </div>
+      <div class="bio-sidebar-block">
+        <div class="bio-sidebar-label">Sociale medier</div>
+        <div id="socialList"><!-- JS --></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PERSONTYPE -->
+  <div class="section-header">
+    <span class="section-title">Personlighed & arbejdsstil</span>
+  </div>
+  <div class="persontype-wrap">
+    <div class="persontype-cell">
+      <div class="persontype-title">Analytisk og løsningsorienteret</div>
+      <p class="persontype-desc" id="persontypeDesc">Indlæser...</p>
+      <div class="persontype-tags" id="persontypeTags">
+        <span class="skill-tag blue">Analytisk</span>
+        <span class="skill-tag blue">Strategisk</span>
+        <span class="skill-tag">Detaljeorienteret</span>
+        <span class="skill-tag">Løsningsfokuseret</span>
+        <span class="skill-tag">Kommunikativ</span>
+      </div>
+    </div>
+    <div class="persontype-cell">
+      <div class="persontype-title">Amatørfotograf</div>
+      <p class="persontype-desc">Udover arbejdet er jeg passioneret amatørfotograf. Jeg finder inspiration i hverdagens detaljer og bruger kameraet til at se verden fra nye vinkler. Solbrillerne på forsiden er et af mine foretrukne motiver — detaljer der fortæller en større historie.</p>
+      <div class="persontype-tags">
+        <span class="skill-tag">Makrofotografi</span>
+        <span class="skill-tag">Hverdagsmotiver</span>
+        <span class="skill-tag">Detaljer</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- CTA -->
+  <div style="display:flex;align-items:center;justify-content:space-between;padding:32px 40px;border-top:0.5px solid var(--border);border-bottom:0.5px solid var(--border);">
+    <p style="font-size:14px;color:var(--text-muted);line-height:1.6;max-width:480px;">
+      <strong style="color:var(--text);font-weight:500;">Vil du vide mere?</strong> Tøv ikke med at tage kontakt — jeg er altid åben for en god snak.
+    </p>
+    <button class="btn-primary" data-contact>Tag kontakt →</button>
+  </div>
+
+  <footer class="footer">
+    <div class="footer-left">zacharias@polonius.dk · 3068 7041</div>
+    <div class="footer-links">
+      <a href="https://www.linkedin.com/in/zpolonius/" target="_blank">LinkedIn</a>
+      <a href="https://www.instagram.com/zackp91/" target="_blank">Instagram</a>
+      <a href="https://www.facebook.com/zpolonius" target="_blank">Facebook</a>
+    </div>
+  </footer>
+
+  <!-- CONTACT OVERLAY -->
+  <div class="overlay" id="contactOverlay">
+    <div class="overlay-bg"></div>
+    <div class="modal">
+      <div id="contactFormView">
+        <div class="modal-header">
+          <div>
+            <div class="modal-label">Kontakt</div>
+            <div class="modal-title">Lad os tage<br>en snak</div>
+            <div class="modal-sub">Jeg vender tilbage inden for 24 timer.</div>
+          </div>
+          <button class="modal-close" onclick="closeContact()">✕</button>
+        </div>
+        <div class="modal-progress"><div class="modal-progress-bar" id="contactProgressBar"></div></div>
+        <div class="modal-divider"></div>
+        <div class="modal-body">
+          <div class="field-row">
+            <div class="field"><label class="field-label">Navn</label><input class="input" type="text" id="f-name" placeholder="Dit fulde navn"></div>
+            <div class="field"><label class="field-label">Firma</label><input class="input" type="text" id="f-company" placeholder="Virksomhedsnavn"></div>
+          </div>
+          <div class="field"><label class="field-label">Email</label><input class="input" type="email" id="f-email" placeholder="din@email.dk"></div>
+          <div class="field">
+            <label class="field-label">Emne</label>
+            <div class="pills" style="margin-top:4px;">
+              <button class="pill">Jobmulighed</button>
+              <button class="pill">Samarbejde</button>
+              <button class="pill">AI-projekt</button>
+              <button class="pill">Andet</button>
+            </div>
+          </div>
+          <div class="field" style="margin-top:18px;"><label class="field-label">Besked</label><textarea class="input" id="f-msg" placeholder="Fortæl mig lidt om hvad du har i tankerne..."></textarea></div>
+          <div class="modal-footer">
+            <div class="modal-contact-info"><span>zacharias@polonius.dk</span><span>3068 7041</span></div>
+            <button class="btn-primary" id="contactSubmit">Send besked →</button>
+          </div>
+        </div>
+        <div class="modal-social">
+          <a href="https://www.linkedin.com/in/zpolonius/" target="_blank">LinkedIn</a>
+          <span class="modal-social-sep">·</span>
+          <a href="https://www.instagram.com/zackp91/" target="_blank">Instagram</a>
+          <span class="modal-social-sep">·</span>
+          <a href="https://www.facebook.com/zpolonius" target="_blank">Facebook</a>
+        </div>
+      </div>
+      <div class="success-view" id="contactSuccessView">
+        <div class="success-icon"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
+        <div class="success-title">Besked sendt!</div>
+        <div class="success-sub">Tak for din henvendelse. Jeg vender tilbage inden for 24 timer.</div>
+        <button class="btn-primary" onclick="closeContact()" style="margin-top:8px;">Luk vindue</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- FLOATING BOTTOM NAV (mobil) -->
+  <nav class="bottom-nav" id="bottomNav">
+    <a class="bottom-nav-item" href="index.html" data-page="hjem">
+      <span class="bottom-nav-icon">⌂</span>
+      <span class="bottom-nav-label">Hjem</span>
+    </a>
+    <div class="bottom-nav-divider"></div>
+    <a class="bottom-nav-item" href="projects.html" data-page="projekter">
+      <span class="bottom-nav-icon">◈</span>
+      <span class="bottom-nav-label">Projekter</span>
+    </a>
+    <div class="bottom-nav-divider"></div>
+    <a class="bottom-nav-item" href="cv.html" data-page="cv">
+      <span class="bottom-nav-icon">◎</span>
+      <span class="bottom-nav-label">CV</span>
+    </a>
+    <div class="bottom-nav-divider"></div>
+    <a class="bottom-nav-item" href="about.html" data-page="om">
+      <span class="bottom-nav-icon">◉</span>
+      <span class="bottom-nav-label">Om</span>
+    </a>
+    <div class="bottom-nav-divider"></div>
+    <button class="bottom-nav-contact" data-contact-mobile>
+      <span class="bottom-nav-icon">✉</span>
+      <span class="bottom-nav-label">Kontakt</span>
+    </button>
+  </nav>
+
+  <script src="js/main.js"></script>
+  <script>
+    fetch('data/content.json')
+      .then(r => r.json())
+      .then(data => {
+        const om = data.om || {};
+        const site = data.site || {};
+
+        // Photo
+        if (om.photo) document.getElementById('aboutPhoto').src = om.photo;
+        else document.getElementById('photoFallback').style.display = 'flex';
+
+        // Bio paragraphs
+        const bioEl = document.getElementById('bioContent');
+        if (om.bio) {
+          om.bio.split('\n\n').forEach(p => {
+            if (p.trim()) bioEl.innerHTML += `<p class="bio-para">${p.trim()}</p>`;
+          });
+        }
+
+        // Hero bio — first paragraph
+        const firstPara = (om.bio || '').split('\n\n')[0] || '';
+        document.getElementById('heroBio').textContent = firstPara;
+
+        // Persontype
+        if (om.persontype) document.getElementById('persontypeDesc').textContent = om.persontype;
+
+        // Sprog
+        const sprogEl = document.getElementById('sprogList');
+        (om.sprog || ['Dansk (modersmål)', 'Engelsk (flydende)']).forEach(s => {
+          sprogEl.innerHTML += `<div class="bio-sidebar-item">${s}</div>`;
+        });
+
+        // Interesser
+        const intEl = document.getElementById('interesserList');
+        (om.interesser || []).forEach(i => {
+          intEl.innerHTML += `<div class="bio-sidebar-item">${i}</div>`;
+        });
+
+        // Social
+        const socEl = document.getElementById('socialList');
+        const socials = site.social || {};
+        if (socials.linkedin)  socEl.innerHTML += `<div class="bio-sidebar-item"><a href="${socials.linkedin}"  target="_blank" style="color:var(--blue);">LinkedIn →</a></div>`;
+        if (socials.instagram) socEl.innerHTML += `<div class="bio-sidebar-item"><a href="${socials.instagram}" target="_blank" style="color:var(--blue);">Instagram →</a></div>`;
+        if (socials.facebook)  socEl.innerHTML += `<div class="bio-sidebar-item"><a href="${socials.facebook}"  target="_blank" style="color:var(--blue);">Facebook →</a></div>`;
+      });
+  </script>
+</body>
+</html>

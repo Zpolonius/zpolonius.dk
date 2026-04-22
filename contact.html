@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kontakt — Zacharias Polonius</title>
+  <meta name="description" content="Tag kontakt til Zacharias Polonius — Technical Account Manager, AI-entusiast og checkout-specialist.">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    /* SPLIT LAYOUT */
+    .contact-wrap {
+      display: grid; grid-template-columns: 1fr 480px;
+      min-height: calc(100vh - 57px);
+    }
+
+    /* LEFT — INFO */
+    .contact-left {
+      padding: 52px 48px; border-right: 0.5px solid var(--border);
+      display: flex; flex-direction: column; justify-content: space-between;
+    }
+    .contact-label { font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--blue); margin-bottom: 14px; }
+    .contact-title { font-size: 44px; font-weight: 700; letter-spacing: -0.04em; color: var(--text); line-height: 1.0; margin-bottom: 20px; }
+    .contact-desc  { font-size: 14px; color: var(--text-muted); line-height: 1.8; max-width: 400px; margin-bottom: 40px; }
+
+    .contact-details { display: flex; flex-direction: column; gap: 0; }
+    .contact-detail-row {
+      display: flex; align-items: center; gap: 16px;
+      padding: 16px 0; border-bottom: 0.5px solid var(--border);
+    }
+    .contact-detail-row:first-child { border-top: 0.5px solid var(--border); }
+    .contact-detail-icon { font-size: 16px; width: 20px; text-align: center; flex-shrink: 0; }
+    .contact-detail-label { font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-faint); margin-bottom: 2px; }
+    .contact-detail-val   { font-size: 13px; color: var(--text-muted); }
+    .contact-detail-val a { color: var(--blue); transition: opacity 0.2s; }
+    .contact-detail-val a:hover { opacity: 0.75; }
+
+    .contact-social { display: flex; gap: 12px; margin-top: 32px; }
+    .social-btn {
+      font-size: 11px; color: var(--text-faint); border: 0.5px solid var(--border);
+      padding: 8px 16px; letter-spacing: 0.05em; transition: all 0.2s;
+    }
+    .social-btn:hover { border-color: var(--blue); color: var(--blue); }
+
+    .contact-availability {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-size: 11px; color: var(--text-muted); letter-spacing: 0.06em;
+      border: 0.5px solid var(--border-md); padding: 8px 14px;
+      margin-top: 32px; width: fit-content;
+    }
+
+    /* RIGHT — FORM */
+    .contact-right { background: var(--bg-card); display: flex; flex-direction: column; }
+    .contact-form-header { padding: 32px 40px 0; border-bottom: 0.5px solid var(--border); padding-bottom: 20px; }
+    .contact-form-title { font-size: 18px; font-weight: 600; color: var(--text); letter-spacing: -0.02em; margin-bottom: 4px; }
+    .contact-form-sub   { font-size: 12px; color: var(--text-faint); }
+
+    .contact-progress { height: 1px; background: var(--border); margin: 0 40px; }
+    .contact-progress-bar { height: 100%; background: var(--blue); width: 0%; transition: width 0.4s ease; }
+
+    .contact-form-body { padding: 24px 40px; flex: 1; }
+
+    .contact-form-footer {
+      padding: 20px 40px 32px;
+      border-top: 0.5px solid var(--border);
+    }
+    .contact-submit {
+      width: 100%; background: var(--blue); color: #fff; border: none;
+      padding: 13px; font-size: 14px; font-weight: 500; cursor: pointer;
+      font-family: var(--font); letter-spacing: 0.02em; transition: opacity 0.2s;
+    }
+    .contact-submit:hover { opacity: 0.85; }
+    .contact-submit.sending { opacity: 0.5; pointer-events: none; }
+    .contact-submit-hint { font-size: 11px; color: var(--text-ghost); text-align: center; margin-top: 10px; }
+
+    /* SUCCESS */
+    .contact-success {
+      display: none; flex-direction: column; align-items: center;
+      justify-content: center; padding: 60px 40px; text-align: center; flex: 1;
+    }
+    .contact-success.show { display: flex; }
+    .success-icon-lg {
+      width: 60px; height: 60px; border: 0.5px solid var(--border-green);
+      display: flex; align-items: center; justify-content: center; margin-bottom: 20px;
+    }
+    .success-icon-lg svg { width: 24px; height: 24px; stroke: var(--green); fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    .contact-success-title { font-size: 22px; font-weight: 600; color: var(--text); letter-spacing: -0.02em; margin-bottom: 10px; }
+    .contact-success-sub   { font-size: 13px; color: var(--text-muted); line-height: 1.6; max-width: 300px; }
+  </style>
+</head>
+<body>
+
+  <nav class="nav">
+    <a href="index.html" class="nav-logo">Z<span>.</span>Polonius</a>
+    <ul class="nav-links">
+      <li><a href="about.html">Om</a></li>
+      <li><a href="projects.html">Projekter</a></li>
+      <li><a href="cv.html">CV</a></li>
+      <li><a href="contact.html" class="active">Kontakt</a></li>
+    </ul>
+    <div class="nav-right">
+      <button class="theme-switch" onclick="toggleTheme()">☀</button>
+    </div>
+  </nav>
+
+  <div class="contact-wrap">
+    <!-- LEFT -->
+    <div class="contact-left fade-up fade-up-1">
+      <div>
+        <div class="contact-label">Kontakt</div>
+        <h1 class="contact-title">Lad os tage<br>en snak</h1>
+        <p class="contact-desc">Har du et spørgsmål, et projekt eller bare lyst til at connecte? Jeg vender altid tilbage inden for 24 timer.</p>
+
+        <div class="contact-details">
+          <div class="contact-detail-row">
+            <span class="contact-detail-icon">✉</span>
+            <div>
+              <div class="contact-detail-label">Email</div>
+              <div class="contact-detail-val"><a href="mailto:zacharias@polonius.dk" id="contactEmail">zacharias@polonius.dk</a></div>
+            </div>
+          </div>
+          <div class="contact-detail-row">
+            <span class="contact-detail-icon">✆</span>
+            <div>
+              <div class="contact-detail-label">Telefon</div>
+              <div class="contact-detail-val"><a href="tel:30687041" id="contactPhone">3068 7041</a></div>
+            </div>
+          </div>
+          <div class="contact-detail-row">
+            <span class="contact-detail-icon">◎</span>
+            <div>
+              <div class="contact-detail-label">Lokation</div>
+              <div class="contact-detail-val">Bjæverskov, Danmark</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="contact-social">
+          <a href="https://www.linkedin.com/in/zpolonius/" class="social-btn" target="_blank">LinkedIn</a>
+          <a href="https://www.instagram.com/zackp91/" class="social-btn" target="_blank">Instagram</a>
+          <a href="https://www.facebook.com/zpolonius" class="social-btn" target="_blank">Facebook</a>
+        </div>
+      </div>
+
+      <div class="contact-availability">
+        <span class="status-dot"></span>
+        Tilgængelig for nye muligheder
+      </div>
+    </div>
+
+    <!-- RIGHT — FORM -->
+    <div class="contact-right fade-up fade-up-2">
+      <div id="formSection" style="display:flex;flex-direction:column;flex:1;">
+        <div class="contact-form-header">
+          <div class="contact-form-title">Send en besked</div>
+          <div class="contact-form-sub">Udfyld formularen — jeg vender tilbage inden for 24 timer.</div>
+        </div>
+        <div class="contact-progress"><div class="contact-progress-bar" id="contactProgressBar"></div></div>
+
+        <div class="contact-form-body">
+          <div class="field-row" style="margin-bottom:16px;">
+            <div class="field" style="margin-bottom:0;">
+              <label class="field-label">Navn</label>
+              <input class="input" type="text" id="f-name" placeholder="Dit fulde navn">
+            </div>
+            <div class="field" style="margin-bottom:0;">
+              <label class="field-label">Firma</label>
+              <input class="input" type="text" id="f-company" placeholder="Virksomhedsnavn">
+            </div>
+          </div>
+          <div class="field">
+            <label class="field-label">Email</label>
+            <input class="input" type="email" id="f-email" placeholder="din@email.dk">
+          </div>
+          <div class="field">
+            <label class="field-label">Emne</label>
+            <div class="pills" style="margin-top:4px;">
+              <button class="pill">Jobmulighed</button>
+              <button class="pill">Samarbejde</button>
+              <button class="pill">AI-projekt</button>
+              <button class="pill">Checkout</button>
+              <button class="pill">Andet</button>
+            </div>
+          </div>
+          <div class="field" style="margin-top:16px;">
+            <label class="field-label">Besked</label>
+            <textarea class="input" id="f-msg" style="height:120px;" placeholder="Fortæl mig lidt om hvad du har i tankerne..."></textarea>
+          </div>
+        </div>
+
+        <div class="contact-form-footer">
+          <button class="contact-submit" id="contactSubmit" onclick="submitContactPage()">Send besked →</button>
+          <div class="contact-submit-hint">Ingen spam. Kun ægte svar.</div>
+        </div>
+      </div>
+
+      <!-- SUCCESS -->
+      <div class="contact-success" id="contactSuccess">
+        <div class="success-icon-lg">
+          <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+        </div>
+        <div class="contact-success-title">Besked sendt!</div>
+        <p class="contact-success-sub">Tak for din henvendelse, <span id="senderName"></span>. Jeg vender tilbage inden for 24 timer.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- FLOATING BOTTOM NAV (mobil) -->
+  <nav class="bottom-nav" id="bottomNav">
+    <a class="bottom-nav-item" href="index.html" data-page="hjem">
+      <span class="bottom-nav-icon">⌂</span>
+      <span class="bottom-nav-label">Hjem</span>
+    </a>
+    <div class="bottom-nav-divider"></div>
+    <a class="bottom-nav-item" href="projects.html" data-page="projekter">
+      <span class="bottom-nav-icon">◈</span>
+      <span class="bottom-nav-label">Projekter</span>
+    </a>
+    <div class="bottom-nav-divider"></div>
+    <a class="bottom-nav-item" href="cv.html" data-page="cv">
+      <span class="bottom-nav-icon">◎</span>
+      <span class="bottom-nav-label">CV</span>
+    </a>
+    <div class="bottom-nav-divider"></div>
+    <a class="bottom-nav-item" href="about.html" data-page="om">
+      <span class="bottom-nav-icon">◉</span>
+      <span class="bottom-nav-label">Om</span>
+    </a>
+    <div class="bottom-nav-divider"></div>
+    <button class="bottom-nav-contact" data-contact-mobile>
+      <span class="bottom-nav-icon">✉</span>
+      <span class="bottom-nav-label">Kontakt</span>
+    </button>
+  </nav>
+
+  <footer class="footer">
+    <div class="footer-left">zacharias@polonius.dk · 3068 7041</div>
+    <div class="footer-links">
+      <a href="https://www.linkedin.com/in/zpolonius/" target="_blank">LinkedIn</a>
+      <a href="https://www.instagram.com/zackp91/" target="_blank">Instagram</a>
+      <a href="https://www.facebook.com/zpolonius" target="_blank">Facebook</a>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+  <script>
+    // Load contact info from content.json
+    fetch('data/content.json')
+      .then(r => r.json())
+      .then(data => {
+        const s = data.site || {};
+        if (s.email) {
+          document.getElementById('contactEmail').href = `mailto:${s.email}`;
+          document.getElementById('contactEmail').textContent = s.email;
+        }
+        if (s.phone) {
+          document.getElementById('contactPhone').href = `tel:${s.phone.replace(/\s/g,'')}`;
+          document.getElementById('contactPhone').textContent = s.phone;
+        }
+      });
+
+    // Pills
+    document.querySelectorAll('.pill').forEach(pill => {
+      pill.addEventListener('click', () => {
+        document.querySelectorAll('.pill').forEach(p => p.classList.remove('selected'));
+        pill.classList.add('selected');
+        updateContactProgress();
+      });
+    });
+
+    ['f-name','f-email','f-msg'].forEach(id => {
+      document.getElementById(id)?.addEventListener('input', updateContactProgress);
+    });
+
+    function updateContactProgress() {
+      const vals = [
+        document.getElementById('f-name')?.value.trim(),
+        document.getElementById('f-email')?.value.trim(),
+        document.getElementById('f-msg')?.value.trim(),
+        document.querySelector('.pill.selected') ? 'x' : ''
+      ];
+      const pct = (vals.filter(v => v && v.length).length / vals.length) * 100;
+      document.getElementById('contactProgressBar').style.width = pct + '%';
+      const emailEl = document.getElementById('f-email');
+      if (emailEl) emailEl.classList.toggle('valid', emailEl.value.includes('@'));
+    }
+
+    function submitContactPage() {
+      const name  = document.getElementById('f-name').value.trim();
+      const email = document.getElementById('f-email').value.trim();
+      const msg   = document.getElementById('f-msg').value.trim();
+      let valid = true;
+
+      [['f-name', name], ['f-email', email], ['f-msg', msg]].forEach(([id, val]) => {
+        const el = document.getElementById(id);
+        if (!val) { el.classList.add('error'); setTimeout(() => el.classList.remove('error'), 1500); valid = false; }
+      });
+      if (!valid) return;
+
+      const btn = document.getElementById('contactSubmit');
+      btn.classList.add('sending');
+      btn.textContent = 'Sender...';
+
+      fetch('api/contact.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name, email,
+          company: document.getElementById('f-company').value.trim(),
+          subject: document.querySelector('.pill.selected')?.textContent || 'Generel henvendelse',
+          message: msg
+        })
+      })
+      .then(() => {
+        document.getElementById('senderName').textContent = name.split(' ')[0];
+        document.getElementById('formSection').style.display = 'none';
+        document.getElementById('contactSuccess').classList.add('show');
+      })
+      .catch(() => {
+        document.getElementById('senderName').textContent = name.split(' ')[0];
+        document.getElementById('formSection').style.display = 'none';
+        document.getElementById('contactSuccess').classList.add('show');
+      });
+    }
+  </script>
+</body>
+</html>

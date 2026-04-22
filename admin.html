@@ -1,0 +1,1178 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin — Zacharias Polonius</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+    :root {
+      --bg:        #0f0f0f;
+      --bg-card:   #161616;
+      --bg-input:  #111111;
+      --border:    rgba(255,255,255,0.07);
+      --border-md: rgba(255,255,255,0.12);
+      --text:      #e8e8e8;
+      --muted:     rgba(255,255,255,0.45);
+      --faint:     rgba(255,255,255,0.2);
+      --ghost:     rgba(255,255,255,0.08);
+      --blue:      #418FFF;
+      --green:     #41A447;
+      --red:       #e05555;
+      --amber:     #e09a30;
+      --sidebar-w: 220px;
+    }
+
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+    html, body { height:100%; }
+    body { background:var(--bg); color:var(--text); font-family:'Inter',sans-serif; font-size:13px; overflow:hidden; }
+
+    /* ---- LOGIN ---- */
+    #loginScreen {
+      position:fixed; inset:0; background:var(--bg);
+      display:flex; align-items:center; justify-content:center; z-index:999;
+    }
+    .login-box {
+      width:100%; max-width:360px; padding:40px;
+      border:0.5px solid var(--border-md);
+      background:var(--bg-card);
+    }
+    .login-logo { font-size:16px; font-weight:700; letter-spacing:-0.03em; color:#fff; margin-bottom:6px; }
+    .login-logo span { color:var(--blue); }
+    .login-sub  { font-size:11px; color:var(--faint); letter-spacing:0.08em; text-transform:uppercase; margin-bottom:32px; }
+    .login-label { font-size:10px; letter-spacing:0.12em; text-transform:uppercase; color:var(--faint); margin-bottom:6px; display:block; }
+    .login-input {
+      width:100%; background:var(--bg-input); border:0.5px solid var(--border);
+      color:#fff; font-size:13px; font-family:'Inter',sans-serif;
+      padding:10px 14px; outline:none; margin-bottom:14px;
+      transition:border-color 0.2s;
+    }
+    .login-input:focus { border-color:var(--blue); }
+    .login-btn {
+      width:100%; background:var(--blue); color:#fff; border:none;
+      padding:11px; font-size:13px; font-weight:500; cursor:pointer;
+      font-family:'Inter',sans-serif; transition:opacity 0.2s; margin-top:4px;
+    }
+    .login-btn:hover { opacity:0.85; }
+    .login-error { font-size:12px; color:var(--red); margin-top:10px; display:none; }
+
+    /* ---- LAYOUT ---- */
+    #adminApp { display:none; height:100%; flex-direction:row; }
+    #adminApp.show { display:flex; }
+
+    /* ---- SIDEBAR ---- */
+    .sidebar {
+      width:var(--sidebar-w); flex-shrink:0;
+      background:var(--bg-card); border-right:0.5px solid var(--border);
+      display:flex; flex-direction:column; overflow-y:auto;
+    }
+    .sidebar-logo {
+      padding:20px; border-bottom:0.5px solid var(--border);
+      font-size:14px; font-weight:700; letter-spacing:-0.03em; color:#fff;
+    }
+    .sidebar-logo span { color:var(--blue); }
+    .sidebar-logo small { display:block; font-size:9px; letter-spacing:0.1em; text-transform:uppercase; color:var(--faint); font-weight:400; margin-top:2px; }
+
+    .sidebar-section { padding:16px 0 8px; }
+    .sidebar-section-label {
+      font-size:9px; letter-spacing:0.14em; text-transform:uppercase;
+      color:var(--faint); padding:0 16px 8px;
+    }
+    .sidebar-item {
+      display:flex; align-items:center; gap:10px;
+      padding:9px 16px; cursor:pointer; transition:background 0.15s;
+      color:var(--muted); font-size:12px; border:none; background:transparent;
+      width:100%; text-align:left; font-family:'Inter',sans-serif;
+    }
+    .sidebar-item:hover { background:rgba(255,255,255,0.04); color:var(--text); }
+    .sidebar-item.active { background:rgba(65,143,255,0.1); color:var(--blue); }
+    .sidebar-item .icon { font-size:14px; width:18px; text-align:center; flex-shrink:0; }
+    .sidebar-item .badge {
+      margin-left:auto; font-size:9px; background:var(--ghost);
+      color:var(--faint); padding:2px 6px; border-radius:20px;
+    }
+    .sidebar-item.active .badge { background:rgba(65,143,255,0.2); color:var(--blue); }
+
+    .sidebar-footer {
+      margin-top:auto; padding:14px 16px;
+      border-top:0.5px solid var(--border);
+      display:flex; align-items:center; justify-content:space-between;
+    }
+    .sidebar-view-btn {
+      font-size:11px; color:var(--faint); background:transparent;
+      border:0.5px solid var(--border); padding:5px 10px; cursor:pointer;
+      font-family:'Inter',sans-serif; transition:all 0.2s;
+    }
+    .sidebar-view-btn:hover { color:var(--blue); border-color:var(--blue); }
+    .logout-btn {
+      font-size:11px; color:var(--faint); background:transparent;
+      border:none; cursor:pointer; font-family:'Inter',sans-serif; transition:color 0.2s;
+    }
+    .logout-btn:hover { color:var(--red); }
+
+    /* ---- MAIN ---- */
+    .main { flex:1; display:flex; flex-direction:column; overflow:hidden; }
+    .topbar {
+      display:flex; align-items:center; justify-content:space-between;
+      padding:0 32px; height:56px; border-bottom:0.5px solid var(--border);
+      flex-shrink:0;
+    }
+    .topbar-title { font-size:14px; font-weight:600; color:#fff; letter-spacing:-0.02em; }
+    .topbar-sub { font-size:11px; color:var(--faint); margin-top:1px; }
+    .topbar-actions { display:flex; gap:10px; align-items:center; }
+    .btn-add {
+      background:var(--blue); color:#fff; border:none;
+      padding:7px 16px; font-size:12px; font-weight:500;
+      cursor:pointer; font-family:'Inter',sans-serif; transition:opacity 0.2s;
+    }
+    .btn-add:hover { opacity:0.85; }
+    .btn-save {
+      background:var(--green); color:#fff; border:none;
+      padding:7px 16px; font-size:12px; font-weight:500;
+      cursor:pointer; font-family:'Inter',sans-serif; transition:opacity 0.2s; display:none;
+    }
+    .btn-save:hover { opacity:0.85; }
+    .save-status { font-size:11px; color:var(--faint); display:none; }
+
+    /* ---- CONTENT AREA ---- */
+    .content-area { flex:1; overflow-y:auto; padding:28px 32px; }
+
+    /* ---- CARDS / GRID ---- */
+    .entry-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:12px; }
+    .entry-card {
+      background:var(--bg-card); border:0.5px solid var(--border);
+      padding:18px 20px; transition:border-color 0.2s;
+    }
+    .entry-card:hover { border-color:var(--border-md); }
+    .entry-card-header { display:flex; align-items:flex-start; justify-content:space-between; margin-bottom:10px; }
+    .entry-card-tag {
+      font-size:9px; letter-spacing:0.12em; text-transform:uppercase;
+      padding:2px 7px; border:0.5px solid var(--border-md); color:var(--faint);
+    }
+    .entry-card-tag.ai    { border-color:rgba(65,143,255,0.4); color:var(--blue); }
+    .entry-card-tag.work  { border-color:rgba(65,164,71,0.4);  color:var(--green); }
+    .entry-card-tag.checkout { border-color:rgba(65,143,255,0.4); color:var(--blue); }
+    .entry-card-tag.volunteer { border-color:var(--border-md); color:var(--faint); }
+    .entry-card-tag.education { border-color:var(--border-md); color:var(--muted); }
+    .entry-card-actions { display:flex; gap:6px; }
+    .btn-edit, .btn-del {
+      background:transparent; border:0.5px solid var(--border);
+      font-size:10px; padding:3px 8px; cursor:pointer;
+      font-family:'Inter',sans-serif; transition:all 0.2s;
+    }
+    .btn-edit { color:var(--muted); }
+    .btn-edit:hover { border-color:var(--blue); color:var(--blue); }
+    .btn-del { color:var(--faint); }
+    .btn-del:hover { border-color:var(--red); color:var(--red); }
+    .entry-card-title { font-size:13px; font-weight:600; color:#fff; margin-bottom:4px; letter-spacing:-0.01em; }
+    .entry-card-sub { font-size:11px; color:var(--muted); margin-bottom:8px; }
+    .entry-card-desc { font-size:11px; color:var(--faint); line-height:1.6; }
+    .entry-card-period { font-size:10px; color:var(--blue); letter-spacing:0.06em; margin-top:10px; }
+
+    /* ---- FORM PANEL ---- */
+    .form-panel {
+      display:none; position:fixed;
+      top:0; right:0; bottom:0; width:520px;
+      background:var(--bg-card); border-left:0.5px solid var(--border-md);
+      z-index:100; flex-direction:column;
+      box-shadow:-20px 0 60px rgba(0,0,0,0.4);
+      transform:translateX(100%);
+      transition:transform 0.35s cubic-bezier(0.16,1,0.3,1);
+    }
+    .form-panel.open { display:flex; transform:translateX(0); }
+    .form-panel-header {
+      padding:20px 24px; border-bottom:0.5px solid var(--border);
+      display:flex; align-items:center; justify-content:space-between; flex-shrink:0;
+    }
+    .form-panel-title { font-size:14px; font-weight:600; color:#fff; letter-spacing:-0.02em; }
+    .form-panel-close {
+      background:transparent; border:0.5px solid var(--border);
+      color:var(--muted); width:30px; height:30px;
+      display:flex; align-items:center; justify-content:center;
+      cursor:pointer; font-size:14px; transition:all 0.2s;
+    }
+    .form-panel-close:hover { border-color:var(--red); color:var(--red); }
+    .form-panel-body { flex:1; overflow-y:auto; padding:24px; }
+    .form-panel-footer {
+      padding:16px 24px; border-top:0.5px solid var(--border);
+      display:flex; gap:10px; flex-shrink:0;
+    }
+    .btn-submit {
+      background:var(--blue); color:#fff; border:none;
+      padding:9px 20px; font-size:12px; font-weight:500;
+      cursor:pointer; font-family:'Inter',sans-serif; flex:1;
+      transition:opacity 0.2s;
+    }
+    .btn-submit:hover { opacity:0.85; }
+    .btn-cancel {
+      background:transparent; color:var(--muted); border:0.5px solid var(--border);
+      padding:9px 16px; font-size:12px; cursor:pointer;
+      font-family:'Inter',sans-serif; transition:all 0.2s;
+    }
+    .btn-cancel:hover { border-color:var(--border-md); color:var(--text); }
+
+    /* ---- FORM FIELDS ---- */
+    .field { margin-bottom:18px; }
+    .field-label {
+      display:block; font-size:10px; letter-spacing:0.12em;
+      text-transform:uppercase; color:var(--faint); margin-bottom:6px;
+    }
+    .field-hint { font-size:10px; color:var(--faint); margin-top:4px; }
+    .f-input, .f-select, .f-textarea {
+      width:100%; background:var(--bg-input); border:0.5px solid var(--border);
+      color:#fff; font-size:12px; font-family:'Inter',sans-serif;
+      padding:9px 12px; outline:none; transition:border-color 0.2s;
+      -webkit-appearance:none; border-radius:0;
+    }
+    .f-input:focus, .f-select:focus, .f-textarea:focus { border-color:var(--blue); }
+    .f-select option { background:#1a1a1a; }
+    .f-textarea { resize:vertical; min-height:90px; line-height:1.6; }
+    .field-row { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+
+    /* ---- SETTINGS SECTIONS ---- */
+    .settings-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+    .settings-card { background:var(--bg-card); border:0.5px solid var(--border); padding:20px 22px; }
+    .settings-card-title { font-size:12px; font-weight:600; color:#fff; margin-bottom:14px; letter-spacing:-0.01em; }
+
+    /* ---- HERO EDITOR ---- */
+    .hero-preview {
+      background:var(--ghost); border:0.5px solid var(--border);
+      padding:24px; margin-bottom:20px;
+    }
+    .hero-preview-label { font-size:9px; letter-spacing:0.12em; text-transform:uppercase; color:var(--faint); margin-bottom:10px; }
+    .hero-preview-name { font-size:28px; font-weight:700; letter-spacing:-0.04em; color:#fff; line-height:1.1; }
+    .hero-preview-role { font-size:13px; color:var(--blue); margin-top:6px; }
+    .hero-preview-tag  { font-size:12px; color:var(--muted); margin-top:8px; line-height:1.6; }
+
+    /* ---- SPECIALER ---- */
+    .special-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(240px,1fr)); gap:10px; }
+    .special-card {
+      background:var(--bg-card); border:0.5px solid var(--border);
+      padding:16px 18px; display:flex; align-items:flex-start; gap:12px;
+    }
+    .special-icon { font-size:18px; color:var(--blue); flex-shrink:0; }
+    .special-info { flex:1; }
+    .special-title { font-size:12px; font-weight:600; color:#fff; margin-bottom:4px; }
+    .special-desc  { font-size:11px; color:var(--faint); line-height:1.6; }
+    .special-actions { display:flex; gap:6px; margin-top:10px; }
+
+    /* ---- BENTO EDITOR ---- */
+    .bento-list { display:flex; flex-direction:column; gap:8px; }
+    .bento-row {
+      display:grid; grid-template-columns:24px 1fr 1fr auto;
+      align-items:center; gap:10px;
+      background:var(--bg-card); border:0.5px solid var(--border);
+      padding:12px 14px;
+    }
+    .bento-handle { color:var(--faint); cursor:grab; font-size:14px; text-align:center; }
+    .bento-label-val { }
+    .bento-label-txt { font-size:10px; color:var(--faint); letter-spacing:0.1em; text-transform:uppercase; }
+    .bento-main-txt { font-size:13px; font-weight:600; color:#fff; }
+    .bento-sub-txt  { font-size:11px; color:var(--muted); }
+
+    /* ---- QUOTE LIST ---- */
+    .quote-list { display:flex; flex-direction:column; gap:10px; }
+    .quote-row {
+      background:var(--bg-card); border:0.5px solid var(--border);
+      padding:16px 18px;
+    }
+    .quote-row-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:8px; }
+    .quote-name { font-size:12px; font-weight:600; color:#fff; }
+    .quote-role-txt { font-size:11px; color:var(--faint); }
+    .quote-text-preview { font-size:12px; color:var(--muted); line-height:1.6; font-style:italic; }
+
+    /* ---- TOAST ---- */
+    .toast {
+      position:fixed; bottom:24px; right:24px;
+      background:var(--bg-card); border:0.5px solid var(--green);
+      color:var(--text); padding:12px 20px; font-size:12px;
+      display:none; align-items:center; gap:8px; z-index:500;
+      animation:slideIn 0.3s ease;
+    }
+    .toast.show { display:flex; }
+    .toast.error { border-color:var(--red); }
+    .toast-dot { width:6px; height:6px; background:var(--green); border-radius:50%; flex-shrink:0; }
+    .toast.error .toast-dot { background:var(--red); }
+    @keyframes slideIn { from { transform:translateY(10px); opacity:0; } to { transform:translateY(0); opacity:1; } }
+
+    /* ---- EMPTY STATE ---- */
+    .empty { text-align:center; padding:60px 20px; color:var(--faint); }
+    .empty-icon { font-size:32px; margin-bottom:14px; opacity:0.4; }
+    .empty h3 { font-size:14px; color:var(--muted); margin-bottom:6px; }
+    .empty p  { font-size:12px; line-height:1.6; }
+
+    /* ---- COLOR PICKER ---- */
+    .color-row { display:flex; align-items:center; gap:10px; }
+    .color-swatch { width:32px; height:32px; border:0.5px solid var(--border); cursor:pointer; flex-shrink:0; }
+    .color-presets { display:flex; gap:6px; margin-top:8px; }
+    .color-preset { width:24px; height:24px; cursor:pointer; border:0.5px solid transparent; transition:border-color 0.2s; }
+    .color-preset:hover { border-color:rgba(255,255,255,0.4); }
+
+    /* ---- OVERLAY BACKDROP ---- */
+    .panel-backdrop {
+      position:fixed; inset:0; background:rgba(0,0,0,0.5);
+      z-index:99; display:none;
+    }
+    .panel-backdrop.show { display:block; }
+
+
+    /* ---- IMAGE UPLOAD ---- */
+    .upload-zone {
+      border: 0.5px dashed var(--border-md);
+      padding: 20px; text-align: center; cursor: pointer;
+      transition: all 0.2s; background: var(--bg-input); position: relative;
+    }
+    .upload-zone:hover { border-color: var(--blue); background: rgba(65,143,255,0.04); }
+    .upload-zone.dragover { border-color: var(--blue); background: rgba(65,143,255,0.08); }
+    .upload-zone input[type=file] { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; }
+    .upload-zone-icon { font-size: 22px; margin-bottom: 8px; opacity: 0.4; }
+    .upload-zone-text { font-size: 12px; color: var(--muted); }
+    .upload-zone-hint { font-size: 10px; color: var(--faint); margin-top: 4px; }
+    .upload-preview { margin-top: 10px; border: 0.5px solid var(--border); padding: 10px; display: none; align-items: center; gap: 12px; background: var(--bg-input); }
+    .upload-preview.show { display: flex; }
+    .upload-preview img { width: 48px; height: 48px; object-fit: cover; flex-shrink: 0; }
+    .upload-preview-name { font-size: 12px; color: var(--text); margin-bottom: 2px; }
+    .upload-preview-path { font-size: 10px; color: var(--blue); font-family: monospace; }
+    .upload-preview-clear { background: transparent; border: 0.5px solid var(--border); color: var(--faint); padding: 4px 8px; font-size: 10px; cursor: pointer; font-family: var(--font); transition: all 0.2s; flex-shrink: 0; }
+    .upload-preview-clear:hover { border-color: var(--red); color: var(--red); }
+    .upload-progress { height: 2px; background: var(--border); margin-top: 8px; display: none; }
+    .upload-progress-bar { height: 100%; background: var(--blue); width: 0%; transition: width 0.3s; }
+    .upload-error { font-size: 11px; color: var(--red); margin-top: 6px; display: none; }
+    /* ---- CONFIRM DIALOG ---- */
+    .confirm-dialog {
+      position:fixed; inset:0; z-index:200;
+      display:none; align-items:center; justify-content:center;
+      background:rgba(0,0,0,0.7);
+    }
+    .confirm-dialog.show { display:flex; }
+    .confirm-box {
+      background:var(--bg-card); border:0.5px solid var(--border-md);
+      padding:28px 32px; max-width:340px; width:100%; margin:20px;
+    }
+    .confirm-title { font-size:14px; font-weight:600; color:#fff; margin-bottom:8px; }
+    .confirm-text  { font-size:12px; color:var(--muted); line-height:1.6; margin-bottom:20px; }
+    .confirm-actions { display:flex; gap:10px; }
+    .btn-confirm-del {
+      background:var(--red); color:#fff; border:none;
+      padding:8px 18px; font-size:12px; font-weight:500;
+      cursor:pointer; font-family:'Inter',sans-serif; flex:1;
+    }
+    .btn-confirm-cancel {
+      background:transparent; color:var(--muted); border:0.5px solid var(--border);
+      padding:8px 14px; font-size:12px; cursor:pointer; font-family:'Inter',sans-serif;
+    }
+  </style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="loginScreen">
+  <div class="login-box">
+    <div class="login-logo">Z<span>.</span>Polonius</div>
+    <div class="login-sub">Admin Panel</div>
+    <label class="login-label">Password</label>
+    <input class="login-input" type="password" id="loginPw" placeholder="••••••••"
+      onkeydown="if(event.key==='Enter') doLogin()">
+    <button class="login-btn" onclick="doLogin()">Log ind</button>
+    <div class="login-error" id="loginError">Forkert password. Prøv igen.</div>
+  </div>
+</div>
+
+<!-- ADMIN APP -->
+<div id="adminApp">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      Z<span>.</span>Polonius
+      <small>Admin Panel</small>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Indhold</div>
+      <button class="sidebar-item active" onclick="showSection('forside')">
+        <span class="icon">🏠</span> Forside
+      </button>
+      <button class="sidebar-item" onclick="showSection('specialer')">
+        <span class="icon">⭐</span> Specialer
+        <span class="badge" id="badge-specialer">0</span>
+      </button>
+      <button class="sidebar-item" onclick="showSection('projekter')">
+        <span class="icon">📁</span> Projekter
+        <span class="badge" id="badge-projekter">0</span>
+      </button>
+      <button class="sidebar-item" onclick="showSection('ansaettelser')">
+        <span class="icon">💼</span> Ansættelser
+        <span class="badge" id="badge-ansaettelser">0</span>
+      </button>
+      <button class="sidebar-item" onclick="showSection('uddannelse')">
+        <span class="icon">🎓</span> Uddannelse
+        <span class="badge" id="badge-uddannelse">0</span>
+      </button>
+      <button class="sidebar-item" onclick="showSection('anbefalinger')">
+        <span class="icon">💬</span> Anbefalinger
+        <span class="badge" id="badge-anbefalinger">0</span>
+      </button>
+      <button class="sidebar-item" onclick="showSection('om')">
+        <span class="icon">👤</span> Om mig
+      </button>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Indstillinger</div>
+      <button class="sidebar-item" onclick="showSection('kontakt')">
+        <span class="icon">📬</span> Kontakt & Sociale
+      </button>
+      <button class="sidebar-item" onclick="showSection('site')">
+        <span class="icon">⚙️</span> Site-indstillinger
+      </button>
+    </div>
+    <div class="sidebar-footer">
+      <button class="sidebar-view-btn" onclick="window.open('index.html','_blank')">Se side →</button>
+      <button class="logout-btn" onclick="logout()">Log ud</button>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main">
+    <div class="topbar">
+      <div>
+        <div class="topbar-title" id="topbarTitle">Forside</div>
+        <div class="topbar-sub" id="topbarSub">Rediger hero, bento-bokse og forsideindhold</div>
+      </div>
+      <div class="topbar-actions">
+        <span class="save-status" id="saveStatus">✓ Gemt</span>
+        <button class="btn-save" id="btnSave" onclick="saveAll()">Gem ændringer</button>
+        <button class="btn-add" id="btnAdd" style="display:none" onclick="openForm()">+ Tilføj ny</button>
+      </div>
+    </div>
+
+    <div class="content-area" id="contentArea">
+      <!-- Rendered dynamically -->
+    </div>
+  </main>
+</div>
+
+<!-- FORM PANEL -->
+<div class="panel-backdrop" id="panelBackdrop" onclick="closeForm()"></div>
+<div class="form-panel" id="formPanel">
+  <div class="form-panel-header">
+    <div class="form-panel-title" id="formTitle">Tilføj</div>
+    <button class="form-panel-close" onclick="closeForm()">✕</button>
+  </div>
+  <div class="form-panel-body" id="formBody"></div>
+  <div class="form-panel-footer">
+    <button class="btn-submit" onclick="submitForm()">Gem</button>
+    <button class="btn-cancel" onclick="closeForm()">Annuller</button>
+  </div>
+</div>
+
+<!-- CONFIRM DELETE -->
+<div class="confirm-dialog" id="confirmDialog">
+  <div class="confirm-box">
+    <div class="confirm-title">Slet indgang?</div>
+    <div class="confirm-text" id="confirmText">Er du sikker på at du vil slette dette? Handlingen kan ikke fortrydes.</div>
+    <div class="confirm-actions">
+      <button class="btn-confirm-cancel" onclick="closeConfirm()">Annuller</button>
+      <button class="btn-confirm-del" onclick="confirmDelete()">Slet</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast">
+  <div class="toast-dot"></div>
+  <span id="toastMsg">Gemt!</span>
+</div>
+
+<script>
+/* ============================================================
+   ADMIN PANEL — ZACHARIAS POLONIUS
+   Password: sættes i api/config.php på serveren
+
+   ============================================================ */
+
+let data = {};
+let currentSection = 'forside';
+let editingId = null;
+let deleteTarget = null;
+
+/* ---- LOGIN — validering sker server-side i api/login.php ---- */
+function doLogin() {
+  const pw  = document.getElementById('loginPw').value;
+  const err = document.getElementById('loginError');
+  const btn = document.querySelector('.login-btn');
+
+  if (!pw) return;
+  btn.textContent = 'Logger ind...';
+  btn.disabled = true;
+
+  fetch('api/login.php', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    credentials: 'same-origin',
+    body: JSON.stringify({ password: pw })
+  })
+  .then(r => r.json())
+  .then(res => {
+    btn.textContent = 'Log ind';
+    btn.disabled = false;
+    if (res.ok) {
+      document.getElementById('loginScreen').style.display = 'none';
+      document.getElementById('adminApp').classList.add('show');
+      loadData();
+    } else {
+      err.textContent = res.error || 'Forkert password. Prøv igen.';
+      err.style.display = 'block';
+      document.getElementById('loginPw').value = '';
+    }
+  })
+  .catch(() => {
+    btn.textContent = 'Log ind';
+    btn.disabled = false;
+    err.textContent = 'Serverfejl — er PHP aktiv på serveren?';
+    err.style.display = 'block';
+  });
+}
+
+function logout() {
+  fetch('api/logout.php', { credentials: 'same-origin' })
+    .finally(() => {
+      document.getElementById('adminApp').classList.remove('show');
+      document.getElementById('loginScreen').style.display = 'flex';
+      document.getElementById('loginPw').value = '';
+    });
+}
+
+/* ---- DATA ---- */
+function loadData() {
+  fetch('data/content.json?t=' + Date.now())
+    .then(r => r.json())
+    .then(d => {
+      data = d;
+      updateBadges();
+      renderSection('forside');
+    })
+    .catch(() => {
+      // Demo mode: use empty structure
+      data = { site:{name:'Zacharias Polonius',tagline:'De små detaljer leder til store forandringer',email:'zacharias@polonius.dk',phone:'3068 7041',accent_color:'#418FFF',social:{linkedin:'',instagram:'',facebook:''}}, hero:{role:'Technical Account Manager · Bring',cover:'assets/cover.webp',status:'Tilgængelig for nye muligheder',intro:'...'}, specialer:[], bento:[], om:{bio:'',photo:'',sprog:[],interesser:[]}, projects:[], cv:{jobs:[],education:[],recommendations:[]}, };
+      updateBadges();
+      renderSection('forside');
+    });
+}
+
+function saveAll() {
+  const btn = document.getElementById('btnSave');
+  btn.textContent = 'Gemmer...';
+  btn.style.opacity = '0.6';
+
+  fetch('api/save.php', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data)
+  })
+  .then(r => r.json())
+  .then(res => {
+    btn.textContent = 'Gem ændringer';
+    btn.style.opacity = '1';
+    if (res.ok) showToast('Ændringer gemt!');
+    else showToast('Fejl: ' + res.error, true);
+  })
+  .catch(() => {
+    btn.textContent = 'Gem ændringer';
+    btn.style.opacity = '1';
+    showToast('Gemt lokalt (API ikke tilsluttet)', false);
+    console.log('Saved data:', JSON.stringify(data, null, 2));
+  });
+}
+
+function updateBadges() {
+  document.getElementById('badge-specialer').textContent   = (data.specialer||[]).length;
+  document.getElementById('badge-projekter').textContent   = (data.projects||[]).length;
+  document.getElementById('badge-ansaettelser').textContent = (data.cv?.jobs||[]).length;
+  document.getElementById('badge-uddannelse').textContent  = (data.cv?.education||[]).length;
+  document.getElementById('badge-anbefalinger').textContent = (data.cv?.recommendations||[]).length;
+}
+
+/* ---- NAVIGATION ---- */
+function showSection(key) {
+  currentSection = key;
+  document.querySelectorAll('.sidebar-item').forEach(i => i.classList.remove('active'));
+  event.currentTarget.classList.add('active');
+  closeForm();
+  renderSection(key);
+}
+
+const sectionMeta = {
+  forside:       { title:'Forside',         sub:'Rediger hero, bento-bokse og forsideindhold',   add:false, save:true  },
+  specialer:     { title:'Specialer',       sub:'Tilføj og rediger dine faglige specialer',       add:true,  save:true  },
+  projekter:     { title:'Projekter',       sub:'Tilføj, rediger og slet projekter',              add:true,  save:true  },
+  ansaettelser:  { title:'Ansættelser',     sub:'Rediger din arbejdserfaring',                    add:true,  save:true  },
+  uddannelse:    { title:'Uddannelse',      sub:'Rediger uddannelse og certificeringer',          add:true,  save:true  },
+  anbefalinger:  { title:'Anbefalinger',    sub:'Tilføj og rediger anbefalinger fra samarbejdspartnere', add:true, save:true },
+  om:            { title:'Om mig',          sub:'Rediger din biografi og personlige info',        add:false, save:true  },
+  kontakt:       { title:'Kontakt & Sociale medier', sub:'Email, telefon og sociale profiler',   add:false, save:true  },
+  site:          { title:'Site-indstillinger', sub:'Sitenavn, farver og generelle indstillinger', add:false, save:true  },
+};
+
+function renderSection(key) {
+  const meta = sectionMeta[key];
+  document.getElementById('topbarTitle').textContent = meta.title;
+  document.getElementById('topbarSub').textContent   = meta.sub;
+  document.getElementById('btnAdd').style.display    = meta.add ? 'block' : 'none';
+  document.getElementById('btnSave').style.display   = meta.save ? 'block' : 'none';
+
+  const area = document.getElementById('contentArea');
+  const renderers = {
+    forside:      renderForside,
+    specialer:    renderSpecialer,
+    projekter:    renderProjekter,
+    ansaettelser: renderAnsaettelser,
+    uddannelse:   renderUddannelse,
+    anbefalinger: renderAnbefalinger,
+    om:           renderOm,
+    kontakt:      renderKontakt,
+    site:         renderSite,
+  };
+  (renderers[key] || (() => area.innerHTML = '<div class="empty"><p>Sektion ikke fundet</p></div>'))(area);
+}
+
+/* ---- FORSIDE ---- */
+function renderForside(area) {
+  const h = data.hero || {};
+  const b = data.bento || [];
+  area.innerHTML = `
+    <div style="max-width:720px;">
+      <div class="hero-preview">
+        <div class="hero-preview-label">Live preview</div>
+        <div class="hero-preview-name" id="prev-name">${data.site?.name || ''}</div>
+        <div class="hero-preview-role" id="prev-role">${h.role || ''}</div>
+        <div class="hero-preview-tag"  id="prev-intro">${h.intro || ''}</div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px;">
+        <div class="field">
+          <label class="field-label">Tagline / intro-tekst</label>
+          <textarea class="f-textarea" id="fe-intro" style="height:70px;" oninput="document.getElementById('prev-intro').textContent=this.value">${h.intro||''}</textarea>
+        </div>
+        <div class="field">
+          <label class="field-label">Rolle (vises under navn)</label>
+          <input class="f-input" id="fe-role" value="${h.role||''}" oninput="document.getElementById('prev-role').textContent=this.value">
+        </div>
+        <div class="field">
+          <label class="field-label">Status-tekst</label>
+          <input class="f-input" id="fe-status" value="${h.status||''}">
+          <div class="field-hint">Vises som en grøn prik-label på forsiden</div>
+        </div>
+        <div class="field">
+          <label class="field-label">Cover-billede</label>
+          ${createUploadZone('fe-cover','cover', h.cover||'assets/cover.webp')}
+          <div class="field-hint" style="margin-top:6px;">Dette er hero-billedet på forsiden</div>
+        </div>
+      </div>
+
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
+        <div style="font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:var(--faint);">Bento-bokse (6 stk.)</div>
+      </div>
+      <div class="bento-list" id="bentoList">
+        ${b.map((box, i) => `
+          <div class="bento-row" data-i="${i}">
+            <div class="bento-handle">⠿</div>
+            <div class="bento-label-val">
+              <div class="bento-label-txt">${box.label}</div>
+              <div class="bento-main-txt">${box.value}</div>
+            </div>
+            <div class="bento-sub-txt">${box.sub}</div>
+            <button class="btn-edit" onclick="editBento(${i})">Rediger</button>
+          </div>
+        `).join('')}
+      </div>
+
+      <div style="margin-top:24px;display:flex;justify-content:flex-end;">
+        <button class="btn-submit" style="width:auto;padding:9px 24px;" onclick="saveForside()">Gem forside</button>
+      </div>
+    </div>`;
+}
+
+function saveForside() {
+  data.hero.intro  = document.getElementById('fe-intro').value;
+  data.hero.role   = document.getElementById('fe-role').value;
+  data.hero.status = document.getElementById('fe-status').value;
+  data.hero.cover  = getUploadPath('fe-cover') || document.getElementById('imgpath-fe-cover')?.value || data.hero.cover;
+  saveAll();
+}
+
+function editBento(i) {
+  editingId = i;
+  const box = data.bento[i];
+  document.getElementById('formTitle').textContent = 'Rediger bento-boks';
+  document.getElementById('formBody').innerHTML = `
+    <div class="field"><label class="field-label">Label (lille tekst over)</label><input class="f-input" id="fb-label" value="${box.label||''}"></div>
+    <div class="field"><label class="field-label">Værdi (stor tekst)</label><input class="f-input" id="fb-value" value="${box.value||''}"></div>
+    <div class="field"><label class="field-label">Undertekst</label><input class="f-input" id="fb-sub" value="${box.sub||''}"></div>
+    <div class="field"><label class="field-label">Beskrivelse (lille grå tekst)</label><textarea class="f-textarea" id="fb-desc">${box.desc||''}</textarea></div>
+    <div class="field"><label class="field-label">Accent-farve</label>
+      <select class="f-select" id="fb-accent">
+        <option value="none" ${box.accent==='none'?'selected':''}>Ingen</option>
+        <option value="blue" ${box.accent==='blue'?'selected':''}>Blå</option>
+        <option value="green" ${box.accent==='green'?'selected':''}>Grøn</option>
+      </select>
+    </div>`;
+  openFormPanel('Rediger bento-boks', () => {
+    data.bento[i].label  = document.getElementById('fb-label').value;
+    data.bento[i].value  = document.getElementById('fb-value').value;
+    data.bento[i].sub    = document.getElementById('fb-sub').value;
+    data.bento[i].desc   = document.getElementById('fb-desc').value;
+    data.bento[i].accent = document.getElementById('fb-accent').value;
+    closeForm(); renderSection('forside'); showToast('Bento-boks opdateret');
+  });
+}
+
+/* ---- SPECIALER ---- */
+function renderSpecialer(area) {
+  const list = data.specialer || [];
+  area.innerHTML = list.length ? `<div class="special-grid">${list.map((s,i) => `
+    <div class="special-card">
+      <div class="special-icon">${s.icon||'◆'}</div>
+      <div class="special-info">
+        <div class="special-title">${s.label}</div>
+        <div class="special-desc">${s.desc||''}</div>
+        <div class="special-actions">
+          <button class="btn-edit" onclick="editSpecial(${i})">Rediger</button>
+          <button class="btn-del"  onclick="deleteEntry('specialer',${i})">Slet</button>
+        </div>
+      </div>
+    </div>`).join('')}</div>`
+  : emptyState('⭐','Ingen specialer endnu','Tilføj dine faglige specialer her.');
+}
+
+function openForm(editIdx) {
+  const isEdit = editIdx !== undefined;
+  const item = isEdit ? (currentSection === 'specialer' ? data.specialer[editIdx] : {}) : {};
+  if (currentSection === 'specialer') openSpecialForm(isEdit, editIdx, item);
+  else if (currentSection === 'projekter') openProjectForm(isEdit, editIdx, item);
+  else if (currentSection === 'ansaettelser') openJobForm(isEdit, editIdx, item);
+  else if (currentSection === 'uddannelse') openEduForm(isEdit, editIdx, item);
+  else if (currentSection === 'anbefalinger') openRecForm(isEdit, editIdx, item);
+}
+
+function editSpecial(i) { openSpecialForm(true, i, data.specialer[i]); }
+function openSpecialForm(isEdit, idx, item={}) {
+  document.getElementById('formBody').innerHTML = `
+    <div class="field"><label class="field-label">Titel / label</label><input class="f-input" id="sp-label" value="${item.label||''}"></div>
+    <div class="field"><label class="field-label">Beskrivelse</label><textarea class="f-textarea" id="sp-desc">${item.desc||''}</textarea></div>
+    <div class="field-row">
+      <div class="field"><label class="field-label">Ikon (emoji)</label><input class="f-input" id="sp-icon" value="${item.icon||'◆'}"></div>
+      <div class="field"><label class="field-label">Farve</label>
+        <select class="f-select" id="sp-color">
+          <option value="blue" ${item.color==='blue'?'selected':''}>Blå</option>
+          <option value="green" ${item.color==='green'?'selected':''}>Grøn</option>
+        </select>
+      </div>
+    </div>`;
+  openFormPanel(isEdit ? 'Rediger speciale' : 'Tilføj speciale', () => {
+    const obj = { id: item.id || slug(document.getElementById('sp-label').value), label: document.getElementById('sp-label').value, desc: document.getElementById('sp-desc').value, icon: document.getElementById('sp-icon').value, color: document.getElementById('sp-color').value };
+    if (isEdit) data.specialer[idx] = obj;
+    else data.specialer.push(obj);
+    closeForm(); updateBadges(); renderSection('specialer'); showToast(isEdit ? 'Speciale opdateret' : 'Speciale tilføjet');
+  });
+}
+
+/* ---- PROJEKTER ---- */
+function renderProjekter(area) {
+  const list = data.projects || [];
+  area.innerHTML = list.length ? `<div class="entry-grid">${list.map((p,i) => `
+    <div class="entry-card">
+      <div class="entry-card-header">
+        <span class="entry-card-tag ${p.category||''}">${p.tag||p.category}</span>
+        <div class="entry-card-actions">
+          <button class="btn-edit" onclick="editProject(${i})">Rediger</button>
+          <button class="btn-del"  onclick="deleteEntry('projekter',${i})">Slet</button>
+        </div>
+      </div>
+      <div class="entry-card-title">${p.title}</div>
+      <div class="entry-card-sub">${p.period||''}</div>
+      <div class="entry-card-desc">${p.desc||''}</div>
+    </div>`).join('')}</div>`
+  : emptyState('📁','Ingen projekter endnu','Tilføj dine projekter og cases her.');
+}
+
+function editProject(i) { openProjectForm(true, i, data.projects[i]); }
+function openProjectForm(isEdit, idx, item={}) {
+  document.getElementById('formBody').innerHTML = `
+    <div class="field"><label class="field-label">Titel</label><input class="f-input" id="pj-title" value="${item.title||''}"></div>
+    <div class="field-row">
+      <div class="field"><label class="field-label">Kategori</label>
+        <select class="f-select" id="pj-cat">
+          <option value="ai"       ${item.category==='ai'?'selected':''}>AI</option>
+          <option value="checkout" ${item.category==='checkout'?'selected':''}>Checkout</option>
+          <option value="work"     ${item.category==='work'?'selected':''}>Arbejde</option>
+          <option value="volunteer"${item.category==='volunteer'?'selected':''}>Frivillig</option>
+        </select>
+      </div>
+      <div class="field"><label class="field-label">Periode</label><input class="f-input" id="pj-period" value="${item.period||''}"></div>
+    </div>
+    <div class="field"><label class="field-label">Kort beskrivelse</label><textarea class="f-textarea" style="height:60px;" id="pj-desc">${item.desc||''}</textarea></div>
+    <div class="field"><label class="field-label">Intro (vist øverst på detailside)</label><textarea class="f-textarea" id="pj-intro">${item.intro||''}</textarea></div>
+    <div class="field"><label class="field-label">Indhold / brødtekst</label><textarea class="f-textarea" style="height:140px;" id="pj-body">${item.body||''}</textarea><div class="field-hint">Brug dobbelt linjeskift til afsnit</div></div>
+    <div class="field"><label class="field-label">Kompetencer (kommasepareret)</label><input class="f-input" id="pj-skills" value="${(item.skills||[]).join(', ')}"></div>
+    <div class="field"><label class="field-label">Cover-billede</label>${createUploadZone('pj-cover','projects',item.cover||'')}</div>
+    <div class="field"><label class="field-label">Link URL (valgfrit)</label><input class="f-input" id="pj-url" value="${item.url||''}"></div>`;
+  openFormPanel(isEdit ? 'Rediger projekt' : 'Tilføj projekt', () => {
+    const obj = { id: item.id || slug(document.getElementById('pj-title').value), title: document.getElementById('pj-title').value, category: document.getElementById('pj-cat').value, tag: { ai:'AI', checkout:'Checkout', work:'Arbejde', volunteer:'Frivillig' }[document.getElementById('pj-cat').value], period: document.getElementById('pj-period').value, desc: document.getElementById('pj-desc').value, intro: document.getElementById('pj-intro').value, body: document.getElementById('pj-body').value, skills: document.getElementById('pj-skills').value.split(',').map(s=>s.trim()).filter(Boolean), cover: getUploadPath('pj-cover') || item.cover || '', url: document.getElementById('pj-url').value || undefined };
+    if (isEdit) data.projects[idx] = obj;
+    else data.projects.push(obj);
+    closeForm(); updateBadges(); renderSection('projekter'); showToast(isEdit ? 'Projekt opdateret' : 'Projekt tilføjet');
+  });
+}
+
+/* ---- ANSÆTTELSER ---- */
+function renderAnsaettelser(area) {
+  const list = data.cv?.jobs || [];
+  area.innerHTML = list.length ? `<div class="entry-grid">${list.map((j,i) => `
+    <div class="entry-card">
+      <div class="entry-card-header">
+        <span class="entry-card-tag work">Arbejde</span>
+        <div class="entry-card-actions">
+          <button class="btn-edit" onclick="editJob(${i})">Rediger</button>
+          <button class="btn-del"  onclick="deleteEntry('ansaettelser',${i})">Slet</button>
+        </div>
+      </div>
+      <div class="entry-card-title">${j.role}</div>
+      <div class="entry-card-sub">${j.company}</div>
+      <div class="entry-card-desc">${j.desc||''}</div>
+      <div class="entry-card-period">${j.period}</div>
+    </div>`).join('')}</div>`
+  : emptyState('💼','Ingen ansættelser endnu','Tilføj din arbejdserfaring her.');
+}
+
+function editJob(i) { openJobForm(true, i, data.cv.jobs[i]); }
+function openJobForm(isEdit, idx, item={}) {
+  document.getElementById('formBody').innerHTML = `
+    <div class="field"><label class="field-label">Jobtitel</label><input class="f-input" id="jb-role" value="${item.role||''}"></div>
+    <div class="field-row">
+      <div class="field"><label class="field-label">Virksomhed</label><input class="f-input" id="jb-company" value="${item.company||''}"></div>
+      <div class="field"><label class="field-label">Periode</label><input class="f-input" id="jb-period" value="${item.period||''}"></div>
+    </div>
+    <div class="field"><label class="field-label">Kort beskrivelse</label><textarea class="f-textarea" style="height:60px;" id="jb-desc">${item.desc||''}</textarea></div>
+    <div class="field"><label class="field-label">Intro (detailside)</label><textarea class="f-textarea" id="jb-intro">${item.intro||''}</textarea></div>
+    <div class="field"><label class="field-label">Indhold / brødtekst</label><textarea class="f-textarea" style="height:120px;" id="jb-body">${item.body||''}</textarea></div>
+    <div class="field"><label class="field-label">Cover-billede</label>${createUploadZone('jb-cover','projects',item.cover||'')}</div>`;
+  openFormPanel(isEdit ? 'Rediger ansættelse' : 'Tilføj ansættelse', () => {
+    const obj = { id: item.id || slug((document.getElementById('jb-role').value)+'-'+(document.getElementById('jb-company').value)), role: document.getElementById('jb-role').value, company: document.getElementById('jb-company').value, period: document.getElementById('jb-period').value, desc: document.getElementById('jb-desc').value, intro: document.getElementById('jb-intro').value, body: document.getElementById('jb-body').value, cover: getUploadPath('jb-cover') || item.cover || '', category:'work' };
+    if (isEdit) data.cv.jobs[idx] = obj;
+    else data.cv.jobs.push(obj);
+    closeForm(); updateBadges(); renderSection('ansaettelser'); showToast(isEdit ? 'Ansættelse opdateret' : 'Ansættelse tilføjet');
+  });
+}
+
+/* ---- UDDANNELSE ---- */
+function renderUddannelse(area) {
+  const list = data.cv?.education || [];
+  area.innerHTML = list.length ? `<div class="entry-grid">${list.map((e,i) => `
+    <div class="entry-card">
+      <div class="entry-card-header">
+        <span class="entry-card-tag education">Uddannelse</span>
+        <div class="entry-card-actions">
+          <button class="btn-edit" onclick="editEdu(${i})">Rediger</button>
+          <button class="btn-del"  onclick="deleteEntry('uddannelse',${i})">Slet</button>
+        </div>
+      </div>
+      <div class="entry-card-title">${e.title}</div>
+      <div class="entry-card-sub">${e.institution}</div>
+      <div class="entry-card-desc">${e.desc||''}</div>
+      <div class="entry-card-period">${e.period}</div>
+    </div>`).join('')}</div>`
+  : emptyState('🎓','Ingen uddannelse endnu','Tilføj din uddannelse og certificeringer her.');
+}
+
+function editEdu(i) { openEduForm(true, i, data.cv.education[i]); }
+function openEduForm(isEdit, idx, item={}) {
+  document.getElementById('formBody').innerHTML = `
+    <div class="field"><label class="field-label">Titel / uddannelse</label><input class="f-input" id="ed-title" value="${item.title||''}"></div>
+    <div class="field-row">
+      <div class="field"><label class="field-label">Institution</label><input class="f-input" id="ed-inst" value="${item.institution||''}"></div>
+      <div class="field"><label class="field-label">Periode</label><input class="f-input" id="ed-period" value="${item.period||''}"></div>
+    </div>
+    <div class="field"><label class="field-label">Beskrivelse</label><textarea class="f-textarea" id="ed-desc">${item.desc||''}</textarea></div>`;
+  openFormPanel(isEdit ? 'Rediger uddannelse' : 'Tilføj uddannelse', () => {
+    const obj = { id: item.id || slug(document.getElementById('ed-title').value), title: document.getElementById('ed-title').value, institution: document.getElementById('ed-inst').value, period: document.getElementById('ed-period').value, desc: document.getElementById('ed-desc').value, category:'education' };
+    if (isEdit) data.cv.education[idx] = obj;
+    else data.cv.education.push(obj);
+    closeForm(); updateBadges(); renderSection('uddannelse'); showToast(isEdit ? 'Uddannelse opdateret' : 'Uddannelse tilføjet');
+  });
+}
+
+/* ---- ANBEFALINGER ---- */
+function renderAnbefalinger(area) {
+  const list = data.cv?.recommendations || [];
+  area.innerHTML = list.length ? `<div class="quote-list">${list.map((r,i) => `
+    <div class="quote-row">
+      <div class="quote-row-header">
+        <div><div class="quote-name">${r.name}</div><div class="quote-role-txt">${r.role||''}</div></div>
+        <div class="entry-card-actions">
+          <button class="btn-edit" onclick="editRec(${i})">Rediger</button>
+          <button class="btn-del"  onclick="deleteEntry('anbefalinger',${i})">Slet</button>
+        </div>
+      </div>
+      <div class="quote-text-preview">"${r.text}"</div>
+    </div>`).join('')}</div>`
+  : emptyState('💬','Ingen anbefalinger endnu','Tilføj anbefalinger fra kolleger og samarbejdspartnere.');
+}
+
+function editRec(i) { openRecForm(true, i, data.cv.recommendations[i]); }
+function openRecForm(isEdit, idx, item={}) {
+  document.getElementById('formBody').innerHTML = `
+    <div class="field"><label class="field-label">Navn</label><input class="f-input" id="rc-name" value="${item.name||''}"></div>
+    <div class="field"><label class="field-label">Titel / rolle</label><input class="f-input" id="rc-role" value="${item.role||''}"></div>
+    <div class="field"><label class="field-label">Anbefalingstekst</label><textarea class="f-textarea" style="height:120px;" id="rc-text">${item.text||''}</textarea></div>`;
+  openFormPanel(isEdit ? 'Rediger anbefaling' : 'Tilføj anbefaling', () => {
+    const obj = { id: item.id || slug(document.getElementById('rc-name').value), name: document.getElementById('rc-name').value, role: document.getElementById('rc-role').value, text: document.getElementById('rc-text').value };
+    if (isEdit) data.cv.recommendations[idx] = obj;
+    else data.cv.recommendations.push(obj);
+    closeForm(); updateBadges(); renderSection('anbefalinger'); showToast(isEdit ? 'Anbefaling opdateret' : 'Anbefaling tilføjet');
+  });
+}
+
+/* ---- OM MIG ---- */
+function renderOm(area) {
+  const o = data.om || {};
+  area.innerHTML = `
+    <div style="max-width:680px;">
+      <div class="field"><label class="field-label">Biografi</label><textarea class="f-textarea" style="height:180px;" id="om-bio">${o.bio||''}</textarea><div class="field-hint">Brug dobbelt linjeskift til afsnit</div></div>
+      <div class="field"><label class="field-label">Profilbillede</label>${createUploadZone('om-photo','photo', o.photo||'')}</div>
+      <div class="field"><label class="field-label">Persontype / beskrivelse</label><textarea class="f-textarea" style="height:60px;" id="om-type">${o.persontype||''}</textarea></div>
+      <div class="field-row">
+        <div class="field"><label class="field-label">Sprog (kommasepareret)</label><input class="f-input" id="om-sprog" value="${(o.sprog||[]).join(', ')}"></div>
+        <div class="field"><label class="field-label">Interesser (kommasepareret)</label><input class="f-input" id="om-int" value="${(o.interesser||[]).join(', ')}"></div>
+      </div>
+      <div style="margin-top:8px;display:flex;justify-content:flex-end;">
+        <button class="btn-submit" style="width:auto;padding:9px 24px;" onclick="saveOm()">Gem om mig</button>
+      </div>
+    </div>`;
+}
+
+function saveOm() {
+  if (!data.om) data.om = {};
+  data.om.bio        = document.getElementById('om-bio').value;
+  data.om.photo      = getUploadPath('om-photo') || data.om.photo || '';
+  data.om.persontype = document.getElementById('om-type').value;
+  data.om.sprog      = document.getElementById('om-sprog').value.split(',').map(s=>s.trim()).filter(Boolean);
+  data.om.interesser = document.getElementById('om-int').value.split(',').map(s=>s.trim()).filter(Boolean);
+  saveAll();
+}
+
+/* ---- KONTAKT ---- */
+function renderKontakt(area) {
+  const s = data.site || {};
+  area.innerHTML = `
+    <div style="max-width:560px;">
+      <div class="field-row">
+        <div class="field"><label class="field-label">Email</label><input class="f-input" id="kt-email" value="${s.email||''}"></div>
+        <div class="field"><label class="field-label">Telefon</label><input class="f-input" id="kt-phone" value="${s.phone||''}"></div>
+      </div>
+      <div style="margin-bottom:20px;padding-bottom:20px;border-bottom:0.5px solid var(--border);">
+        <div style="font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:var(--faint);margin-bottom:14px;">Sociale medier</div>
+        <div class="field"><label class="field-label">LinkedIn URL</label><input class="f-input" id="kt-li" value="${s.social?.linkedin||''}"></div>
+        <div class="field"><label class="field-label">Instagram URL</label><input class="f-input" id="kt-ig" value="${s.social?.instagram||''}"></div>
+        <div class="field"><label class="field-label">Facebook URL</label><input class="f-input" id="kt-fb" value="${s.social?.facebook||''}"></div>
+      </div>
+      <div style="display:flex;justify-content:flex-end;">
+        <button class="btn-submit" style="width:auto;padding:9px 24px;" onclick="saveKontakt()">Gem kontaktinfo</button>
+      </div>
+    </div>`;
+}
+
+function saveKontakt() {
+  data.site.email = document.getElementById('kt-email').value;
+  data.site.phone = document.getElementById('kt-phone').value;
+  if (!data.site.social) data.site.social = {};
+  data.site.social.linkedin  = document.getElementById('kt-li').value;
+  data.site.social.instagram = document.getElementById('kt-ig').value;
+  data.site.social.facebook  = document.getElementById('kt-fb').value;
+  saveAll();
+}
+
+/* ---- SITE INDSTILLINGER ---- */
+function renderSite(area) {
+  const s = data.site || {};
+  area.innerHTML = `
+    <div style="max-width:600px;">
+      <div class="settings-grid" style="margin-bottom:20px;">
+        <div class="field"><label class="field-label">Sitenavn</label><input class="f-input" id="st-name" value="${s.name||''}"></div>
+        <div class="field"><label class="field-label">Tagline</label><input class="f-input" id="st-tag" value="${s.tagline||''}"></div>
+        <div class="field"><label class="field-label">Logo</label>${createUploadZone('st-logo','general', s.logo||'')}</div>
+        <div class="field"><label class="field-label">Accent-farve</label>
+          <div class="color-row">
+            <input type="color" class="color-swatch" id="st-color" value="${s.accent_color||'#418FFF'}" oninput="document.getElementById('st-colorhex').value=this.value">
+            <input class="f-input" id="st-colorhex" value="${s.accent_color||'#418FFF'}" style="flex:1;" oninput="document.getElementById('st-color').value=this.value">
+          </div>
+          <div class="color-presets">
+            ${['#418FFF','#41A447','#e05555','#e09a30','#9b59b6','#1abc9c'].map(c=>`<div class="color-preset" style="background:${c}" onclick="document.getElementById('st-color').value='${c}';document.getElementById('st-colorhex').value='${c}';" title="${c}"></div>`).join('')}
+          </div>
+        </div>
+      </div>
+      <div style="display:flex;justify-content:flex-end;">
+        <button class="btn-submit" style="width:auto;padding:9px 24px;" onclick="saveSite()">Gem indstillinger</button>
+      </div>
+    </div>`;
+}
+
+function saveSite() {
+  data.site.name         = document.getElementById('st-name').value;
+  data.site.tagline      = document.getElementById('st-tag').value;
+  data.site.logo         = getUploadPath('st-logo') || data.site.logo || '';
+  data.site.accent_color = document.getElementById('st-colorhex').value;
+  saveAll();
+}
+
+/* ---- DELETE ---- */
+let deleteCallback = null;
+function deleteEntry(section, idx) {
+  deleteCallback = () => {
+    if (section === 'specialer')    data.specialer.splice(idx,1);
+    else if (section === 'projekter')    data.projects.splice(idx,1);
+    else if (section === 'ansaettelser') data.cv.jobs.splice(idx,1);
+    else if (section === 'uddannelse')   data.cv.education.splice(idx,1);
+    else if (section === 'anbefalinger') data.cv.recommendations.splice(idx,1);
+    updateBadges(); renderSection(currentSection); showToast('Indgang slettet');
+  };
+  document.getElementById('confirmDialog').classList.add('show');
+}
+function confirmDelete() { if(deleteCallback) deleteCallback(); closeConfirm(); }
+function closeConfirm()  { document.getElementById('confirmDialog').classList.remove('show'); deleteCallback=null; }
+
+/* ---- FORM PANEL HELPERS ---- */
+let submitCallback = null;
+function openFormPanel(title, onSubmit) {
+  submitCallback = onSubmit;
+  document.getElementById('formTitle').textContent = title;
+  document.getElementById('formPanel').classList.add('open');
+  document.getElementById('panelBackdrop').classList.add('show');
+}
+function submitForm() { if(submitCallback) submitCallback(); }
+function closeForm()  {
+  document.getElementById('formPanel').classList.remove('open');
+  document.getElementById('panelBackdrop').classList.remove('show');
+  submitCallback = null;
+}
+
+/* ---- IMAGE UPLOAD ---- */
+function createUploadZone(id, folder, currentPath='') {
+  return `
+    <div class="upload-zone" id="zone-${id}"
+      ondragover="event.preventDefault();this.classList.add('dragover')"
+      ondragleave="this.classList.remove('dragover')"
+      ondrop="handleDrop(event,'${id}','${folder}')">
+      <input type="file" accept="image/*" onchange="handleFileSelect(this,'${id}','${folder}')">
+      <div class="upload-zone-icon">📷</div>
+      <div class="upload-zone-text">Klik eller træk et billede hertil</div>
+      <div class="upload-zone-hint">JPG, PNG, WebP · Maks 5MB</div>
+    </div>
+    <div class="upload-progress" id="prog-${id}">
+      <div class="upload-progress-bar" id="progbar-${id}"></div>
+    </div>
+    <div class="upload-error" id="err-${id}"></div>
+    <div class="upload-preview ${currentPath?'show':''}" id="prev-${id}">
+      ${currentPath ? `<img src="${currentPath}" onerror="this.style.display='none'">` : '<img style="display:none">'}
+      <div style="flex:1;">
+        <div class="upload-preview-name" id="prevname-${id}">${currentPath ? currentPath.split('/').pop() : ''}</div>
+        <div class="upload-preview-path" id="prevpath-${id}">${currentPath}</div>
+      </div>
+      <button class="upload-preview-clear" onclick="clearUpload('${id}','${folder}')">✕</button>
+    </div>
+    <input type="hidden" id="imgpath-${id}" value="${currentPath}">`;
+}
+
+function handleDrop(e, id, folder) {
+  e.preventDefault();
+  document.getElementById('zone-' + id).classList.remove('dragover');
+  const file = e.dataTransfer.files[0];
+  if (file) uploadImage(file, id, folder);
+}
+
+function handleFileSelect(input, id, folder) {
+  const file = input.files[0];
+  if (file) uploadImage(file, id, folder);
+}
+
+function uploadImage(file, id, folder) {
+  const prog    = document.getElementById('prog-' + id);
+  const progbar = document.getElementById('progbar-' + id);
+  const errEl   = document.getElementById('err-' + id);
+  const prev    = document.getElementById('prev-' + id);
+
+  // Reset
+  errEl.style.display = 'none';
+  prog.style.display  = 'block';
+  progbar.style.width = '0%';
+
+  // Animate progress (XHR doesn't support progress on Simply shared hosting easily)
+  let fakeProgress = 0;
+  const interval = setInterval(() => {
+    fakeProgress = Math.min(fakeProgress + Math.random() * 20, 85);
+    progbar.style.width = fakeProgress + '%';
+  }, 200);
+
+  const formData = new FormData();
+  formData.append('image', file);
+  formData.append('folder', folder);
+
+  fetch('api/upload.php', {
+    method: 'POST',
+    credentials: 'same-origin',
+    body: formData
+  })
+  .then(r => r.json())
+  .then(res => {
+    clearInterval(interval);
+    progbar.style.width = '100%';
+    setTimeout(() => { prog.style.display = 'none'; progbar.style.width = '0%'; }, 600);
+
+    if (res.ok) {
+      // Update hidden input with path
+      document.getElementById('imgpath-' + id).value = res.path;
+      // Show preview
+      const img = prev.querySelector('img');
+      img.src = res.path;
+      img.style.display = 'block';
+      document.getElementById('prevname-' + id).textContent = res.name;
+      document.getElementById('prevpath-' + id).textContent = res.path;
+      prev.classList.add('show');
+      showToast('Billede uploadet: ' + res.name);
+    } else {
+      errEl.textContent = res.error || 'Upload fejlede';
+      errEl.style.display = 'block';
+      showToast(res.error || 'Upload fejlede', true);
+    }
+  })
+  .catch(() => {
+    clearInterval(interval);
+    prog.style.display = 'none';
+    errEl.textContent = 'Serverfejl under upload';
+    errEl.style.display = 'block';
+    showToast('Upload fejlede', true);
+  });
+}
+
+function clearUpload(id) {
+  document.getElementById('imgpath-' + id).value = '';
+  document.getElementById('prev-' + id).classList.remove('show');
+  document.getElementById('err-' + id).style.display = 'none';
+}
+
+function getUploadPath(id) {
+  return document.getElementById('imgpath-' + id)?.value || '';
+}
+
+/* ---- UTILS ---- */
+function slug(str) { return str.toLowerCase().replace(/[æ]/g,'ae').replace(/[ø]/g,'oe').replace(/[å]/g,'aa').replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,''); }
+function emptyState(icon, title, text) { return `<div class="empty"><div class="empty-icon">${icon}</div><h3>${title}</h3><p>${text}</p></div>`; }
+function showToast(msg, isError=false) {
+  const t = document.getElementById('toast');
+  document.getElementById('toastMsg').textContent = msg;
+  t.className = 'toast show' + (isError?' error':'');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+</script>
+</body>
+</html>

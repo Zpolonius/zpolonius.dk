@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CV — Zacharias Polonius</title>
+  <meta name="description" content="CV og arbejdserfaring — Technical Account Manager med 10+ års erfaring inden for tech, support og ledelse.">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .page-hero {
+      padding: 52px 40px 44px;
+      border-bottom: 0.5px solid var(--border);
+    }
+    .page-hero-label { font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--blue); margin-bottom: 14px; }
+    .page-hero-title { font-size: 44px; font-weight: 700; letter-spacing: -0.04em; color: var(--text); line-height: 1.0; margin-bottom: 14px; }
+    .page-hero-desc  { font-size: 14px; color: var(--text-muted); line-height: 1.7; max-width: 520px; }
+
+    /* DOWNLOAD BAR */
+    .download-bar {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 14px 40px; border-bottom: 0.5px solid var(--border);
+      background: var(--bg-card);
+    }
+    .download-bar-text { font-size: 12px; color: var(--text-faint); }
+    .download-btn {
+      font-size: 11px; color: var(--blue); border: 0.5px solid var(--border-blue);
+      background: transparent; padding: 6px 16px; cursor: pointer;
+      font-family: var(--font); letter-spacing: 0.04em; transition: all 0.2s;
+    }
+    .download-btn:hover { background: rgba(65,143,255,0.08); }
+
+    /* TIMELINE */
+    .timeline { display: grid; grid-template-columns: 200px 1fr; }
+    .timeline-year {
+      padding: 24px 28px; border-right: 0.5px solid var(--border);
+      border-bottom: 0.5px solid var(--border);
+      display: flex; flex-direction: column; justify-content: flex-start;
+    }
+    .timeline-year-val { font-size: 11px; color: var(--blue); letter-spacing: 0.08em; font-weight: 500; }
+    .timeline-year-dot {
+      width: 6px; height: 6px; background: var(--blue);
+      border-radius: 50%; margin-top: 10px;
+    }
+    .timeline-content {
+      padding: 24px 32px; border-bottom: 0.5px solid var(--border);
+      display: block; transition: background 0.2s; position: relative;
+    }
+    .timeline-content:hover { background: rgba(65,143,255,0.025); }
+    .timeline-content:hover .timeline-arrow { opacity: 1; }
+    .timeline-role { font-size: 15px; font-weight: 600; color: var(--text); letter-spacing: -0.02em; margin-bottom: 4px; }
+    .timeline-company { font-size: 13px; color: var(--blue); margin-bottom: 8px; font-weight: 500; }
+    .timeline-desc { font-size: 12px; color: var(--text-muted); line-height: 1.65; }
+    .timeline-arrow { position: absolute; right: 20px; top: 50%; transform: translateY(-50%); font-size: 11px; color: var(--blue); opacity: 0; transition: opacity 0.2s; }
+
+    /* EDUCATION */
+    .edu-grid { display: grid; grid-template-columns: repeat(3, 1fr); }
+    .edu-card {
+      padding: 24px 28px; border-right: 0.5px solid var(--border);
+      border-bottom: 0.5px solid var(--border);
+      display: block; transition: background 0.2s;
+    }
+    .edu-card:hover { background: rgba(65,143,255,0.025); }
+    .edu-card:nth-child(3n) { border-right: none; }
+    .edu-period { font-size: 10px; color: var(--blue); letter-spacing: 0.08em; margin-bottom: 6px; }
+    .edu-title { font-size: 14px; font-weight: 600; color: var(--text); letter-spacing: -0.02em; margin-bottom: 4px; }
+    .edu-inst  { font-size: 12px; color: var(--text-muted); margin-bottom: 8px; }
+    .edu-desc  { font-size: 11px; color: var(--text-faint); line-height: 1.6; }
+
+    /* RECOMMENDATIONS */
+    .rec-grid { display: grid; grid-template-columns: repeat(2, 1fr); }
+    .rec-card {
+      padding: 30px 40px; border-right: 0.5px solid var(--border);
+      border-bottom: 0.5px solid var(--border);
+    }
+    .rec-card:nth-child(2n) { border-right: none; }
+    .rec-mark { font-size: 28px; color: var(--blue); font-weight: 700; line-height: 1; margin-bottom: 12px; }
+    .rec-text { font-size: 13px; color: var(--text-muted); line-height: 1.8; font-style: italic; margin-bottom: 16px; }
+    .rec-name { font-size: 13px; font-weight: 600; color: var(--text); }
+    .rec-role { font-size: 11px; color: var(--text-faint); margin-top: 2px; }
+
+    /* SKILLS STRIP */
+    .skills-strip { display: grid; grid-template-columns: repeat(4, 1fr); border-bottom: 0.5px solid var(--border); }
+    .skill-group { padding: 22px 28px; border-right: 0.5px solid var(--border); }
+    .skill-group:last-child { border-right: none; }
+    .skill-group-title { font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-faint); margin-bottom: 12px; }
+    .skill-tags { display: flex; flex-wrap: wrap; gap: 5px; }
+  </style>
+</head>
+<body>
+
+  <nav class="nav">
+    <a href="index.html" class="nav-logo">Z<span>.</span>Polonius</a>
+    <ul class="nav-links">
+      <li><a href="about.html">Om</a></li>
+      <li><a href="projects.html">Projekter</a></li>
+      <li><a href="cv.html" class="active">CV</a></li>
+      <li><a href="contact.html">Kontakt</a></li>
+    </ul>
+    <div class="nav-right">
+      <button class="theme-switch" onclick="toggleTheme()">☀</button>
+      <button class="nav-btn" data-contact>Kontakt</button>
+    </div>
+  </nav>
+
+  <div class="page-hero fade-up fade-up-1">
+    <div class="page-hero-label">Curriculum Vitae</div>
+    <h1 class="page-hero-title">Erfaring &<br>uddannelse</h1>
+    <p class="page-hero-desc">10+ år inden for tech, support, ledelse og AI — fra coffee shop manager til technical account manager.</p>
+  </div>
+
+  <div class="download-bar">
+    <span class="download-bar-text">Download mit fulde CV som PDF</span>
+    <a href="assets/cv-zacharias-polonius.pdf" class="download-btn" download>Download CV →</a>
+  </div>
+
+  <!-- ANSÆTTELSER -->
+  <div class="section-header">
+    <span class="section-title">Ansættelser</span>
+  </div>
+  <div id="jobTimeline" class="timeline">
+    <!-- Rendered by JS -->
+  </div>
+
+  <!-- KOMPETENCER -->
+  <div class="section-header">
+    <span class="section-title">Kompetencer</span>
+  </div>
+  <div class="skills-strip">
+    <div class="skill-group">
+      <div class="skill-group-title">Checkout & E-commerce</div>
+      <div class="skill-tags">
+        <span class="skill-tag blue">Checkout-optimering</span>
+        <span class="skill-tag blue">Konverteringsrate</span>
+        <span class="skill-tag blue">API-integration</span>
+        <span class="skill-tag blue">Shopify</span>
+        <span class="skill-tag blue">DanDomain</span>
+      </div>
+    </div>
+    <div class="skill-group">
+      <div class="skill-group-title">AI & Teknologi</div>
+      <div class="skill-tags">
+        <span class="skill-tag blue">AI-værktøjer</span>
+        <span class="skill-tag blue">Vibe Coding</span>
+        <span class="skill-tag blue">Prompt Engineering</span>
+        <span class="skill-tag blue">Flutter</span>
+        <span class="skill-tag blue">REST API</span>
+      </div>
+    </div>
+    <div class="skill-group">
+      <div class="skill-group-title">Ledelse & Support</div>
+      <div class="skill-tags">
+        <span class="skill-tag">Teamledelse</span>
+        <span class="skill-tag">Teknisk support</span>
+        <span class="skill-tag">Kundesuccess</span>
+        <span class="skill-tag">Helpdesk</span>
+        <span class="skill-tag">Dokumentation</span>
+      </div>
+    </div>
+    <div class="skill-group">
+      <div class="skill-group-title">Sprog & Metode</div>
+      <div class="skill-tags">
+        <span class="skill-tag">Dansk</span>
+        <span class="skill-tag">Engelsk</span>
+        <span class="skill-tag">Scrum / PSPO I</span>
+        <span class="skill-tag">Agil udvikling</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- UDDANNELSE -->
+  <div class="section-header" id="uddannelse">
+    <span class="section-title">Uddannelse & certificeringer</span>
+  </div>
+  <div class="edu-grid" id="eduGrid">
+    <!-- Rendered by JS -->
+  </div>
+
+  <!-- ANBEFALINGER -->
+  <div class="section-header" id="anbefalinger">
+    <span class="section-title">Anbefalinger</span>
+  </div>
+  <div class="rec-grid" id="recGrid">
+    <!-- Rendered by JS -->
+  </div>
+
+  <!-- CTA -->
+  <div style="display:flex;align-items:center;justify-content:space-between;padding:32px 40px;border-top:0.5px solid var(--border);border-bottom:0.5px solid var(--border);">
+    <p style="font-size:14px;color:var(--text-muted);line-height:1.6;max-width:480px;">
+      <strong style="color:var(--text);font-weight:500;">Interesseret i et samarbejde?</strong> Tag kontakt — jeg vender tilbage inden for 24 timer.
+    </p>
+    <button class="btn-primary" data-contact>Tag kontakt →</button>
+  </div>
+
+  <footer class="footer">
+    <div class="footer-left">zacharias@polonius.dk · 3068 7041</div>
+    <div class="footer-links">
+      <a href="https://www.linkedin.com/in/zpolonius/" target="_blank">LinkedIn</a>
+      <a href="https://www.instagram.com/zackp91/" target="_blank">Instagram</a>
+      <a href="https://www.facebook.com/zpolonius" target="_blank">Facebook</a>
+    </div>
+  </footer>
+
+  <!-- CONTACT OVERLAY -->
+  <div class="overlay" id="contactOverlay">
+    <div class="overlay-bg"></div>
+    <div class="modal">
+      <div id="contactFormView">
+        <div class="modal-header">
+          <div>
+            <div class="modal-label">Kontakt</div>
+            <div class="modal-title">Lad os tage<br>en snak</div>
+            <div class="modal-sub">Jeg vender tilbage inden for 24 timer.</div>
+          </div>
+          <button class="modal-close" onclick="closeContact()">✕</button>
+        </div>
+        <div class="modal-progress"><div class="modal-progress-bar" id="contactProgressBar"></div></div>
+        <div class="modal-divider"></div>
+        <div class="modal-body">
+          <div class="field-row">
+            <div class="field"><label class="field-label">Navn</label><input class="input" type="text" id="f-name" placeholder="Dit fulde navn"></div>
+            <div class="field"><label class="field-label">Firma</label><input class="input" type="text" id="f-company" placeholder="Virksomhedsnavn"></div>
+          </div>
+          <div class="field"><label class="field-label">Email</label><input class="input" type="email" id="f-email" placeholder="din@email.dk"></div>
+          <div class="field">
+            <label class="field-label">Emne</label>
+            <div class="pills" style="margin-top:4px;">
+              <button class="pill">Jobmulighed</button>
+              <button class="pill">Samarbejde</button>
+              <button class="pill">AI-projekt</button>
+              <button class="pill">Andet</button>
+            </div>
+          </div>
+          <div class="field" style="margin-top:18px;"><label class="field-label">Besked</label><textarea class="input" id="f-msg" placeholder="Fortæl mig lidt om hvad du har i tankerne..."></textarea></div>
+          <div class="modal-footer">
+            <div class="modal-contact-info"><span>zacharias@polonius.dk</span><span>3068 7041</span></div>
+            <button class="btn-primary" id="contactSubmit">Send besked →</button>
+          </div>
+        </div>
+        <div class="modal-social">
+          <a href="https://www.linkedin.com/in/zpolonius/" target="_blank">LinkedIn</a>
+          <span class="modal-social-sep">·</span>
+          <a href="https://www.instagram.com/zackp91/" target="_blank">Instagram</a>
+          <span class="modal-social-sep">·</span>
+          <a href="https://www.facebook.com/zpolonius" target="_blank">Facebook</a>
+        </div>
+      </div>
+      <div class="success-view" id="contactSuccessView">
+        <div class="success-icon"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
+        <div class="success-title">Besked sendt!</div>
+        <div class="success-sub">Tak for din henvendelse. Jeg vender tilbage inden for 24 timer.</div>
+        <button class="btn-primary" onclick="closeContact()" style="margin-top:8px;">Luk vindue</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- FLOATING BOTTOM NAV (mobil) -->
+  <nav class="bottom-nav" id="bottomNav">
+    <a class="bottom-nav-item" href="index.html" data-page="hjem">
+      <span class="bottom-nav-icon">⌂</span>
+      <span class="bottom-nav-label">Hjem</span>
+    </a>
+    <div class="bottom-nav-divider"></div>
+    <a class="bottom-nav-item" href="projects.html" data-page="projekter">
+      <span class="bottom-nav-icon">◈</span>
+      <span class="bottom-nav-label">Projekter</span>
+    </a>
+    <div class="bottom-nav-divider"></div>
+    <a class="bottom-nav-item" href="cv.html" data-page="cv">
+      <span class="bottom-nav-icon">◎</span>
+      <span class="bottom-nav-label">CV</span>
+    </a>
+    <div class="bottom-nav-divider"></div>
+    <a class="bottom-nav-item" href="about.html" data-page="om">
+      <span class="bottom-nav-icon">◉</span>
+      <span class="bottom-nav-label">Om</span>
+    </a>
+    <div class="bottom-nav-divider"></div>
+    <button class="bottom-nav-contact" data-contact-mobile>
+      <span class="bottom-nav-icon">✉</span>
+      <span class="bottom-nav-label">Kontakt</span>
+    </button>
+  </nav>
+
+  <script src="js/main.js"></script>
+  <script>
+    fetch('data/content.json')
+      .then(r => r.json())
+      .then(data => {
+        // Jobs timeline
+        const tl = document.getElementById('jobTimeline');
+        (data.cv?.jobs || []).forEach(j => {
+          tl.innerHTML += `
+            <div class="timeline-year">
+              <div class="timeline-year-val">${j.period}</div>
+              <div class="timeline-year-dot"></div>
+            </div>
+            <a class="timeline-content" href="detail.html?id=${j.id}">
+              <div class="timeline-role">${j.role}</div>
+              <div class="timeline-company">${j.company}</div>
+              <div class="timeline-desc">${j.desc || ''}</div>
+              <span class="timeline-arrow">→</span>
+            </a>`;
+        });
+
+        // Education
+        const eg = document.getElementById('eduGrid');
+        (data.cv?.education || []).forEach(e => {
+          eg.innerHTML += `
+            <a class="edu-card" href="detail.html?id=${e.id}">
+              <div class="edu-period">${e.period}</div>
+              <div class="edu-title">${e.title}</div>
+              <div class="edu-inst">${e.institution}</div>
+              <div class="edu-desc">${e.desc || ''}</div>
+            </a>`;
+        });
+
+        // Recommendations
+        const rg = document.getElementById('recGrid');
+        (data.cv?.recommendations || []).forEach(r => {
+          rg.innerHTML += `
+            <div class="rec-card">
+              <div class="rec-mark">"</div>
+              <p class="rec-text">${r.text}</p>
+              <div class="rec-name">${r.name}</div>
+              <div class="rec-role">${r.role}</div>
+            </div>`;
+        });
+      });
+  </script>
+</body>
+</html>

@@ -1,0 +1,5 @@
+# Bloker direkte browser-adgang til data-mappen
+<FilesMatch "\.json$">
+    Order allow,deny
+    Deny from all
+</FilesMatch>

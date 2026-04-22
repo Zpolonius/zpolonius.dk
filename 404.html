@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>404 — Side ikke fundet · Zacharias Polonius</title>
+  <meta name="robots" content="noindex">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font);
+      min-height: 100vh;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ---- ANIMATED GRID BACKGROUND ---- */
+    .grid-bg {
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(var(--border) 1px, transparent 1px),
+        linear-gradient(90deg, var(--border) 1px, transparent 1px);
+      background-size: 48px 48px;
+      animation: gridDrift 20s linear infinite;
+      pointer-events: none;
+    }
+    @keyframes gridDrift {
+      0%   { background-position: 0 0; }
+      100% { background-position: 48px 48px; }
+    }
+
+    /* ---- SCANLINE OVERLAY ---- */
+    .scanlines {
+      position: fixed;
+      inset: 0;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        rgba(0,0,0,0.03) 2px,
+        rgba(0,0,0,0.03) 4px
+      );
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* ---- GLITCH ORBS ---- */
+    .orb {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: 0.07;
+      pointer-events: none;
+    }
+    .orb-1 {
+      width: 400px; height: 400px;
+      background: #418FFF;
+      top: -100px; right: -100px;
+      animation: orbFloat1 8s ease-in-out infinite;
+    }
+    .orb-2 {
+      width: 300px; height: 300px;
+      background: #41A447;
+      bottom: -80px; left: -80px;
+      animation: orbFloat2 10s ease-in-out infinite;
+    }
+    @keyframes orbFloat1 {
+      0%,100% { transform: translate(0,0); }
+      50%      { transform: translate(-40px, 40px); }
+    }
+    @keyframes orbFloat2 {
+      0%,100% { transform: translate(0,0); }
+      50%      { transform: translate(30px,-30px); }
+    }
+
+    /* ---- MAIN LAYOUT ---- */
+    .page {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    /* ---- CENTER CONTENT ---- */
+    .center {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px;
+      text-align: center;
+    }
+
+    /* ---- ERROR CODE ---- */
+    .error-wrap {
+      position: relative;
+      margin-bottom: 40px;
+    }
+
+    .error-num {
+      font-size: clamp(120px, 20vw, 220px);
+      font-weight: 700;
+      letter-spacing: -0.06em;
+      line-height: 0.85;
+      color: transparent;
+      -webkit-text-stroke: 1px rgba(255,255,255,0.08);
+      user-select: none;
+      position: relative;
+    }
+
+    /* Glitch layers */
+    .error-num::before,
+    .error-num::after {
+      content: '404';
+      position: absolute;
+      inset: 0;
+      -webkit-text-stroke: 1px;
+    }
+    .error-num::before {
+      color: transparent;
+      -webkit-text-stroke: 1px #418FFF;
+      opacity: 0.4;
+      animation: glitchA 4s infinite;
+    }
+    .error-num::after {
+      color: transparent;
+      -webkit-text-stroke: 1px #41A447;
+      opacity: 0.3;
+      animation: glitchB 4s infinite;
+    }
+    @keyframes glitchA {
+      0%,90%,100% { transform: translate(0); clip-path: none; }
+      91%          { transform: translate(-4px, 2px); clip-path: inset(20% 0 60% 0); }
+      93%          { transform: translate(4px,-2px); clip-path: inset(60% 0 10% 0); }
+      95%          { transform: translate(-2px,0); clip-path: inset(40% 0 30% 0); }
+      97%          { transform: translate(0); clip-path: none; }
+    }
+    @keyframes glitchB {
+      0%,88%,100% { transform: translate(0); clip-path: none; }
+      89%          { transform: translate(4px,-3px); clip-path: inset(50% 0 20% 0); }
+      91%          { transform: translate(-4px,3px); clip-path: inset(10% 0 70% 0); }
+      93%          { transform: translate(2px,0); clip-path: inset(70% 0 5% 0); }
+      95%          { transform: translate(0); clip-path: none; }
+    }
+
+    /* ---- STATUS BADGE ---- */
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border: 0.5px solid rgba(65,143,255,0.3);
+      padding: 6px 14px;
+      font-size: 10px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--blue);
+      margin-bottom: 24px;
+      animation: fadeDown 0.6s ease 0.2s both;
+    }
+    .status-dot-anim {
+      width: 6px; height: 6px;
+      background: var(--blue);
+      border-radius: 50%;
+      animation: pulse 2s ease infinite;
+    }
+    @keyframes pulse {
+      0%,100% { opacity: 1; transform: scale(1); }
+      50%      { opacity: 0.4; transform: scale(0.7); }
+    }
+
+    /* ---- HEADLINE ---- */
+    .headline {
+      font-size: clamp(22px, 4vw, 32px);
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      color: var(--text);
+      margin-bottom: 12px;
+      animation: fadeDown 0.6s ease 0.35s both;
+    }
+
+    .subline {
+      font-size: 14px;
+      color: var(--text-muted);
+      line-height: 1.7;
+      max-width: 400px;
+      margin-bottom: 40px;
+      animation: fadeDown 0.6s ease 0.45s both;
+    }
+
+    /* ---- TERMINAL BLOCK ---- */
+    .terminal {
+      background: var(--bg-card);
+      border: 0.5px solid var(--border-md);
+      padding: 20px 24px;
+      width: 100%;
+      max-width: 480px;
+      text-align: left;
+      margin-bottom: 36px;
+      animation: fadeDown 0.6s ease 0.55s both;
+    }
+    .terminal-bar {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 14px;
+      padding-bottom: 12px;
+      border-bottom: 0.5px solid var(--border);
+    }
+    .terminal-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+    }
+    .t-red   { background: #e05555; }
+    .t-amber { background: #e09a30; }
+    .t-green { background: #41A447; }
+    .terminal-title {
+      font-size: 10px;
+      color: var(--text-faint);
+      letter-spacing: 0.08em;
+      margin-left: 4px;
+    }
+    .terminal-line {
+      font-size: 12px;
+      font-family: 'Courier New', monospace;
+      color: var(--text-muted);
+      line-height: 1.9;
+    }
+    .t-prompt { color: var(--blue); }
+    .t-cmd    { color: var(--text); }
+    .t-err    { color: #e05555; }
+    .t-ok     { color: var(--green); }
+    .t-cursor {
+      display: inline-block;
+      width: 8px; height: 14px;
+      background: var(--blue);
+      vertical-align: middle;
+      margin-left: 2px;
+      animation: blink 1s step-end infinite;
+    }
+    @keyframes blink {
+      0%,100% { opacity: 1; }
+      50%      { opacity: 0; }
+    }
+
+    /* ---- ACTIONS ---- */
+    .actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      justify-content: center;
+      animation: fadeDown 0.6s ease 0.65s both;
+    }
+    .btn-home {
+      background: var(--blue);
+      color: #fff;
+      border: none;
+      padding: 11px 28px;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      font-family: var(--font);
+      text-decoration: none;
+      display: inline-block;
+      transition: opacity 0.2s;
+      letter-spacing: 0.02em;
+    }
+    .btn-home:hover { opacity: 0.85; }
+    .btn-back {
+      background: transparent;
+      color: var(--text-muted);
+      border: 0.5px solid var(--border-md);
+      padding: 11px 24px;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      font-family: var(--font);
+      text-decoration: none;
+      display: inline-block;
+      transition: all 0.2s;
+    }
+    .btn-back:hover { color: var(--text); border-color: var(--text-muted); }
+
+    /* ---- BENTO HINTS ---- */
+    .hints {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      width: 100%;
+      max-width: 640px;
+      margin-top: 48px;
+      border-top: 0.5px solid var(--border);
+      animation: fadeDown 0.6s ease 0.75s both;
+    }
+    .hint {
+      padding: 16px 14px;
+      border-right: 0.5px solid var(--border);
+      text-decoration: none;
+      transition: background 0.2s;
+      display: block;
+    }
+    .hint:last-child { border-right: none; }
+    .hint:hover { background: rgba(65,143,255,0.04); }
+    .hint-icon { font-size: 16px; margin-bottom: 6px; }
+    .hint-label {
+      font-size: 9px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-faint);
+    }
+    .hint:hover .hint-label { color: var(--blue); }
+
+    /* ---- FOOTER ---- */
+    .footer-404 {
+      padding: 16px 40px;
+      border-top: 0.5px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: relative;
+      z-index: 2;
+    }
+    .footer-404-left {
+      font-size: 10px;
+      color: var(--text-ghost);
+      letter-spacing: 0.06em;
+    }
+    .footer-404-right {
+      font-size: 10px;
+      color: var(--text-ghost);
+      letter-spacing: 0.06em;
+    }
+
+    @keyframes fadeDown {
+      from { opacity: 0; transform: translateY(-12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ---- MOBILE ---- */
+    @media (max-width: 600px) {
+      .hints { grid-template-columns: repeat(2,1fr); }
+      .hint:nth-child(2) { border-right: none; }
+      .hint:nth-child(3) { border-top: 0.5px solid var(--border); }
+      .footer-404 { flex-direction: column; gap: 6px; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- BAGGRUNDS-EFFEKTER -->
+  <div class="grid-bg"></div>
+  <div class="scanlines"></div>
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+
+  <div class="page">
+
+    <!-- NAV -->
+    <nav class="nav">
+      <a href="index.html" class="nav-logo">Z<span>.</span>Polonius</a>
+      <ul class="nav-links">
+        <li><a href="about.html">Om</a></li>
+        <li><a href="projects.html">Projekter</a></li>
+        <li><a href="cv.html">CV</a></li>
+        <li><a href="contact.html">Kontakt</a></li>
+      </ul>
+      <div class="nav-right">
+        <button class="theme-switch" onclick="toggleTheme()" title="Skift tema">☀</button>
+      </div>
+    </nav>
+
+    <!-- CENTER -->
+    <div class="center">
+
+      <div class="status-badge">
+        <span class="status-dot-anim"></span>
+        Error · Node ikke fundet
+      </div>
+
+      <div class="error-wrap">
+        <div class="error-num">404</div>
+      </div>
+
+      <h1 class="headline">Siden eksisterer ikke</h1>
+      <p class="subline">
+        Du er landet et sted der ikke er her. Det sker selv for de bedste.
+        De små detaljer leder til store forandringer — men denne URL leder ingen steder.
+      </p>
+
+      <!-- TERMINAL -->
+      <div class="terminal">
+        <div class="terminal-bar">
+          <div class="terminal-dot t-red"></div>
+          <div class="terminal-dot t-amber"></div>
+          <div class="terminal-dot t-green"></div>
+          <span class="terminal-title">zpolonius.dk — bash</span>
+        </div>
+        <div class="terminal-line">
+          <span class="t-prompt">zacharias@zpolonius</span>
+          <span style="color:var(--text-faint)">:~$</span>
+          <span class="t-cmd"> GET <span id="badUrl"></span></span>
+        </div>
+        <div class="terminal-line">
+          <span class="t-err">✗ 404 Not Found</span>
+          — siden eksisterer ikke
+        </div>
+        <div class="terminal-line">
+          <span class="t-ok">→</span> Prøv at navigere til forsiden
+        </div>
+        <div class="terminal-line">
+          <span class="t-prompt">zacharias@zpolonius</span>
+          <span style="color:var(--text-faint)">:~$</span>
+          <span class="t-cursor"></span>
+        </div>
+      </div>
+
+      <div class="actions">
+        <a href="index.html" class="btn-home">← Tilbage til forsiden</a>
+        <a href="javascript:history.back()" class="btn-back">Gå tilbage</a>
+      </div>
+
+      <!-- HURTIGE LINKS -->
+      <div class="hints">
+        <a href="about.html" class="hint">
+          <div class="hint-icon">◉</div>
+          <div class="hint-label">Om mig</div>
+        </a>
+        <a href="projects.html" class="hint">
+          <div class="hint-icon">◈</div>
+          <div class="hint-label">Projekter</div>
+        </a>
+        <a href="cv.html" class="hint">
+          <div class="hint-icon">◎</div>
+          <div class="hint-label">CV</div>
+        </a>
+        <a href="contact.html" class="hint">
+          <div class="hint-icon">✉</div>
+          <div class="hint-label">Kontakt</div>
+        </a>
+      </div>
+
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="footer-404">
+      <span class="footer-404-left">zacharias@polonius.dk · 3068 7041</span>
+      <span class="footer-404-right">ERROR_CODE: 404 · STATUS: NOT_FOUND</span>
+    </footer>
+
+  </div>
+
+  <!-- FLOATING BOTTOM NAV (mobil) -->
+  <nav class="bottom-nav" id="bottomNav">
+    <a class="bottom-nav-item" href="index.html" data-page="hjem">
+      <span class="bottom-nav-icon">⌂</span>
+      <span class="bottom-nav-label">Hjem</span>
+    </a>
+    <div class="bottom-nav-divider"></div>
+    <a class="bottom-nav-item" href="projects.html" data-page="projekter">
+      <span class="bottom-nav-icon">◈</span>
+      <span class="bottom-nav-label">Projekter</span>
+    </a>
+    <div class="bottom-nav-divider"></div>
+    <a class="bottom-nav-item" href="cv.html" data-page="cv">
+      <span class="bottom-nav-icon">◎</span>
+      <span class="bottom-nav-label">CV</span>
+    </a>
+    <div class="bottom-nav-divider"></div>
+    <a class="bottom-nav-item" href="about.html" data-page="om">
+      <span class="bottom-nav-icon">◉</span>
+      <span class="bottom-nav-label">Om</span>
+    </a>
+    <div class="bottom-nav-divider"></div>
+    <a href="contact.html" class="bottom-nav-contact">
+      <span class="bottom-nav-icon">✉</span>
+      <span class="bottom-nav-label">Kontakt</span>
+    </a>
+  </nav>
+
+  <script src="js/main.js"></script>
+  <script>
+    // Vis den forkerte URL i terminalen
+    document.getElementById('badUrl').textContent = window.location.pathname;
+  </script>
+</body>
+</html>

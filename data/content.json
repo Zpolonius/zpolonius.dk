@@ -1,0 +1,296 @@
+{
+  "site": {
+    "name": "Zacharias Polonius",
+    "tagline": "De små detaljer leder til store forandringer",
+    "email": "zacharias@polonius.dk",
+    "phone": "3068 7041",
+    "location": "Bjæverskov, Danmark",
+    "logo": "assets/logo.png",
+    "accent_color": "#418FFF",
+    "social": {
+      "linkedin": "https://www.linkedin.com/in/zpolonius/",
+      "instagram": "https://www.instagram.com/zackp91/",
+      "facebook": "https://www.facebook.com/zpolonius"
+    }
+  },
+  "hero": {
+    "role": "Technical Account Manager · Bring",
+    "cover": "assets/cover.webp",
+    "status": "Tilgængelig for nye muligheder",
+    "intro": "De små detaljer leder til store forandringer — inden for AI, teknisk support og kundesuccess."
+  },
+  "specialer": [
+    {
+      "id": "checkout",
+      "label": "Checkout-optimering",
+      "color": "blue",
+      "icon": "◈",
+      "desc": "Optimering af checkout-flow, konverteringsrate og brugeroplevelse for e-commerce kunder."
+    },
+    {
+      "id": "konvertering",
+      "label": "Konverteringsoptimering",
+      "color": "blue",
+      "icon": "↑",
+      "desc": "Data-drevet tilgang til at øge konverteringsrater og forbedre den digitale kunderejse."
+    },
+    {
+      "id": "tam",
+      "label": "Technical Account Management",
+      "color": "green",
+      "icon": "⬡",
+      "desc": "Teknisk rådgivning og bindeleddet mellem forretning og IT for e-commerce virksomheder."
+    },
+    {
+      "id": "ai",
+      "label": "AI & Vibe Coding",
+      "color": "blue",
+      "icon": "◆",
+      "desc": "Bygger AI-drevne løsninger og bruger moderne AI-værktøjer som dagligt arbejdsredskab."
+    },
+    {
+      "id": "ledelse",
+      "label": "Ledelse & organisation",
+      "color": "green",
+      "icon": "◉",
+      "desc": "Erfaring med teamledelse, organisationsudvikling og frivilligt arbejde på nationalt plan."
+    },
+    {
+      "id": "support",
+      "label": "Teknisk support",
+      "color": "green",
+      "icon": "◎",
+      "desc": "10+ års erfaring med teknisk support, helpdesk og kundekommunikation på tværs af brancher."
+    }
+  ],
+  "bento": [
+    { "label": "Erfaring", "value": "10+", "unit": "år", "sub": "Tech, support og ledelse", "desc": "Fra coffee shop manager til technical account manager — en bred rejse.", "accent": "blue", "detail": "erfaring" },
+    { "label": "Nuværende rolle", "value": "Technical Account Manager", "sub": "Bring · sep. 2023 — nu", "desc": "Teknisk rådgiver og bindeleddet mellem Bring og e-commerce kunder.", "accent": "none", "detail": "rolle" },
+    { "label": "Certificering", "value": "PSPO I", "sub": "Professional Scrum Product Owner", "desc": "Agil produktudvikling og backlog-styring.", "accent": "green", "detail": "pspo" },
+    { "label": "Uddannelse", "value": "Serviceøkonom", "sub": "+ Eventkoordinator", "desc": "Speciale i service management og kommunikation.", "accent": "none", "detail": "uddannelse" },
+    { "label": "Speciale", "value": "Checkout & AI", "sub": "Konvertering og vibe coding", "desc": "Optimerer checkout-flows og bygger AI-drevne løsninger.", "accent": "blue", "detail": "ai" },
+    { "label": "Om mig", "value": "Zacharias, 33", "sub": "Bjæverskov · Gift · To sønner", "desc": "Nysgerrig, detaljeorienteret og altid på udkig efter den smarte løsning.", "accent": "none", "detail": "om" }
+  ],
+  "om": {
+    "bio": "Mit navn er Zacharias Polonius, jeg er 33 år og bor i Bjæverskov sammen med min kone og to sønner. Jeg er uddannet serviceøkonom og har arbejdet inden for tech, support og ledelse i over 10 år.\n\nJeg brænder for at finde de løsninger der gør en reel forskel — hvad enten det er at optimere et checkout-flow, bygge en AI-drevet app eller lede et team. De små detaljer leder til store forandringer.\n\nTil daglig arbejder jeg som Technical Account Manager hos Bring, hvor jeg er det tekniske bindeled mellem Bring og vores e-commerce kunder.",
+    "photo": "assets/photo.jpg",
+    "persontype": "Analytisk og strategisk. Jeg er god til at se mønstre, finde løsninger og kommunikere tekniske emner på en forståelig måde.",
+    "sprog": ["Dansk (modersmål)", "Engelsk (flydende)"],
+    "interesser": ["Fotografi", "Teknologi & AI", "E-commerce", "Frivilligt arbejde"]
+  },
+  "projects": [
+    {
+      "id": "checkout-optimering-bring",
+      "title": "Checkout-optimering hos Bring",
+      "tag": "Checkout",
+      "category": "checkout",
+      "desc": "Optimering af checkout-flow og konverteringsrate for Brings e-commerce kunder.",
+      "cover": "assets/projects/checkout-bring.jpg",
+      "period": "2023 — Nu",
+      "intro": "Som Technical Account Manager hos Bring arbejder jeg dagligt med at optimere checkout-flowet for vores e-commerce kunder. Målet er at sikre den bedst mulige placering og brugeroplevelse for Brings leveringsløsninger i kundernes checkout.",
+      "body": "Checkout-optimering er en central del af mit arbejde hos Bring. Jeg analyserer konverteringsdata, identificerer flaskehalse og rådgiver kunder i hvordan de bedst integrerer Brings API'er for at maksimere konverteringsraten.\n\nJeg arbejder tæt sammen med webshops om at forbedre hele checkout-oplevelsen — fra valg af leveringsmetode til den endelige ordre-bekræftelse.",
+      "tasks": [
+        "Analyse af checkout-flow og identifikation af drop-off punkter",
+        "Rådgivning i optimal placering af leveringsmuligheder i checkout",
+        "Optimering af Brings API-integration for bedre performance",
+        "A/B testing og datadrevet forbedring af konverteringsrate",
+        "Best practice guides til webshops og partnere",
+        "Vejledning i UX-forbedringer der øger konvertering"
+      ],
+      "skills": ["Checkout-optimering", "Konverteringsrate", "API-integration", "UX-analyse", "Bring API", "E-commerce"],
+      "links": [{ "label": "developer.bring.com", "url": "https://developer.bring.com" }]
+    },
+    {
+      "id": "gendo",
+      "title": "GenDo",
+      "tag": "AI",
+      "category": "ai",
+      "desc": "Appen jeg altid har manglet — bygget med AI og vibe coding til daglig opgavestyring.",
+      "cover": "assets/projects/gendo.jpg",
+      "period": "Dec. 2025",
+      "intro": "Jeg har i årevis ledt efter den perfekte produktivitets-app. En der ikke bare er en liste, men som faktisk hjælper mig med at få tingene gjort. Da jeg ikke kunne finde den, besluttede jeg mig for at bygge den selv.",
+      "body": "Tidligere ville et projekt som GenDo have været en kæmpe tidsmæssig investering. Med AI som udviklingspartner er barrieren fuldstændig forsvundet.\n\nVed at bruge AI til at generere koden, hjælpe med opsætning og arkitektur og debugge komplekse integrationer, kunne jeg springe de tunge opsætningsfaser over og gå direkte til at skabe værdi.\n\nGenDo er bygget i Flutter og fungerer på både iPhone og Android. Den kombinerer klassisk opgavestyring med Pomodoro-teknikken og realtids-samarbejde via Firebase.",
+      "tasks": [
+        "Fokus-modul med Pomodoro-timer koblet til opgavelister",
+        "Intelligente opgavelister med prioritering og kategorisering",
+        "Realtids-samarbejde — del lister med andre øjeblikkeligt",
+        "Cloud-baseret data via Firebase — aldrig mister data",
+        "Bygget i Flutter til både iOS og Android"
+      ],
+      "skills": ["Flutter", "Firebase", "Claude AI", "Vibe Coding", "App Design", "Prompt Engineering"],
+      "links": [{ "label": "Åbn GenDo", "url": "https://gendo-a3592.web.app" }],
+      "url": "https://gendo-a3592.web.app"
+    },
+    {
+      "id": "review-manager",
+      "title": "Review Manager",
+      "tag": "AI",
+      "category": "ai",
+      "desc": "AI-drevet review-håndtering bygget til brug i Brings kundeplatform.",
+      "cover": "assets/projects/review-manager.jpg",
+      "period": "Okt. 2025",
+      "intro": "Som Technical Account Manager hos Bring arbejder jeg aktivt med AI som en del af hverdagen. Review Manager er et internt værktøj til at håndtere og besvare kundereviews effektivt med AI.",
+      "body": "Review Manager automatiserer og optimerer håndteringen af kundefeedback ved hjælp af AI.Værktøjet analyserer reviews, foreslår svar og hjælper med at prioritere opfølgning.\n\nProjektet er et godt eksempel på hvordan AI kan bruges til at løse reelle forretningsproblemer hurtigt og effektivt.",
+      "skills": ["AI", "Automatisering", "Kundefeedback", "Prompt Engineering", "Bring Platform"],
+      "links": []
+    },
+    {
+      "id": "ai-support-specialist",
+      "title": "AI Support Specialist",
+      "tag": "Arbejde",
+      "category": "work",
+      "desc": "Opbyggede support, vidensbase og helpdesk fra bunden hos MyBizz AI.",
+      "cover": "assets/projects/mybizz.jpg",
+      "period": "Dec. 2024 — Okt. 2025",
+      "intro": "Som AI Support Specialist hos MyBizz AI var min primære opgave at opbygge supportfunktion, vidensbase og helpdesk og sikre en gnidningsfri oplevelse for brugerne.",
+      "body": "Jeg byggede supportstrukturen fra bunden — fra vidensbase og FAQ til helpdesk-workflows og supportprocesser. En unik mulighed for at forme en hel supportorganisation i en AI-virksomhed.",
+      "skills": ["Support", "Vidensbase", "Helpdesk", "AI-produkter", "Procesdesign", "Kundeservice"],
+      "links": []
+    },
+    {
+      "id": "technical-account-manager",
+      "title": "Technical Account Manager",
+      "tag": "Arbejde",
+      "category": "work",
+      "desc": "Teknisk rådgiver og bindeleddet mellem Bring og e-commerce kunder.",
+      "cover": "assets/projects/bring.jpg",
+      "period": "Sep. 2023 — Nu",
+      "intro": "Siden 1. september 2023 har jeg været ansat hos Bring som Technical Account Manager. Her rådgiver og vejleder jeg Brings kunder så de får mest muligt ud af samarbejdet.",
+      "body": "I det daglige fungerer jeg som teknisk rådgiver for kunder og partnere. Jeg er bindeleddet mellem salg og IT/integration og hjælper webshops med at optimere brugen af Brings API'er.\n\nJeg er med hele vejen i kundens rejse — fra integration af API'erne til løbende rådgivning og evaluering af tekniske løsninger.",
+      "tasks": [
+        "Optimering af checkout-flowet for webshops og partnere",
+        "Vejledning i brug af Brings API'er, særligt Checkout-API'et",
+        "Opdatering og vedligeholdelse af best practice-guide",
+        "Support, drift og udvikling af plugins til DanDomain og Shopify",
+        "Sikre bedst mulige placering af Posten Bring i checkouten",
+        "Generel vejledning og forbedring af konverteringsrate",
+        "Besvare spørgsmål fra webshops, kunder og partnere",
+        "Udarbejde dokumentation og informationsmateriale"
+      ],
+      "skills": ["API-integration", "Checkout-optimering", "Shopify", "DanDomain", "REST API", "Kunderådgivning", "Dokumentation"],
+      "links": [
+        { "label": "bring.dk", "url": "https://bring.dk" },
+        { "label": "developer.bring.com", "url": "https://developer.bring.com" }
+      ]
+    },
+    {
+      "id": "formand-lh",
+      "title": "Formand for LH",
+      "tag": "Frivillig",
+      "category": "volunteer",
+      "desc": "Landsformand med ansvar for organisation og strategi.",
+      "cover": "assets/projects/lh.jpg",
+      "period": "2015 — 2017",
+      "intro": "Som landsformand for LH var jeg ansvarlig for den overordnede strategi og drift af organisationen på landsplan.",
+      "body": "Rollen som landsformand gav mig stærke ledelseskompetencer og erfaring med at drive en frivillig organisation på nationalt niveau.",
+      "skills": ["Ledelse", "Strategi", "Organisation", "Frivilligt arbejde", "Kommunikation"],
+      "links": []
+    }
+  ],
+  "cv": {
+    "jobs": [
+      {
+        "id": "technical-account-manager",
+        "period": "2023 — Nu",
+        "role": "Technical Account Manager",
+        "company": "Bring",
+        "desc": "Teknisk rådgiver for e-commerce kunder og partnere.",
+        "cover": "assets/projects/bring.jpg",
+        "category": "work"
+      },
+      {
+        "id": "ai-support-specialist",
+        "period": "2024 — 2025",
+        "role": "AI Support Specialist",
+        "company": "MyBizz AI",
+        "desc": "Opbyggede supportfunktion, vidensbase og helpdesk.",
+        "cover": "assets/projects/mybizz.jpg",
+        "category": "work"
+      },
+      {
+        "id": "technical-support-specialist",
+        "period": "2022 — 2023",
+        "role": "Technical Support Specialist",
+        "company": "Altapay",
+        "desc": "Teknisk support til betalingsplatform.",
+        "category": "work"
+      },
+      {
+        "id": "technical-support-manager",
+        "period": "2020 — 2022",
+        "role": "Technical Support Manager & Product Specialist",
+        "company": "Shopbox",
+        "desc": "Leder af support og product specialist.",
+        "category": "work"
+      },
+      {
+        "id": "customer-success-manager",
+        "period": "2019 — 2020",
+        "role": "Customer Success Manager",
+        "company": "Shopbox",
+        "desc": "Ansvar for kundeservice og teknisk onboarding.",
+        "category": "work"
+      },
+      {
+        "id": "coffee-shop-manager",
+        "period": "2018 — 2019",
+        "role": "Coffee Shop Manager",
+        "company": "Espresso House",
+        "desc": "Daglig leder på Roskilde Station og RO's Torv.",
+        "category": "work"
+      }
+    ],
+    "education": [
+      {
+        "id": "pspo",
+        "period": "2021",
+        "title": "Professional Scrum Product Owner I",
+        "institution": "Scrum.org",
+        "desc": "Certificering i agil produktudvikling og backlog-styring.",
+        "category": "education"
+      },
+      {
+        "id": "serviceokonom",
+        "period": "2014 — 2016",
+        "title": "Serviceøkonom",
+        "institution": "Erhvervsakademi",
+        "desc": "Speciale i service management, kommunikation og kultur.",
+        "category": "education"
+      },
+      {
+        "id": "eventkoordinator",
+        "period": "2012 — 2014",
+        "title": "Eventkoordinator",
+        "institution": "Erhvervsskole",
+        "desc": "Planlægning, projektledelse og eventafvikling.",
+        "category": "education"
+      }
+    ],
+    "recommendations": [
+      {
+        "id": "ronnie-nygaard",
+        "name": "Ronnie Nygaard",
+        "role": "Technical Support, Altapay",
+        "text": "Zacharias er en dygtig og engageret medarbejder, der altid leverer høj kvalitet i sit arbejde. Han har en naturlig evne til at skabe gode relationer med kunder og kollegaer."
+      },
+      {
+        "id": "trine-simmel",
+        "name": "Trine Simmel",
+        "role": "Tidligere kollega",
+        "text": "Zacharias har en sjælden kombination af teknisk forståelse og stærke kommunikative evner — han formår at formidle komplekse emner på en forståelig og engagerende måde."
+      },
+      {
+        "id": "johannes-maarlov",
+        "name": "Johannes Mårlöv",
+        "role": "Politisk samarbejdspartner",
+        "text": "Zacharias er en stærk leder med en naturlig autoritet. Han evner at samle folk om en fælles vision og skaber altid et godt arbejdsmiljø."
+      },
+      {
+        "id": "peter-hummelgaard",
+        "name": "Peter Hummelgaard",
+        "role": "Politisk kontakt",
+        "text": "Zacharias er en dedikeret og kompetent person, der altid går ind for sagen med stort engagement og professionalisme."
+      }
+    ]
+  }
+}

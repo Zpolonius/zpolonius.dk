@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Zacharias Polonius — Portfolio</title>
+  <meta name="description" content="De små detaljer leder til store forandringer. Technical Account Manager hos Bring med speciale i AI, checkout-optimering og teknisk rådgivning.">
+
+  <!-- Open Graph / LinkedIn / Facebook -->
+  <meta property="og:type"        content="website">
+  <meta property="og:url"         content="https://test.zpolonius.dk/">
+  <meta property="og:title"       content="Zacharias Polonius — Portfolio">
+  <meta property="og:description" content="De små detaljer leder til store forandringer. Technical Account Manager hos Bring med speciale i AI og checkout-optimering.">
+  <meta property="og:image"       content="https://test.zpolonius.dk/assets/cover.webp">
+
+  <!-- Twitter/X Card -->
+  <meta name="twitter:card"        content="summary_large_image">
+  <meta name="twitter:title"       content="Zacharias Polonius — Portfolio">
+  <meta name="twitter:description" content="Technical Account Manager · AI · Checkout-optimering">
+  <meta name="twitter:image"       content="https://test.zpolonius.dk/assets/cover.webp">
+
+  <!-- Preconnect for faster font loading -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    /* ---- HERO ---- */
+    .hero {
+      position: relative;
+      height: 520px;
+      overflow: hidden;
+      border-bottom: 0.5px solid var(--border);
+    }
+    .hero-img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      object-position: center;
+      filter: brightness(0.4) contrast(1.15) saturate(0.75);
+    }
+    .hero-fallback {
+      position: absolute;
+      inset: 0;
+      background: #161616;
+    }
+    .hero-content {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: flex-end;
+      padding: 48px 40px;
+    }
+    .hero-label {
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.15em;
+      color: var(--blue);
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+    .hero-name {
+      font-size: 52px;
+      font-weight: 700;
+      letter-spacing: -0.04em;
+      line-height: 1.0;
+      color: #fff;
+      margin-bottom: 14px;
+    }
+    .hero-tagline {
+      font-size: 14px;
+      color: rgba(255,255,255,0.55);
+      line-height: 1.6;
+      max-width: 360px;
+      margin-bottom: 28px;
+    }
+    .hero-actions { display: flex; gap: 12px; }
+    .hero-btn-primary {
+      background: var(--blue);
+      color: #fff;
+      border: none;
+      padding: 10px 22px;
+      font-size: 13px;
+      font-weight: 500;
+      transition: background 0.2s;
+    }
+    .hero-btn-primary:hover { background: #2d7ae8; }
+    .hero-btn-secondary {
+      background: transparent;
+      color: rgba(255,255,255,0.6);
+      border: 0.5px solid rgba(255,255,255,0.2);
+      padding: 10px 22px;
+      font-size: 13px;
+      font-weight: 500;
+      transition: all 0.2s;
+    }
+    .hero-btn-secondary:hover { border-color: rgba(255,255,255,0.4); color: #fff; }
+    .hero-right {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      justify-content: flex-start;
+    }
+
+    /* ---- BENTO ---- */
+    .bento {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      border-bottom: 0.5px solid var(--border);
+    }
+    .bento-cell {
+      padding: 24px 28px;
+      border-right: 0.5px solid var(--border);
+      border-bottom: 0.5px solid var(--border);
+      cursor: pointer;
+      transition: background 0.2s;
+      position: relative;
+    }
+    .bento-cell:hover { background: rgba(255,255,255,0.025); }
+    .bento-cell:hover .cell-arrow { opacity: 1; }
+    .bento-cell:nth-child(3n) { border-right: none; }
+    .bento-cell.selected {
+      background: rgba(65,143,255,0.05);
+      border-color: rgba(65,143,255,0.2);
+    }
+    .cell-label {
+      font-size: 9px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--text-faint);
+      margin-bottom: 8px;
+    }
+    .cell-title {
+      font-size: 16px;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      color: #fff;
+      margin-bottom: 5px;
+      line-height: 1.2;
+    }
+    .cell-sub {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+    }
+    .cell-desc {
+      font-size: 11px;
+      color: var(--text-faint);
+      line-height: 1.6;
+    }
+    .cell-arrow {
+      position: absolute;
+      bottom: 14px; right: 16px;
+      font-size: 11px;
+      color: var(--blue);
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+    .accent-blue { color: var(--blue); }
+    .accent-green { color: var(--green); }
+
+    /* ---- BENTO DETAIL HERO ---- */
+    .detail-panel {
+      display: none;
+      border-bottom: 0.5px solid var(--border);
+      background: var(--bg-card);
+    }
+    .detail-panel.active { display: block; }
+    .detail-inner {
+      padding: 36px 40px;
+      display: grid;
+      grid-template-columns: 1fr 320px;
+      gap: 40px;
+      align-items: start;
+    }
+    .detail-tag {
+      display: inline-block;
+      font-size: 9px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      padding: 3px 8px;
+      margin-bottom: 14px;
+      border: 0.5px solid var(--border-blue);
+      color: var(--blue);
+    }
+    .detail-title {
+      font-size: 26px;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      color: #fff;
+      margin-bottom: 12px;
+      line-height: 1.1;
+    }
+    .detail-desc {
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.75;
+      margin-bottom: 22px;
+    }
+    .detail-actions { display: flex; gap: 10px; }
+    .detail-btn {
+      background: var(--blue);
+      color: #fff;
+      border: none;
+      padding: 9px 18px;
+      font-size: 12px;
+      font-weight: 500;
+      transition: background 0.2s;
+    }
+    .detail-btn:hover { background: #2d7ae8; }
+    .detail-close {
+      background: transparent;
+      color: var(--text-muted);
+      border: 0.5px solid var(--border-md);
+      padding: 9px 18px;
+      font-size: 12px;
+      transition: all 0.2s;
+    }
+    .detail-close:hover { color: #fff; border-color: rgba(255,255,255,0.3); }
+    .detail-meta { display: flex; flex-direction: column; }
+    .detail-row {
+      display: flex;
+      gap: 12px;
+      padding: 12px 0;
+      border-bottom: 0.5px solid var(--border);
+      align-items: baseline;
+    }
+    .detail-row:last-child { border-bottom: none; }
+    .detail-key {
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-faint);
+      min-width: 80px;
+      flex-shrink: 0;
+    }
+    .detail-val { font-size: 13px; color: var(--text-muted); line-height: 1.5; }
+
+    /* ---- PROJECTS ---- */
+    .proj-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+    }
+    .proj-card {
+      padding: 24px 28px;
+      border-right: 0.5px solid var(--border);
+      border-bottom: 0.5px solid var(--border);
+      transition: background 0.2s;
+      position: relative;
+      display: block;
+    }
+    .proj-card:hover { background: rgba(255,255,255,0.025); }
+    .proj-card:hover .proj-arrow { opacity: 1; }
+    .proj-card:nth-child(3n) { border-right: none; }
+    .proj-tag { margin-bottom: 12px; }
+    .proj-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: #fff;
+      letter-spacing: -0.02em;
+      margin-bottom: 6px;
+      line-height: 1.3;
+    }
+    .proj-desc {
+      font-size: 12px;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+    .proj-arrow {
+      position: absolute;
+      bottom: 14px; right: 16px;
+      font-size: 11px;
+      color: var(--blue);
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+
+    /* ---- CV STRIP ---- */
+    .cv-strip {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+    }
+    .cv-item {
+      padding: 22px 28px;
+      border-right: 0.5px solid var(--border);
+      border-bottom: 0.5px solid var(--border);
+      display: block;
+      transition: background 0.2s;
+    }
+    .cv-item:hover { background: rgba(255,255,255,0.025); }
+    .cv-item:nth-child(3n) { border-right: none; }
+    .cv-year { font-size: 10px; color: var(--blue); letter-spacing: 0.1em; margin-bottom: 4px; }
+    .cv-role { font-size: 13px; font-weight: 600; color: #fff; letter-spacing: -0.01em; margin-bottom: 3px; }
+    .cv-company { font-size: 11px; color: var(--text-faint); margin-bottom: 6px; }
+    .cv-desc { font-size: 11px; color: var(--text-ghost); line-height: 1.5; }
+
+    /* ---- QUOTES ---- */
+    .quote-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+    }
+    .quote-card {
+      padding: 28px 40px;
+      border-right: 0.5px solid var(--border);
+      border-bottom: 0.5px solid var(--border);
+    }
+    .quote-card:nth-child(2n) { border-right: none; }
+    .quote-mark { font-size: 22px; color: var(--blue); font-weight: 700; margin-bottom: 10px; line-height: 1; }
+    .quote-text { font-size: 13px; color: var(--text-muted); line-height: 1.75; margin-bottom: 14px; font-style: italic; }
+    .quote-author { font-size: 11px; color: var(--text-faint); }
+    .quote-name { color: rgba(255,255,255,0.6); font-weight: 500; }
+
+    /* ---- CTA ---- */
+    .cta-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 32px 40px;
+      border-bottom: 0.5px solid var(--border);
+    }
+    .cta-text { font-size: 14px; color: var(--text-muted); line-height: 1.6; max-width: 480px; }
+    .cta-text strong { color: #fff; font-weight: 500; }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav class="nav">
+    <a href="index.html" class="nav-logo">Z<span>.</span>Polonius</a>
+    <ul class="nav-links">
+      <li><a href="about.html">Om</a></li>
+      <li><a href="projects.html">Projekter</a></li>
+      <li><a href="cv.html">CV</a></li>
+      <li><a href="contact.html">Kontakt</a></li>
+    </ul>
+    <div class="nav-right">
+      <button class="nav-hamburger" id="hamburgerBtn" aria-label="Menu" aria-expanded="false">☰</button>
+      <button class="theme-switch" onclick="toggleTheme()" title="Skift tema">☀</button>
+      <button class="nav-btn" data-contact>Kontakt</button>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <img
+      class="hero-img"
+      src="assets/cover.webp"
+      alt="Zacharias Polonius"
+      onerror="this.style.display='none'"
+    />
+    <div class="hero-fallback"></div>
+    <div class="hero-content">
+      <div class="fade-up fade-up-1">
+        <div class="hero-label">Technical Account Manager · Bring</div>
+        <h1 class="hero-name">Zacharias<br>Polonius</h1>
+        <p class="hero-tagline">De små detaljer leder til store forandringer — inden for AI, teknisk support og kundesuccess.</p>
+        <div class="hero-actions">
+          <a href="projects.html" class="hero-btn-primary">Se projekter →</a>
+          <a href="assets/cv-zacharias-polonius.pdf" class="hero-btn-secondary" download>Download CV</a>
+        </div>
+      </div>
+      <div class="hero-right fade-up fade-up-2">
+        <div class="status-pill">
+          <span class="status-dot"></span>
+          Tilgængelig for nye muligheder
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BENTO DETAIL PANEL -->
+  <div class="detail-panel" id="detailPanel">
+    <div class="detail-inner">
+      <div>
+        <div class="detail-tag" id="dTag"></div>
+        <h2 class="detail-title" id="dTitle"></h2>
+        <p class="detail-desc" id="dDesc"></p>
+        <div class="detail-actions">
+          <a href="#" class="detail-btn" id="dBtn"></a>
+          <button class="detail-close" onclick="closeDetail()">Luk ✕</button>
+        </div>
+      </div>
+      <div class="detail-meta" id="dMeta"></div>
+    </div>
+  </div>
+
+  <!-- BENTO GRID -->
+  <div class="bento">
+    <div class="bento-cell fade-up fade-up-1" onclick="openDetail('erfaring')">
+      <div class="cell-label">Erfaring</div>
+      <div class="cell-title"><span class="accent-blue">10+</span> år</div>
+      <div class="cell-sub">Tech, support og ledelse</div>
+      <div class="cell-desc">Fra coffee shop manager til technical account manager — en bred rejse gennem service og teknologi.</div>
+      <span class="cell-arrow">Åbn →</span>
+    </div>
+    <div class="bento-cell fade-up fade-up-2" onclick="openDetail('rolle')">
+      <div class="cell-label">Nuværende rolle</div>
+      <div class="cell-title">Technical Account Manager</div>
+      <div class="cell-sub">Bring · sep. 2023 — nu</div>
+      <div class="cell-desc">Teknisk rådgiver og bindeleddet mellem Bring og e-commerce kunder og partnere.</div>
+      <span class="cell-arrow">Åbn →</span>
+    </div>
+    <div class="bento-cell fade-up fade-up-3" onclick="openDetail('pspo')">
+      <div class="cell-label">Certificering</div>
+      <div class="cell-title"><span class="accent-green">PSPO I</span></div>
+      <div class="cell-sub">Professional Scrum Product Owner</div>
+      <div class="cell-desc">Agil produktudvikling og backlog-styring. Opnået under arbejdet som Product Specialist hos Shopbox.</div>
+      <span class="cell-arrow">Åbn →</span>
+    </div>
+    <div class="bento-cell fade-up fade-up-1" onclick="openDetail('uddannelse')">
+      <div class="cell-label">Uddannelse</div>
+      <div class="cell-title">Serviceøkonom</div>
+      <div class="cell-sub">+ Eventkoordinator</div>
+      <div class="cell-desc">Speciale i service management og kommunikation, suppleret med eventkoordinator-uddannelse.</div>
+      <span class="cell-arrow">Åbn →</span>
+    </div>
+    <div class="bento-cell fade-up fade-up-2" onclick="openDetail('ai')">
+      <div class="cell-label">Speciale</div>
+      <div class="cell-title">AI &amp; <span class="accent-blue">Vibe Coding</span></div>
+      <div class="cell-sub">Bygger AI-drevne løsninger</div>
+      <div class="cell-desc">Bruger AI aktivt i hverdagen og har bygget egne apps som GenDo og Review Manager.</div>
+      <span class="cell-arrow">Åbn →</span>
+    </div>
+    <div class="bento-cell fade-up fade-up-3" onclick="openDetail('om')">
+      <div class="cell-label">Om mig</div>
+      <div class="cell-title">Zacharias, 33</div>
+      <div class="cell-sub">Bjæverskov · Gift · To sønner</div>
+      <div class="cell-desc">Nysgerrig, detaljeorienteret og altid på udkig efter den smarte løsning — privat og professionelt.</div>
+      <span class="cell-arrow">Åbn →</span>
+    </div>
+  </div>
+
+  <!-- PROJEKTER -->
+  <div>
+    <div class="section-header">
+      <span class="section-title">Udvalgte projekter</span>
+      <a href="projects.html" class="section-link">Se alle →</a>
+    </div>
+    <div class="proj-grid">
+      <a href="detail.html?id=gendo" class="proj-card">
+        <div class="tag tag-ai proj-tag">AI</div>
+        <div class="proj-title">GenDo</div>
+        <div class="proj-desc">Appen jeg altid har manglet — bygget med AI og vibe coding til daglig opgavestyring.</div>
+        <span class="proj-arrow">Læs mere →</span>
+      </a>
+      <a href="detail.html?id=review-manager" class="proj-card">
+        <div class="tag tag-ai proj-tag">AI</div>
+        <div class="proj-title">Review Manager</div>
+        <div class="proj-desc">AI-drevet review-håndtering bygget til brug i Brings kundeplatform.</div>
+        <span class="proj-arrow">Læs mere →</span>
+      </a>
+      <a href="detail.html?id=ai-support-specialist" class="proj-card">
+        <div class="tag tag-work proj-tag">Arbejde</div>
+        <div class="proj-title">AI Support Specialist</div>
+        <div class="proj-desc">Opbyggede support, vidensbase og helpdesk fra bunden hos MyBizz AI.</div>
+        <span class="proj-arrow">Læs mere →</span>
+      </a>
+    </div>
+    <div class="section-footer">
+      <a href="projects.html" class="btn-outline">Se alle projekter</a>
+    </div>
+  </div>
+
+  <!-- CV STRIP -->
+  <div>
+    <div class="section-header">
+      <span class="section-title">Seneste erfaring</span>
+      <a href="cv.html" class="section-link">Se fuldt CV →</a>
+    </div>
+    <div class="cv-strip">
+      <a href="detail.html?id=technical-account-manager" class="cv-item">
+        <div class="cv-year">2023 — Nu</div>
+        <div class="cv-role">Technical Account Manager</div>
+        <div class="cv-company">Bring</div>
+        <div class="cv-desc">Teknisk rådgiver for e-commerce kunder og partnere.</div>
+      </a>
+      <a href="detail.html?id=ai-support-specialist" class="cv-item">
+        <div class="cv-year">2024 — 2025</div>
+        <div class="cv-role">AI Support Specialist</div>
+        <div class="cv-company">MyBizz AI</div>
+        <div class="cv-desc">Opbyggede supportfunktion og vidensbase fra bunden.</div>
+      </a>
+      <a href="detail.html?id=technical-support-specialist" class="cv-item">
+        <div class="cv-year">2022 — 2023</div>
+        <div class="cv-role">Technical Support Specialist</div>
+        <div class="cv-company">Altapay</div>
+        <div class="cv-desc">Teknisk support til betalingsplatform.</div>
+      </a>
+    </div>
+    <div class="section-footer">
+      <a href="cv.html" class="btn-outline">Se fuldt CV</a>
+    </div>
+  </div>
+
+  <!-- ANBEFALINGER -->
+  <div>
+    <div class="section-header">
+      <span class="section-title">Anbefalinger</span>
+      <a href="cv.html#anbefalinger" class="section-link">Se alle →</a>
+    </div>
+    <div class="quote-grid">
+      <div class="quote-card">
+        <div class="quote-mark">"</div>
+        <p class="quote-text">Zacharias er en dygtig og engageret medarbejder, der altid leverer høj kvalitet i sit arbejde. Han har en naturlig evne til at skabe gode relationer med kunder og kollegaer.</p>
+        <div class="quote-author"><span class="quote-name">Ronnie Nygaard</span> · Technical Support, Altapay</div>
+      </div>
+      <div class="quote-card">
+        <div class="quote-mark">"</div>
+        <p class="quote-text">Zacharias har en sjælden kombination af teknisk forståelse og stærke kommunikative evner — han formår at formidle komplekse emner på en forståelig og engagerende måde.</p>
+        <div class="quote-author"><span class="quote-name">Trine Simmel</span> · Tidligere kollega</div>
+      </div>
+    </div>
+    <div class="section-footer">
+      <a href="cv.html#anbefalinger" class="btn-outline">Se alle anbefalinger</a>
+    </div>
+  </div>
+
+  <!-- CTA -->
+  <div class="cta-bar">
+    <p class="cta-text"><strong>Interesseret i et samarbejde?</strong> Tøv ikke med at tage kontakt — jeg vender tilbage inden for 24 timer.</p>
+    <button class="btn-primary" data-contact>Tag kontakt →</button>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-left">zacharias@polonius.dk · 3068 7041</div>
+    <div class="footer-links">
+      <a href="https://www.linkedin.com/in/zpolonius/" target="_blank">LinkedIn</a>
+      <a href="https://www.instagram.com/zackp91/" target="_blank">Instagram</a>
+      <a href="https://www.facebook.com/zpolonius" target="_blank">Facebook</a>
+    </div>
+  </footer>
+
+  <!-- CONTACT OVERLAY -->
+  <div class="overlay" id="contactOverlay">
+    <div class="overlay-bg"></div>
+    <div class="modal">
+      <div id="contactFormView">
+        <div class="modal-header">
+          <div>
+            <div class="modal-label">Kontakt</div>
+            <div class="modal-title">Lad os tage<br>en snak</div>
+            <div class="modal-sub">Jeg vender tilbage inden for 24 timer.</div>
+          </div>
+          <button class="modal-close" onclick="closeContact()">✕</button>
+        </div>
+        <div class="modal-progress"><div class="modal-progress-bar" id="contactProgressBar"></div></div>
+        <div class="modal-divider"></div>
+        <div class="modal-body">
+          <div class="field-row">
+            <div class="field">
+              <label class="field-label">Navn</label>
+              <input class="input" type="text" id="f-name" placeholder="Dit fulde navn">
+            </div>
+            <div class="field">
+              <label class="field-label">Firma</label>
+              <input class="input" type="text" id="f-company" placeholder="Virksomhedsnavn">
+            </div>
+          </div>
+          <div class="field">
+            <label class="field-label">Email</label>
+            <input class="input" type="email" id="f-email" placeholder="din@email.dk">
+          </div>
+          <div class="field">
+            <label class="field-label">Emne</label>
+            <div class="pills" style="margin-top:4px;">
+              <button class="pill">Jobmulighed</button>
+              <button class="pill">Samarbejde</button>
+              <button class="pill">AI-projekt</button>
+              <button class="pill">Andet</button>
+            </div>
+          </div>
+          <div class="field" style="margin-top:18px;">
+            <label class="field-label">Besked</label>
+            <textarea class="input" id="f-msg" placeholder="Fortæl mig lidt om hvad du har i tankerne..."></textarea>
+          </div>
+          <div class="modal-footer">
+            <div class="modal-contact-info">
+              <span>zacharias@polonius.dk</span>
+              <span>3068 7041</span>
+            </div>
+            <button class="btn-primary" id="contactSubmit">Send besked →</button>
+          </div>
+        </div>
+        <div class="modal-social">
+          <a href="https://www.linkedin.com/in/zpolonius/" target="_blank">LinkedIn</a>
+          <span class="modal-social-sep">·</span>
+          <a href="https://www.instagram.com/zackp91/" target="_blank">Instagram</a>
+          <span class="modal-social-sep">·</span>
+          <a href="https://www.facebook.com/zpolonius" target="_blank">Facebook</a>
+        </div>
+      </div>
+      <div class="success-view" id="contactSuccessView">
+        <div class="success-icon">
+          <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+        </div>
+        <div class="success-title">Besked sendt!</div>
+        <div class="success-sub">Tak for din henvendelse. Jeg vender tilbage inden for 24 timer.</div>
+        <button class="btn-primary" onclick="closeContact()" style="margin-top:8px;">Luk vindue</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- FLOATING BOTTOM NAV (mobil) -->
+  <nav class="bottom-nav" id="bottomNav">
+    <a class="bottom-nav-item" href="index.html" data-page="hjem">
+      <span class="bottom-nav-icon">⌂</span>
+      <span class="bottom-nav-label">Hjem</span>
+    </a>
+    <div class="bottom-nav-divider"></div>
+    <a class="bottom-nav-item" href="projects.html" data-page="projekter">
+      <span class="bottom-nav-icon">◈</span>
+      <span class="bottom-nav-label">Projekter</span>
+    </a>
+    <div class="bottom-nav-divider"></div>
+    <a class="bottom-nav-item" href="cv.html" data-page="cv">
+      <span class="bottom-nav-icon">◎</span>
+      <span class="bottom-nav-label">CV</span>
+    </a>
+    <div class="bottom-nav-divider"></div>
+    <a class="bottom-nav-item" href="about.html" data-page="om">
+      <span class="bottom-nav-icon">◉</span>
+      <span class="bottom-nav-label">Om</span>
+    </a>
+    <div class="bottom-nav-divider"></div>
+    <button class="bottom-nav-contact" data-contact-mobile>
+      <span class="bottom-nav-icon">✉</span>
+      <span class="bottom-nav-label">Kontakt</span>
+    </button>
+  </nav>
+
+  <script src="js/main.js"></script>
+  <script>
+    // BENTO DETAIL DATA
+    const bentoData = {
+      erfaring: {
+        tag: 'Erfaring',
+        title: '10+ års erfaring inden for tech og service',
+        desc: 'Min karriere har ført mig fra barista og coffee shop manager til technical account manager i en af Skandinaviens største logistikvirksomheder. Undervejs har jeg opbygget stærke kompetencer inden for teknisk support, kundesuccess, ledelse og AI.',
+        btn: 'Se fuldt CV', btnHref: 'cv.html',
+        meta: [
+          ['Start', 'Coffee Shop Manager, Espresso House'],
+          ['Udvikling', 'Kundeservice → Tech Support → Management'],
+          ['Nu', 'Technical Account Manager, Bring'],
+          ['Styrke', 'Bro mellem teknik og forretning']
+        ]
+      },
+      rolle: {
+        tag: 'Nuværende rolle',
+        title: 'Technical Account Manager hos Bring',
+        desc: 'Siden september 2023 har jeg været ansat hos Bring som Technical Account Manager. Jeg rådgiver Brings største e-commerce kunder med tekniske integrationer, API-løsninger og forretningsudvikling.',
+        btn: 'Læs mere', btnHref: 'detail.html?id=technical-account-manager',
+        meta: [
+          ['Virksomhed', 'Bring (PostNord)'],
+          ['Periode', 'Sep. 2023 — nu'],
+          ['Fokus', 'E-commerce & API-integration'],
+          ['Lokation', 'Danmark']
+        ]
+      },
+      pspo: {
+        tag: 'Certificering',
+        title: 'Professional Scrum Product Owner I',
+        desc: 'Som en del af mit arbejde som Product Specialist hos Shopbox tog jeg PSPO I-certificeringen. På et tre-dages kursus dykkede jeg ned i Scrum-rammerne, product ownership og backlog-styring.',
+        btn: 'Se uddannelse', btnHref: 'cv.html#uddannelse',
+        meta: [
+          ['Udbyder', 'Scrum.org'],
+          ['Niveau', 'Professional — PSPO I'],
+          ['Opnået', 'Under ansættelse hos Shopbox'],
+          ['Relevans', 'Agil produktudvikling']
+        ]
+      },
+      uddannelse: {
+        tag: 'Uddannelse',
+        title: 'Serviceøkonom & Eventkoordinator',
+        desc: 'Jeg er uddannet serviceøkonom med speciale i service management, kommunikation og kultur. Uddannelsen har givet mig et stærkt fundament for at forstå kundeadfærd og forretning. Suppleret med eventkoordinator-uddannelse.',
+        btn: 'Se fuldt CV', btnHref: 'cv.html#uddannelse',
+        meta: [
+          ['Uddannelse 1', 'Serviceøkonom'],
+          ['Speciale', 'Service management, kommunikation'],
+          ['Uddannelse 2', 'Eventkoordinator'],
+          ['Suppleret med', 'PSPO I, Folkeuniversitet']
+        ]
+      },
+      ai: {
+        tag: 'AI & Vibe Coding',
+        title: 'Bygger AI-drevne løsninger',
+        desc: 'Den seneste tid har jeg dykket dybt ned i mulighederne med AI — både professionelt og privat. Jeg har bygget apps som GenDo og Review Manager ved hjælp af moderne AI-værktøjer og en vibe coding-tilgang.',
+        btn: 'Se AI-projekter', btnHref: 'projects.html?filter=ai',
+        meta: [
+          ['Projekter', 'GenDo, Review Manager'],
+          ['Værktøjer', 'Claude, Cursor, AI-APIs'],
+          ['Tilgang', 'Vibe coding & prompt engineering'],
+          ['Mål', 'AI som dagligt arbejdsredskab']
+        ]
+      },
+      om: {
+        tag: 'Om mig',
+        title: 'Zacharias Polonius, 33 år',
+        desc: 'Mit navn er Zacharias Polonius, jeg er 33 år og bor i Bjæverskov sammen med min kone og to sønner. Jeg er nysgerrig af natur, detaljeorienteret og har altid en forkærlighed for at finde den smarte løsning.',
+        btn: 'Læs mere om mig', btnHref: 'about.html',
+        meta: [
+          ['Bopæl', 'Bjæverskov'],
+          ['Familie', 'Gift, to sønner'],
+          ['Interesser', 'Fotografi, teknologi, AI'],
+          ['Persontype', 'Analytisk og strategisk']
+        ]
+      }
+    };
+
+    function openDetail(key) {
+      const d = bentoData[key];
+      document.getElementById('dTag').textContent = d.tag;
+      document.getElementById('dTitle').textContent = d.title;
+      document.getElementById('dDesc').textContent = d.desc;
+      const btn = document.getElementById('dBtn');
+      btn.textContent = d.btn + ' →';
+      btn.href = d.btnHref;
+      document.getElementById('dMeta').innerHTML = d.meta.map(([k,v]) =>
+        `<div class="detail-row"><span class="detail-key">${k}</span><span class="detail-val">${v}</span></div>`
+      ).join('');
+      document.getElementById('detailPanel').classList.add('active');
+      document.querySelectorAll('.bento-cell').forEach(c => c.classList.remove('selected'));
+      event.currentTarget.classList.add('selected');
+      document.getElementById('detailPanel').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    function closeDetail() {
+      document.getElementById('detailPanel').classList.remove('active');
+      document.querySelectorAll('.bento-cell').forEach(c => c.classList.remove('selected'));
+    }
+  </script>
+</body>
+</html>

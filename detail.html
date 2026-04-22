@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title id="pageTitle">Detalje — Zacharias Polonius</title>
+  <meta name="description" id="pageDesc" content="">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    /* ---- COVER ---- */
+    .cover {
+      position: relative;
+      height: 380px;
+      overflow: hidden;
+      border-bottom: 0.5px solid var(--border);
+      background: var(--bg-card);
+    }
+    .cover-img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      object-position: center;
+      filter: brightness(0.35) contrast(1.1) saturate(0.7);
+      transition: filter 0.3s ease;
+    }
+    [data-theme="light"] .cover-img {
+      filter: brightness(0.45) contrast(1.05) saturate(0.8);
+    }
+    .cover-gradient {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        to right,
+        rgba(0,0,0,0.5) 0%,
+        rgba(0,0,0,0.1) 60%,
+        transparent 100%
+      );
+    }
+    .cover-content {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: flex-end;
+      padding: 40px;
+      gap: 24px;
+    }
+    .cover-tag {
+      display: inline-block;
+      font-size: 9px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      padding: 3px 8px;
+      margin-bottom: 14px;
+      border: 0.5px solid rgba(255,255,255,0.25);
+      color: rgba(255,255,255,0.7);
+    }
+    .cover-tag.ai    { border-color: rgba(65,143,255,0.6); color: #418FFF; }
+    .cover-tag.work  { border-color: rgba(65,164,71,0.6);  color: #41A447; }
+    .cover-tag.edu   { border-color: rgba(255,255,255,0.3); color: rgba(255,255,255,0.6); }
+    .cover-tag.vol   { border-color: rgba(255,255,255,0.2); color: rgba(255,255,255,0.5); }
+
+    .cover-title {
+      font-size: 42px;
+      font-weight: 700;
+      letter-spacing: -0.04em;
+      color: #fff;
+      line-height: 1.0;
+      margin-bottom: 8px;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.4);
+    }
+    .cover-company {
+      font-size: 16px;
+      color: rgba(255,255,255,0.7);
+      font-weight: 500;
+      letter-spacing: -0.01em;
+    }
+    .cover-right {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 10px;
+    }
+    .cover-period {
+      font-size: 11px;
+      color: rgba(255,255,255,0.5);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      border: 0.5px solid rgba(255,255,255,0.15);
+      padding: 6px 12px;
+      background: rgba(0,0,0,0.4);
+    }
+    .cover-photo-credit {
+      font-size: 9px;
+      color: rgba(255,255,255,0.2);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    /* Fallback when no image */
+    .cover-fallback {
+      position: absolute;
+      inset: 0;
+      background: var(--bg-card);
+      display: none;
+      align-items: center;
+      justify-content: center;
+    }
+    .cover-fallback.show { display: flex; }
+    .cover-fallback-pattern {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(var(--border) 1px, transparent 1px),
+        linear-gradient(90deg, var(--border) 1px, transparent 1px);
+      background-size: 40px 40px;
+    }
+
+    /* ---- INTRO + META ---- */
+    .intro-wrap {
+      display: grid;
+      grid-template-columns: 1fr 300px;
+      border-bottom: 0.5px solid var(--border);
+    }
+    .intro-col {
+      padding: 36px 40px;
+      border-right: 0.5px solid var(--border);
+    }
+    .intro-text {
+      font-size: 15px;
+      color: var(--text-muted);
+      line-height: 1.8;
+    }
+    .meta-col {
+      padding: 36px 28px;
+      display: flex;
+      flex-direction: column;
+    }
+    .meta-row {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      padding: 14px 0;
+      border-bottom: 0.5px solid var(--border);
+    }
+    .meta-row:first-child { padding-top: 0; }
+    .meta-row:last-child { border-bottom: none; padding-bottom: 0; }
+    .meta-key {
+      font-size: 9px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--text-faint);
+    }
+    .meta-val {
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+    .meta-val strong { color: var(--text); font-weight: 500; }
+    .meta-val a { color: var(--blue); }
+
+    /* ---- CONTENT + SIDEBAR ---- */
+    .content-wrap {
+      display: grid;
+      grid-template-columns: 1fr 300px;
+      border-bottom: 0.5px solid var(--border);
+    }
+    .content-main {
+      padding: 36px 40px;
+      border-right: 0.5px solid var(--border);
+    }
+    .content-sidebar { padding: 36px 28px; }
+
+    .section-lbl {
+      font-size: 9px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--text-faint);
+      padding-bottom: 14px;
+      border-bottom: 0.5px solid var(--border);
+      margin-bottom: 22px;
+    }
+
+    .content-h2 {
+      font-size: 17px;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      color: var(--text);
+      margin-bottom: 12px;
+      margin-top: 28px;
+      line-height: 1.2;
+    }
+    .content-h2:first-child { margin-top: 0; }
+    .content-h3 {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 8px;
+      margin-top: 20px;
+    }
+    .content-p {
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.8;
+      margin-bottom: 12px;
+    }
+    .content-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 18px;
+    }
+    .content-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+    .content-list li::before {
+      content: '';
+      display: block;
+      width: 4px;
+      height: 4px;
+      background: var(--blue);
+      border-radius: 50%;
+      margin-top: 7px;
+      flex-shrink: 0;
+    }
+    .content-link {
+      color: var(--blue);
+      font-size: 13px;
+      border-bottom: 0.5px solid var(--border-blue);
+      padding-bottom: 1px;
+      transition: opacity 0.2s;
+    }
+    .content-link:hover { opacity: 0.75; }
+
+    /* Sidebar cards */
+    .sidebar-card {
+      background: var(--bg-card);
+      border: 0.5px solid var(--border);
+      padding: 16px 18px;
+      margin-bottom: 12px;
+    }
+    .sidebar-card-lbl {
+      font-size: 9px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--text-faint);
+      margin-bottom: 10px;
+    }
+    .sidebar-link {
+      display: block;
+      font-size: 12px;
+      color: var(--blue);
+      margin-bottom: 6px;
+      transition: opacity 0.2s;
+    }
+    .sidebar-link:hover { opacity: 0.75; }
+    .sidebar-link:last-child { margin-bottom: 0; }
+
+    /* ---- PREV / NEXT ---- */
+    .entry-nav {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      border-bottom: 0.5px solid var(--border);
+    }
+    .entry-nav-item {
+      padding: 20px 32px;
+      transition: background 0.2s;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+    }
+    .entry-nav-item:hover { background: rgba(65,143,255,0.04); }
+    .entry-nav-item:first-child { border-right: 0.5px solid var(--border); }
+    .entry-nav-dir {
+      font-size: 10px;
+      color: var(--text-ghost);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+    .entry-nav-title {
+      font-size: 13px;
+      color: var(--text-muted);
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+    .entry-nav-item:hover .entry-nav-title { color: var(--blue); }
+    .entry-nav-sub { font-size: 11px; color: var(--text-faint); }
+
+    /* ---- CTA BAR ---- */
+    .cta-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 32px 40px;
+      border-bottom: 0.5px solid var(--border);
+    }
+    .cta-text { font-size: 14px; color: var(--text-muted); line-height: 1.6; max-width: 480px; }
+    .cta-text strong { color: var(--text); font-weight: 500; }
+
+    /* ---- NOT FOUND ---- */
+    .not-found {
+      padding: 80px 40px;
+      text-align: center;
+      display: none;
+    }
+    .not-found.show { display: block; }
+    .not-found h2 { font-size: 24px; color: var(--text); margin-bottom: 12px; }
+    .not-found p { font-size: 14px; color: var(--text-muted); }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav class="nav">
+    <a href="index.html" class="nav-logo">Z<span>.</span>Polonius</a>
+    <ul class="nav-links">
+      <li><a href="about.html">Om</a></li>
+      <li><a href="projects.html">Projekter</a></li>
+      <li><a href="cv.html">CV</a></li>
+      <li><a href="contact.html">Kontakt</a></li>
+    </ul>
+    <div class="nav-right">
+      <button class="nav-hamburger" id="hamburgerBtn" aria-label="Menu" aria-expanded="false">☰</button>
+      <button class="theme-switch" onclick="toggleTheme()" title="Skift tema">☀</button>
+      <button class="nav-btn" data-contact>Kontakt</button>
+    </div>
+  </nav>
+
+  <!-- BREADCRUMB -->
+  <div class="breadcrumb">
+    <a href="index.html">Hjem</a>
+    <span class="breadcrumb-sep">/</span>
+    <a href="#" id="bcParent">—</a>
+    <span class="breadcrumb-sep">/</span>
+    <span class="breadcrumb-current" id="bcCurrent">Indlæser...</span>
+  </div>
+
+  <!-- COVER -->
+  <div class="cover" id="cover">
+    <img class="cover-img" id="coverImg" src="" alt=""
+      onerror="this.style.display='none'; document.getElementById('coverFallback').classList.add('show');">
+    <div class="cover-fallback" id="coverFallback">
+      <div class="cover-fallback-pattern"></div>
+    </div>
+    <div class="cover-gradient"></div>
+    <div class="cover-content">
+      <div>
+        <div class="cover-tag" id="coverTag"></div>
+        <h1 class="cover-title" id="coverTitle"></h1>
+        <div class="cover-company" id="coverCompany"></div>
+      </div>
+      <div class="cover-right">
+        <div class="cover-period" id="coverPeriod"></div>
+        <div class="cover-photo-credit" id="coverCredit"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- INTRO + META -->
+  <div class="intro-wrap">
+    <div class="intro-col">
+      <p class="intro-text" id="introText"></p>
+    </div>
+    <div class="meta-col" id="metaCol"></div>
+  </div>
+
+  <!-- CONTENT + SIDEBAR -->
+  <div class="content-wrap">
+    <div class="content-main" id="contentMain"></div>
+    <div class="content-sidebar" id="contentSidebar"></div>
+  </div>
+
+  <!-- PREV / NEXT -->
+  <div class="entry-nav" id="entryNav">
+    <a class="entry-nav-item" id="navPrev" href="#">
+      <div class="entry-nav-dir">← Forrige</div>
+      <div class="entry-nav-title" id="navPrevTitle"></div>
+      <div class="entry-nav-sub" id="navPrevSub"></div>
+    </a>
+    <a class="entry-nav-item" id="navNext" href="#" style="align-items:flex-end; text-align:right;">
+      <div class="entry-nav-dir">Næste →</div>
+      <div class="entry-nav-title" id="navNextTitle"></div>
+      <div class="entry-nav-sub" id="navNextSub"></div>
+    </a>
+  </div>
+
+  <!-- CTA -->
+  <div class="cta-bar">
+    <p class="cta-text"><strong>Vil du høre mere?</strong> Tøv ikke med at tage kontakt — jeg vender tilbage inden for 24 timer.</p>
+    <button class="btn-primary" data-contact>Tag kontakt →</button>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-left">zacharias@polonius.dk · 3068 7041</div>
+    <div class="footer-links">
+      <a href="https://www.linkedin.com/in/zpolonius/" target="_blank">LinkedIn</a>
+      <a href="https://www.instagram.com/zackp91/" target="_blank">Instagram</a>
+      <a href="https://www.facebook.com/zpolonius" target="_blank">Facebook</a>
+    </div>
+  </footer>
+
+  <!-- NOT FOUND -->
+  <div class="not-found" id="notFound">
+    <h2>Siden blev ikke fundet</h2>
+    <p>Det indhold du leder efter eksisterer ikke. <a href="index.html" class="content-link">Gå til forsiden →</a></p>
+  </div>
+
+  <!-- CONTACT OVERLAY -->
+  <div class="overlay" id="contactOverlay">
+    <div class="overlay-bg"></div>
+    <div class="modal">
+      <div id="contactFormView">
+        <div class="modal-header">
+          <div>
+            <div class="modal-label">Kontakt</div>
+            <div class="modal-title">Lad os tage<br>en snak</div>
+            <div class="modal-sub">Jeg vender tilbage inden for 24 timer.</div>
+          </div>
+          <button class="modal-close" onclick="closeContact()">✕</button>
+        </div>
+        <div class="modal-progress"><div class="modal-progress-bar" id="contactProgressBar"></div></div>
+        <div class="modal-divider"></div>
+        <div class="modal-body">
+          <div class="field-row">
+            <div class="field">
+              <label class="field-label">Navn</label>
+              <input class="input" type="text" id="f-name" placeholder="Dit fulde navn">
+            </div>
+            <div class="field">
+              <label class="field-label">Firma</label>
+              <input class="input" type="text" id="f-company" placeholder="Virksomhedsnavn">
+            </div>
+          </div>
+          <div class="field">
+            <label class="field-label">Email</label>
+            <input class="input" type="email" id="f-email" placeholder="din@email.dk">
+          </div>
+          <div class="field">
+            <label class="field-label">Emne</label>
+            <div class="pills" style="margin-top:4px;">
+              <button class="pill">Jobmulighed</button>
+              <button class="pill">Samarbejde</button>
+              <button class="pill">AI-projekt</button>
+              <button class="pill">Andet</button>
+            </div>
+          </div>
+          <div class="field" style="margin-top:18px;">
+            <label class="field-label">Besked</label>
+            <textarea class="input" id="f-msg" placeholder="Fortæl mig lidt om hvad du har i tankerne..."></textarea>
+          </div>
+          <div class="modal-footer">
+            <div class="modal-contact-info">
+              <span>zacharias@polonius.dk</span>
+              <span>3068 7041</span>
+            </div>
+            <button class="btn-primary" id="contactSubmit">Send besked →</button>
+          </div>
+        </div>
+        <div class="modal-social">
+          <a href="https://www.linkedin.com/in/zpolonius/" target="_blank">LinkedIn</a>
+          <span class="modal-social-sep">·</span>
+          <a href="https://www.instagram.com/zackp91/" target="_blank">Instagram</a>
+          <span class="modal-social-sep">·</span>
+          <a href="https://www.facebook.com/zpolonius" target="_blank">Facebook</a>
+        </div>
+      </div>
+      <div class="success-view" id="contactSuccessView">
+        <div class="success-icon">
+          <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+        </div>
+        <div class="success-title">Besked sendt!</div>
+        <div class="success-sub">Tak for din henvendelse. Jeg vender tilbage inden for 24 timer.</div>
+        <button class="btn-primary" onclick="closeContact()" style="margin-top:8px;">Luk vindue</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- FLOATING BOTTOM NAV (mobil) -->
+  <nav class="bottom-nav" id="bottomNav">
+    <a class="bottom-nav-item" href="index.html" data-page="hjem">
+      <span class="bottom-nav-icon">⌂</span>
+      <span class="bottom-nav-label">Hjem</span>
+    </a>
+    <div class="bottom-nav-divider"></div>
+    <a class="bottom-nav-item" href="projects.html" data-page="projekter">
+      <span class="bottom-nav-icon">◈</span>
+      <span class="bottom-nav-label">Projekter</span>
+    </a>
+    <div class="bottom-nav-divider"></div>
+    <a class="bottom-nav-item" href="cv.html" data-page="cv">
+      <span class="bottom-nav-icon">◎</span>
+      <span class="bottom-nav-label">CV</span>
+    </a>
+    <div class="bottom-nav-divider"></div>
+    <a class="bottom-nav-item" href="about.html" data-page="om">
+      <span class="bottom-nav-icon">◉</span>
+      <span class="bottom-nav-label">Om</span>
+    </a>
+    <div class="bottom-nav-divider"></div>
+    <button class="bottom-nav-contact" data-contact-mobile>
+      <span class="bottom-nav-icon">✉</span>
+      <span class="bottom-nav-label">Kontakt</span>
+    </button>
+  </nav>
+
+  <script src="js/main.js"></script>
+  <script>
+    // Load content from content.json based on ?id= URL param
+    const params  = new URLSearchParams(location.search);
+    const entryId = params.get('id');
+
+    // Category tag class mapping
+    const tagClass = { ai: 'ai', work: 'work', volunteer: 'vol', education: 'edu' };
+    const tagLabel = { ai: 'AI', work: 'Arbejde', volunteer: 'Frivillig', education: 'Uddannelse' };
+    const parentLabel = { ai: 'Projekter', work: 'CV', volunteer: 'CV', education: 'CV' };
+    const parentHref  = { ai: 'projects.html', work: 'cv.html', volunteer: 'cv.html', education: 'cv.html' };
+
+    fetch('data/content.json')
+      .then(r => r.json())
+      .then(data => {
+        // Flatten all entries into one searchable list
+        const all = [
+          ...data.projects,
+          ...data.cv.jobs.map(j => ({ ...j, category: 'work' })),
+          ...data.cv.education.map(e => ({ ...e, category: 'education', company: e.institution, period: e.period, title: e.title }))
+        ];
+
+        const entry = all.find(e => e.id === entryId);
+        if (!entry) {
+          document.getElementById('notFound').classList.add('show');
+          document.getElementById('cover').style.display = 'none';
+          document.querySelector('.intro-wrap').style.display = 'none';
+          document.querySelector('.content-wrap').style.display = 'none';
+          document.getElementById('entryNav').style.display = 'none';
+          return;
+        }
+
+        const cat = entry.category || 'work';
+        const name = entry.title || entry.role;
+        const company = entry.company || '';
+
+        // Page meta
+        document.title = `${name}${company ? ' · ' + company : ''} — Zacharias Polonius`;
+        document.getElementById('pageDesc').content = entry.intro || entry.desc || '';
+
+        // Breadcrumb
+        document.getElementById('bcParent').textContent = parentLabel[cat] || 'Projekter';
+        document.getElementById('bcParent').href = parentHref[cat] || 'projects.html';
+        document.getElementById('bcCurrent').textContent = name + (company ? ' · ' + company : '');
+
+        // Cover
+        const img = document.getElementById('coverImg');
+        if (entry.cover) { img.src = entry.cover; img.alt = name; }
+        else { document.getElementById('coverFallback').classList.add('show'); }
+
+        const coverTagEl = document.getElementById('coverTag');
+        coverTagEl.textContent = tagLabel[cat] || cat;
+        coverTagEl.className = `cover-tag ${tagClass[cat] || ''}`;
+
+        document.getElementById('coverTitle').textContent = name;
+        document.getElementById('coverCompany').textContent = company;
+        document.getElementById('coverPeriod').textContent = entry.period || '';
+        if (entry.cover) document.getElementById('coverCredit').textContent = 'Foto · Z. Polonius';
+
+        // Intro
+        document.getElementById('introText').textContent = entry.intro || entry.desc || '';
+
+        // Meta column
+        const metaRows = [];
+        if (company) metaRows.push(['Virksomhed / Sted', `<strong>${company}</strong>`]);
+        if (entry.period) metaRows.push(['Periode', entry.period]);
+        if (entry.category) metaRows.push(['Kategori', tagLabel[cat]]);
+        if (entry.links && entry.links.length) {
+          metaRows.push(['Links', entry.links.map(l => `<a href="${l.url}" target="_blank">${l.label} →</a>`).join('<br>')]);
+        }
+        document.getElementById('metaCol').innerHTML = metaRows.map(([k,v]) =>
+          `<div class="meta-row"><div class="meta-key">${k}</div><div class="meta-val">${v}</div></div>`
+        ).join('');
+
+        // Main content
+        let mainHTML = `<div class="section-lbl">Detaljer & beskrivelse</div>`;
+        if (entry.body) {
+          entry.body.split('\n\n').forEach(para => {
+            if (para.startsWith('###')) {
+              mainHTML += `<h3 class="content-h3">${para.replace('### ','')}</h3>`;
+            } else if (para.startsWith('##')) {
+              mainHTML += `<h2 class="content-h2">${para.replace('## ','')}</h2>`;
+            } else {
+              mainHTML += `<p class="content-p">${para}</p>`;
+            }
+          });
+        }
+        if (entry.tasks && entry.tasks.length) {
+          mainHTML += `<h2 class="content-h2">Konkrete opgaver</h2><ul class="content-list">`;
+          entry.tasks.forEach(t => { mainHTML += `<li>${t}</li>`; });
+          mainHTML += `</ul>`;
+        }
+        if (entry.url) {
+          mainHTML += `<a href="${entry.url}" class="content-link" target="_blank">Se projektet live →</a>`;
+        }
+        document.getElementById('contentMain').innerHTML = mainHTML;
+
+        // Sidebar
+        let sideHTML = `<div class="section-lbl">Kompetencer</div>`;
+        if (entry.skills && entry.skills.length) {
+          const techSkills = entry.skills.slice(0, Math.ceil(entry.skills.length / 2));
+          const bizSkills  = entry.skills.slice(Math.ceil(entry.skills.length / 2));
+          if (techSkills.length) {
+            sideHTML += `<div class="sidebar-card"><div class="sidebar-card-lbl">Teknisk</div>`;
+            techSkills.forEach(s => { sideHTML += `<span class="skill-tag blue">${s}</span>`; });
+            sideHTML += `</div>`;
+          }
+          if (bizSkills.length) {
+            sideHTML += `<div class="sidebar-card"><div class="sidebar-card-lbl">Generelt</div>`;
+            bizSkills.forEach(s => { sideHTML += `<span class="skill-tag">${s}</span>`; });
+            sideHTML += `</div>`;
+          }
+        }
+        if (entry.links && entry.links.length) {
+          sideHTML += `<div class="sidebar-card"><div class="sidebar-card-lbl">Links</div>`;
+          entry.links.forEach(l => { sideHTML += `<a href="${l.url}" class="sidebar-link" target="_blank">${l.label} →</a>`; });
+          sideHTML += `</div>`;
+        }
+        document.getElementById('contentSidebar').innerHTML = sideHTML;
+
+        // Prev / Next navigation within same category
+        const siblings = all.filter(e => e.category === cat);
+        const idx = siblings.findIndex(e => e.id === entryId);
+        const prev = siblings[idx - 1];
+        const next = siblings[idx + 1];
+
+        if (prev) {
+          document.getElementById('navPrev').href = `detail.html?id=${prev.id}`;
+          document.getElementById('navPrevTitle').textContent = prev.title || prev.role;
+          document.getElementById('navPrevSub').textContent = prev.company || '';
+        } else {
+          document.getElementById('navPrev').style.opacity = '0.3';
+          document.getElementById('navPrevTitle').textContent = 'Første indlæg';
+        }
+        if (next) {
+          document.getElementById('navNext').href = `detail.html?id=${next.id}`;
+          document.getElementById('navNextTitle').textContent = next.title || next.role;
+          document.getElementById('navNextSub').textContent = next.company || '';
+        } else {
+          document.getElementById('navNext').style.opacity = '0.3';
+          document.getElementById('navNextTitle').textContent = 'Seneste indlæg';
+        }
+      })
+      .catch(err => {
+        console.error('Kunne ikke indlæse indhold:', err);
+      });
+  </script>
+</body>
+</html>

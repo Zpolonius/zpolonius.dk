@@ -1,0 +1,9 @@
+# PHP
+api/config.php
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
