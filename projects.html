@@ -69,10 +69,19 @@
     /* PROJECT GRID */
     .proj-grid { display: grid; grid-template-columns: repeat(3, 1fr); }
     .proj-card {
-      padding: 26px 28px; border-right: 0.5px solid var(--border);
+      padding: 0; border-right: 0.5px solid var(--border);
       border-bottom: 0.5px solid var(--border);
-      display: block; position: relative; transition: background 0.2s;
+      display: flex; flex-direction: column; position: relative; transition: background 0.2s;
     }
+    .proj-card-img-wrap {
+      width: 100%; height: 180px; overflow: hidden; background: var(--bg-card);
+      border-bottom: 0.5px solid var(--border);
+    }
+    .proj-card-img {
+      width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease;
+    }
+    .proj-card:hover .proj-card-img { transform: scale(1.05); }
+    .proj-card-body { padding: 24px 28px; }
     .proj-card:hover { background: rgba(65,143,255,0.03); }
     .proj-card:hover .proj-arrow { opacity: 1; }
     .proj-card:nth-child(3n) { border-right: none; }
@@ -251,7 +260,7 @@
     const catLabels = { ai:'AI', checkout:'Checkout', konvertering:'Konvertering', work:'Arbejde', volunteer:'Frivillig' };
     const catClass  = { ai:'tag-ai', checkout:'tag-ai', konvertering:'tag-ai', work:'tag-work', volunteer:'tag-vol' };
 
-    fetch('data/content.json')
+    fetch('data/content.json?t=' + Date.now())
       .then(r => r.json())
       .then(data => {
         const visibleProjects = (data.projects||[]).filter(p => p.visible !== false);

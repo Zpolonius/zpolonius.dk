@@ -290,7 +290,7 @@
 
   <script src="js/main.js"></script>
   <script>
-    fetch('data/content.json')
+    fetch('data/content.json?t=' + Date.now())
       .then(r => r.json())
       .then(data => {
         // Jobs timeline
@@ -330,7 +330,7 @@
           rg.innerHTML += `
             <div class="rec-card">
               <div class="rec-mark">"</div>
-              <p class="rec-text">${r.text}</p>
+              <p class="rec-text">${r.intro || r.text}</p>
               <div class="rec-author-wrap">
                 ${r.photo ? `<img src="${r.photo}" alt="${r.photo_alt||r.name}" class="rec-avatar">` : ''}
                 <div class="rec-meta">
@@ -338,6 +338,7 @@
                   <div class="rec-role">${r.role}</div>
                 </div>
               </div>
+              <a href="detail.html?id=${r.id}" class="section-link" style="margin-top:20px; display:inline-block; font-size:12px;">Læs hele udtalelsen →</a>
             </div>`;
         });
       });

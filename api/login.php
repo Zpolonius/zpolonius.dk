@@ -8,7 +8,9 @@ header('Content-Type: application/json');
 
 // Start sikker session
 ini_set('session.cookie_httponly', 1);
-ini_set('session.cookie_secure', 1);
+// Kun secure cookie hvis vi kører over HTTPS
+$is_https = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') || $_SERVER['SERVER_PORT'] == 443;
+ini_set('session.cookie_secure', $is_https ? 1 : 0);
 ini_set('session.cookie_samesite', 'Strict');
 session_name(SESSION_NAME);
 session_start();

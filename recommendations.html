@@ -192,7 +192,7 @@
 
   <script src="js/main.js"></script>
   <script>
-    fetch('data/content.json')
+    fetch('data/content.json?t=' + Date.now())
       .then(r => r.json())
       .then(data => {
         const s = data.site || {};

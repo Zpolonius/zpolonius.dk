@@ -614,7 +614,7 @@
     const parentLabel = { ai:'Projekter', work:'CV', volunteer:'CV', education:'CV', recommendation:'Anbefalinger' };
     const parentHref  = { ai:'projects.html', work:'cv.html', volunteer:'cv.html', education:'cv.html', recommendation:'recommendations.html' };
 
-    fetch('data/content.json')
+    fetch('data/content.json?t=' + Date.now())
       .then(r => r.json())
       .then(data => {
         // Flatten all entries into one searchable list
