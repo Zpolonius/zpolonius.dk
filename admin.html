@@ -555,7 +555,7 @@ function logout() {
 
 /* ---- DATA ---- */
 function loadData() {
-  fetch('data/content.json?t=' + Date.now(), {
+  fetch('api/load.php?t=' + Date.now(), {
     credentials: 'same-origin'
   })
     .then(r => {
@@ -569,15 +569,39 @@ function loadData() {
     })
     .catch((err) => {
       console.error('Load failed:', err);
-      showToast('Kunne ikke hente data fra serveren', true);
-      // Demo mode as fallback
-      data = { site:{name:'Zacharias Polonius',tagline:'De små detaljer leder til store forandringer',email:'zacharias@polonius.dk',phone:'3068 7041',accent_color:'#418FFF',social:{linkedin:'',instagram:'',facebook:''}}, hero:{role:'Technical Account Manager · Bring',cover:'assets/cover.webp',status:'Tilgængelig for nye muligheder',intro:'...'}, specialer:[], bento:[], om:{bio:'',photo:'',sprog:[],interesser:[]}, projects:[], cv:{jobs:[],education:[],recommendations:[]}, };
-      updateBadges();
-      renderSection('forside');
+      showToast('Kunne ikke hente data fra serveren. Log ind igen.', true);
     });
 }
 
 function saveAll() {
+  // Synkroniser data fra inputs i den nuværende sektion før gem
+  if (currentSection === 'forside') {
+    data.hero.intro  = document.getElementById('fe-intro').value;
+    data.hero.role   = document.getElementById('fe-role').value;
+    data.hero.status = document.getElementById('fe-status').value;
+    data.hero.cover  = getUploadPath('fe-cover') || document.getElementById('imgpath-fe-cover')?.value || data.hero.cover;
+  } else if (currentSection === 'om') {
+    if (!data.om) data.om = {};
+    data.om.bio        = document.getElementById('om-bio').value;
+    data.om.photo      = getUploadPath('om-photo') || data.om.photo || '';
+    data.om.persontype = document.getElementById('om-type').value;
+    data.om.sprog      = document.getElementById('om-sprog').value.split(',').map(s=>s.trim()).filter(Boolean);
+    data.om.interesser = document.getElementById('om-int').value.split(',').map(s=>s.trim()).filter(Boolean);
+  } else if (currentSection === 'kontakt') {
+    if (!data.site) data.site = {};
+    data.site.email = document.getElementById('kt-email').value;
+    data.site.phone = document.getElementById('kt-phone').value;
+    if (!data.site.social) data.site.social = {};
+    data.site.social.linkedin  = document.getElementById('kt-li').value;
+    data.site.social.instagram = document.getElementById('kt-ig').value;
+    data.site.social.facebook  = document.getElementById('kt-fb').value;
+  } else if (currentSection === 'site') {
+    if (!data.site) data.site = {};
+    data.site.name = document.getElementById('st-name').value;
+    data.site.tagline = document.getElementById('st-tag').value;
+    data.site.accent_color = document.getElementById('st-colorhex').value;
+  }
+
   const btn = document.getElementById('btnSave');
   btn.textContent = 'Gemmer...';
   btn.style.opacity = '0.6';
@@ -599,7 +623,6 @@ function saveAll() {
     btn.textContent = 'Gem ændringer';
     btn.style.opacity = '1';
     showToast('Fejl — Kunne ikke oprette forbindelse til serveren', true);
-    console.error('Save failed. Local data state:', data);
   });
 }
 

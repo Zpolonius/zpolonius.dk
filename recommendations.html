@@ -212,12 +212,15 @@
         // Recommendations
         const grid = document.getElementById('recGrid');
         recs.forEach(r => {
+          const raw = r.intro || r.text || '';
+          const words = raw.trim().split(/\s+/);
+          const truncated = words.length > 150 ? words.slice(0, 150).join(' ') + '...' : raw;
           grid.innerHTML += `
             <div class="rec-card">
               <div class="rec-mark">"</div>
-              <p class="rec-text">${r.intro || r.text}</p>
+              <p class="rec-text">${truncated}</p>
               <div class="rec-author-wrap">
-                ${r.photo ? `<img src="${r.photo}" alt="${r.photo_alt||r.name}" class="rec-avatar">` : ''}
+                ${r.photo ? `<img src="${r.photo}" alt="${r.photo_alt||r.name}" class="rec-avatar" onerror="this.src='data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2240%22%20height%3D%2240%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%23555%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M20%2021v-2a4%204%200%200%200-4-4H8a4%204%200%200%200-4%204v2%22%3E%3C%2Fpath%3E%3Ccircle%20cx%3D%2212%22%20cy%3D%227%22%20r%3D%224%22%3E%3C%2Fcircle%3E%3C%2Fsvg%3E'">` : ''}
                 <div class="rec-meta">
                   <div class="rec-name">${r.name}</div>
                   <div class="rec-role">${r.role}</div>
