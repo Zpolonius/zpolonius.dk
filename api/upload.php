@@ -15,9 +15,9 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 }
 
 // Tilladte filtyper
-$allowed_types = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp', 'image/gif'];
-$allowed_ext   = ['jpg', 'jpeg', 'png', 'webp', 'gif'];
-$max_size      = 5 * 1024 * 1024; // 5MB
+$allowed_types = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp', 'image/gif', 'application/pdf'];
+$allowed_ext   = ['jpg', 'jpeg', 'png', 'webp', 'gif', 'pdf'];
+$max_size      = 10 * 1024 * 1024; // 10MB
 
 if (empty($_FILES['image'])) {
     echo json_encode(['ok' => false, 'error' => 'Ingen fil modtaget']);
@@ -42,7 +42,7 @@ if ($file['error'] !== UPLOAD_ERR_OK) {
 
 // Tjek filstørrelse
 if ($file['size'] > $max_size) {
-    echo json_encode(['ok' => false, 'error' => 'Filen er for stor. Maks 5MB.']);
+    echo json_encode(['ok' => false, 'error' => 'Filen er for stor. Maks 10MB.']);
     exit;
 }
 
@@ -51,7 +51,7 @@ $finfo     = new finfo(FILEINFO_MIME_TYPE);
 $mime_type = $finfo->file($file['tmp_name']);
 
 if (!in_array($mime_type, $allowed_types)) {
-    echo json_encode(['ok' => false, 'error' => 'Filtypen er ikke tilladt. Brug JPG, PNG, WebP eller GIF.']);
+    echo json_encode(['ok' => false, 'error' => 'Filtypen er ikke tilladt. Brug billeder eller PDF.']);
     exit;
 }
 
@@ -66,7 +66,7 @@ if (!in_array($ext, $allowed_ext)) {
 $folder = $_POST['folder'] ?? 'general';
 
 // Whitelist af tilladte mapper — ingen directory traversal mulig
-$allowed_folders = ['projects', 'general', 'cover', 'photo'];
+$allowed_folders = ['projects', 'general', 'cover', 'photo', 'docs'];
 if (!in_array($folder, $allowed_folders)) {
     $folder = 'general';
 }
