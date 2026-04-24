@@ -353,12 +353,12 @@
     <div class="hero-content">
       <div class="fade-up fade-up-1">
         <div class="hero-label">Technical Account Manager · Bring</div>
-        <h1 class="hero-name">Zacharias<br>Polonius</h1>
+        <h1 class="hero-name" id="heroName">Zacharias<br>Polonius</h1>
         <p class="hero-tagline">De små detaljer leder til store forandringer — inden for AI, teknisk support og kundesuccess.</p>
-        <div class="hero-actions">
-          <a href="projects.html" class="hero-btn-primary">Se projekter →</a>
-          <a href="assets/cv-zacharias-polonius.pdf" class="hero-btn-secondary" download>Download CV</a>
-        </div>
+          <div class="hero-actions">
+            <a href="projects.html" class="hero-btn-primary">Se projekter →</a>
+            <a href="cv-print.html" class="hero-btn-secondary" target="_blank">Download CV</a>
+          </div>
       </div>
       <div class="hero-right fade-up fade-up-2">
         <div class="status-pill">
@@ -566,6 +566,7 @@
       // Hero
       const h = data.hero || {};
       const s = data.site || {};
+      if (s.name) document.getElementById('heroName').innerHTML = s.name.replace(' ', '<br>');
       if (h.role) document.querySelector('.hero-label').textContent = h.role;
       if (h.intro) document.querySelector('.hero-tagline').textContent = h.intro;
       if (h.status) document.querySelector('.status-pill').innerHTML = `<span class="status-dot"></span> ${h.status}`;

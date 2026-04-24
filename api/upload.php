@@ -19,12 +19,12 @@ $allowed_types = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp', 'image/g
 $allowed_ext   = ['jpg', 'jpeg', 'png', 'webp', 'gif', 'pdf'];
 $max_size      = 10 * 1024 * 1024; // 10MB
 
-if (empty($_FILES['image'])) {
+$file = $_FILES['image'] ?? $_FILES['file'] ?? null;
+
+if (!$file) {
     echo json_encode(['ok' => false, 'error' => 'Ingen fil modtaget']);
     exit;
 }
-
-$file = $_FILES['image'];
 
 // Tjek for upload-fejl
 if ($file['error'] !== UPLOAD_ERR_OK) {

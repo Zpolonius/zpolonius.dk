@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CV — Zacharias Polonius</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    /* CV PRINT SPECIFIC STYLES */
+    :root {
+      --print-blue: #1c64dc;
+      --print-text: #1a1a1a;
+      --print-muted: #555;
+      --print-border: #ddd;
+    }
+
+    body {
+      background: white !important;
+      color: var(--print-text) !important;
+      margin: 0;
+      padding: 0;
+      font-size: 11pt; /* Points are better for print */
+    }
+
+    .cv-container {
+      max-width: 210mm; /* A4 width */
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      min-height: 297mm; /* A4 height */
+      background: white;
+    }
+
+    /* SIDEBAR */
+    .cv-sidebar {
+      background: #f8f9fa;
+      border-right: 1px solid var(--print-border);
+      padding: 30px 25px;
+      display: flex;
+      flex-direction: column;
+      gap: 25px;
+    }
+
+    .cv-photo-wrap {
+      width: 160px;
+      height: 160px;
+      margin: 0 auto;
+      border-radius: 50%;
+      overflow: hidden;
+      border: 4px solid white;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    }
+
+    .cv-photo {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .cv-quote {
+      font-style: italic;
+      font-size: 10pt;
+      color: var(--print-muted);
+      text-align: center;
+      line-height: 1.4;
+      margin-top: 10px;
+    }
+
+    .cv-sidebar-section-title {
+      font-size: 10pt;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--print-blue);
+      margin-bottom: 12px;
+      border-bottom: 1px solid var(--print-border);
+      padding-bottom: 4px;
+    }
+
+    .cv-contact-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 9.5pt;
+      margin-bottom: 8px;
+      color: var(--print-muted);
+    }
+
+    .cv-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .cv-list li {
+      font-size: 9.5pt;
+      margin-bottom: 6px;
+      color: var(--print-text);
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+    }
+
+    .cv-list li::before {
+      content: "•";
+      color: var(--print-blue);
+    }
+
+    /* MAIN CONTENT */
+    .cv-main {
+      padding: 40px 45px;
+    }
+
+    .cv-header {
+      margin-bottom: 35px;
+    }
+
+    .cv-name {
+      font-size: 32pt;
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      color: var(--print-text);
+      margin-bottom: 5px;
+      line-height: 1;
+    }
+
+    .cv-role {
+      font-size: 14pt;
+      font-weight: 500;
+      color: var(--print-blue);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .cv-section {
+      margin-bottom: 30px;
+    }
+
+    .cv-section-title {
+      font-size: 14pt;
+      font-weight: 700;
+      color: var(--print-text);
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .cv-section-title::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background: var(--print-border);
+    }
+
+    .cv-entry {
+      margin-bottom: 18px;
+    }
+
+    .cv-entry-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 4px;
+    }
+
+    .cv-entry-title {
+      font-size: 11pt;
+      font-weight: 700;
+      color: var(--print-text);
+    }
+
+    .cv-entry-period {
+      font-size: 9pt;
+      color: var(--print-blue);
+      font-weight: 600;
+    }
+
+    .cv-entry-sub {
+      font-size: 10pt;
+      color: var(--print-muted);
+      margin-bottom: 6px;
+      font-weight: 500;
+    }
+
+    .cv-entry-desc {
+      font-size: 10pt;
+      line-height: 1.5;
+      color: var(--print-muted);
+    }
+
+    /* PRINT OPTIMIZATION */
+    @media print {
+      body {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+      .no-print {
+        display: none !important;
+      }
+      @page {
+        margin: 0;
+        size: A4;
+      }
+      .cv-container {
+        width: 210mm;
+        height: 297mm;
+        border: none;
+      }
+    }
+
+    .print-btn-float {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      background: var(--blue);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 30px;
+      font-weight: 600;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+      cursor: pointer;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+  </style>
+</head>
+<body>
+
+  <button class="print-btn-float no-print" onclick="window.print()">
+    <span>🖨️</span> Udskriv / Gem som PDF
+  </button>
+
+  <div class="cv-container" id="cvContent">
+    <!-- Sidebar -->
+    <aside class="cv-sidebar">
+      <div class="cv-photo-wrap">
+        <img id="cvPhoto" src="" alt="" class="cv-photo">
+      </div>
+      <div class="cv-quote" id="cvTagline"></div>
+
+      <div class="cv-sidebar-section">
+        <div class="cv-sidebar-section-title">Kontakt</div>
+        <div class="cv-contact-item"><span style="width:20px">📞</span> <span id="cvPhone"></span></div>
+        <div class="cv-contact-item"><span style="width:20px">✉️</span> <span id="cvEmail"></span></div>
+        <div class="cv-contact-item"><span style="width:20px">📍</span> <span id="cvLocation"></span></div>
+        <div class="cv-contact-item"><span style="width:20px">🔗</span> <span>zpolonius.dk</span></div>
+      </div>
+
+      <div class="cv-sidebar-section">
+        <div class="cv-sidebar-section-title">Sprog</div>
+        <ul class="cv-list" id="cvSprog"></ul>
+      </div>
+
+      <div class="cv-sidebar-section">
+        <div class="cv-sidebar-section-title">Interesser</div>
+        <ul class="cv-list" id="cvInteresser"></ul>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="cv-main">
+      <header class="cv-header">
+        <h1 class="cv-name" id="cvName"></h1>
+        <div class="cv-role" id="cvRole"></div>
+      </header>
+
+      <section class="cv-section">
+        <div class="cv-section-title">Erhvervserfaring</div>
+        <div id="cvExperience"></div>
+      </section>
+
+      <section class="cv-section">
+        <div class="cv-section-title">Uddannelse</div>
+        <div id="cvEducation"></div>
+      </section>
+
+      <section class="cv-section">
+        <div class="cv-section-title">Top Kompetencer</div>
+        <div id="cvSkills" style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;"></div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    fetch('data/content.json')
+      .then(r => r.json())
+      .then(data => {
+        const site = data.site || {};
+        const hero = data.hero || {};
+        const om = data.om || {};
+        
+        // Basic Info
+        document.getElementById('cvName').textContent = "Zacharias Polonius";
+        document.getElementById('cvRole').textContent = hero.role || "";
+        document.getElementById('cvTagline').textContent = `"${site.tagline}"`;
+        document.getElementById('cvPhoto').src = om.photo || "assets/photo.jpg";
+        document.getElementById('cvPhone').textContent = site.phone || "";
+        document.getElementById('cvEmail').textContent = site.email || "";
+        document.getElementById('cvLocation').textContent = site.location || "Bjæverskov, Danmark";
+
+        // Sprog
+        const sprogList = document.getElementById('cvSprog');
+        (om.sprog || []).forEach(s => {
+          const li = document.createElement('li');
+          li.textContent = s;
+          sprogList.appendChild(li);
+        });
+
+        // Interesser
+        const intList = document.getElementById('cvInteresser');
+        (om.interesser || []).forEach(i => {
+          const li = document.createElement('li');
+          li.textContent = i;
+          intList.appendChild(li);
+        });
+
+        // Experience
+        const expDiv = document.getElementById('cvExperience');
+        (data.cv?.jobs || []).filter(j => j.visible !== false).forEach(j => {
+          const entry = document.createElement('div');
+          entry.className = 'cv-entry';
+          entry.innerHTML = `
+            <div class="cv-entry-header">
+              <div class="cv-entry-title">${j.role}</div>
+              <div class="cv-entry-period">${j.period}</div>
+            </div>
+            <div class="cv-entry-sub">${j.company}</div>
+            <div class="cv-entry-desc">${j.desc || ""}</div>
+          `;
+          expDiv.appendChild(entry);
+        });
+
+        // Education
+        const eduDiv = document.getElementById('cvEducation');
+        (data.cv?.education || []).filter(e => e.visible !== false).forEach(e => {
+          const entry = document.createElement('div');
+          entry.className = 'cv-entry';
+          entry.innerHTML = `
+            <div class="cv-entry-header">
+              <div class="cv-entry-title">${e.title}</div>
+              <div class="cv-entry-period">${e.period}</div>
+            </div>
+            <div class="cv-entry-sub">${e.institution}</div>
+          `;
+          eduDiv.appendChild(entry);
+        });
+
+        // Skills (from Specialer)
+        const skillsDiv = document.getElementById('cvSkills');
+        (data.specialer || []).slice(0, 6).forEach(s => {
+          const item = document.createElement('div');
+          item.style.fontSize = '10pt';
+          item.style.color = 'var(--print-muted)';
+          item.innerHTML = `<span style="color:var(--print-blue)">${s.icon}</span> ${s.label}`;
+          skillsDiv.appendChild(item);
+        });
+
+        // Auto print after a short delay to ensure images/fonts are ready
+        window.onload = () => {
+          setTimeout(() => {
+            // Uncomment the line below to auto-print
+            // window.print();
+          }, 1000);
+        };
+      });
+  </script>
+</body>
+</html>

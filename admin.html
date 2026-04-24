@@ -728,6 +728,7 @@ function editBento(i) {
     <div class="field"><label class="field-label">Værdi (stor tekst)</label><input class="f-input" id="fb-value" value="${box.value||''}"></div>
     <div class="field"><label class="field-label">Undertekst</label><input class="f-input" id="fb-sub" value="${box.sub||''}"></div>
     <div class="field"><label class="field-label">Beskrivelse (lille grå tekst)</label><textarea class="f-textarea" id="fb-desc">${box.desc||''}</textarea></div>
+    <div class="field"><label class="field-label">Knap URL (valgfrit)</label><input class="f-input" id="fb-url" value="${box.url||''}" placeholder="f.eks. cv.html eller about.html"></div>
     <div class="field"><label class="field-label">Accent-farve</label>
       <select class="f-select" id="fb-accent">
         <option value="none" ${box.accent==='none'?'selected':''}>Ingen</option>
@@ -740,6 +741,7 @@ function editBento(i) {
     data.bento[i].value  = document.getElementById('fb-value').value;
     data.bento[i].sub    = document.getElementById('fb-sub').value;
     data.bento[i].desc   = document.getElementById('fb-desc').value;
+    data.bento[i].url    = document.getElementById('fb-url').value;
     data.bento[i].accent = document.getElementById('fb-accent').value;
     closeForm(); renderSection('forside'); showToast('Bento-boks opdateret');
   });
@@ -752,7 +754,10 @@ function renderSpecialer(area) {
     <div class="special-card">
       <div class="special-icon">${s.icon||'◆'}</div>
       <div class="special-info">
-        <div class="special-title">${s.label}</div>
+        <div class="special-title">
+          ${s.label}
+          ${s.visible===false?'<span style="font-size:9px;color:var(--amber);border:1px solid var(--amber);padding:1px 4px;border-radius:4px;margin-left:6px;font-weight:normal;">Udkast</span>':''}
+        </div>
         <div class="special-desc">${s.desc||''}</div>
         <div class="special-actions">
           <button class="btn-edit" onclick="editSpecial(${i})">Rediger</button>
@@ -1333,10 +1338,10 @@ function uploadFile(file, id) {
     progbar.style.width = fakeProgress + '%';
   }, 250);
 
-  const formData = new FormData();
-  formData.append('file', file);
-  formData.append('folder', 'files');
-  formData.append('mode', 'file');
+   const formData = new FormData();
+   formData.append('file', file);
+   formData.append('folder', 'docs');
+   formData.append('mode', 'file');
 
   fetch('api/upload.php', {
     method: 'POST',
