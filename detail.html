@@ -609,10 +609,10 @@
     const entryId = params.get('id');
 
     // Category tag class mapping
-    const tagClass = { ai: 'ai', work: 'work', volunteer: 'vol', education: 'edu' };
-    const tagLabel = { ai: 'AI', work: 'Arbejde', volunteer: 'Frivillig', education: 'Uddannelse' };
-    const parentLabel = { ai: 'Projekter', work: 'CV', volunteer: 'CV', education: 'CV' };
-    const parentHref  = { ai: 'projects.html', work: 'cv.html', volunteer: 'cv.html', education: 'cv.html' };
+    const tagClass = { ai:'tag-ai', work:'tag-work', volunteer:'tag-vol', education:'tag-work', recommendation:'tag-ai' };
+    const tagLabel = { ai:'AI', work:'Arbejde', volunteer:'Frivillig', education:'Uddannelse', recommendation:'Anbefaling' };
+    const parentLabel = { ai:'Projekter', work:'CV', volunteer:'CV', education:'CV', recommendation:'Anbefalinger' };
+    const parentHref  = { ai:'projects.html', work:'cv.html', volunteer:'cv.html', education:'cv.html', recommendation:'recommendations.html' };
 
     fetch('data/content.json')
       .then(r => r.json())
@@ -621,7 +621,8 @@
         const all = [
           ...data.projects,
           ...data.cv.jobs.map(j => ({ ...j, category: 'work' })),
-          ...data.cv.education.map(e => ({ ...e, category: 'education', company: e.institution, period: e.period, title: e.title }))
+          ...data.cv.education.map(e => ({ ...e, category: 'education', company: e.institution })),
+          ...(data.cv.recommendations || []).map(r => ({ ...r, category: 'recommendation', title: r.name, company: r.role }))
         ];
 
         const entry = all.find(e => e.id === entryId);
@@ -635,7 +636,7 @@
         }
 
         const cat = entry.category || 'work';
-        const name = entry.title || entry.role;
+        const name = entry.title || entry.role || entry.name;
         const company = entry.company || '';
 
         // Page meta
@@ -666,9 +667,14 @@
 
         // Meta column
         const metaRows = [];
-        if (company) metaRows.push(['Virksomhed / Sted', `<strong>${company}</strong>`]);
-        if (entry.period) metaRows.push(['Periode', entry.period]);
-        if (entry.category) metaRows.push(['Kategori', tagLabel[cat]]);
+        if (cat === 'recommendation') {
+          metaRows.push(['Person', `<strong>${entry.name}</strong>`]);
+          if (entry.role) metaRows.push(['Rolle / Virksomhed', entry.role]);
+        } else {
+          if (company) metaRows.push(['Virksomhed / Sted', `<strong>${company}</strong>`]);
+          if (entry.period) metaRows.push(['Periode', entry.period]);
+        }
+        if (entry.category && entry.category !== 'recommendation') metaRows.push(['Kategori', tagLabel[cat]]);
         if (entry.links && entry.links.length) {
           metaRows.push(['Links', entry.links.map(l => `<a href="${l.url}" target="_blank">${l.label} →</a>`).join('<br>')]);
         }
@@ -677,9 +683,20 @@
         ).join('');
 
         // Main content
-        let mainHTML = `<div class="section-lbl">Detaljer & beskrivelse</div>`;
-        if (entry.body) {
-          entry.body.split('\n\n').forEach(para => {
+        let mainHTML = `<div class="section-lbl">${cat === 'recommendation' ? 'Udtalelse' : 'Detaljer & beskrivelse'}</div>`;
+        if (cat === 'recommendation' && entry.photo) {
+          mainHTML += `<div style="display:flex; align-items:center; gap:20px; margin-bottom:30px; padding:20px; background:rgba(255,255,255,0.03); border:0.5px solid var(--border);">
+            <img src="${entry.photo}" alt="${entry.photo_alt||entry.name}" style="width:80px; height:80px; border-radius:50%; object-fit:cover; border:2px solid var(--bg-card);">
+            <div>
+              <div style="font-size:18px; font-weight:600; color:var(--text);">${entry.name}</div>
+              <div style="font-size:14px; color:var(--text-faint);">${entry.role||''}</div>
+            </div>
+          </div>`;
+        }
+
+        const rawContent = entry.text || entry.body;
+        if (rawContent) {
+          rawContent.split('\n\n').forEach(para => {
             if (para.startsWith('###')) {
               mainHTML += `<h3 class="content-h3">${para.replace('### ','')}</h3>`;
             } else if (para.startsWith('##')) {

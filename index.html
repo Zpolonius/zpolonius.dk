@@ -295,24 +295,52 @@
     .cv-company { font-size: 11px; color: var(--text-faint); margin-bottom: 6px; }
     .cv-desc { font-size: 11px; color: var(--text-ghost); line-height: 1.5; }
 
-    /* ---- QUOTES ---- */
-    .quote-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-    }
-    .quote-card {
-      padding: 28px 40px;
-      border-right: 0.5px solid var(--border);
+    /* ---- QUOTES CAROUSEL ---- */
+    .rec-container {
+      position: relative;
+      overflow: hidden;
       border-bottom: 0.5px solid var(--border);
     }
-    .quote-card:nth-child(2n) { border-right: none; }
-    .quote-mark { font-size: 22px; color: var(--blue); font-weight: 700; margin-bottom: 10px; line-height: 1; }
-    .quote-text { font-size: 13px; color: var(--text-muted); line-height: 1.75; margin-bottom: 14px; font-style: italic; }
-    .quote-author { font-size: 11px; color: var(--text-faint); }
-    .quote-name { color: rgba(255,255,255,0.6); font-weight: 500; }
+    .quote-carousel {
+      display: flex;
+      transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+      will-change: transform;
+    }
+    .quote-card {
+      min-width: 100%;
+      padding: 48px 40px;
+      border-right: 0.5px solid var(--border);
+      box-sizing: border-box;
+    }
+    .quote-mark { font-size: 28px; color: var(--blue); font-weight: 700; margin-bottom: 14px; line-height: 1; }
+    .quote-text { font-size: 15px; color: var(--text-muted); line-height: 1.8; margin-bottom: 18px; font-style: italic; }
 
-    /* ---- CTA ---- */
-    .cta-bar {
+    .carousel-nav {
+      position: absolute;
+      bottom: 24px;
+      right: 40px;
+      display: flex;
+      gap: 8px;
+      z-index: 5;
+    }
+    .carousel-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--text-ghost);
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    .carousel-dot.active {
+      background: var(--blue);
+      transform: scale(1.4);
+    }
+
+    @media (max-width: 768px) {
+      .quote-card { padding: 32px 24px 60px; }
+      .carousel-nav { right: 50%; transform: translateX(50%); bottom: 20px; }
+    }
+
+    /* ---- CTA ---- */    .cta-bar {
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -424,8 +452,13 @@
       <span class="section-title">Anbefalinger</span>
       <a href="recommendations.html" class="section-link">Se alle →</a>
     </div>
-    <div class="quote-grid" id="featuredRecommendations">
-      <!-- Rendered dynamically -->
+    <div class="rec-container">
+      <div class="quote-carousel" id="featuredRecommendations">
+        <!-- Rendered dynamically -->
+      </div>
+      <div class="carousel-nav" id="carouselNav">
+        <!-- Dots rendered by JS -->
+      </div>
     </div>
     <div class="section-footer">
       <a href="recommendations.html" class="btn-outline">Se alle anbefalinger</a>
@@ -625,14 +658,21 @@
         `).join('');
       }
 
-      // Recommendations (latest 2)
+      // Recommendations Carousel
       const recGrid = document.getElementById('featuredRecommendations');
+      const recNav = document.getElementById('carouselNav');
       if (recGrid) {
-        const latestRecs = (data.cv?.recommendations || []).filter(r => r.visible !== false).slice(0, 2);
+        const latestRecs = (data.cv?.recommendations || []).filter(r => r.visible !== false).slice(0, 5);
+        
+        if (latestRecs.length === 0) {
+          document.getElementById('recSection').style.display = 'none';
+          return;
+        }
+
         recGrid.innerHTML = latestRecs.map(r => `
           <div class="quote-card">
             <div class="quote-mark">"</div>
-            <p class="quote-text">${r.text}</p>
+            <p class="quote-text">${r.intro || r.text}</p>
             <div class="rec-author-wrap">
               ${r.photo ? `<img src="${r.photo}" alt="${r.photo_alt||r.name}" class="rec-avatar">` : ''}
               <div class="rec-meta">
@@ -640,8 +680,41 @@
                 <div class="rec-role">${r.role}</div>
               </div>
             </div>
+            <a href="detail.html?id=${r.id}" class="section-link" style="margin-top:16px; display:inline-block; font-size:11px;">Læs hele udtalelsen →</a>
           </div>
         `).join('');
+
+        // Carousel dots
+        recNav.innerHTML = latestRecs.map((_, i) => `
+          <div class="carousel-dot ${i===0?'active':''}" onclick="goToSlide(${i})"></div>
+        `).join('');
+
+        // Carousel logic
+        let currentSlide = 0;
+        const totalSlides = latestRecs.length;
+        let carouselInterval;
+
+        window.goToSlide = function(index) {
+          currentSlide = index;
+          recGrid.style.transform = `translateX(-${index * 100}%)`;
+          document.querySelectorAll('.carousel-dot').forEach((dot, i) => {
+            dot.classList.toggle('active', i === index);
+          });
+          resetInterval();
+        };
+
+        function nextSlide() {
+          currentSlide = (currentSlide + 1) % totalSlides;
+          goToSlide(currentSlide);
+        }
+
+        function resetInterval() {
+          clearInterval(carouselInterval);
+          carouselInterval = setInterval(nextSlide, 5000);
+        }
+
+        if (totalSlides > 1) resetInterval();
+        else recNav.style.display = 'none';
       }
     }
 
