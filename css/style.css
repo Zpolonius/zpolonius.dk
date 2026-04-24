@@ -491,3 +491,33 @@ textarea.input { resize: none; height: 100px; line-height: 1.6; }
   .about-hero, .hero { margin-bottom: 0; }
   footer.footer { margin-bottom: 80px; }
 }
+
+/* ---- NEW AVATARS & CHIPS (added for Admin UI upgrade) ---- */
+.rec-author-wrap { display: flex; align-items: center; gap: 14px; margin-top: 20px; }
+.rec-avatar {
+  width: 48px; height: 48px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 0.5px solid var(--border);
+  background: var(--bg-card);
+  flex-shrink: 0;
+}
+.rec-meta { display: flex; flex-direction: column; gap: 2px; }
+.rec-name { font-size: 13px; font-weight: 600; color: var(--text); }
+.rec-role { font-size: 11px; color: var(--text-faint); }
+
+.tag-chip {
+  display: inline-block;
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 3px 10px;
+  border: 0.5px solid var(--border-md);
+  color: var(--text-faint);
+  background: rgba(255,255,255,0.03);
+  margin-right: 6px;
+  margin-bottom: 6px;
+}
+.tag-chip.blue { border-color: rgba(65,143,255,0.4); color: var(--blue); }
+.tag-chip.green { border-color: rgba(65,164,71,0.4); color: var(--green); }
+

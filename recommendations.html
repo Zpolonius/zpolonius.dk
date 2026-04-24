@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Anbefalinger — Zacharias Polonius</title>
+  <meta name="description" content="Anbefalinger og udtalelser fra kolleger, ledere og samarbejdspartnere.">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .page-hero {
+      padding: 52px 40px 44px;
+      border-bottom: 0.5px solid var(--border);
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: flex-end;
+      gap: 32px;
+    }
+    .page-hero-label {
+      font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase;
+      color: var(--blue); margin-bottom: 14px;
+    }
+    .page-hero-title {
+      font-size: 44px; font-weight: 700; letter-spacing: -0.04em;
+      color: var(--text); line-height: 1.0; margin-bottom: 14px;
+    }
+    .page-hero-desc {
+      font-size: 14px; color: var(--text-muted); line-height: 1.7; max-width: 480px;
+    }
+    .page-hero-stat { text-align: right; }
+    .page-hero-stat-num { font-size: 36px; font-weight: 700; color: var(--blue); letter-spacing: -0.03em; }
+    .page-hero-stat-lbl { font-size: 11px; color: var(--text-faint); letter-spacing: 0.08em; text-transform: uppercase; margin-top: 2px; }
+
+    /* RECOMMENDATIONS GRID */
+    .rec-grid { display: grid; grid-template-columns: repeat(2, 1fr); }
+    .rec-card {
+      padding: 40px; border-right: 0.5px solid var(--border);
+      border-bottom: 0.5px solid var(--border);
+      display: flex; flex-direction: column;
+    }
+    .rec-card:nth-child(2n) { border-right: none; }
+    .rec-mark { font-size: 32px; color: var(--blue); font-weight: 700; line-height: 1; margin-bottom: 16px; }
+    .rec-text { font-size: 14px; color: var(--text-muted); line-height: 1.8; font-style: italic; margin-bottom: 24px; flex: 1; }
+    
+    .rec-skills { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 20px; border-top: 0.5px solid var(--border); padding-top: 16px; }
+    .rec-skill { font-size: 9px; letter-spacing: 0.06em; padding: 3px 7px; border: 0.5px solid var(--border); color: var(--text-faint); text-transform: uppercase; }
+
+    @media (max-width: 768px) {
+      .rec-grid { grid-template-columns: 1fr; }
+      .rec-card:nth-child(n) { border-right: none; }
+      .rec-card { padding: 32px 20px; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="nav">
+    <a href="index.html" class="nav-logo">Z<span>.</span>Polonius</a>
+    <ul class="nav-links">
+      <li><a href="about.html">Om</a></li>
+      <li><a href="projects.html">Projekter</a></li>
+      <li><a href="cv.html">CV</a></li>
+      <li><a href="recommendations.html" class="active">Anbefalinger</a></li>
+      <li><a href="contact.html">Kontakt</a></li>
+    </ul>
+    <div class="nav-right">
+      <button class="nav-hamburger" id="hamburgerBtn" aria-label="Menu" aria-expanded="false">☰</button>
+      <button class="theme-switch" onclick="toggleTheme()">☀</button>
+      <button class="nav-btn" data-contact>Kontakt</button>
+    </div>
+  </nav>
+
+  <!-- PAGE HERO -->
+  <div class="page-hero">
+    <div class="fade-up fade-up-1">
+      <div class="page-hero-label">Udtalelser</div>
+      <h1 class="page-hero-title">Hvad andre<br>siger</h1>
+      <p class="page-hero-desc">Et indblik i mine professionelle relationer og de resultater, jeg har skabt sammen med mine kolleger og ledere.</p>
+    </div>
+    <div class="page-hero-stat fade-up fade-up-2">
+      <div class="page-hero-stat-num" id="recCount">—</div>
+      <div class="page-hero-stat-lbl">Anbefalinger</div>
+    </div>
+  </div>
+
+  <!-- RECOMMENDATIONS GRID -->
+  <div class="rec-grid" id="recGrid">
+    <!-- Rendered by JS -->
+  </div>
+
+  <!-- CTA -->
+  <div style="display:flex;align-items:center;justify-content:space-between;padding:32px 40px;border-top:0.5px solid var(--border);border-bottom:0.5px solid var(--border);">
+    <p style="font-size:14px;color:var(--text-muted);line-height:1.6;max-width:480px;">
+      <strong style="color:var(--text);font-weight:500;">Vil du høre mere?</strong> Jeg sætter dig gerne i kontakt med mine referencer for en uddybende snak om vores samarbejde.
+    </p>
+    <button class="btn-primary" data-contact>Tag kontakt →</button>
+  </div>
+
+  <footer class="footer">
+    <div class="footer-left" id="footerContact">zacharias@polonius.dk · 3068 7041</div>
+    <div class="footer-links">
+      <a href="https://www.linkedin.com/in/zpolonius/" target="_blank" id="link-linkedin">LinkedIn</a>
+      <a href="https://www.instagram.com/zackp91/" target="_blank" id="link-instagram">Instagram</a>
+      <a href="https://www.facebook.com/zpolonius" target="_blank" id="link-facebook">Facebook</a>
+    </div>
+  </footer>
+
+  <!-- CONTACT OVERLAY -->
+  <div class="overlay" id="contactOverlay">
+    <div class="overlay-bg"></div>
+    <div class="modal">
+      <div id="contactFormView">
+        <div class="modal-header">
+          <div>
+            <div class="modal-label">Kontakt</div>
+            <div class="modal-title">Lad os tage<br>en snak</div>
+            <div class="modal-sub">Jeg vender tilbage inden for 24 timer.</div>
+          </div>
+          <button class="modal-close" onclick="closeContact()">✕</button>
+        </div>
+        <div class="modal-progress"><div class="modal-progress-bar" id="contactProgressBar"></div></div>
+        <div class="modal-divider"></div>
+        <div class="modal-body">
+          <div class="field-row">
+            <div class="field"><label class="field-label">Navn</label><input class="input" type="text" id="f-name" placeholder="Dit fulde navn"></div>
+            <div class="field"><label class="field-label">Firma</label><input class="input" type="text" id="f-company" placeholder="Virksomhedsnavn"></div>
+          </div>
+          <div class="field"><label class="field-label">Email</label><input class="input" type="email" id="f-email" placeholder="din@email.dk"></div>
+          <div class="field">
+            <label class="field-label">Emne</label>
+            <div class="pills" style="margin-top:4px;">
+              <button class="pill">Jobmulighed</button>
+              <button class="pill">Samarbejde</button>
+              <button class="pill">AI-projekt</button>
+              <button class="pill">Andet</button>
+            </div>
+          </div>
+          <div class="field" style="margin-top:18px;"><label class="field-label">Besked</label><textarea class="input" id="f-msg" placeholder="Fortæl mig lidt om hvad du har i tankerne..."></textarea></div>
+          <div class="modal-footer">
+            <div class="modal-contact-info"><span>zacharias@polonius.dk</span><span>3068 7041</span></div>
+            <button class="btn-primary" id="contactSubmit">Send besked →</button>
+          </div>
+        </div>
+        <div class="modal-social">
+          <a href="https://www.linkedin.com/in/zpolonius/" target="_blank">LinkedIn</a>
+          <span class="modal-social-sep">·</span>
+          <a href="https://www.instagram.com/zackp91/" target="_blank">Instagram</a>
+          <span class="modal-social-sep">·</span>
+          <a href="https://www.facebook.com/zpolonius" target="_blank">Facebook</a>
+        </div>
+      </div>
+      <div class="success-view" id="contactSuccessView">
+        <div class="success-icon"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
+        <div class="success-title">Besked sendt!</div>
+        <div class="success-sub">Tak for din henvendelse. Jeg vender tilbage inden for 24 timer.</div>
+        <button class="btn-primary" onclick="closeContact()" style="margin-top:8px;">Luk vindue</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- FLOATING BOTTOM NAV (mobil) -->
+  <nav class="bottom-nav" id="bottomNav">
+    <a class="bottom-nav-item" href="index.html" data-page="hjem">
+      <span class="bottom-nav-icon">⌂</span>
+      <span class="bottom-nav-label">Hjem</span>
+    </a>
+    <div class="bottom-nav-divider"></div>
+    <a class="bottom-nav-item" href="projects.html" data-page="projekter">
+      <span class="bottom-nav-icon">◈</span>
+      <span class="bottom-nav-label">Projekter</span>
+    </a>
+    <div class="bottom-nav-divider"></div>
+    <a class="bottom-nav-item" href="cv.html" data-page="cv">
+      <span class="bottom-nav-icon">◎</span>
+      <span class="bottom-nav-label">CV</span>
+    </a>
+    <div class="bottom-nav-divider"></div>
+    <a class="bottom-nav-item" href="recommendations.html" data-page="anbefalinger">
+      <span class="bottom-nav-icon">💬</span>
+      <span class="bottom-nav-label">Anbefalinger</span>
+    </a>
+    <div class="bottom-nav-divider"></div>
+    <a class="bottom-nav-item" href="about.html" data-page="om">
+      <span class="bottom-nav-icon">◉</span>
+      <span class="bottom-nav-label">Om</span>
+    </a>
+    <div class="bottom-nav-divider"></div>
+    <button class="bottom-nav-contact" data-contact-mobile>
+      <span class="bottom-nav-icon">✉</span>
+      <span class="bottom-nav-label">Kontakt</span>
+    </button>
+  </nav>
+
+  <script src="js/main.js"></script>
+  <script>
+    fetch('data/content.json')
+      .then(r => r.json())
+      .then(data => {
+        const s = data.site || {};
+        const recs = (data.cv?.recommendations || []).filter(r => r.visible !== false);
+        
+        // Count
+        document.getElementById('recCount').textContent = recs.length;
+
+        // Footer & Links
+        if (s.email && s.phone) document.getElementById('footerContact').textContent = `${s.email} · ${s.phone}`;
+        if (s.social) {
+          document.getElementById('link-linkedin').href = s.social.linkedin || '#';
+          document.getElementById('link-instagram').href = s.social.instagram || '#';
+          document.getElementById('link-facebook').href = s.social.facebook || '#';
+        }
+
+        // Recommendations
+        const grid = document.getElementById('recGrid');
+        recs.forEach(r => {
+          grid.innerHTML += `
+            <div class="rec-card">
+              <div class="rec-mark">"</div>
+              <p class="rec-text">${r.text}</p>
+              <div class="rec-author-wrap">
+                ${r.photo ? `<img src="${r.photo}" alt="${r.photo_alt||r.name}" class="rec-avatar">` : ''}
+                <div class="rec-meta">
+                  <div class="rec-name">${r.name}</div>
+                  <div class="rec-role">${r.role}</div>
+                </div>
+              </div>
+              ${(r.skills||[]).length ? `<div class="rec-skills">${r.skills.map(s=>`<span class="rec-skill">${s}</span>`).join('')}</div>` : ''}
+            </div>`;
+        });
+      });
+  </script>
+</body>
+</html>

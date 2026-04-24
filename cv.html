@@ -94,6 +94,7 @@
       <li><a href="about.html">Om</a></li>
       <li><a href="projects.html">Projekter</a></li>
       <li><a href="cv.html" class="active">CV</a></li>
+      <li><a href="recommendations.html">Anbefalinger</a></li>
       <li><a href="contact.html">Kontakt</a></li>
     </ul>
     <div class="nav-right">
@@ -178,6 +179,7 @@
   <!-- ANBEFALINGER -->
   <div class="section-header" id="anbefalinger">
     <span class="section-title">Anbefalinger</span>
+    <a href="recommendations.html" class="section-link">Se alle →</a>
   </div>
   <div class="rec-grid" id="recGrid">
     <!-- Rendered by JS -->
@@ -270,6 +272,11 @@
       <span class="bottom-nav-label">CV</span>
     </a>
     <div class="bottom-nav-divider"></div>
+    <a class="bottom-nav-item" href="recommendations.html" data-page="anbefalinger">
+      <span class="bottom-nav-icon">💬</span>
+      <span class="bottom-nav-label">Anb.</span>
+    </a>
+    <div class="bottom-nav-divider"></div>
     <a class="bottom-nav-item" href="about.html" data-page="om">
       <span class="bottom-nav-icon">◉</span>
       <span class="bottom-nav-label">Om</span>
@@ -289,6 +296,7 @@
         // Jobs timeline
         const tl = document.getElementById('jobTimeline');
         (data.cv?.jobs || []).forEach(j => {
+          if (j.visible === false) return;
           tl.innerHTML += `
             <div class="timeline-year">
               <div class="timeline-year-val">${j.period}</div>
@@ -305,6 +313,7 @@
         // Education
         const eg = document.getElementById('eduGrid');
         (data.cv?.education || []).forEach(e => {
+          if (e.visible === false) return;
           eg.innerHTML += `
             <a class="edu-card" href="detail.html?id=${e.id}">
               <div class="edu-period">${e.period}</div>
@@ -317,12 +326,18 @@
         // Recommendations
         const rg = document.getElementById('recGrid');
         (data.cv?.recommendations || []).forEach(r => {
+          if (r.visible === false) return;
           rg.innerHTML += `
             <div class="rec-card">
               <div class="rec-mark">"</div>
               <p class="rec-text">${r.text}</p>
-              <div class="rec-name">${r.name}</div>
-              <div class="rec-role">${r.role}</div>
+              <div class="rec-author-wrap">
+                ${r.photo ? `<img src="${r.photo}" alt="${r.photo_alt||r.name}" class="rec-avatar">` : ''}
+                <div class="rec-meta">
+                  <div class="rec-name">${r.name}</div>
+                  <div class="rec-role">${r.role}</div>
+                </div>
+              </div>
             </div>`;
         });
       });

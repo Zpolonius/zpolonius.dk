@@ -100,6 +100,7 @@
       <li><a href="about.html">Om</a></li>
       <li><a href="projects.html" class="active">Projekter</a></li>
       <li><a href="cv.html">CV</a></li>
+      <li><a href="recommendations.html">Anbefalinger</a></li>
       <li><a href="contact.html">Kontakt</a></li>
     </ul>
     <div class="nav-right">
@@ -229,6 +230,11 @@
       <span class="bottom-nav-label">CV</span>
     </a>
     <div class="bottom-nav-divider"></div>
+    <a class="bottom-nav-item" href="recommendations.html" data-page="anbefalinger">
+      <span class="bottom-nav-icon">💬</span>
+      <span class="bottom-nav-label">Anb.</span>
+    </a>
+    <div class="bottom-nav-divider"></div>
     <a class="bottom-nav-item" href="about.html" data-page="om">
       <span class="bottom-nav-icon">◉</span>
       <span class="bottom-nav-label">Om</span>
@@ -248,12 +254,15 @@
     fetch('data/content.json')
       .then(r => r.json())
       .then(data => {
+        const visibleProjects = (data.projects||[]).filter(p => p.visible !== false);
+
         // Count
-        document.getElementById('projCount').textContent = (data.projects||[]).length;
+        document.getElementById('projCount').textContent = visibleProjects.length;
 
         // Specialer
         const strip = document.getElementById('specialerStrip');
         (data.specialer||[]).forEach(s => {
+          if (s.visible === false) return;
           strip.innerHTML += `
             <div class="special-cell">
               <div class="special-icon-wrap ${s.color==='green'?'green':''}">${s.icon||'◆'}</div>
@@ -265,7 +274,7 @@
         });
 
         // Categories for filter
-        const cats = [...new Set((data.projects||[]).map(p => p.category))];
+        const cats = [...new Set(visibleProjects.map(p => p.category))];
         const bar = document.getElementById('filterBar');
         cats.forEach(cat => {
           const btn = document.createElement('button');
@@ -283,7 +292,7 @@
         const noRes = document.getElementById('noResults');
         grid.appendChild(noRes);
 
-        (data.projects||[]).forEach(p => {
+        visibleProjects.forEach(p => {
           const card = document.createElement('a');
           card.className = 'proj-card';
           card.href = `detail.html?id=${p.id}`;

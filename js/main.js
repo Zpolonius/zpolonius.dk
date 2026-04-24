@@ -88,12 +88,13 @@ function initBottomNav() {
 
   const page = location.pathname.split('/').pop() || 'index.html';
   const map = {
-    'index.html':    'hjem',
-    '':              'hjem',
-    'projects.html': 'projekter',
-    'cv.html':       'cv',
-    'about.html':    'om',
-    'contact.html':  'kontakt',
+    'index.html':           'hjem',
+    '':                     'hjem',
+    'projects.html':        'projekter',
+    'cv.html':              'cv',
+    'recommendations.html': 'anbefalinger',
+    'about.html':           'om',
+    'contact.html':         'kontakt',
   };
   const activeKey = map[page];
   if (activeKey) {

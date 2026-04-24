@@ -409,6 +409,7 @@
       <li><a href="about.html">Om</a></li>
       <li><a href="projects.html">Projekter</a></li>
       <li><a href="cv.html">CV</a></li>
+      <li><a href="recommendations.html">Anbefalinger</a></li>
       <li><a href="contact.html">Kontakt</a></li>
     </ul>
     <div class="nav-right">
@@ -585,6 +586,11 @@
       <span class="bottom-nav-label">CV</span>
     </a>
     <div class="bottom-nav-divider"></div>
+    <a class="bottom-nav-item" href="recommendations.html" data-page="anbefalinger">
+      <span class="bottom-nav-icon">💬</span>
+      <span class="bottom-nav-label">Anb.</span>
+    </a>
+    <div class="bottom-nav-divider"></div>
     <a class="bottom-nav-item" href="about.html" data-page="om">
       <span class="bottom-nav-icon">◉</span>
       <span class="bottom-nav-label">Om</span>
@@ -643,7 +649,7 @@
 
         // Cover
         const img = document.getElementById('coverImg');
-        if (entry.cover) { img.src = entry.cover; img.alt = name; }
+        if (entry.cover) { img.src = entry.cover; img.alt = entry.cover_alt || name; }
         else { document.getElementById('coverFallback').classList.add('show'); }
 
         const coverTagEl = document.getElementById('coverTag');
@@ -699,47 +705,40 @@
             <span class="sidebar-toggle-label">Kompetencer & links</span>
             <span class="sidebar-toggle-icon">▾</span>
           </div>
-          <div class="sidebar-inner">
-            <div class="section-lbl">Kompetencer</div>`;
+          <div class="sidebar-inner">`;
         if (entry.skills && entry.skills.length) {
-          const techSkills = entry.skills.slice(0, Math.ceil(entry.skills.length / 2));
-          const bizSkills  = entry.skills.slice(Math.ceil(entry.skills.length / 2));
-          if (techSkills.length) {
-            sideHTML += `<div class="sidebar-card"><div class="sidebar-card-lbl">Teknisk</div>`;
-            techSkills.forEach(s => { sideHTML += `<span class="skill-tag blue">${s}</span>`; });
-            sideHTML += `</div>`;
-          }
-          if (bizSkills.length) {
-            sideHTML += `<div class="sidebar-card"><div class="sidebar-card-lbl">Generelt</div>`;
-            bizSkills.forEach(s => { sideHTML += `<span class="skill-tag">${s}</span>`; });
-            sideHTML += `</div>`;
-          }
-        }
-        if (entry.links && entry.links.length) {
-          sideHTML += `<div class="sidebar-card"><div class="sidebar-card-lbl">Links</div>`;
-          entry.links.forEach(l => { sideHTML += `<a href="${l.url}" class="sidebar-link" target="_blank">${l.label} →</a>`; });
+          sideHTML += `<div class="section-lbl">Kompetencer</div><div class="sidebar-card" style="padding-bottom:12px;">`;
+          entry.skills.forEach(s => { sideHTML += `<span class="skill-tag blue">${s}</span>`; });
           sideHTML += `</div>`;
         }
-        if (entry.file) {
-          const fname = entry.file.split('/').pop();
-          sideHTML += `
-            <div class="sidebar-card" style="border-color:var(--border-blue);">
-              <div class="sidebar-card-lbl">Download</div>
-              <a href="${entry.file}" class="sidebar-download" download="${fname}">
-                <span class="sidebar-download-icon">📄</span>
-                <span class="sidebar-download-info">
-                  <span class="sidebar-download-name">${fname}</span>
-                  <span class="sidebar-download-hint">Klik for at downloade</span>
-                </span>
-                <span class="sidebar-download-arrow">↓</span>
-              </a>
-            </div>`;
+        if ((entry.links && entry.links.length) || entry.file) {
+          sideHTML += `<div class="section-lbl">Materiale & Links</div>`;
+          if (entry.links && entry.links.length) {
+            sideHTML += `<div class="sidebar-card"><div class="sidebar-card-lbl">Links</div>`;
+            entry.links.forEach(l => { sideHTML += `<a href="${l.url}" class="sidebar-link" target="_blank">${l.label} →</a>`; });
+            sideHTML += `</div>`;
+          }
+          if (entry.file) {
+            const fname = entry.file.split('/').pop();
+            sideHTML += `
+              <div class="sidebar-card" style="border-color:var(--border-blue);">
+                <div class="sidebar-card-lbl">Download</div>
+                <a href="${entry.file}" class="sidebar-download" download="${fname}">
+                  <span class="sidebar-download-icon">📄</span>
+                  <span class="sidebar-download-info">
+                    <span class="sidebar-download-name">${fname}</span>
+                    <span class="sidebar-download-hint">Klik for at downloade</span>
+                  </span>
+                  <span class="sidebar-download-arrow">↓</span>
+                </a>
+              </div>`;
+          }
         }
         sideHTML += `</div>`; // close sidebar-inner
         document.getElementById('contentSidebar').innerHTML = sideHTML;
 
         // Prev / Next navigation within same category
-        const siblings = all.filter(e => e.category === cat);
+        const siblings = all.filter(e => e.category === cat && e.visible !== false);
         const idx = siblings.findIndex(e => e.id === entryId);
         const prev = siblings[idx - 1];
         const next = siblings[idx + 1];

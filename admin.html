@@ -170,45 +170,55 @@
     .entry-card-desc { font-size:11px; color:var(--faint); line-height:1.6; }
     .entry-card-period { font-size:10px; color:var(--blue); letter-spacing:0.06em; margin-top:10px; }
 
-    /* ---- FORM PANEL ---- */
+    /* ---- FORM PANEL (CENTERED 2-COLUMN) ---- */
     .form-panel {
       display:none; position:fixed;
-      top:0; right:0; bottom:0; width:520px;
-      background:var(--bg-card); border-left:0.5px solid var(--border-md);
-      z-index:100; flex-direction:column;
-      box-shadow:-20px 0 60px rgba(0,0,0,0.4);
-      transform:translateX(100%);
-      transition:transform 0.35s cubic-bezier(0.16,1,0.3,1);
+      top: 4vh; left: 50%; transform: translateX(-50%);
+      width: 92vw; max-width: 1000px; height: 92vh;
+      background:var(--bg-card); border:0.5px solid var(--border-md);
+      z-index:105; flex-direction:column;
+      box-shadow: 0 30px 80px rgba(0,0,0,0.6);
+      border-radius: 6px;
     }
-    .form-panel.open { display:flex; transform:translateX(0); }
+    .form-panel.open { display:flex; }
     .form-panel-header {
-      padding:20px 24px; border-bottom:0.5px solid var(--border);
+      padding:20px 32px; border-bottom:0.5px solid var(--border);
       display:flex; align-items:center; justify-content:space-between; flex-shrink:0;
     }
-    .form-panel-title { font-size:14px; font-weight:600; color:#fff; letter-spacing:-0.02em; }
+    .form-panel-title { font-size:16px; font-weight:600; color:#fff; letter-spacing:-0.02em; }
     .form-panel-close {
       background:transparent; border:0.5px solid var(--border);
-      color:var(--muted); width:30px; height:30px;
+      color:var(--muted); width:32px; height:32px;
       display:flex; align-items:center; justify-content:center;
-      cursor:pointer; font-size:14px; transition:all 0.2s;
+      cursor:pointer; font-size:16px; transition:all 0.2s; border-radius: 4px;
     }
     .form-panel-close:hover { border-color:var(--red); color:var(--red); }
-    .form-panel-body { flex:1; overflow-y:auto; padding:24px; }
+    .form-panel-body { flex:1; overflow-y:auto; padding:32px; }
+    
+    .form-layout { display: grid; grid-template-columns: 1fr 300px; gap: 40px; }
+    .form-main { display: flex; flex-direction: column; gap: 18px; }
+    .form-sidebar { display: flex; flex-direction: column; gap: 18px; border-left: 0.5px solid var(--border); padding-left: 32px; }
+    @media (max-width: 800px) {
+      .form-layout { grid-template-columns: 1fr; }
+      .form-sidebar { border-left: none; padding-left: 0; border-top: 0.5px solid var(--border); padding-top: 24px; }
+    }
+    
     .form-panel-footer {
-      padding:16px 24px; border-top:0.5px solid var(--border);
-      display:flex; gap:10px; flex-shrink:0;
+      padding:20px 32px; border-top:0.5px solid var(--border);
+      display:flex; justify-content:flex-end; gap:12px; flex-shrink:0; background: var(--bg-card);
+      border-bottom-left-radius: 6px; border-bottom-right-radius: 6px;
     }
     .btn-submit {
       background:var(--blue); color:#fff; border:none;
-      padding:9px 20px; font-size:12px; font-weight:500;
-      cursor:pointer; font-family:'Inter',sans-serif; flex:1;
-      transition:opacity 0.2s;
+      padding:10px 24px; font-size:13px; font-weight:500;
+      cursor:pointer; font-family:'Inter',sans-serif;
+      transition:opacity 0.2s; border-radius: 4px;
     }
     .btn-submit:hover { opacity:0.85; }
     .btn-cancel {
       background:transparent; color:var(--muted); border:0.5px solid var(--border);
-      padding:9px 16px; font-size:12px; cursor:pointer;
-      font-family:'Inter',sans-serif; transition:all 0.2s;
+      padding:10px 20px; font-size:13px; cursor:pointer;
+      font-family:'Inter',sans-serif; transition:all 0.2s; border-radius: 4px;
     }
     .btn-cancel:hover { border-color:var(--border-md); color:var(--text); }
 
@@ -765,20 +775,37 @@ function openForm(editIdx) {
 
 function editSpecial(i) { openSpecialForm(true, i, data.specialer[i]); }
 function openSpecialForm(isEdit, idx, item={}) {
+  const isVis = item.visible !== false;
   document.getElementById('formBody').innerHTML = `
-    <div class="field"><label class="field-label">Titel / label</label><input class="f-input" id="sp-label" value="${item.label||''}"></div>
-    <div class="field"><label class="field-label">Beskrivelse</label><textarea class="f-textarea" id="sp-desc">${item.desc||''}</textarea></div>
-    <div class="field-row">
-      <div class="field"><label class="field-label">Ikon (emoji)</label><input class="f-input" id="sp-icon" value="${item.icon||'◆'}"></div>
-      <div class="field"><label class="field-label">Farve</label>
-        <select class="f-select" id="sp-color">
-          <option value="blue" ${item.color==='blue'?'selected':''}>Blå</option>
-          <option value="green" ${item.color==='green'?'selected':''}>Grøn</option>
-        </select>
+    <div class="form-layout">
+      <div class="form-main">
+        <div class="field"><label class="field-label">Titel / label</label><input class="f-input" id="sp-label" value="${item.label||''}"></div>
+        <div class="field"><label class="field-label">Beskrivelse</label><textarea class="f-textarea" style="height:120px;" id="sp-desc">${item.desc||''}</textarea></div>
+        <div class="field-row">
+          <div class="field"><label class="field-label">Ikon (emoji)</label><input class="f-input" id="sp-icon" value="${item.icon||'◆'}"></div>
+          <div class="field"><label class="field-label">Farve</label>
+            <select class="f-select" id="sp-color">
+              <option value="blue" ${item.color==='blue'?'selected':''}>Blå</option>
+              <option value="green" ${item.color==='green'?'selected':''}>Grøn</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="form-sidebar">
+        <div class="field"><label class="field-label">Status</label>
+          <select class="f-select" id="sp-vis">
+            <option value="1" ${isVis?'selected':''}>Synlig (Live)</option>
+            <option value="0" ${!isVis?'selected':''}>Skjult (Udkast)</option>
+          </select>
+        </div>
+        <div class="field"><label class="field-label">Keywords / Tags</label><input class="f-input" id="sp-skills" value="${(item.skills||[]).join(', ')}" placeholder="F.eks. B2B, Salg, API"></div>
+        <div class="field"><label class="field-label">Cover-billede</label>${createUploadZone('sp-cover','cover',item.cover||'')}</div>
+        <div class="field"><label class="field-label">Billede Alt-tekst</label><input class="f-input" id="sp-cover-alt" value="${item.cover_alt||''}" placeholder="Til SEO og skærmlæsere"></div>
+        <div class="field"><label class="field-label">Vedhæftet fil (PDF)</label>${createFileZone('sp-file', item.file||'')}</div>
       </div>
     </div>`;
   openFormPanel(isEdit ? 'Rediger speciale' : 'Tilføj speciale', () => {
-    const obj = { id: item.id || slug(document.getElementById('sp-label').value), label: document.getElementById('sp-label').value, desc: document.getElementById('sp-desc').value, icon: document.getElementById('sp-icon').value, color: document.getElementById('sp-color').value };
+    const obj = { id: item.id || slug(document.getElementById('sp-label').value), label: document.getElementById('sp-label').value, desc: document.getElementById('sp-desc').value, icon: document.getElementById('sp-icon').value, color: document.getElementById('sp-color').value, skills: document.getElementById('sp-skills').value.split(',').map(s=>s.trim()).filter(Boolean), cover: getUploadPath('sp-cover') || item.cover || '', cover_alt: document.getElementById('sp-cover-alt').value, file: getUploadPath('sp-file') || item.file || '', visible: document.getElementById('sp-vis').value === "1" };
     if (isEdit) data.specialer[idx] = obj;
     else data.specialer.push(obj);
     closeForm(); updateBadges(); renderSection('specialer'); showToast(isEdit ? 'Speciale opdateret' : 'Speciale tilføjet');
@@ -791,7 +818,8 @@ function renderProjekter(area) {
   area.innerHTML = list.length ? `<div class="entry-grid">${list.map((p,i) => `
     <div class="entry-card">
       <div class="entry-card-header">
-        <span class="entry-card-tag ${p.category||''}">${p.tag||p.category}</span>
+        <span class="entry-card-tag ${p.category||''} ${p.visible===false?'draft':''}"> ${p.tag||p.category}</span>
+        ${p.visible===false?'<span class="entry-card-tag draft" style="border-color:var(--amber);color:var(--amber);margin-left:6px;">Udkast</span>':''}
         <div class="entry-card-actions">
           <button class="btn-edit" onclick="editProject(${i})">Rediger</button>
           <button class="btn-del"  onclick="deleteEntry('projekter',${i})">Slet</button>
@@ -806,29 +834,42 @@ function renderProjekter(area) {
 
 function editProject(i) { openProjectForm(true, i, data.projects[i]); }
 function openProjectForm(isEdit, idx, item={}) {
+  const isVis = item.visible !== false;
   document.getElementById('formBody').innerHTML = `
-    <div class="field"><label class="field-label">Titel</label><input class="f-input" id="pj-title" value="${item.title||''}"></div>
-    <div class="field-row">
-      <div class="field"><label class="field-label">Kategori</label>
-        <select class="f-select" id="pj-cat">
-          <option value="ai"       ${item.category==='ai'?'selected':''}>AI</option>
-          <option value="checkout" ${item.category==='checkout'?'selected':''}>Checkout</option>
-          <option value="work"     ${item.category==='work'?'selected':''}>Arbejde</option>
-          <option value="volunteer"${item.category==='volunteer'?'selected':''}>Frivillig</option>
-        </select>
+    <div class="form-layout">
+      <div class="form-main">
+        <div class="field"><label class="field-label">Titel</label><input class="f-input" id="pj-title" value="${item.title||''}"></div>
+        <div class="field-row">
+          <div class="field"><label class="field-label">Kategori</label>
+            <select class="f-select" id="pj-cat">
+              <option value="ai"       ${item.category==='ai'?'selected':''}>AI</option>
+              <option value="checkout" ${item.category==='checkout'?'selected':''}>Checkout</option>
+              <option value="work"     ${item.category==='work'?'selected':''}>Arbejde</option>
+              <option value="volunteer"${item.category==='volunteer'?'selected':''}>Frivillig</option>
+            </select>
+          </div>
+          <div class="field"><label class="field-label">Periode</label><input class="f-input" id="pj-period" value="${item.period||''}"></div>
+        </div>
+        <div class="field"><label class="field-label">Kort beskrivelse (forside)</label><textarea class="f-textarea" style="height:60px;" id="pj-desc">${item.desc||''}</textarea></div>
+        <div class="field"><label class="field-label">Intro (vises øverst på detailside)</label><textarea class="f-textarea" id="pj-intro">${item.intro||''}</textarea></div>
+        <div class="field"><label class="field-label">Indhold / brødtekst</label><textarea class="f-textarea" style="height:200px;" id="pj-body">${item.body||''}</textarea><div class="field-hint">Brug dobbelt linjeskift til afsnit</div></div>
       </div>
-      <div class="field"><label class="field-label">Periode</label><input class="f-input" id="pj-period" value="${item.period||''}"></div>
-    </div>
-    <div class="field"><label class="field-label">Kort beskrivelse</label><textarea class="f-textarea" style="height:60px;" id="pj-desc">${item.desc||''}</textarea></div>
-    <div class="field"><label class="field-label">Intro (vist øverst på detailside)</label><textarea class="f-textarea" id="pj-intro">${item.intro||''}</textarea></div>
-    <div class="field"><label class="field-label">Indhold / brødtekst</label><textarea class="f-textarea" style="height:140px;" id="pj-body">${item.body||''}</textarea><div class="field-hint">Brug dobbelt linjeskift til afsnit</div></div>
-    <div class="field"><label class="field-label">Kompetencer (kommasepareret)</label><input class="f-input" id="pj-skills" value="${(item.skills||[]).join(', ')}"></div>
-    <div class="field"><label class="field-label">Cover-billede</label>${createUploadZone('pj-cover','projects',item.cover||'')}</div>
-    <div class="field"><label class="field-label">Vedhæftet fil (PDF) <span style="color:var(--faint);font-size:10px;">valgfrit</span></label>${createFileZone('pj-file', item.file||'')}<div class="field-hint">Vises som download-knap på detailsiden</div></div>
-    <div class="field"><label class="field-label">Link URL (valgfrit)</label><input class="f-input" id="pj-url" value="${item.url||''}"></div>`;
+      <div class="form-sidebar">
+        <div class="field"><label class="field-label">Status</label>
+          <select class="f-select" id="pj-vis">
+            <option value="1" ${isVis?'selected':''}>Synlig (Live)</option>
+            <option value="0" ${!isVis?'selected':''}>Skjult (Udkast)</option>
+          </select>
+        </div>
+        <div class="field"><label class="field-label">Kompetencer / Keywords</label><input class="f-input" id="pj-skills" value="${(item.skills||[]).join(', ')}" placeholder="f.eks. AI, Scrum, React"><div class="field-hint">Kommasepareret</div></div>
+        <div class="field"><label class="field-label">Link URL (valgfrit)</label><input class="f-input" id="pj-url" value="${item.url||''}" placeholder="https://..."></div>
+        <div class="field"><label class="field-label">Cover-billede</label>${createUploadZone('pj-cover','projects',item.cover||'')}</div>
+        <div class="field"><label class="field-label">Billede Alt-tekst</label><input class="f-input" id="pj-cover-alt" value="${item.cover_alt||''}" placeholder="Til SEO og skærmlæsere"></div>
+        <div class="field"><label class="field-label">Vedhæftet fil (PDF)</label>${createFileZone('pj-file', item.file||'')}</div>
+      </div>
+    </div>`;
   openFormPanel(isEdit ? 'Rediger projekt' : 'Tilføj projekt', () => {
-    const obj = { id: item.id || slug(document.getElementById('pj-title').value), title: document.getElementById('pj-title').value, category: document.getElementById('pj-cat').value, tag: { ai:'AI', checkout:'Checkout', work:'Arbejde', volunteer:'Frivillig' }[document.getElementById('pj-cat').value], period: document.getElementById('pj-period').value, desc: document.getElementById('pj-desc').value, intro: document.getElementById('pj-intro').value, body: document.getElementById('pj-body').value, skills: document.getElementById('pj-skills').value.split(',').map(s=>s.trim()).filter(Boolean), cover: getUploadPath('pj-cover') || item.cover || '',
-        file: getUploadPath('pj-file') || item.file || '', url: document.getElementById('pj-url').value || undefined };
+    const obj = { id: item.id || slug(document.getElementById('pj-title').value), title: document.getElementById('pj-title').value, category: document.getElementById('pj-cat').value, tag: { ai:'AI', checkout:'Checkout', work:'Arbejde', volunteer:'Frivillig' }[document.getElementById('pj-cat').value], period: document.getElementById('pj-period').value, desc: document.getElementById('pj-desc').value, intro: document.getElementById('pj-intro').value, body: document.getElementById('pj-body').value, skills: document.getElementById('pj-skills').value.split(',').map(s=>s.trim()).filter(Boolean), cover: getUploadPath('pj-cover') || item.cover || '', cover_alt: document.getElementById('pj-cover-alt').value, file: getUploadPath('pj-file') || item.file || '', url: document.getElementById('pj-url').value || undefined, visible: document.getElementById('pj-vis').value === "1" };
     if (isEdit) data.projects[idx] = obj;
     else data.projects.push(obj);
     closeForm(); updateBadges(); renderSection('projekter'); showToast(isEdit ? 'Projekt opdateret' : 'Projekt tilføjet');
@@ -841,7 +882,8 @@ function renderAnsaettelser(area) {
   area.innerHTML = list.length ? `<div class="entry-grid">${list.map((j,i) => `
     <div class="entry-card">
       <div class="entry-card-header">
-        <span class="entry-card-tag work">Arbejde</span>
+        <span class="entry-card-tag work ${j.visible===false?'draft':''}">Arbejde</span>
+        ${j.visible===false?'<span class="entry-card-tag draft" style="border-color:var(--amber);color:var(--amber);margin-left:6px;">Udkast</span>':''}
         <div class="entry-card-actions">
           <button class="btn-edit" onclick="editJob(${i})">Rediger</button>
           <button class="btn-del"  onclick="deleteEntry('ansaettelser',${i})">Slet</button>
@@ -857,20 +899,34 @@ function renderAnsaettelser(area) {
 
 function editJob(i) { openJobForm(true, i, data.cv.jobs[i]); }
 function openJobForm(isEdit, idx, item={}) {
+  const isVis = item.visible !== false;
   document.getElementById('formBody').innerHTML = `
-    <div class="field"><label class="field-label">Jobtitel</label><input class="f-input" id="jb-role" value="${item.role||''}"></div>
-    <div class="field-row">
-      <div class="field"><label class="field-label">Virksomhed</label><input class="f-input" id="jb-company" value="${item.company||''}"></div>
-      <div class="field"><label class="field-label">Periode</label><input class="f-input" id="jb-period" value="${item.period||''}"></div>
-    </div>
-    <div class="field"><label class="field-label">Kort beskrivelse</label><textarea class="f-textarea" style="height:60px;" id="jb-desc">${item.desc||''}</textarea></div>
-    <div class="field"><label class="field-label">Intro (detailside)</label><textarea class="f-textarea" id="jb-intro">${item.intro||''}</textarea></div>
-    <div class="field"><label class="field-label">Indhold / brødtekst</label><textarea class="f-textarea" style="height:120px;" id="jb-body">${item.body||''}</textarea></div>
-    <div class="field"><label class="field-label">Cover-billede</label>${createUploadZone('jb-cover','projects',item.cover||'')}</div>
-    <div class="field"><label class="field-label">Vedhæftet fil (PDF) <span style="color:var(--faint);font-size:10px;">valgfrit</span></label>${createFileZone('jb-file', item.file||'')}<div class="field-hint">Vises som download-knap på detailsiden</div></div>`;
+    <div class="form-layout">
+      <div class="form-main">
+        <div class="field-row">
+          <div class="field"><label class="field-label">Jobtitel</label><input class="f-input" id="jb-role" value="${item.role||''}"></div>
+          <div class="field"><label class="field-label">Virksomhed</label><input class="f-input" id="jb-company" value="${item.company||''}"></div>
+        </div>
+        <div class="field"><label class="field-label">Periode</label><input class="f-input" id="jb-period" value="${item.period||''}"></div>
+        <div class="field"><label class="field-label">Kort beskrivelse (forside)</label><textarea class="f-textarea" style="height:60px;" id="jb-desc">${item.desc||''}</textarea></div>
+        <div class="field"><label class="field-label">Intro (detailside)</label><textarea class="f-textarea" id="jb-intro">${item.intro||''}</textarea></div>
+        <div class="field"><label class="field-label">Indhold / brødtekst</label><textarea class="f-textarea" style="height:150px;" id="jb-body">${item.body||''}</textarea></div>
+      </div>
+      <div class="form-sidebar">
+        <div class="field"><label class="field-label">Status</label>
+          <select class="f-select" id="jb-vis">
+            <option value="1" ${isVis?'selected':''}>Synlig (Live)</option>
+            <option value="0" ${!isVis?'selected':''}>Skjult (Udkast)</option>
+          </select>
+        </div>
+        <div class="field"><label class="field-label">Kompetencer / Keywords</label><input class="f-input" id="jb-skills" value="${(item.skills||[]).join(', ')}"></div>
+        <div class="field"><label class="field-label">Cover-billede</label>${createUploadZone('jb-cover','projects',item.cover||'')}</div>
+        <div class="field"><label class="field-label">Billede Alt-tekst</label><input class="f-input" id="jb-cover-alt" value="${item.cover_alt||''}"></div>
+        <div class="field"><label class="field-label">Vedhæftet fil (PDF)</label>${createFileZone('jb-file', item.file||'')}</div>
+      </div>
+    </div>`;
   openFormPanel(isEdit ? 'Rediger ansættelse' : 'Tilføj ansættelse', () => {
-    const obj = { id: item.id || slug((document.getElementById('jb-role').value)+'-'+(document.getElementById('jb-company').value)), role: document.getElementById('jb-role').value, company: document.getElementById('jb-company').value, period: document.getElementById('jb-period').value, desc: document.getElementById('jb-desc').value, intro: document.getElementById('jb-intro').value, body: document.getElementById('jb-body').value, cover: getUploadPath('jb-cover') || item.cover || '',
-        file: getUploadPath('jb-file') || item.file || '', category:'work' };
+    const obj = { id: item.id || slug((document.getElementById('jb-role').value)+'-'+(document.getElementById('jb-company').value)), role: document.getElementById('jb-role').value, company: document.getElementById('jb-company').value, period: document.getElementById('jb-period').value, desc: document.getElementById('jb-desc').value, intro: document.getElementById('jb-intro').value, body: document.getElementById('jb-body').value, skills: document.getElementById('jb-skills').value.split(',').map(s=>s.trim()).filter(Boolean), cover: getUploadPath('jb-cover') || item.cover || '', cover_alt: document.getElementById('jb-cover-alt').value, file: getUploadPath('jb-file') || item.file || '', visible: document.getElementById('jb-vis').value === "1", category:'work' };
     if (isEdit) data.cv.jobs[idx] = obj;
     else data.cv.jobs.push(obj);
     closeForm(); updateBadges(); renderSection('ansaettelser'); showToast(isEdit ? 'Ansættelse opdateret' : 'Ansættelse tilføjet');
@@ -883,7 +939,8 @@ function renderUddannelse(area) {
   area.innerHTML = list.length ? `<div class="entry-grid">${list.map((e,i) => `
     <div class="entry-card">
       <div class="entry-card-header">
-        <span class="entry-card-tag education">Uddannelse</span>
+        <span class="entry-card-tag education ${e.visible===false?'draft':''}">Uddannelse</span>
+        ${e.visible===false?'<span class="entry-card-tag draft" style="border-color:var(--amber);color:var(--amber);margin-left:6px;">Udkast</span>':''}
         <div class="entry-card-actions">
           <button class="btn-edit" onclick="editEdu(${i})">Rediger</button>
           <button class="btn-del"  onclick="deleteEntry('uddannelse',${i})">Slet</button>
@@ -899,15 +956,32 @@ function renderUddannelse(area) {
 
 function editEdu(i) { openEduForm(true, i, data.cv.education[i]); }
 function openEduForm(isEdit, idx, item={}) {
+  const isVis = item.visible !== false;
   document.getElementById('formBody').innerHTML = `
-    <div class="field"><label class="field-label">Titel / uddannelse</label><input class="f-input" id="ed-title" value="${item.title||''}"></div>
-    <div class="field-row">
-      <div class="field"><label class="field-label">Institution</label><input class="f-input" id="ed-inst" value="${item.institution||''}"></div>
-      <div class="field"><label class="field-label">Periode</label><input class="f-input" id="ed-period" value="${item.period||''}"></div>
-    </div>
-    <div class="field"><label class="field-label">Beskrivelse</label><textarea class="f-textarea" id="ed-desc">${item.desc||''}</textarea></div>`;
+    <div class="form-layout">
+      <div class="form-main">
+        <div class="field"><label class="field-label">Titel / uddannelse</label><input class="f-input" id="ed-title" value="${item.title||''}"></div>
+        <div class="field-row">
+          <div class="field"><label class="field-label">Institution</label><input class="f-input" id="ed-inst" value="${item.institution||''}"></div>
+          <div class="field"><label class="field-label">Periode</label><input class="f-input" id="ed-period" value="${item.period||''}"></div>
+        </div>
+        <div class="field"><label class="field-label">Beskrivelse</label><textarea class="f-textarea" style="height:120px;" id="ed-desc">${item.desc||''}</textarea></div>
+      </div>
+      <div class="form-sidebar">
+        <div class="field"><label class="field-label">Status</label>
+          <select class="f-select" id="ed-vis">
+            <option value="1" ${isVis?'selected':''}>Synlig (Live)</option>
+            <option value="0" ${!isVis?'selected':''}>Skjult (Udkast)</option>
+          </select>
+        </div>
+        <div class="field"><label class="field-label">Kompetencer / Keywords</label><input class="f-input" id="ed-skills" value="${(item.skills||[]).join(', ')}"></div>
+        <div class="field"><label class="field-label">Cover-billede</label>${createUploadZone('ed-cover','cover',item.cover||'')}</div>
+        <div class="field"><label class="field-label">Billede Alt-tekst</label><input class="f-input" id="ed-cover-alt" value="${item.cover_alt||''}"></div>
+        <div class="field"><label class="field-label">Vedhæftet fil (PDF)</label>${createFileZone('ed-file', item.file||'')}</div>
+      </div>
+    </div>`;
   openFormPanel(isEdit ? 'Rediger uddannelse' : 'Tilføj uddannelse', () => {
-    const obj = { id: item.id || slug(document.getElementById('ed-title').value), title: document.getElementById('ed-title').value, institution: document.getElementById('ed-inst').value, period: document.getElementById('ed-period').value, desc: document.getElementById('ed-desc').value, category:'education' };
+    const obj = { id: item.id || slug(document.getElementById('ed-title').value), title: document.getElementById('ed-title').value, institution: document.getElementById('ed-inst').value, period: document.getElementById('ed-period').value, desc: document.getElementById('ed-desc').value, skills: document.getElementById('ed-skills').value.split(',').map(s=>s.trim()).filter(Boolean), cover: getUploadPath('ed-cover') || item.cover || '', cover_alt: document.getElementById('ed-cover-alt').value, file: getUploadPath('ed-file') || item.file || '', visible: document.getElementById('ed-vis').value === "1", category:'education' };
     if (isEdit) data.cv.education[idx] = obj;
     else data.cv.education.push(obj);
     closeForm(); updateBadges(); renderSection('uddannelse'); showToast(isEdit ? 'Uddannelse opdateret' : 'Uddannelse tilføjet');
@@ -920,7 +994,13 @@ function renderAnbefalinger(area) {
   area.innerHTML = list.length ? `<div class="quote-list">${list.map((r,i) => `
     <div class="quote-row">
       <div class="quote-row-header">
-        <div><div class="quote-name">${r.name}</div><div class="quote-role-txt">${r.role||''}</div></div>
+        <div>
+          <div class="quote-name">
+            ${r.name} 
+            ${r.visible===false?'<span style="font-size:9px;color:var(--amber);border:1px solid var(--amber);padding:1px 4px;border-radius:4px;margin-left:6px;font-weight:normal;">Udkast</span>':''}
+          </div>
+          <div class="quote-role-txt">${r.role||''}</div>
+        </div>
         <div class="entry-card-actions">
           <button class="btn-edit" onclick="editRec(${i})">Rediger</button>
           <button class="btn-del"  onclick="deleteEntry('anbefalinger',${i})">Slet</button>
@@ -933,12 +1013,33 @@ function renderAnbefalinger(area) {
 
 function editRec(i) { openRecForm(true, i, data.cv.recommendations[i]); }
 function openRecForm(isEdit, idx, item={}) {
+  const isVis = item.visible !== false;
   document.getElementById('formBody').innerHTML = `
-    <div class="field"><label class="field-label">Navn</label><input class="f-input" id="rc-name" value="${item.name||''}"></div>
-    <div class="field"><label class="field-label">Titel / rolle</label><input class="f-input" id="rc-role" value="${item.role||''}"></div>
-    <div class="field"><label class="field-label">Anbefalingstekst</label><textarea class="f-textarea" style="height:120px;" id="rc-text">${item.text||''}</textarea></div>`;
+    <div class="form-layout">
+      <div class="form-main">
+        <div class="field-row">
+          <div class="field"><label class="field-label">Navn</label><input class="f-input" id="rc-name" value="${item.name||''}"></div>
+          <div class="field"><label class="field-label">Titel / rolle</label><input class="f-input" id="rc-role" value="${item.role||''}"></div>
+        </div>
+        <div class="field"><label class="field-label">Anbefalingstekst</label><textarea class="f-textarea" style="height:150px;" id="rc-text">${item.text||''}</textarea></div>
+      </div>
+      <div class="form-sidebar">
+        <div class="field"><label class="field-label">Status</label>
+          <select class="f-select" id="rc-vis">
+            <option value="1" ${isVis?'selected':''}>Synlig (Live)</option>
+            <option value="0" ${!isVis?'selected':''}>Skjult (Udkast)</option>
+          </select>
+        </div>
+        <div class="field"><label class="field-label">Keywords / Tags</label><input class="f-input" id="rc-skills" value="${(item.skills||[]).join(', ')}"></div>
+        <div class="field"><label class="field-label">Profilbillede (Avatar)</label>${createUploadZone('rc-photo','photo',item.photo||'')}</div>
+        <div class="field"><label class="field-label">Profilbillede Alt-tekst</label><input class="f-input" id="rc-photo-alt" value="${item.photo_alt||''}"></div>
+        <div class="field"><label class="field-label">Cover-billede</label>${createUploadZone('rc-cover','cover',item.cover||'')}</div>
+        <div class="field"><label class="field-label">Cover Alt-tekst</label><input class="f-input" id="rc-cover-alt" value="${item.cover_alt||''}"></div>
+        <div class="field"><label class="field-label">Vedhæftet fil (PDF)</label>${createFileZone('rc-file', item.file||'')}</div>
+      </div>
+    </div>`;
   openFormPanel(isEdit ? 'Rediger anbefaling' : 'Tilføj anbefaling', () => {
-    const obj = { id: item.id || slug(document.getElementById('rc-name').value), name: document.getElementById('rc-name').value, role: document.getElementById('rc-role').value, text: document.getElementById('rc-text').value };
+    const obj = { id: item.id || slug(document.getElementById('rc-name').value), name: document.getElementById('rc-name').value, role: document.getElementById('rc-role').value, text: document.getElementById('rc-text').value, skills: document.getElementById('rc-skills').value.split(',').map(s=>s.trim()).filter(Boolean), photo: getUploadPath('rc-photo') || item.photo || '', photo_alt: document.getElementById('rc-photo-alt').value, cover: getUploadPath('rc-cover') || item.cover || '', cover_alt: document.getElementById('rc-cover-alt').value, file: getUploadPath('rc-file') || item.file || '', visible: document.getElementById('rc-vis').value === "1" };
     if (isEdit) data.cv.recommendations[idx] = obj;
     else data.cv.recommendations.push(obj);
     closeForm(); updateBadges(); renderSection('anbefalinger'); showToast(isEdit ? 'Anbefaling opdateret' : 'Anbefaling tilføjet');
