@@ -816,9 +816,11 @@ function openProjectForm(isEdit, idx, item={}) {
     <div class="field"><label class="field-label">Indhold / brødtekst</label><textarea class="f-textarea" style="height:140px;" id="pj-body">${item.body||''}</textarea><div class="field-hint">Brug dobbelt linjeskift til afsnit</div></div>
     <div class="field"><label class="field-label">Kompetencer (kommasepareret)</label><input class="f-input" id="pj-skills" value="${(item.skills||[]).join(', ')}"></div>
     <div class="field"><label class="field-label">Cover-billede</label>${createUploadZone('pj-cover','projects',item.cover||'')}</div>
+    <div class="field"><label class="field-label">Vedhæftet fil (PDF) <span style="color:var(--faint);font-size:10px;">valgfrit</span></label>${createFileZone('pj-file', item.file||'')}<div class="field-hint">Vises som download-knap på detailsiden</div></div>
     <div class="field"><label class="field-label">Link URL (valgfrit)</label><input class="f-input" id="pj-url" value="${item.url||''}"></div>`;
   openFormPanel(isEdit ? 'Rediger projekt' : 'Tilføj projekt', () => {
-    const obj = { id: item.id || slug(document.getElementById('pj-title').value), title: document.getElementById('pj-title').value, category: document.getElementById('pj-cat').value, tag: { ai:'AI', checkout:'Checkout', work:'Arbejde', volunteer:'Frivillig' }[document.getElementById('pj-cat').value], period: document.getElementById('pj-period').value, desc: document.getElementById('pj-desc').value, intro: document.getElementById('pj-intro').value, body: document.getElementById('pj-body').value, skills: document.getElementById('pj-skills').value.split(',').map(s=>s.trim()).filter(Boolean), cover: getUploadPath('pj-cover') || item.cover || '', url: document.getElementById('pj-url').value || undefined };
+    const obj = { id: item.id || slug(document.getElementById('pj-title').value), title: document.getElementById('pj-title').value, category: document.getElementById('pj-cat').value, tag: { ai:'AI', checkout:'Checkout', work:'Arbejde', volunteer:'Frivillig' }[document.getElementById('pj-cat').value], period: document.getElementById('pj-period').value, desc: document.getElementById('pj-desc').value, intro: document.getElementById('pj-intro').value, body: document.getElementById('pj-body').value, skills: document.getElementById('pj-skills').value.split(',').map(s=>s.trim()).filter(Boolean), cover: getUploadPath('pj-cover') || item.cover || '',
+        file: getUploadPath('pj-file') || item.file || '', url: document.getElementById('pj-url').value || undefined };
     if (isEdit) data.projects[idx] = obj;
     else data.projects.push(obj);
     closeForm(); updateBadges(); renderSection('projekter'); showToast(isEdit ? 'Projekt opdateret' : 'Projekt tilføjet');
@@ -856,9 +858,11 @@ function openJobForm(isEdit, idx, item={}) {
     <div class="field"><label class="field-label">Kort beskrivelse</label><textarea class="f-textarea" style="height:60px;" id="jb-desc">${item.desc||''}</textarea></div>
     <div class="field"><label class="field-label">Intro (detailside)</label><textarea class="f-textarea" id="jb-intro">${item.intro||''}</textarea></div>
     <div class="field"><label class="field-label">Indhold / brødtekst</label><textarea class="f-textarea" style="height:120px;" id="jb-body">${item.body||''}</textarea></div>
-    <div class="field"><label class="field-label">Cover-billede</label>${createUploadZone('jb-cover','projects',item.cover||'')}</div>`;
+    <div class="field"><label class="field-label">Cover-billede</label>${createUploadZone('jb-cover','projects',item.cover||'')}</div>
+    <div class="field"><label class="field-label">Vedhæftet fil (PDF) <span style="color:var(--faint);font-size:10px;">valgfrit</span></label>${createFileZone('jb-file', item.file||'')}<div class="field-hint">Vises som download-knap på detailsiden</div></div>`;
   openFormPanel(isEdit ? 'Rediger ansættelse' : 'Tilføj ansættelse', () => {
-    const obj = { id: item.id || slug((document.getElementById('jb-role').value)+'-'+(document.getElementById('jb-company').value)), role: document.getElementById('jb-role').value, company: document.getElementById('jb-company').value, period: document.getElementById('jb-period').value, desc: document.getElementById('jb-desc').value, intro: document.getElementById('jb-intro').value, body: document.getElementById('jb-body').value, cover: getUploadPath('jb-cover') || item.cover || '', category:'work' };
+    const obj = { id: item.id || slug((document.getElementById('jb-role').value)+'-'+(document.getElementById('jb-company').value)), role: document.getElementById('jb-role').value, company: document.getElementById('jb-company').value, period: document.getElementById('jb-period').value, desc: document.getElementById('jb-desc').value, intro: document.getElementById('jb-intro').value, body: document.getElementById('jb-body').value, cover: getUploadPath('jb-cover') || item.cover || '',
+        file: getUploadPath('jb-file') || item.file || '', category:'work' };
     if (isEdit) data.cv.jobs[idx] = obj;
     else data.cv.jobs.push(obj);
     closeForm(); updateBadges(); renderSection('ansaettelser'); showToast(isEdit ? 'Ansættelse opdateret' : 'Ansættelse tilføjet');
@@ -1162,6 +1166,99 @@ function clearUpload(id) {
 
 function getUploadPath(id) {
   return document.getElementById('imgpath-' + id)?.value || '';
+}
+
+/* ---- PDF / FIL UPLOAD ---- */
+function createFileZone(id, currentPath='') {
+  const filename = currentPath ? currentPath.split('/').pop() : '';
+  return `
+    <div class="upload-zone" id="zone-${id}"
+      ondragover="event.preventDefault();this.classList.add('dragover')"
+      ondragleave="this.classList.remove('dragover')"
+      ondrop="handleFileDrop(event,'${id}')">
+      <input type="file" accept=".pdf,application/pdf" onchange="handleFileSelect2(this,'${id}')">
+      <div class="upload-zone-icon">📄</div>
+      <div class="upload-zone-text">Klik eller træk en PDF hertil</div>
+      <div class="upload-zone-hint">PDF · Maks 20MB</div>
+    </div>
+    <div class="upload-progress" id="prog-${id}">
+      <div class="upload-progress-bar" id="progbar-${id}"></div>
+    </div>
+    <div class="upload-error" id="err-${id}"></div>
+    <div class="upload-preview ${currentPath?'show':''}" id="prev-${id}">
+      <div style="font-size:22px;flex-shrink:0;">📄</div>
+      <div style="flex:1;">
+        <div class="upload-preview-name" id="prevname-${id}">${filename}</div>
+        <div class="upload-preview-path" id="prevpath-${id}">${currentPath}</div>
+      </div>
+      <button class="upload-preview-clear" onclick="clearUpload('${id}')">✕</button>
+    </div>
+    <input type="hidden" id="imgpath-${id}" value="${currentPath}">`;
+}
+
+function handleFileDrop(e, id) {
+  e.preventDefault();
+  document.getElementById('zone-' + id).classList.remove('dragover');
+  const file = e.dataTransfer.files[0];
+  if (file) uploadFile(file, id);
+}
+
+function handleFileSelect2(input, id) {
+  const file = input.files[0];
+  if (file) uploadFile(file, id);
+}
+
+function uploadFile(file, id) {
+  const prog    = document.getElementById('prog-' + id);
+  const progbar = document.getElementById('progbar-' + id);
+  const errEl   = document.getElementById('err-' + id);
+  const prev    = document.getElementById('prev-' + id);
+
+  errEl.style.display = 'none';
+  prog.style.display  = 'block';
+  progbar.style.width = '0%';
+
+  let fakeProgress = 0;
+  const interval = setInterval(() => {
+    fakeProgress = Math.min(fakeProgress + Math.random() * 15, 85);
+    progbar.style.width = fakeProgress + '%';
+  }, 250);
+
+  const formData = new FormData();
+  formData.append('file', file);
+  formData.append('folder', 'files');
+  formData.append('mode', 'file');
+
+  fetch('api/upload.php', {
+    method: 'POST',
+    credentials: 'same-origin',
+    body: formData
+  })
+  .then(r => r.json())
+  .then(res => {
+    clearInterval(interval);
+    progbar.style.width = '100%';
+    setTimeout(() => { prog.style.display = 'none'; progbar.style.width = '0%'; }, 600);
+
+    if (res.ok) {
+      document.getElementById('imgpath-' + id).value = res.path;
+      document.getElementById('prevname-' + id).textContent = res.name;
+      document.getElementById('prevpath-' + id).textContent = res.path;
+      prev.classList.add('show');
+      showToast('PDF uploadet: ' + res.name);
+    } else {
+      errEl.textContent = res.error || 'Upload fejlede';
+      errEl.style.display = 'block';
+      showToast(res.error || 'Upload fejlede', true);
+    }
+  })
+  .catch(() => {
+    clearInterval(interval);
+    prog.style.display = 'none';
+    errEl.textContent = 'Serverfejl under upload';
+    errEl.style.display = 'block';
+    showToast('Upload fejlede', true);
+  });
 }
 
 /* ---- UTILS ---- */

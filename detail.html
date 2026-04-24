@@ -261,7 +261,93 @@
     .sidebar-link:hover { opacity: 0.75; }
     .sidebar-link:last-child { margin-bottom: 0; }
 
-    /* ---- PREV / NEXT ---- */
+    /* ---- DOWNLOAD KNAP ---- */
+    .sidebar-download {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      padding: 10px 12px;
+      background: rgba(65,143,255,0.06);
+      border: 0.5px solid var(--border-blue);
+      transition: background 0.2s;
+      margin-top: 4px;
+    }
+    .sidebar-download:hover { background: rgba(65,143,255,0.12); }
+    .sidebar-download-icon { font-size: 20px; flex-shrink: 0; }
+    .sidebar-download-info { flex: 1; min-width: 0; }
+    .sidebar-download-name {
+      display: block;
+      font-size: 11px;
+      color: var(--text);
+      font-weight: 500;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .sidebar-download-hint {
+      display: block;
+      font-size: 10px;
+      color: var(--text-faint);
+      margin-top: 1px;
+      letter-spacing: 0.04em;
+    }
+    .sidebar-download-arrow {
+      font-size: 16px;
+      color: var(--blue);
+      flex-shrink: 0;
+    }
+
+    /* ---- MOBILE SIDEBAR KOMPAKT ---- */
+    @media (max-width: 768px) {
+      .intro-wrap   { grid-template-columns: 1fr; }
+      .intro-col    { border-right: none; padding: 24px 20px; }
+      .meta-col     { padding: 20px; background: var(--bg-card); }
+      .meta-row     { padding: 10px 0; }
+      .meta-key     { font-size: 9px; }
+      .meta-val     { font-size: 12px; }
+      .content-wrap { grid-template-columns: 1fr; }
+      .content-main { border-right: none; padding: 28px 20px; }
+      .content-sidebar {
+        padding: 20px;
+        background: var(--bg-card);
+        border-top: 0.5px solid var(--border);
+      }
+      .sidebar-card { padding: 12px 14px; margin-bottom: 8px; }
+      .sidebar-card-lbl { font-size: 8px; margin-bottom: 8px; }
+      /* Kompetencer vises som én kompakt linje */
+      .content-sidebar .skill-tag {
+        font-size: 9px;
+        padding: 2px 7px;
+      }
+      /* Fold sidebar op med toggle på mobil */
+      .sidebar-toggle {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        cursor: pointer;
+        padding-bottom: 12px;
+        border-bottom: 0.5px solid var(--border);
+        margin-bottom: 14px;
+        user-select: none;
+      }
+      .sidebar-toggle-label {
+        font-size: 9px;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        color: var(--text-faint);
+      }
+      .sidebar-toggle-icon {
+        font-size: 12px;
+        color: var(--blue);
+        transition: transform 0.2s;
+      }
+      .sidebar-toggle.collapsed + .sidebar-inner { display: none; }
+      .sidebar-toggle.collapsed .sidebar-toggle-icon { transform: rotate(-90deg); }
+    }
+    @media (min-width: 769px) {
+      .sidebar-toggle { display: none; }
+    }
     .entry-nav {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -608,7 +694,13 @@
         document.getElementById('contentMain').innerHTML = mainHTML;
 
         // Sidebar
-        let sideHTML = `<div class="section-lbl">Kompetencer</div>`;
+        let sideHTML = `
+          <div class="sidebar-toggle" onclick="toggleSidebar(this)">
+            <span class="sidebar-toggle-label">Kompetencer & links</span>
+            <span class="sidebar-toggle-icon">▾</span>
+          </div>
+          <div class="sidebar-inner">
+            <div class="section-lbl">Kompetencer</div>`;
         if (entry.skills && entry.skills.length) {
           const techSkills = entry.skills.slice(0, Math.ceil(entry.skills.length / 2));
           const bizSkills  = entry.skills.slice(Math.ceil(entry.skills.length / 2));
@@ -628,6 +720,22 @@
           entry.links.forEach(l => { sideHTML += `<a href="${l.url}" class="sidebar-link" target="_blank">${l.label} →</a>`; });
           sideHTML += `</div>`;
         }
+        if (entry.file) {
+          const fname = entry.file.split('/').pop();
+          sideHTML += `
+            <div class="sidebar-card" style="border-color:var(--border-blue);">
+              <div class="sidebar-card-lbl">Download</div>
+              <a href="${entry.file}" class="sidebar-download" download="${fname}">
+                <span class="sidebar-download-icon">📄</span>
+                <span class="sidebar-download-info">
+                  <span class="sidebar-download-name">${fname}</span>
+                  <span class="sidebar-download-hint">Klik for at downloade</span>
+                </span>
+                <span class="sidebar-download-arrow">↓</span>
+              </a>
+            </div>`;
+        }
+        sideHTML += `</div>`; // close sidebar-inner
         document.getElementById('contentSidebar').innerHTML = sideHTML;
 
         // Prev / Next navigation within same category
@@ -656,6 +764,9 @@
       .catch(err => {
         console.error('Kunne ikke indlæse indhold:', err);
       });
+    function toggleSidebar(el) {
+      el.classList.toggle('collapsed');
+    }
   </script>
 </body>
 </html>
