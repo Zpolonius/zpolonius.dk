@@ -15,9 +15,9 @@
   --border-blue:  rgba(65,143,255,0.35);
   --border-green: rgba(65,164,71,0.35);
   --text:         #e8e8e8;
-  --text-muted:   rgba(255,255,255,0.5);
-  --text-faint:   rgba(255,255,255,0.25);
-  --text-ghost:   rgba(255,255,255,0.1);
+  --text-muted:   rgba(255,255,255,0.6);
+  --text-faint:   rgba(255,255,255,0.4);
+  --text-ghost:   rgba(255,255,255,0.18);
   --blue:         #418FFF;
   --green:        #41A447;
   --font:         'Inter', sans-serif;
@@ -35,9 +35,9 @@
   --border-blue:  rgba(28,100,220,0.3);
   --border-green: rgba(40,130,50,0.3);
   --text:         #1a1a1a;
-  --text-muted:   rgba(0,0,0,0.55);
-  --text-faint:   rgba(0,0,0,0.35);
-  --text-ghost:   rgba(0,0,0,0.14);
+  --text-muted:   rgba(0,0,0,0.6);
+  --text-faint:   rgba(0,0,0,0.45);
+  --text-ghost:   rgba(0,0,0,0.2);
   --blue:         #1c64dc;
   --green:        #288232;
   --overlay-bg:   rgba(20,20,20,0.75);
@@ -71,14 +71,29 @@ body {
   background: var(--bg);
   color: var(--text);
   font-family: var(--font);
-  font-size: 14px;
-  line-height: 1.5;
+  font-size: 15px;
+  line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   transition: background 0.3s ease, color 0.3s ease;
 }
 a { color: inherit; text-decoration: none; }
 img { display: block; max-width: 100%; }
 button { font-family: var(--font); cursor: pointer; }
+
+/* ---- CONTENT LAYOUT ---- */
+p, li {
+  max-width: 720px;
+  line-height: 1.65;
+}
+
+.readable-content {
+  max-width: 720px;
+  margin: 0;
+}
+
+.about-hero-bio, .info-cell-val, .bio-para, .content-p, .rec-text, .cta-text {
+  max-width: 720px;
+}
 
 /* ---- NAVIGATION ---- */
 .nav {
@@ -250,6 +265,7 @@ textarea.input { resize: none; height: 100px; line-height: 1.6; }
 }
 
 @media (max-width: 768px) {
+  body { font-size: 16px; }
   /* NAV */
   .nav { padding: 14px 20px; }
   .nav-links {
