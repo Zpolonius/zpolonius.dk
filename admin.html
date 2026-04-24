@@ -545,15 +545,22 @@ function logout() {
 
 /* ---- DATA ---- */
 function loadData() {
-  fetch('data/content.json?t=' + Date.now())
-    .then(r => r.json())
+  fetch('data/content.json?t=' + Date.now(), {
+    credentials: 'same-origin'
+  })
+    .then(r => {
+      if (!r.ok) throw new Error('Kunne ikke hente data (Status: ' + r.status + ')');
+      return r.json();
+    })
     .then(d => {
       data = d;
       updateBadges();
       renderSection('forside');
     })
-    .catch(() => {
-      // Demo mode: use empty structure
+    .catch((err) => {
+      console.error('Load failed:', err);
+      showToast('Kunne ikke hente data fra serveren', true);
+      // Demo mode as fallback
       data = { site:{name:'Zacharias Polonius',tagline:'De små detaljer leder til store forandringer',email:'zacharias@polonius.dk',phone:'3068 7041',accent_color:'#418FFF',social:{linkedin:'',instagram:'',facebook:''}}, hero:{role:'Technical Account Manager · Bring',cover:'assets/cover.webp',status:'Tilgængelig for nye muligheder',intro:'...'}, specialer:[], bento:[], om:{bio:'',photo:'',sprog:[],interesser:[]}, projects:[], cv:{jobs:[],education:[],recommendations:[]}, };
       updateBadges();
       renderSection('forside');
@@ -568,6 +575,7 @@ function saveAll() {
   fetch('api/save.php', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
+    credentials: 'same-origin',
     body: JSON.stringify(data)
   })
   .then(r => r.json())
@@ -580,8 +588,8 @@ function saveAll() {
   .catch(() => {
     btn.textContent = 'Gem ændringer';
     btn.style.opacity = '1';
-    showToast('Gemt lokalt (API ikke tilsluttet)', false);
-    console.log('Saved data:', JSON.stringify(data, null, 2));
+    showToast('Fejl — Kunne ikke oprette forbindelse til serveren', true);
+    console.error('Save failed. Local data state:', data);
   });
 }
 
