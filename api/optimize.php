@@ -34,6 +34,14 @@ if (!defined('GEMINI_API_KEY') || empty(GEMINI_API_KEY) || GEMINI_API_KEY === 'I
 $prompt = "Du er en ekspert i tekstforfatning, SEO og UX-skrivning. Optimér følgende tekst til en personlig portefølje-hjemmeside. 
 Konteksten er: {$context}. ";
 
+if ($context === 'project') {
+    $prompt .= "\n\nVIGTIGT: Omskriv teksten, så den følger denne specifikke 3-delte case-struktur, som er standard for porteføljen:
+<h2>1. Den Kommercielle Vinkel</h2> (Udfordringen og det forretningsmæssige behov)
+<h2>2. Den Tekniske Vinkel</h2> (Løsningen og den tekniske implementering)
+<h2>3. Broen (Forretningsværdien)</h2> (Resultatet, f.eks. ROI, sparet tid eller konvertering).
+Du skal omstrukturere den givne tekst ind i disse 3 afsnit.";
+}
+
 if (!empty($instruction)) {
     $prompt .= "\n\nBRUGERENS INSTRUKTION/FEEDBACK: {$instruction}. Du SKAL prioritere denne instruktion i din omskrivning.";
 } else {

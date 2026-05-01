@@ -177,6 +177,29 @@
     },
     "projects": [
         {
+            "id": "vibe-coding-cms",
+            "title": "Custom AI-bygget CMS & Sales Page",
+            "category": "project",
+            "tag": "AI",
+            "period": "2026",
+            "desc": "Udvikling af et skræddersyet, lynhurtigt CMS og konverteringsoptimeret portefølje bygget fra bunden ved hjælp af Vibe Coding og AI-agenter.",
+            "intro": "Udvikling af et skræddersyet, lynhurtigt CMS og konverteringsoptimeret portefølje bygget fra bunden ved hjælp af Vibe Coding og AI-agenter.",
+            "body": "<h2>1. Den Kommercielle Vinkel</h2>\n<p><strong>Udfordring:</strong> Behovet var en digital platform, der ikke blot fungerede som et statisk CV, men som en skarp 'Sales Page'. Platformen skulle være ultra-hurtig, nem at vedligeholde og udstråle premium autoritet for at konvertere B2B leads. Standardløsninger som WordPress var for tunge, langsomme og ufleksible.</p>\n<h2>2. Den Tekniske Vinkel</h2>\n<p><strong>Løsning (Vibe Coding):</strong> I stedet for at bruge ugevis på manuel kodning eller træk-og-slip skabeloner, anvendte jeg 'Vibe Coding' – agil udvikling orkestreret i tæt samarbejde med avancerede AI-agenter. Jeg designede arkitekturen som et afkoblet 'flat-file' CMS: Et vanilla JavaScript frontend for lynhurtig performance, og et letvægts PHP-backend til at administrere en JSON-database. Hele platformen, inklusiv et skræddersyet Admin Panel med indbygget AI-tekstoptimering, blev bygget via AI.</p>\n<h2>3. Broen (Forretningsværdien)</h2>\n<p><strong>Resultat:</strong> Resultatet er en robust platform, der loader på under et sekund og rangerer i toppen af Lighthouse-tests. Ved at benytte Vibe Coding blev udviklingstiden og dermed 'Time-to-Market' reduceret massivt. Dette projekt er det levende bevis på, hvordan AI kan bruges som en reel løftestang til at bygge enterprise-grade skræddersyet teknologi til en brøkdel af normale udviklingsomkostninger.</p>",
+            "skills": [
+                "Vibe Coding",
+                "AI-Agenter",
+                "Vanilla JS",
+                "PHP CMS",
+                "Systemarkitektur"
+            ],
+            "cover": "assets/projects/vibe_coding_cover.png",
+            "cover_pos": "50% 50%",
+            "cover_alt": "Dark mode IDE screen with AI matrix code bridge",
+            "file": "",
+            "url": "",
+            "visible": true
+        },
+        {
             "id": "review-manager",
             "title": "Fra Teknisk Audit til Kommercielle Leads",
             "category": "ai",

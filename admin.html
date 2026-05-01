@@ -1234,7 +1234,9 @@ function openProjectForm(isEdit, idx, item={}) {
     else data.projects.push(obj);
     closeForm(); updateBadges(); renderSection('projekter'); showToast(isEdit ? 'Projekt opdateret' : 'Projekt tilføjet');
   });
-  initQuill('#quillEditor', item.body || '');
+  
+  const defaultTemplate = `<h2>1. Den Kommercielle Vinkel</h2><p><strong>Udfordring:</strong> Skriv om det forretningsmæssige problem her...</p><h2>2. Den Tekniske Vinkel</h2><p><strong>Løsning:</strong> Skriv om den tekniske implementering her...</p><h2>3. Broen (Forretningsværdien)</h2><p><strong>Resultat:</strong> Skriv om ROI, sparet tid eller øget konvertering her...</p>`;
+  initQuill('#quillEditor', isEdit ? (item.body || '') : defaultTemplate);
 }
 
 /* ---- ANSÆTTELSER ---- */
