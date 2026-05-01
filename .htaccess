@@ -22,8 +22,8 @@ ErrorDocument 404 /404.html
     Header set Permissions-Policy "geolocation=(), camera=(), microphone=()"
 
     # Content Security Policy (CSP)
-    # Tillader scripts fra eget domæne, Quill CDN og Google Fonts
-    Header set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' cdn.quilljs.com cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' fonts.googleapis.com cdn.quilljs.com cdn.jsdelivr.net; font-src 'self' fonts.gstatic.com; img-src 'self' data:; connect-src 'self' generativelanguage.googleapis.com cdn.jsdelivr.net;"
+    # Tillader scripts fra eget domæne, Quill CDN, Cloudflare CDN (Vanilla Tilt), og Spotify
+    Header set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' cdn.quilljs.com cdn.jsdelivr.net cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' fonts.googleapis.com cdn.quilljs.com cdn.jsdelivr.net; font-src 'self' fonts.gstatic.com; img-src 'self' data:; connect-src 'self' generativelanguage.googleapis.com cdn.jsdelivr.net; frame-src 'self' open.spotify.com;"
 
     # Force HTTPS (HSTS) - Gælder i 1 år
     Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"

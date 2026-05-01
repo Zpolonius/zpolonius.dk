@@ -395,6 +395,7 @@
     <ul class="nav-links">
       <li><a href="about.html">Om</a></li>
       <li><a href="projects.html">Projekter</a></li>
+      <li><a href="index.html#blogSection">Indsigter</a></li>
       <li><a href="cv.html">CV</a></li>
       <li><a href="recommendations.html">Anbefalinger</a></li>
       <li><a href="contact.html">Kontakt</a></li>
@@ -489,6 +490,16 @@
     </div>
     <div class="media-container" style="background: var(--bg-card); border: 0.5px solid var(--border-md); padding: 16px; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); margin: 0 20px 40px 20px; transition: border-color 0.3s;">
       <iframe data-testid="embed-iframe" style="border-radius:12px" src="https://open.spotify.com/embed/episode/1IMoB5xodoIzsVIgDosrv0?utm_source=generator&theme=0" width="100%" height="152" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+    </div>
+  </div>
+
+  <!-- INDSIGTER (BLOG) -->
+  <div id="blogSection" class="fade-up" style="display:none;">
+    <div class="section-header">
+      <span class="section-title">Indsigter & Artikler</span>
+    </div>
+    <div class="proj-grid" id="blogGrid">
+      <!-- Udfyldes af JS -->
     </div>
   </div>
 
@@ -630,6 +641,11 @@
       <span class="bottom-nav-label">Projekter</span>
     </a>
     <div class="bottom-nav-divider"></div>
+    <a class="bottom-nav-item" href="index.html#blogSection" data-page="indsigter">
+      <span class="bottom-nav-icon">📝</span>
+      <span class="bottom-nav-label">Indsigter</span>
+    </a>
+    <div class="bottom-nav-divider"></div>
     <a class="bottom-nav-item" href="cv.html" data-page="cv">
       <span class="bottom-nav-icon">◎</span>
       <span class="bottom-nav-label">CV</span>
@@ -765,6 +781,31 @@
             </div>
           </a>
         `).join('');
+      }
+
+      // Artikler (Blog)
+      const blogSec = document.getElementById('blogSection');
+      const bGrid = document.getElementById('blogGrid');
+      if (blogSec && bGrid) {
+        const arts = (data.articles || []).filter(a => a.visible !== false).slice(0, 3);
+        if (arts.length > 0) {
+          blogSec.style.display = 'block';
+          bGrid.innerHTML = arts.map(a => `
+            <a href="detail.html?id=${a.id}" class="proj-card">
+              ${a.cover ? `
+                <div class="proj-card-img-wrap">
+                  <img src="${a.cover}" alt="${esc(a.title)}" class="proj-card-img" style="object-position: ${a.cover_pos || 'center center'}" onerror="this.parentElement.style.display='none'">
+                </div>
+              ` : ''}
+              <div class="proj-card-body">
+                <div class="tag tag-ai proj-tag">${esc(a.date || 'Artikel')}</div>
+                <div class="proj-title" style="font-size:18px;">${esc(a.title)}</div>
+                <div class="proj-desc" style="display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;">${esc(a.excerpt || '')}</div>
+                <span class="proj-arrow">Læs artikel →</span>
+              </div>
+            </a>
+          `).join('');
+        }
       }
 
       // Experience (latest 3)

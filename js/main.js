@@ -282,3 +282,74 @@ function showContactSuccess() {
   document.getElementById('contactFormView').style.display = 'none';
   document.getElementById('contactSuccessView').classList.add('show');
 }
+
+
+/* ---- HTML TYPEWRITER ---- */
+window.typeHTML = function(element, htmlString, speed = 8) {
+  element.innerHTML = '';
+  const tempDiv = document.createElement('div');
+  tempDiv.innerHTML = htmlString;
+  
+  let skip = false;
+  const skipHandler = () => { skip = true; };
+  // Bind to any click in the document to skip typing
+  document.addEventListener('click', skipHandler, { once: true });
+
+  function typeNode(node, targetNode, callback) {
+    if (node.nodeType === Node.TEXT_NODE) {
+      let text = node.textContent;
+      let i = 0;
+      function typeChar() {
+        if (skip) {
+          targetNode.textContent += text.substring(i);
+          callback();
+          return;
+        }
+        if (i < text.length) {
+          targetNode.textContent += text.charAt(i);
+          i++;
+          setTimeout(typeChar, speed);
+        } else {
+          callback();
+        }
+      }
+      typeChar();
+    } else if (node.nodeType === Node.ELEMENT_NODE) {
+      const newElem = document.createElement(node.tagName);
+      for (let attr of node.attributes) {
+        newElem.setAttribute(attr.name, attr.value);
+      }
+      targetNode.appendChild(newElem);
+      
+      let childNodes = Array.from(node.childNodes);
+      let childIndex = 0;
+      function processNextChild() {
+        if (childIndex < childNodes.length) {
+          typeNode(childNodes[childIndex], newElem, () => {
+            childIndex++;
+            processNextChild();
+          });
+        } else {
+          callback();
+        }
+      }
+      processNextChild();
+    } else {
+      callback();
+    }
+  }
+
+  let rootChildNodes = Array.from(tempDiv.childNodes);
+  let rootIndex = 0;
+  function processNextRootChild() {
+    if (rootIndex < rootChildNodes.length) {
+      typeNode(rootChildNodes[rootIndex], element, () => {
+        rootIndex++;
+        processNextRootChild();
+      });
+    } else {
+      document.removeEventListener('click', skipHandler);
+    }
+  }
+  processNextRootChild();
+};

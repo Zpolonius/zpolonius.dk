@@ -408,6 +408,7 @@
     <ul class="nav-links">
       <li><a href="about.html">Om</a></li>
       <li><a href="projects.html">Projekter</a></li>
+      <li><a href="index.html#blogSection">Indsigter</a></li>
       <li><a href="cv.html">CV</a></li>
       <li><a href="recommendations.html">Anbefalinger</a></li>
       <li><a href="contact.html">Kontakt</a></li>
@@ -574,6 +575,11 @@
       <span class="bottom-nav-label">Projekter</span>
     </a>
     <div class="bottom-nav-divider"></div>
+    <a class="bottom-nav-item" href="index.html#blogSection" data-page="indsigter">
+      <span class="bottom-nav-icon">📝</span>
+      <span class="bottom-nav-label">Indsigter</span>
+    </a>
+    <div class="bottom-nav-divider"></div>
     <a class="bottom-nav-item" href="cv.html" data-page="cv">
       <span class="bottom-nav-icon">◎</span>
       <span class="bottom-nav-label">CV</span>
@@ -616,10 +622,10 @@
     const entryId = params.get('id');
 
     // Category tag class mapping
-    const tagClass = { ai:'tag-ai', work:'tag-work', volunteer:'tag-vol', education:'tag-work', recommendation:'tag-ai' };
-    const tagLabel = { ai:'AI', work:'Arbejde', volunteer:'Frivillig', education:'Uddannelse', recommendation:'Anbefaling' };
-    const parentLabel = { ai:'Projekter', work:'CV', volunteer:'CV', education:'CV', recommendation:'Anbefalinger' };
-    const parentHref  = { ai:'projects.html', work:'cv.html', volunteer:'cv.html', education:'cv.html', recommendation:'recommendations.html' };
+    const tagClass = { article:'tag-ai', ai:'tag-ai', work:'tag-work', volunteer:'tag-vol', education:'tag-work', recommendation:'tag-ai' };
+    const tagLabel = { article:'Artikel', ai:'AI', work:'Arbejde', volunteer:'Frivillig', education:'Uddannelse', recommendation:'Anbefaling' };
+    const parentLabel = { article:'Indsigter', ai:'Projekter', work:'CV', volunteer:'CV', education:'CV', recommendation:'Anbefalinger' };
+    const parentHref  = { article:'index.html#blogSection', ai:'projects.html', work:'cv.html', volunteer:'cv.html', education:'cv.html', recommendation:'recommendations.html' };
 
     fetch('data/content.json?t=' + Date.now())
       .then(r => r.json())
@@ -627,6 +633,7 @@
         // Flatten all entries into one searchable list
         const all = [
           ...data.projects,
+          ...(data.articles || []).map(a => ({ ...a, category: 'article', id: a.id || a.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') })),
           ...data.cv.jobs.map(j => ({ ...j, category: 'work' })),
           ...data.cv.education.map(e => ({ ...e, category: 'education', company: e.institution })),
           ...(data.cv.recommendations || []).map(r => ({ ...r, category: 'recommendation', title: r.name, company: r.role }))
@@ -654,7 +661,7 @@
         // Breadcrumb
         const bcP = document.getElementById('bcParent');
         if (bcP) {
-          bcP.textContent = cat === 'recommendation' ? 'Anbefalinger' : (data.projects.some(p=>p.id===entryId) ? 'Projekter' : 'CV');
+          bcP.textContent = cat === 'recommendation' ? 'Anbefalinger' : (cat === 'article' ? 'Indsigter' : (data.projects.some(p=>p.id===entryId) ? 'Projekter' : 'CV'));
           bcP.href = parentHref[cat] || 'projects.html';
         }
         const bcC = document.getElementById('bcCurrent');
@@ -743,7 +750,11 @@
         if (entry.url) {
           mainHTML += `<a href="${entry.url}" class="content-link" target="_blank">Se projektet live →</a>`;
         }
-        document.getElementById('contentMain').innerHTML = mainHTML;
+        if (window.typeHTML) {
+          window.typeHTML(document.getElementById('contentMain'), mainHTML, 6);
+        } else {
+          document.getElementById('contentMain').innerHTML = mainHTML;
+        }
 
         // Sidebar
         let sideHTML = `

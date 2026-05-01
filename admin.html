@@ -497,6 +497,12 @@
         <span class="icon">📁</span> Business Cases
         <span class="badge" id="badge-projekter">0</span>
       </button>
+      <button class="sidebar-item" onclick="showSection('artikler')">
+        <span class="sidebar-icon">📝</span>
+        <div class="sidebar-text">
+          <div class="sidebar-title">Artikler (Blog)</div>
+        </div>
+      </button>
       <button class="sidebar-item" onclick="showSection('ansaettelser')">
         <span class="icon">💼</span> Komm. Erfaring
         <span class="badge" id="badge-ansaettelser">0</span>
@@ -949,6 +955,7 @@ const sectionMeta = {
   om:            { title:'Om mig',          sub:'Rediger din biografi og personlige info',        add:false, save:true  },
   kontakt:       { title:'Kontakt & Sociale medier', sub:'Email, telefon og sociale profiler',   add:false, save:true  },
   site:          { title:'Site-indstillinger', sub:'Sitenavn, farver og generelle indstillinger', add:false, save:true  },
+  artikler:      { title:'Indsigter (Blog)', sub:'Tilføj og rediger dine artikler',               add:true, save:true  },
 };
 
 function renderSection(key) {
@@ -963,6 +970,7 @@ function renderSection(key) {
     forside:      renderForside,
     specialer:    renderSpecialer,
     projekter:    renderProjekter,
+    artikler:     renderArtikler,
     ansaettelser: renderAnsaettelser,
     uddannelse:   renderUddannelse,
     anbefalinger: renderAnbefalinger,
@@ -1982,17 +1990,73 @@ function showToast(msg, isError=false) {
   t.className = 'toast show' + (isError?' error':'');
   setTimeout(() => t.classList.remove('show'), 3000);
 }
-</script>
-</body>
-</html>
 
-l>
-
-classList.remove('show'), 3000);
+/* ---- ARTIKLER ---- */
+function renderArtikler(area) {
+  const list = data.articles || [];
+  area.innerHTML = list.length ? `<div class="entry-grid">${list.map((a,i) => `
+    <div class="entry-card">
+      <div class="entry-card-header">
+        <span class="entry-card-tag ${a.visible===false?'draft':''}">${a.date||'Ingen dato'}</span>
+        ${a.visible===false?'<span class="entry-card-tag draft" style="border-color:var(--amber);color:var(--amber);margin-left:6px;">Udkast</span>':''}
+        <div class="entry-card-actions">
+          <button class="btn-edit" onclick="editArticle(${i})">Rediger</button>
+          <button class="btn-del"  onclick="deleteEntry('artikler',${i})">Slet</button>
+        </div>
+      </div>
+      <div class="entry-card-title">${a.title}</div>
+      <div class="entry-card-desc">${a.excerpt||''}</div>
+    </div>`).join('')}</div>`
+  : emptyState('📝','Ingen artikler endnu','Skriv dit første indlæg her.');
 }
+
+function editArticle(i) { openArticleForm(true, i, data.articles[i]); }
+function openArticleForm(isEdit, idx, item={}) {
+  const isVis = item.visible !== false;
+  document.getElementById('formBody').innerHTML = `
+    <div class="form-layout">
+      <div class="form-main">
+        <div class="field"><label class="field-label">Titel</label><input class="f-input" id="ar-title" value="${item.title||''}"></div>
+        <div class="field"><label class="field-label">Dato</label><input class="f-input" id="ar-date" placeholder="F.eks. 12. maj 2026" value="${item.date||''}"></div>
+        <div class="field"><label class="field-label">Kort resumé (Uddrag)</label><textarea class="f-input" id="ar-excerpt" rows="2">${item.excerpt||''}</textarea></div>
+        <div class="field">
+          <label class="field-label">Artikel Indhold (Brug AI til at optimere teksten!)</label>
+          <div class="toolbar-ai"><button class="btn-ai" onclick="optimizeText()"><span class="icon">✨</span> Optimér med AI</button></div>
+          <div id="quillEditor" class="f-input" style="height:300px;"></div>
+        </div>
+      </div>
+      <div class="form-sidebar">
+        <div class="field"><label class="field-label">Coverbillede URL</label><input class="f-input" id="ar-cover" value="${item.cover||''}"></div>
+        <div class="field"><label class="field-label">Billedposition (CSS)</label><input class="f-input" id="ar-cover-pos" value="${item.cover_pos||'50% 50%'}"></div>
+        <div class="field"><label class="field-label">Synlighed</label>
+          <label style="display:flex;align-items:center;gap:8px;font-size:14px;color:var(--text);margin-top:8px;">
+            <input type="checkbox" id="ar-vis" ${isVis?'checked':''}> Udgivet (Udkast)
+          </label>
+        </div>
+      </div>
+    </div>`;
+  document.getElementById('formModal').style.display = 'flex';
+  
+  document.getElementById('btnSaveForm').onclick = () => {
+    const title = document.getElementById('ar-title').value.trim();
+    const obj = {
+      id: item.id || title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, ''),
+      title: title,
+      date: document.getElementById('ar-date').value.trim(),
+      excerpt: document.getElementById('ar-excerpt').value.trim(),
+      cover: document.getElementById('ar-cover').value.trim(),
+      cover_pos: document.getElementById('ar-cover-pos').value.trim(),
+      body: getQuillHTML(),
+      visible: document.getElementById('ar-vis').checked
+    };
+    if(!data.articles) data.articles = [];
+    if(isEdit) data.articles[idx] = obj;
+    else data.articles.push(obj);
+    closeForm(); updateBadges(); renderSection('artikler'); showToast(isEdit ? 'Artikel opdateret' : 'Artikel tilføjet');
+  };
+  initQuill('#quillEditor', item.body || '');
+}
+
 </script>
 </body>
 </html>
-
-l>
-
