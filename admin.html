@@ -575,9 +575,12 @@
     <div class="ai-feedback-wrap">
       <label class="field-label">Tilpas udkastet (valgfrit)</label>
       <input type="text" class="ai-feedback-input" id="aiFeedback" placeholder="Skriv din kommentar... (f.eks. 'Gør det kortere' eller 'Brug mere humor')" onkeydown="if(event.key==='Enter') retryAI()">
-      <div style="display:flex; justify-content:space-between; align-items:center;">
-        <div class="field-hint">Hovedmodellen er lige nu: <strong id="currentAIModelDisp">—</strong></div>
-        <button class="btn-ai" id="btnAIRetry" onclick="retryAI()" style="padding:8px 20px;">♻️ Prøv igen</button>
+      <div style="display:flex; justify-content:space-between; align-items:center; gap:16px;">
+        <div style="flex:1;">
+          <label class="field-label" style="font-size:10px; margin-bottom:4px;">Skift model (hvis fejl opstår)</label>
+          <select class="f-select" id="modalAIModel" style="font-size:12px; padding:6px 10px; height:auto; background:rgba(255,255,255,0.03);"></select>
+        </div>
+        <button class="btn-ai" id="btnAIRetry" onclick="retryAI()" style="padding:8px 20px; margin-top:16px;">♻️ Prøv igen</button>
       </div>
     </div>
     <div class="ai-footer">
@@ -731,6 +734,8 @@
           showToast('Tekst opdateret (uden formatering)!');
         }
       }
+      // Auto-gem efter AI-indsættelse
+      setTimeout(saveAll, 300);
     }
     closeAIModal();
   }
@@ -1001,7 +1006,7 @@ function renderForside(area) {
           ${createUploadZone('fe-cover','cover', h.cover||'assets/cover.webp')}
           <div class="field-hint" style="margin-top:6px;">Dette er hero-billedet på forsiden</div>
         </div>
-        ${createPositionSelector('fe-cover-pos', h.cover_pos)}
+        ${createPositionSelector('fe-cover-pos', h.cover_pos, h.cover||'assets/cover.webp')}
       </div>
 
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
@@ -1145,7 +1150,7 @@ function openSpecialForm(isEdit, idx, item={}) {
         </div>
         <div class="field"><label class="field-label">Keywords / Tags</label><input class="f-input" id="sp-skills" value="${(item.skills||[]).join(', ')}" placeholder="F.eks. B2B, Salg, API"></div>
         <div class="field"><label class="field-label">Cover-billede</label>${createUploadZone('sp-cover','cover',item.cover||'')}</div>
-        ${createPositionSelector('sp-cover-pos', item.cover_pos)}
+        ${createPositionSelector('sp-cover-pos', item.cover_pos, item.cover)}
         <div class="field"><label class="field-label">Billede Alt-tekst</label><input class="f-input" id="sp-cover-alt" value="${item.cover_alt||''}" placeholder="Til SEO og skærmlæsere"></div>
         <div class="field"><label class="field-label">Vedhæftet fil (PDF)</label>${createFileZone('sp-file', item.file||'')}</div>
       </div>
@@ -1427,11 +1432,10 @@ function openRecForm(isEdit, idx, item={}) {
         </div>
         <div class="field"><label class="field-label">Keywords / Tags</label><input class="f-input" id="rc-skills" value="${(item.skills||[]).join(', ')}"></div>
         <div class="field"><label class="field-label">Profilbillede (Avatar)</label>${createUploadZone('rc-photo','photo',item.photo||'')}</div>
-        ${createPositionSelector('rc-photo-pos', item.photo_pos)}
+        ${createPositionSelector('rc-photo-pos', item.photo_pos, item.photo)}
         <div class="field"><label class="field-label">Profilbillede Alt-tekst</label><input class="f-input" id="rc-photo-alt" value="${item.photo_alt||''}"></div>
         <div class="field"><label class="field-label">Cover-billede</label>${createUploadZone('rc-cover','cover',item.cover||'')}</div>
-        ${createPositionSelector('rc-cover-pos', item.cover_pos)}
-        <div class="field"><label class="field-label">Cover Alt-tekst</label><input class="f-input" id="rc-cover-alt" value="${item.cover_alt||''}"></div>
+        ${createPositionSelector('rc-cover-pos', item.cover_pos, item.cover)}        <div class="field"><label class="field-label">Cover Alt-tekst</label><input class="f-input" id="rc-cover-alt" value="${item.cover_alt||''}"></div>
         <div class="field"><label class="field-label">Vedhæftet fil (PDF)</label>${createFileZone('rc-file', item.file||'')}</div>
       </div>
     </div>`;
@@ -1479,8 +1483,7 @@ function renderOm(area) {
     <div style="max-width:680px;">
       <div class="field"><label class="field-label">Biografi</label><textarea class="f-textarea" style="height:180px;" id="om-bio">${o.bio||''}</textarea><div class="field-hint">Brug dobbelt linjeskift til afsnit</div></div>
       <div class="field"><label class="field-label">Profilbillede</label>${createUploadZone('om-photo','photo', o.photo||'')}</div>
-      ${createPositionSelector('om-photo-pos', o.photo_pos)}
-      <div class="field"><label class="field-label">Persontype / beskrivelse</label><textarea class="f-textarea" style="height:60px;" id="om-type">${o.persontype||''}</textarea></div>
+      ${createPositionSelector('om-photo-pos', o.photo_pos, o.photo)}      <div class="field"><label class="field-label">Persontype / beskrivelse</label><textarea class="f-textarea" style="height:60px;" id="om-type">${o.persontype||''}</textarea></div>
       <div class="field-row">
         <div class="field"><label class="field-label">Sprog (kommasepareret)</label><input class="f-input" id="om-sprog" value="${(o.sprog||[]).join(', ')}"></div>
         <div class="field"><label class="field-label">Interesser (kommasepareret)</label><input class="f-input" id="om-int" value="${(o.interesser||[]).join(', ')}"></div>
@@ -1883,7 +1886,7 @@ function uploadFile(file, id) {
 
 /* ---- UTILS ---- */
 function slug(str) { return str.toLowerCase().replace(/[æ]/g,'ae').replace(/[ø]/g,'oe').replace(/[å]/g,'aa').replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,''); }
-function createPositionSelector(id, val='50% 50%') {
+function createPositionSelector(id, val='50% 50%', imgUrl='') {
   if (val === 'center center') val = '50% 50%';
   if (val === 'center top')    val = '50% 0%';
   if (val === 'center bottom') val = '50% 100%';
@@ -1891,8 +1894,8 @@ function createPositionSelector(id, val='50% 50%') {
   if (val === 'right center')  val = '100% 50%';
 
   const [x, y] = val.split(' ');
-  const parentId = id.replace('-pos', '');
-  const currentImg = document.getElementById('imgpath-' + parentId)?.value || '';
+  // Hvis ingen imgUrl er givet, så prøv at slå det op (fallback for ældre kald)
+  const currentImg = imgUrl || '';
 
   return `
     <div class="focus-picker-wrap">
@@ -1928,6 +1931,14 @@ function showToast(msg, isError=false) {
   document.getElementById('toastMsg').textContent = msg;
   t.className = 'toast show' + (isError?' error':'');
   setTimeout(() => t.classList.remove('show'), 3000);
+}
+</script>
+</body>
+</html>
+
+l>
+
+classList.remove('show'), 3000);
 }
 </script>
 </body>
