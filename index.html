@@ -681,10 +681,10 @@
       if (bGrid && data.bento) {
         bGrid.innerHTML = data.bento.map((b, i) => `
           <div class="bento-cell fade-up fade-up-${(i%3)+1}" onclick="openDetail('${i}')">
-            <div class="cell-label">${b.label}</div>
-            <div class="cell-title">${b.value}</div>
-            <div class="cell-sub">${b.sub}</div>
-            <div class="cell-desc">${b.desc}</div>
+            <div class="cell-label">${esc(b.label)}</div>
+            <div class="cell-title">${esc(b.value)}</div>
+            <div class="cell-sub">${esc(b.sub)}</div>
+            <div class="cell-desc">${esc(b.desc)}</div>
             <span class="cell-arrow">Åbn →</span>
           </div>
         `).join('');
@@ -698,13 +698,13 @@
           <a href="detail.html?id=${p.id}" class="proj-card">
             ${p.cover ? `
               <div class="proj-card-img-wrap">
-                <img src="${p.cover}" alt="${p.cover_alt||p.title}" class="proj-card-img" style="object-position: ${p.cover_pos || 'center center'}" onerror="this.parentElement.style.display='none'">
+                <img src="${p.cover}" alt="${esc(p.cover_alt||p.title)}" class="proj-card-img" style="object-position: ${p.cover_pos || 'center center'}" onerror="this.parentElement.style.display='none'">
               </div>
             ` : ''}
             <div class="proj-card-body">
-              <div class="tag ${p.category==='ai'?'tag-ai':p.category==='work'?'tag-work':'tag-vol'} proj-tag">${p.tag||p.category}</div>
-              <div class="proj-title">${p.title}</div>
-              <div class="proj-desc">${p.desc||''}</div>
+              <div class="tag ${p.category==='ai'?'tag-ai':p.category==='work'?'tag-work':'tag-vol'} proj-tag">${esc(p.tag||p.category)}</div>
+              <div class="proj-title">${esc(p.title)}</div>
+              <div class="proj-desc">${esc(p.desc||'')}</div>
               <span class="proj-arrow">Læs mere →</span>
             </div>
           </a>
@@ -717,10 +717,10 @@
         const latestJobs = (data.cv?.jobs || []).filter(j => j.visible !== false && j.category !== 'volunteer').slice(0, 3);
         expGrid.innerHTML = latestJobs.map(j => `
           <a href="detail.html?id=${j.id}" class="cv-item">
-            <div class="cv-year">${j.period}</div>
-            <div class="cv-role">${j.role}</div>
-            <div class="cv-company">${j.company}</div>
-            <div class="cv-desc">${j.desc||''}</div>
+            <div class="cv-year">${esc(j.period)}</div>
+            <div class="cv-role">${esc(j.role)}</div>
+            <div class="cv-company">${esc(j.company)}</div>
+            <div class="cv-desc">${esc(j.desc||'')}</div>
           </a>
         `).join('');
       }
@@ -731,10 +731,10 @@
         const latestEdu = (data.cv?.education || []).filter(e => e.visible !== false).slice(0, 3);
         eduGrid.innerHTML = latestEdu.map(e => `
           <a href="detail.html?id=${e.id}" class="cv-item">
-            <div class="cv-year">${e.period}</div>
-            <div class="cv-role">${e.title}</div>
-            <div class="cv-company">${e.institution}</div>
-            <div class="cv-desc">${e.desc||''}</div>
+            <div class="cv-year">${esc(e.period)}</div>
+            <div class="cv-role">${esc(e.title)}</div>
+            <div class="cv-company">${esc(e.institution)}</div>
+            <div class="cv-desc">${esc(e.desc||'')}</div>
           </a>
         `).join('');
       }
@@ -745,10 +745,10 @@
         const latestVol = (data.projects || []).filter(p => p.category === 'volunteer' && p.visible !== false).slice(0, 3);
         volGrid.innerHTML = latestVol.map(v => `
           <a href="detail.html?id=${v.id}" class="cv-item">
-            <div class="cv-year">${v.period || ''}</div>
-            <div class="cv-role">${v.title}</div>
-            <div class="cv-company">${v.tag || 'Frivillig'}</div>
-            <div class="cv-desc">${v.desc||''}</div>
+            <div class="cv-year">${esc(v.period || '')}</div>
+            <div class="cv-role">${esc(v.title)}</div>
+            <div class="cv-company">${esc(v.tag || 'Frivillig')}</div>
+            <div class="cv-desc">${esc(v.desc||'')}</div>
           </a>
         `).join('');
       }
@@ -772,12 +772,12 @@
           return `
             <div class="quote-card">
               <div class="quote-mark">"</div>
-              <p class="quote-text">${truncated}</p>
+              <p class="quote-text">${esc(truncated)}</p>
               <div class="rec-author-wrap">
-                ${r.photo ? `<img src="${r.photo}" alt="${r.photo_alt||r.name}" class="rec-avatar" style="object-position: ${r.photo_pos || 'center center'}" onerror="this.src='data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2240%22%20height%3D%2240%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%23555%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M20%2021v-2a4%204%200%200%200-4-4H8a4%204%200%200%200-4%204v2%22%3E%3C%2Fpath%3E%3Ccircle%20cx%3D%2212%22%20cy%3D%227%22%20r%3D%224%22%3E%3C%2Fcircle%3E%3C%2Fsvg%3E'">` : ''}
+                ${r.photo ? `<img src="${r.photo}" alt="${esc(r.photo_alt||r.name)}" class="rec-avatar" style="object-position: ${r.photo_pos || 'center center'}" onerror="this.src='data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2240%22%20height%3D%2240%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%23555%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M20%2021v-2a4%204%200%200%200-4-4H8a4%204%200%200%200-4%204v2%22%3E%3C%2Fpath%3E%3Ccircle%20cx%3D%2212%22%20cy%3D%227%22%20r%3D%224%22%3E%3C%2Fcircle%3E%3C%2Fsvg%3E'">` : ''}
                 <div class="rec-meta">
-                  <div class="rec-name">${r.name}</div>
-                  <div class="rec-role">${r.role}</div>
+                  <div class="rec-name">${esc(r.name)}</div>
+                  <div class="rec-role">${esc(r.role)}</div>
                 </div>
               </div>
               <a href="detail.html?id=${r.id}" class="section-link" style="margin-top:16px; display:inline-block; font-size:11px;">Læs hele udtalelsen →</a>

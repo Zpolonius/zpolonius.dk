@@ -1,5 +1,8 @@
-# Bloker direkte browser-adgang til data-mappen
-<FilesMatch "\.json$">
+# Bloker AL direkte browser-adgang til denne mappe
+<IfModule mod_authz_core.c>
+    Require all denied
+</IfModule>
+<IfModule !mod_authz_core.c>
     Order allow,deny
     Deny from all
-</FilesMatch>
+</IfModule>
