@@ -490,6 +490,34 @@
     </div>
   </div>
 
+  <!-- UDDANNELSE -->
+  <div id="eduSection">
+    <div class="section-header">
+      <span class="section-title">Uddannelse</span>
+      <a href="cv.html#uddannelse" class="section-link">Se alle →</a>
+    </div>
+    <div class="cv-strip" id="featuredEducation">
+      <!-- Rendered dynamically -->
+    </div>
+    <div class="section-footer">
+      <a href="cv.html#uddannelse" class="btn-outline">Se alle uddannelser</a>
+    </div>
+  </div>
+
+  <!-- FRIVILLIGT ARBEJDE -->
+  <div id="volSection">
+    <div class="section-header">
+      <span class="section-title">Frivilligt arbejde</span>
+      <a href="projects.html?filter=volunteer" class="section-link">Se alle →</a>
+    </div>
+    <div class="cv-strip" id="featuredVolunteer">
+      <!-- Rendered dynamically -->
+    </div>
+    <div class="section-footer">
+      <a href="projects.html?filter=volunteer" class="btn-outline">Se alt frivilligt arbejde</a>
+    </div>
+  </div>
+
   <!-- CTA -->
   <div class="cta-bar">
     <p class="cta-text"><strong>Interesseret i et samarbejde?</strong> Tøv ikke med at tage kontakt — jeg vender tilbage inden for 24 timer.</p>
@@ -683,13 +711,41 @@
       // Experience (latest 3)
       const expGrid = document.getElementById('featuredExperience');
       if (expGrid) {
-        const latestJobs = (data.cv?.jobs || []).filter(j => j.visible !== false).slice(0, 3);
+        const latestJobs = (data.cv?.jobs || []).filter(j => j.visible !== false && j.category !== 'volunteer').slice(0, 3);
         expGrid.innerHTML = latestJobs.map(j => `
           <a href="detail.html?id=${j.id}" class="cv-item">
             <div class="cv-year">${j.period}</div>
             <div class="cv-role">${j.role}</div>
             <div class="cv-company">${j.company}</div>
             <div class="cv-desc">${j.desc||''}</div>
+          </a>
+        `).join('');
+      }
+
+      // Education (latest 3)
+      const eduGrid = document.getElementById('featuredEducation');
+      if (eduGrid) {
+        const latestEdu = (data.cv?.education || []).filter(e => e.visible !== false).slice(0, 3);
+        eduGrid.innerHTML = latestEdu.map(e => `
+          <a href="detail.html?id=${e.id}" class="cv-item">
+            <div class="cv-year">${e.period}</div>
+            <div class="cv-role">${e.title}</div>
+            <div class="cv-company">${e.institution}</div>
+            <div class="cv-desc">${e.desc||''}</div>
+          </a>
+        `).join('');
+      }
+
+      // Volunteer (latest 3)
+      const volGrid = document.getElementById('featuredVolunteer');
+      if (volGrid) {
+        const latestVol = (data.projects || []).filter(p => p.category === 'volunteer' && p.visible !== false).slice(0, 3);
+        volGrid.innerHTML = latestVol.map(v => `
+          <a href="detail.html?id=${v.id}" class="cv-item">
+            <div class="cv-year">${v.period || ''}</div>
+            <div class="cv-role">${v.title}</div>
+            <div class="cv-company">${v.tag || 'Frivillig'}</div>
+            <div class="cv-desc">${v.desc||''}</div>
           </a>
         `).join('');
       }
