@@ -1107,6 +1107,7 @@ function openForm(editIdx) {
     else if (currentSection === 'ansaettelser') item = (data.cv?.jobs || [])[editIdx] || {};
     else if (currentSection === 'uddannelse')   item = (data.cv?.education || [])[editIdx] || {};
     else if (currentSection === 'anbefalinger') item = (data.cv?.recommendations || [])[editIdx] || {};
+    else if (currentSection === 'artikler')     item = (data.articles || [])[editIdx] || {};
   }
   
   if (currentSection === 'specialer') openSpecialForm(isEdit, editIdx, item);
@@ -1114,6 +1115,7 @@ function openForm(editIdx) {
   else if (currentSection === 'ansaettelser') openJobForm(isEdit, editIdx, item);
   else if (currentSection === 'uddannelse') openEduForm(isEdit, editIdx, item);
   else if (currentSection === 'anbefalinger') openRecForm(isEdit, editIdx, item);
+  else if (currentSection === 'artikler') openArticleForm(isEdit, editIdx, item);
 }
 
 function editSpecial(i) { openSpecialForm(true, i, data.specialer[i]); }
@@ -2018,42 +2020,48 @@ function openArticleForm(isEdit, idx, item={}) {
       <div class="form-main">
         <div class="field"><label class="field-label">Titel</label><input class="f-input" id="ar-title" value="${item.title||''}"></div>
         <div class="field"><label class="field-label">Dato</label><input class="f-input" id="ar-date" placeholder="F.eks. 12. maj 2026" value="${item.date||''}"></div>
-        <div class="field"><label class="field-label">Kort resumé (Uddrag)</label><textarea class="f-input" id="ar-excerpt" rows="2">${item.excerpt||''}</textarea></div>
+        <div class="field"><label class="field-label">Kort resumé (Uddrag)</label><textarea class="f-textarea" id="ar-excerpt" style="height:60px;">${item.excerpt||''}</textarea></div>
         <div class="field">
-          <label class="field-label">Artikel Indhold (Brug AI til at optimere teksten!)</label>
-          <div class="toolbar-ai"><button class="btn-ai" onclick="optimizeText()"><span class="icon">✨</span> Optimér med AI</button></div>
-          <div id="quillEditor" class="f-input" style="height:300px;"></div>
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+            <label class="field-label" style="margin-bottom:0;">Artikel Indhold</label>
+            <button type="button" class="btn-ai" onclick="optimizeWithAI('article')">✨ Optimér med AI</button>
+          </div>
+          <div id="quillEditor" style="height:300px;"></div>
         </div>
       </div>
       <div class="form-sidebar">
-        <div class="field"><label class="field-label">Coverbillede URL</label><input class="f-input" id="ar-cover" value="${item.cover||''}"></div>
-        <div class="field"><label class="field-label">Billedposition (CSS)</label><input class="f-input" id="ar-cover-pos" value="${item.cover_pos||'50% 50%'}"></div>
-        <div class="field"><label class="field-label">Synlighed</label>
-          <label style="display:flex;align-items:center;gap:8px;font-size:14px;color:var(--text);margin-top:8px;">
-            <input type="checkbox" id="ar-vis" ${isVis?'checked':''}> Udgivet (Udkast)
-          </label>
+        <div class="field"><label class="field-label">Status</label>
+          <select class="f-select" id="ar-vis">
+            <option value="1" ${isVis?'selected':''}>Udgivet (Live)</option>
+            <option value="0" ${!isVis?'selected':''}>Skjult (Udkast)</option>
+          </select>
         </div>
+        <div class="field"><label class="field-label">Cover-billede</label>${createUploadZone('ar-cover','articles',item.cover||'')}</div>
+        ${createPositionSelector('ar-cover-pos', item.cover_pos)}
+        <div class="field"><label class="field-label">Billede Alt-tekst</label><input class="f-input" id="ar-cover-alt" value="${item.cover_alt||''}"></div>
       </div>
     </div>`;
-  document.getElementById('formModal').style.display = 'flex';
   
-  document.getElementById('btnSaveForm').onclick = () => {
+  openFormPanel(isEdit ? 'Rediger artikel' : 'Tilføj artikel', () => {
     const title = document.getElementById('ar-title').value.trim();
+    if(!title) { showToast('Giv venligst artiklen en titel', true); return; }
+    const bodyContent = getEditorContent();
     const obj = {
-      id: item.id || title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, ''),
+      id: item.id || slug(title),
       title: title,
       date: document.getElementById('ar-date').value.trim(),
       excerpt: document.getElementById('ar-excerpt').value.trim(),
-      cover: document.getElementById('ar-cover').value.trim(),
-      cover_pos: document.getElementById('ar-cover-pos').value.trim(),
-      body: getQuillHTML(),
-      visible: document.getElementById('ar-vis').checked
+      cover: getUploadPath('ar-cover', item.cover),
+      cover_pos: document.getElementById('ar-cover-pos').value,
+      cover_alt: document.getElementById('ar-cover-alt').value,
+      body: bodyContent,
+      visible: document.getElementById('ar-vis').value === "1"
     };
     if(!data.articles) data.articles = [];
     if(isEdit) data.articles[idx] = obj;
     else data.articles.push(obj);
     closeForm(); updateBadges(); renderSection('artikler'); showToast(isEdit ? 'Artikel opdateret' : 'Artikel tilføjet');
-  };
+  });
   initQuill('#quillEditor', item.body || '');
 }
 

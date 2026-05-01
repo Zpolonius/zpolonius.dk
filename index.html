@@ -785,12 +785,12 @@
 
       // Artikler (Blog)
       const blogSec = document.getElementById('blogSection');
-      const bGrid = document.getElementById('blogGrid');
-      if (blogSec && bGrid) {
+      const blogGridEl = document.getElementById('blogGrid');
+      if (blogSec && blogGridEl) {
         const arts = (data.articles || []).filter(a => a.visible !== false).slice(0, 3);
         if (arts.length > 0) {
           blogSec.style.display = 'block';
-          bGrid.innerHTML = arts.map(a => `
+          blogGridEl.innerHTML = arts.map(a => `
             <a href="detail.html?id=${a.id}" class="proj-card">
               ${a.cover ? `
                 <div class="proj-card-img-wrap">
