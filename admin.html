@@ -1431,6 +1431,7 @@ function openRecForm(isEdit, idx, item={}) {
           </select>
         </div>
         <div class="field"><label class="field-label">Keywords / Tags</label><input class="f-input" id="rc-skills" value="${(item.skills||[]).join(', ')}"></div>
+        ${createLinkEditor(item.links)}
         <div class="field"><label class="field-label">Profilbillede (Avatar)</label>${createUploadZone('rc-photo','photo',item.photo||'')}</div>
         ${createPositionSelector('rc-photo-pos', item.photo_pos, item.photo)}
         <div class="field"><label class="field-label">Profilbillede Alt-tekst</label><input class="f-input" id="rc-photo-alt" value="${item.photo_alt||''}"></div>
@@ -1441,6 +1442,7 @@ function openRecForm(isEdit, idx, item={}) {
     </div>`;
   openFormPanel(isEdit ? 'Rediger anbefaling' : 'Tilføj anbefaling', () => {
     const textContent = getEditorContent();
+    const links = getLinksFromEditor();
     const obj = {
       id:        item.id || slug(document.getElementById('rc-name').value),
       name:      document.getElementById('rc-name').value,
@@ -1448,6 +1450,7 @@ function openRecForm(isEdit, idx, item={}) {
       intro:     document.getElementById('rc-intro').value,
       text:      textContent,
       skills:    document.getElementById('rc-skills').value.split(',').map(s=>s.trim()).filter(Boolean),
+      links:     links,
       photo:     getUploadPath('rc-photo', item.photo),
       photo_pos: document.getElementById('rc-photo-pos').value,
       photo_alt: document.getElementById('rc-photo-alt').value,
@@ -1926,6 +1929,52 @@ function setFocusPoint(e, id) {
   if (previewImg) previewImg.style.objectPosition = val;
 }
 function emptyState(icon, title, text) { return `<div class="empty"><div class="empty-icon">${icon}</div><h3>${title}</h3><p>${text}</p></div>`; }
+
+/* ---- LINK EDITOR ---- */
+function createLinkEditor(links = []) {
+  const list = links && Array.isArray(links) ? links : [];
+  return `
+    <div class="field" style="margin-top:16px;">
+      <label class="field-label">Outbound Links (SEO)</label>
+      <div id="linkList" class="link-editor-list">
+        ${list.map((l, i) => `
+          <div class="link-row" style="display:flex; gap:8px; margin-bottom:8px;">
+            <input type="text" class="f-input" placeholder="Label (f.eks. Se live)" value="${esc(l.label)}" style="flex:1;">
+            <input type="text" class="f-input" placeholder="URL (https://...)" value="${esc(l.url)}" style="flex:2;">
+            <button class="btn-del" onclick="this.parentElement.remove()" style="padding:0 10px;">✕</button>
+          </div>
+        `).join('')}
+      </div>
+      <button type="button" class="btn-edit" style="font-size:11px; padding:6px 12px; margin-top:4px;" onclick="addLinkRow()">+ Tilføj link</button>
+    </div>`;
+}
+
+function addLinkRow() {
+  const container = document.getElementById('linkList');
+  if (!container) return;
+  const row = document.createElement('div');
+  row.className = 'link-row';
+  row.style.cssText = 'display:flex; gap:8px; margin-bottom:8px;';
+  row.innerHTML = `
+    <input type="text" class="f-input" placeholder="Label (f.eks. Se live)" style="flex:1;">
+    <input type="text" class="f-input" placeholder="URL (https://...)" style="flex:2;">
+    <button class="btn-del" onclick="this.parentElement.remove()" style="padding:0 10px;">✕</button>
+  `;
+  container.appendChild(row);
+}
+
+function getLinksFromEditor() {
+  const rows = document.querySelectorAll('.link-row');
+  const links = [];
+  rows.forEach(r => {
+    const inputs = r.querySelectorAll('input');
+    const label = inputs[0].value.trim();
+    const url = inputs[1].value.trim();
+    if (label && url) links.push({ label, url });
+  });
+  return links;
+}
+
 function showToast(msg, isError=false) {
   const t = document.getElementById('toast');
   document.getElementById('toastMsg').textContent = msg;

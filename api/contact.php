@@ -100,15 +100,17 @@ $body .= str_repeat('-', 40) . "\n";
 $body .= "IP-hash: $ip_hash\n";
 $body .= "Tidspunkt: " . date('Y-m-d H:i:s') . "\n";
 
-// Headers til Simply.com (vigtigt: From skal ofte være en mail på domænet)
+// Headers til Simply.com (vigtigt: From SKAL være en mail på domænet for at undgå spam-filtre)
+$from_email = 'noreply@zpolonius.dk'; // Sørg for at denne konto eksisterer eller er tilladt på Simply
 $headers   = [];
-$headers[] = 'From: Zacharias Polonius <noreply@zpolonius.dk>';
+$headers[] = 'From: Portefølje Kontakt <' . $from_email . '>';
 $headers[] = 'Reply-To: ' . $email;
 $headers[] = 'X-Mailer: PHP/' . phpversion();
 $headers[] = 'Content-Type: text/plain; charset=UTF-8';
 
-// Send mail - på Simply er det ofte nødvendigt med det femte parameter (-f)
-$sent = mail('zacharias@polonius.dk', $emailSubject, $body, implode("\r\n", $headers), '-f noreply@zpolonius.dk');
+// Send mail - på Simply er det absolut nødvendigt med det femte parameter (-f) for at verificere afsender
+$to = 'zacharias@polonius.dk';
+$sent = mail($to, $emailSubject, $body, implode("\r\n", $headers), "-f $from_email");
 
 if (!$sent) {
     // Log fejlen lokalt hvis muligt, eller returner fejl til JS
