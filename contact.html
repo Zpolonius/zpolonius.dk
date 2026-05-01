@@ -248,8 +248,16 @@
     </div>
   </footer>
 
-  <script src="js/main.js"></script>
+  <script src="js/main.js?v=1.0.1"></script>
   <script>
+    // Fallback
+    const esc = window.esc || ((str) => {
+      if (!str) return '';
+      const div = document.createElement('div');
+      div.textContent = str;
+      return div.innerHTML;
+    });
+
     // Load contact info from content.json
     fetch('data/content.json')
       .then(r => r.json())

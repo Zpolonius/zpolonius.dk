@@ -2,6 +2,14 @@
    Z. POLONIUS — SHARED JAVASCRIPT
    ============================================ */
 
+/* ---- UTILS ---- */
+function esc(str) {
+  if (!str) return '';
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   initTheme();
   initActiveNav();
@@ -226,12 +234,4 @@ function submitContact() {
 function showContactSuccess() {
   document.getElementById('contactFormView').style.display = 'none';
   document.getElementById('contactSuccessView').classList.add('show');
-}
-
-/* ---- UTILS ---- */
-function esc(str) {
-  if (!str) return '';
-  const div = document.createElement('div');
-  div.textContent = str;
-  return div.innerHTML;
 }

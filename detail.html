@@ -595,8 +595,16 @@
     </button>
   </nav>
 
-  <script src="js/main.js"></script>
+  <script src="js/main.js?v=1.0.1"></script>
   <script>
+    // Fallback
+    const esc = window.esc || ((str) => {
+      if (!str) return '';
+      const div = document.createElement('div');
+      div.textContent = str;
+      return div.innerHTML;
+    });
+
     // Load content from content.json based on ?id= URL param
     const params  = new URLSearchParams(location.search);
     const entryId = params.get('id');

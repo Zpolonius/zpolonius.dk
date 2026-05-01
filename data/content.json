@@ -5,18 +5,19 @@
         "email": "zacharias@polonius.dk",
         "phone": "3068 7041",
         "location": "Bjæverskov, Danmark",
-        "accent_color": "#418FFF",
+        "accent_color": "#41A447",
         "social": {
             "linkedin": "https:\/\/www.linkedin.com\/in\/zpolonius\/",
             "instagram": "https:\/\/www.instagram.com\/zackp91\/",
             "facebook": "https:\/\/www.facebook.com\/zpolonius"
-        }
+        },
+        "logo": "assets\/general\/cropped-cropped-cropped-class-1.webp"
     },
     "hero": {
-        "role": "Technical Account Manager · Bring",
+        "role": "",
         "cover": "assets\/cover.webp",
-        "status": "Tilgængelig for nye muligheder",
-        "intro": "De små detaljer leder til store forandringer — inden for AI, teknisk support og kundesuccess."
+        "status": "Technical Account Manager · Bring",
+        "intro": "De små detaljer leder til store forandringer — inden for  E-commerce, AI, teknisk support og kundesuccess."
     },
     "specialer": [
         {
@@ -106,16 +107,17 @@
         },
         {
             "label": "Om mig",
-            "value": "Zacharias, 33",
+            "value": "Zacharias, 35",
             "sub": "Bjæverskov · Gift · To sønner",
             "desc": "Nysgerrig og altid på udkig efter den smarte løsning.",
             "accent": "none",
-            "detail": "om"
+            "detail": "om",
+            "url": ""
         }
     ],
     "om": {
         "bio": "Efter at jeg blev færdig uddannet som eventkoordinator,\nvalgte jeg at læse videre, på CPH Business, som serviceøkonom.\nHvor jeg blev færdig uddannet januar 2017, med årgangens højeste snit på 11,1\nog med prisen som bedste studiekammerat.\n\nServiceøkonom uddannelsen er en kortere videregående uddannelse, på 2 år.\nSom uddannet serviceøkonom har jeg kvalifikationer til at arbejde indenfor mange forskellige områder og brancher, som f.eks. din HR afdeling, eventmanager, projektleder osv. indenfor service- og oplevelsesindustrien.\nServiceøkonom uddannelsen sikre et godt fundament.\n\nUddannelsen, sammen med min eventkoordinator uddannelse, har givet mig et velfunderet grundlag, både teoretisk og praktisk, at arbejde ud fra.\n\nPå Serviceøkonomi uddannelsen har jeg haft følgende fag:\n\n • Service Design\n\n • Ledelse\n\n • Forandringsledelse\n\n • Organisation\n\n • Service Mangement\n\n Speciale fag i event management\n\n • Karakteren 12 opnået ved eksamen\n\n • Økonomi\n\n Karakteren 12 opnået ved eksamen\n\n • Jura\n\n • Kreativitet & Innovation\n\n • Projektledelse\n\n • Servicemarketing\n\n • Kommunikation & kultur\n\n Karakteren 10 opnået ved eksamen\n\n • Strategi\n\n • HR\n\n • Praktikprojekt\n\n Karakteren 7 opnået ved eksamen\n\n • Forretnings- og udviklingsplan\n\n Karakteren 10 opnået ved eksamen\n\n • Afsluttende Projekt\n\n Karakteren 12 opnået ved eksamen\n\nLyder jeg som manden for jer? Klik her for at kontakte mig,\neller klik her for at læse om min uddannelse som eventkoordinator.",
-        "photo": "assets\/photo.jpg",
+        "photo": "assets\/photo\/linkedin.jpg",
         "persontype": "Analytisk og strategisk. God til at se mønstre, finde løsninger og kommunikere tekniske emner på en forståelig måde.",
         "sprog": [
             "Dansk (modersmål)",
@@ -131,16 +133,23 @@
     "projects": [
         {
             "id": "review-manager",
-            "title": "Review Manager",
+            "title": "CheckoutChecker.ai",
+            "category": "ai",
+            "tag": "AI",
             "period": "2025",
             "desc": "Den seneste tid har jeg arbejdet med AI, som en del at mit arbejde som Technical Account Manager i Bring. Som en del at mit arbejde, har jeg haft til ansvar at se på måde...",
             "intro": "Den seneste tid har jeg arbejdet med AI, som en del at mit arbejde som Technical Account Manager i Bring. Som en del at mit arbejde, har jeg haft til ansvar at se på måde...",
             "body": "Den seneste tid har jeg arbejdet med AI, som en del at mit arbejde som Technical Account Manager i Bring.\n\nSom en del at mit arbejde, har jeg haft til ansvar at se på måde hvorpå vi kan gøre det nemmere for andre dele af organisationen at bruge checkout i deres arbejde.\n\nDerfor satte jeg mig for at se om det vi kunne lave en review manager.\nKravene til review manager var at den skulle gøre det nemt og hurtigt at lave en simpel review af vores kunders checkout.\nDen skulle kunne lave en rapport, der viser i hvor høj grad webshoppen, lever til vores best practice guide.\n\nDet var vigtigt at vi kunne hurtigt gennemgå hjemmesiden og give feedback.\nSåledes at den også kunne bruges på messer og events.\n\nDa jeg har en stor interesse for AI, særligt i kraft at hvad jeg laver som AI Support specialist hos MyBizz.ai, satte jeg mig for at prøve at Vibe kode en løsning med AI.\n\nJeg valgte at bruge Google Gemini for at prøve den af.\nDet virkede over alt forventning.\nI løbet af 2 timer havde jeg, sammen med Gemini, bygget en fungerende web applikation, der levede op til overstående krav.\n\nReview managers opbygning\n\nFor at holde det simpelt, holdte vi det som en HTML side, med CSS til layout og JavaScript til at håndtere alt logikken.\n\nDen består af 3 sider\n\n• Landingsside\n\nHer indtastet webshop info\n\n• Mulighed for at uploade skærmbillede af checkout\n\nVises i Review Manager\n\n• Review manager\n\nGør det muligt at hurtigt og nemt gennemgå en checkout og om det leverer op til Posten Brings Best practice guide.\n\n• I højre side vises skærmbillede af checkout, der kan åbnes op i store billede.\n\n• Sektions opdeling af områder til gennemgang\n\n• Ja\/Nej\/NA besvarelse af sektionsområder\n\n• Udregning af score for hver sektion\n\n• Tjekke at alle områder bliver besvaret\n\n• Forskellig sprog og områder i forhold til vores 3 markeder\n\nNorge\n\n• Sverige\n\n• Danmark\n\n• Rapport og tak for nu side\n\nHer genereres rapporten\n\n• Og fra denne side kan rapporten\n\nDownloades\n\n• Sendes direkte til kunden\n\n• Sendes til yderligere gennemgang af checkout team\n\n• Her fra kan der startes et nyt review af en ny side.\n\nDa vi er en nordisk organisation, har jeg opbygget siden, så sproget bliver sat alt efter om, brugeren vælger, Dansk\/Svensk\/Norsk.\nDette styres i en tilhørende .json fil, for nemt at kunne styre teksten og opdaterer den, i forhold til ændringer og oversættelser.\n\nSe min Review Manager\n\nDu kan se og lege med vores review manager ved at trykke på knappen nedenfor.\n\nClick Here",
-            "cover": "assets\/projects\/review-manager.png",
-            "category": "ai",
-            "skills": [],
-            "links": [],
-            "tag": "AI"
+            "skills": [
+                "AI",
+                "Vibe Coding",
+                "Lead generation"
+            ],
+            "cover": "assets\/projects\/gemini_generated_image_9mdrea9mdrea9mdr.png",
+            "cover_alt": "Animeret billede af en person der sidder foran en skærm ved et skrivebord",
+            "file": "",
+            "url": "https:\/\/checkoutchecker.ai\/",
+            "visible": true
         },
         {
             "id": "ai-support-specialist",
@@ -1059,26 +1068,62 @@
             {
                 "id": "anbefaling-johannes-maarlov",
                 "name": "Johannes Mårlöv 15",
-                "role": "",
-                "text": "Her kan du læse mine anbefalinger fra Johannes Mårlöv,\r\ndirektør og stifter af CoffeeCow AB.\r\nDen seneste for mit arbejde som økonomi- og administrativ ansvarlig\r\npå Roskilde Festival 2015.\r\nDen anden, for mit frivillige arbejde som manager i 2013.\r\n\r\nDu kan downloade den seneste her,\r\nog den fra 2013 her.\r\n\r\n\r\nStockholm 2016.04.04\r\n\r\n\r\n\r\n\r\nZacharias Polonius has worked with CoffeeCow AB during Roskilde Festival 27th June til 5th of July 2015 .\r\n\r\nHe also played a great part in the preparations during the spring 2015– setting up a project plan, ordering necessive equipment from distributors – preparing a workshop for teamleaders etc.\r\n\r\nAnd foremost – he was our CFO on the festival – setting up routines for the economic procedures and keeping track of the cash flow each day. . Also – Zacharias contributed to the accounting and sum up of the festival.\r\nCoffeeCows primary task on the festival was to serve coffee to the festival guest through our mobile equipment. In this way we carry the coffee on our backs to serve at the camping and the concert areas. We have high standars on service and our mission is to make a better day for those we meet.\r\n\r\n2015 we made our best result ever. The part Zacharias Polonius played in this is huge – since the planning and preparations is key to success. During the festival he worked every day to keep good control of the business.\r\n\r\nI give him my best recommendations.\r\n\r\nJohannes Mårlöv CEO\r\n\r\nCoffeeCow AB\r\nNordenskiöldsgatan 87\r\n11521 Stockholm"
+                "role": "Founder and CEO",
+                "intro": "Foremost – he was our CFO on the festival – setting up routines for the economic procedures and keeping track of the cash flow each day. . Also – Zacharias contributed to the accounting and sum up of the festival.",
+                "text": "Her kan du læse mine anbefalinger fra Johannes Mårlöv,\ndirektør og stifter af CoffeeCow AB.\nDen seneste for mit arbejde som økonomi- og administrativ ansvarlig\npå Roskilde Festival 2015.\nDen anden, for mit frivillige arbejde som manager i 2013.\n\nDu kan downloade den seneste her,\nog den fra 2013 her.\n\n\nStockholm 2016.04.04\n\n\nZacharias Polonius has worked with CoffeeCow AB during Roskilde Festival 27th June til 5th of July 2015 .\n\nHe also played a great part in the preparations during the spring 2015– setting up a project plan, ordering necessive equipment from distributors – preparing a workshop for teamleaders etc.\n\nAnd foremost – he was our CFO on the festival – setting up routines for the economic procedures and keeping track of the cash flow each day. . Also – Zacharias contributed to the accounting and sum up of the festival.\nCoffeeCows primary task on the festival was to serve coffee to the festival guest through our mobile equipment. In this way we carry the coffee on our backs to serve at the camping and the concert areas. We have high standars on service and our mission is to make a better day for those we meet.\n\n2015 we made our best result ever. The part Zacharias Polonius played in this is huge – since the planning and preparations is key to success. During the festival he worked every day to keep good control of the business.\n\nI give him my best recommendations.\n\nJohannes Mårlöv CEO\n\nCoffeeCow AB\nNordenskiöldsgatan 87\n11521 Stockholm",
+                "skills": [],
+                "photo": "assets\/photo\/johannes-1777061172.jpg",
+                "photo_alt": "",
+                "cover": "",
+                "cover_alt": "",
+                "file": "assets\/docs\/zachariasintygrf15.pdf",
+                "visible": true,
+                "category": "recommendation"
             },
             {
                 "id": "farum-kulturhus-anb",
                 "name": "Zanne Jahn",
                 "role": "Farum Kulturhus",
-                "text": "Her kan du læse min anbefaling fra Zanne Jahn, leder af Farum Kulturhus.\r\nSom du også kan downloade her\r\n\r\n14. nov. 2014\r\nZanne E. Jahn\r\nLeder, Farum Kulturhus\r\nStavnsholtvej 3\r\n3520 Farum\r\n\r\nAnbefaling ang. Zacharias Polonius.\r\nZacharias, har siden januar måned været tilknyttet Farum Kulturhus,\u2028 først som praktikant og siden som eventkoordinatorelev.\r\n\r\nZacharias har igennem sin tid i Farum Kulturhus, udvist stor omhyggelighed, kreativitet, gode samarbejdsevner, overblik og stærke evner i at tilpasse sig og løse opgaver, både inden og udenfor hans kompetence og vante områder.\r\n\r\nSom en del af hans ansættelse, har Zacharias, være ansvarlig for Farum Kulturhus’ sociale medie profil, hvor han har skabt Kulturhusets profil på de sociale medier, blandt andet, Facebook og Instagram. Zacharias har uddannet det øvrige personale, samt andre interessenter, i brugen af de sociale medier og markedsføring af Kulturhuset igennem disse.\r\n\r\nSom eventkoordinatorelev har Zacharias gentagne gange, vist at han er dygtig, til således at skabe, planlægge, udfører og evaluerer projekter og events, såvel som at skabe en konstruktiv og kreativ proces.\r\n\r\nJeg giver hermed mine varmeste anbefalinger til Zacharias Polonius.\r\nVenlig hilsen\r\nZanne E. Jahn\r\n\r\nLeder af Farum Kulturhus\r\n\r\nHar det givet dig blod på tanden til at lære mere om hvordan jeg kunne passe i jeres virksomhed?\r\nLæs mere om mig her eller kontakt mig her,\r\nEller læs mere om mit arbejde, i Farum Kulturhus, her."
+                "intro": "Som eventkoordinatorelev har Zacharias gentagne gange, vist at han er dygtig, til således at skabe, planlægge, udfører og evaluerer projekter og events, såvel som at skabe en konstruktiv og kreativ proces.\n",
+                "text": "Her kan du læse min anbefaling fra Zanne Jahn, leder af Farum Kulturhus.\nSom du også kan downloade her\n\n14. nov. 2014\nZanne E. Jahn\nLeder, Farum Kulturhus\nStavnsholtvej 3\n3520 Farum\n\nAnbefaling ang. Zacharias Polonius.\nZacharias, har siden januar måned været tilknyttet Farum Kulturhus,\u2028 først som praktikant og siden som eventkoordinatorelev.\n\nZacharias har igennem sin tid i Farum Kulturhus, udvist stor omhyggelighed, kreativitet, gode samarbejdsevner, overblik og stærke evner i at tilpasse sig og løse opgaver, både inden og udenfor hans kompetence og vante områder.\n\nSom en del af hans ansættelse, har Zacharias, være ansvarlig for Farum Kulturhus’ sociale medie profil, hvor han har skabt Kulturhusets profil på de sociale medier, blandt andet, Facebook og Instagram. Zacharias har uddannet det øvrige personale, samt andre interessenter, i brugen af de sociale medier og markedsføring af Kulturhuset igennem disse.\n\nSom eventkoordinatorelev har Zacharias gentagne gange, vist at han er dygtig, til således at skabe, planlægge, udfører og evaluerer projekter og events, såvel som at skabe en konstruktiv og kreativ proces.\n\nJeg giver hermed mine varmeste anbefalinger til Zacharias Polonius.\nVenlig hilsen\nZanne E. Jahn\n\nLeder af Farum Kulturhus\n",
+                "skills": [],
+                "photo": "assets\/photo\/zanne.jpg",
+                "photo_alt": "",
+                "cover": "",
+                "cover_alt": "",
+                "file": "",
+                "visible": true,
+                "category": "recommendation"
             },
             {
                 "id": "anbefaling-rf13",
                 "name": "Johannes Mårlöv 13",
-                "role": "",
-                "text": "Her kan du læse min anbefaling fra mit arbejde som manager, for CoffeeCow,\r\npå Roskilde Festival 2013.\r\n\r\nDu kan læse mere om mit arbejde på Roskilde Festival, her.\r\n\r\nDu kan downloade anbefalingen her.\r\neller læse min anbefaling fra 2015, her.\r\n\r\n\r\n\r\n\r\nStockholm 2013-09-05\r\n\r\nRecommendation letter\r\nZacharias Polonius has been working with CoffeeCow AB as manager on Roskilde festival in Denmark 30 June- 7 July 2013.\r\n\r\nCoffeeCows task on Roskilde is to sell coffee to the camping site and to the festival area during the concerts.\r\nThe fashion in which we do this is to carry coffee on our backs – in order to come close to the audience and provide excellent coffee and service.\r\n\r\nZacharias Polonius was as a manager of the base in charge of a team of 25 people - brewers and sellers. Organizing the basecamp – keeping overview of the staff, equipment and supplies. Solving problems before the occur. Setting an example with good spririt with a motivating approach.\r\n\r\nThis work requires stamina, social skills, as well as planning, speed and problem solving skills.\r\n\r\nZacharias Polonius performed very well and kept the business running smoothly. I can warmly recommend Zacharias Polonius to other employers.\r\n\r\nJohannes Mårlöv\r\n\r\nCEO\r\nCoffeeCow AB\r\nNordenskiöldsgatan 87\r\n115 21 Stockholm"
+                "role": "Founder and CEO",
+                "intro": "Zacharias Polonius was as a manager of the base in charge of a team of 25 people - brewers and sellers. Organizing the basecamp – keeping overview of the staff, equipment and supplies. Solving problems before the occur. Setting an example with good spririt with a motivating approach.\n",
+                "text": "Her kan du læse min anbefaling fra mit arbejde som manager, for CoffeeCow,\npå Roskilde Festival 2013.\n\nDu kan læse mere om mit arbejde på Roskilde Festival, her.\n\nDu kan downloade anbefalingen her.\neller læse min anbefaling fra 2015, her.\n\n\n\n\nStockholm 2013-09-05\n\nRecommendation letter\nZacharias Polonius has been working with CoffeeCow AB as manager on Roskilde festival in Denmark 30 June- 7 July 2013.\n\nCoffeeCows task on Roskilde is to sell coffee to the camping site and to the festival area during the concerts.\nThe fashion in which we do this is to carry coffee on our backs – in order to come close to the audience and provide excellent coffee and service.\n\nZacharias Polonius was as a manager of the base in charge of a team of 25 people - brewers and sellers. Organizing the basecamp – keeping overview of the staff, equipment and supplies. Solving problems before the occur. Setting an example with good spririt with a motivating approach.\n\nThis work requires stamina, social skills, as well as planning, speed and problem solving skills.\n\nZacharias Polonius performed very well and kept the business running smoothly. I can warmly recommend Zacharias Polonius to other employers.\n\nJohannes Mårlöv\n\nCEO\nCoffeeCow AB\nNordenskiöldsgatan 87\n115 21 Stockholm",
+                "skills": [],
+                "photo": "assets\/photo\/johannes-1777061594.jpg",
+                "photo_alt": "",
+                "cover": "",
+                "cover_alt": "",
+                "file": "",
+                "visible": true,
+                "category": "recommendation"
             },
             {
                 "id": "anbefaling-fra-trine-simmel",
                 "name": "Trine Simmel",
-                "role": "Landssammenslutningen af Handelsskoleelev",
-                "text": "Her kan du læse min anbefaling, af Trine Simmel, for min tid, som formand,\r\ni Landssammenslutningen af Handelsskoleelever.\r\nDu kan også downloade anbefalingen, som pdf her!\r\n\r\n20. November 2014\r\nTrine Simmel\r\nFormand\r\nLandssammenslutningen Af Handelsskoleelever\r\nVibevej 31, 2.\r\n2400 København NV\r\n\r\nAnbefaling vedr. Zacharias Polonius\r\nZacharias har i 2 år været valgt som Formand og 1\/2 år som talssperson, \u2028for Landssammenslutningen af Handelsskoleelever.\r\n\r\nZacharias har igennem sit arbejde, for LH, vist stort overskud, fleksibilitet, kreativitet & særdeles gode lederegenskaber.\r\n\r\nZacharias har stået for udvikling, koordineringen, ledelse & afviklingen af vores 4 årlige nationale kurser, skolestartskampagner, konferencer & politiske kampagner. Samt bestyrelsesarbejde og koordinering af sekretariat og bestyrelsen. Hvilket han har gjort med stort engagement & gejst, som har givet vellykket arrangementer, motiverede medarbejder,  & en tilfreds bestyrelse.\r\n\r\nSom formand & talsperson har han repræsenteret organisationen udadtil, i forhold til samarbejdspartner, politikere, medlemmer og presse, \u2028hvilket han har præsteret at gøre ovenud tilfredsstillende.\r\n\r\nZacharias har i kraft af sin post som formand, været en del af LH’s underviser hold, hvormed han har været med til at udvikle kurser og afholde kurser for medlemmer og bestyrelsen i LH.\r\n\r\nIgennem sit arbejde, har Zacharias vist en stor forståelse for hvordan man arbejde med frivillige, ledelse af medarbejde & arbejde med en organisation der hele tiden er i bevægelse.\r\nSom Formand har han, været den bærende kraft for at arbejde med at styrke LH, som organisation, rekruttering samt medlemsfremgang,\r\nZacharias er en udadvendt person, der skaber gejst, har været en fantastisk sparringspartner & en værdifuld aktiv for LH.\r\n\r\nSom jeg kun giver mine varmeste anbefaling.\r\n\r\nVenlig Hilsen\r\n\r\nFormand\r\nTrine Simmel"
+                "role": "Formand",
+                "intro": "Zacharias har igennem sit arbejde, for LH, vist stort overskud, fleksibilitet, kreativitet & særdeles gode lederegenskaber.",
+                "text": "Her kan du læse min anbefaling, af Trine Simmel, for min tid, som formand,\ni Landssammenslutningen af Handelsskoleelever.\nDu kan også downloade anbefalingen, som pdf her!\n\n20. November 2014\nTrine Simmel\nFormand\nLandssammenslutningen Af Handelsskoleelever\nVibevej 31, 2.\n2400 København NV\n\nAnbefaling vedr. Zacharias Polonius\nZacharias har i 2 år været valgt som Formand og 1\/2 år som talssperson, \u2028for Landssammenslutningen af Handelsskoleelever.\n\nZacharias har igennem sit arbejde, for LH, vist stort overskud, fleksibilitet, kreativitet & særdeles gode lederegenskaber.\n\nZacharias har stået for udvikling, koordineringen, ledelse & afviklingen af vores 4 årlige nationale kurser, skolestartskampagner, konferencer & politiske kampagner. Samt bestyrelsesarbejde og koordinering af sekretariat og bestyrelsen. Hvilket han har gjort med stort engagement & gejst, som har givet vellykket arrangementer, motiverede medarbejder,  & en tilfreds bestyrelse.\n\nSom formand & talsperson har han repræsenteret organisationen udadtil, i forhold til samarbejdspartner, politikere, medlemmer og presse, \u2028hvilket han har præsteret at gøre ovenud tilfredsstillende.\n\nZacharias har i kraft af sin post som formand, været en del af LH’s underviser hold, hvormed han har været med til at udvikle kurser og afholde kurser for medlemmer og bestyrelsen i LH.\n\nIgennem sit arbejde, har Zacharias vist en stor forståelse for hvordan man arbejde med frivillige, ledelse af medarbejde & arbejde med en organisation der hele tiden er i bevægelse.\nSom Formand har han, været den bærende kraft for at arbejde med at styrke LH, som organisation, rekruttering samt medlemsfremgang,\nZacharias er en udadvendt person, der skaber gejst, har været en fantastisk sparringspartner & en værdifuld aktiv for LH.\n\nSom jeg kun giver mine varmeste anbefaling.\n\nVenlig Hilsen\n\nFormand\nTrine Simmel",
+                "skills": [],
+                "photo": "assets\/photo\/trine.jpg",
+                "photo_alt": "",
+                "cover": "",
+                "cover_alt": "",
+                "file": "",
+                "visible": true,
+                "category": "recommendation"
             },
             {
                 "id": "anbefaling-fra-marie-schwartz",
@@ -1089,8 +1134,17 @@
             {
                 "id": "anbefaling-peter-hummelgaard",
                 "name": "Peter Hummelgaard",
-                "role": "Distrikt Nordsjælland – en organisation m",
-                "text": "Her kan du læse min anbefaling fra Peter Hummelgaard,\r\nEller downloade den her.\r\n\r\nKøbenhavn d. 14. august 2016\r\n\r\nAngående Zacharias Polonius\r\n\r\nZacharias Polonius har siden 2006 været medlem af DSU. Zacharias er på nuværende tidspunkt formand for DSU i Distrikt Nordsjælland – en organisation med mere end 300 medlemmer. Zacharias har været meget aktiv i såvel det politiske som det organisatoriske arbejde, og har haft stor forståelse for det frivillige arbejde både lokalt og på landsplan.\r\n\r\nZacharias har vist store evner til at sætte sig ind i nyt stof og har hurtigt lært organisationen at kende. Zacharias har haft en række politiske og organisatoriske opgaver, som han har håndteret effektivt og med stort overblik.\r\n\r\nEndvidere har Zacharias forestået en række arrangementer i DSU, og også herigennem vist at han er i stand til at gå forrest og få tingene gjort, og samtidig udvist et stort organisatorisk overskud.\r\n\r\nZacharias er meget selvstændig, dygtig og engageret, og er et stort aktiv for DSU.\r\nMed venlig hilsen\r\n\r\nDanmarks Socialdemokratiske Ungdom\r\n\r\n \r\n\r\nLouise Juul Jensen                                                                              Peter Hummelgaard Thomsen\r\n\r\nForbundssekretær, DSU                                                                     Forbundsformand, DSU"
+                "role": "Formand, DSU",
+                "intro": "Zacharias har vist store evner til at sætte sig ind i nyt stof og har hurtigt lært organisationen at kende. Zacharias har haft en række politiske og organisatoriske opgaver, som han har håndteret effektivt og med stort overblik.",
+                "text": "Her kan du læse min anbefaling fra Peter Hummelgaard,\nEller downloade den her.\n\nKøbenhavn d. 14. august 2016\n\nAngående Zacharias Polonius\n\nZacharias Polonius har siden 2006 været medlem af DSU. Zacharias er på nuværende tidspunkt formand for DSU i Distrikt Nordsjælland – en organisation med mere end 300 medlemmer. Zacharias har været meget aktiv i såvel det politiske som det organisatoriske arbejde, og har haft stor forståelse for det frivillige arbejde både lokalt og på landsplan.\n\nZacharias har vist store evner til at sætte sig ind i nyt stof og har hurtigt lært organisationen at kende. Zacharias har haft en række politiske og organisatoriske opgaver, som han har håndteret effektivt og med stort overblik.\n\nEndvidere har Zacharias forestået en række arrangementer i DSU, og også herigennem vist at han er i stand til at gå forrest og få tingene gjort, og samtidig udvist et stort organisatorisk overskud.\n\nZacharias er meget selvstændig, dygtig og engageret, og er et stort aktiv for DSU.\nMed venlig hilsen\n\nDanmarks Socialdemokratiske Ungdom\n\n \n\nLouise Juul Jensen                                                                              Peter Hummelgaard Thomsen\n\nForbundssekretær, DSU                                                                     Forbundsformand, DSU",
+                "skills": [],
+                "photo": "assets\/photo\/peter.jpg",
+                "photo_alt": "",
+                "cover": "",
+                "cover_alt": "",
+                "file": "",
+                "visible": true,
+                "category": "recommendation"
             }
         ]
     }
