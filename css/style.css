@@ -94,8 +94,8 @@ body {
 .rich-text .ql-align-center { text-align: center; margin-left: auto; margin-right: auto; }
 .rich-text .ql-align-right { text-align: right; }
 .rich-text u { text-decoration: underline; }
-.rich-text h2 { font-size: 20px; font-weight: 600; color: var(--text); margin-top: 32px; margin-bottom: 12px; border:none; }
-.rich-text h3 { font-size: 17px; font-weight: 600; color: var(--text); margin-top: 24px; margin-bottom: 8px; }
+.rich-text h2 { font-size: 13px; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; color: var(--text); margin-top: 40px; margin-bottom: 16px; padding: 12px 16px; background: var(--bg-card); border-left: 2px solid var(--blue); border-radius: 2px; }
+.rich-text h3 { font-size: 16px; font-weight: 600; color: var(--text); margin-top: 24px; margin-bottom: 8px; letter-spacing: -0.01em; }
 .rich-text ul, .rich-text ol { margin-left: 20px; margin-bottom: 20px; max-width: 720px; }
 .rich-text li { margin-bottom: 8px; font-size: 15px; }
 .rich-text strong { color: var(--text); font-weight: 600; }
@@ -213,8 +213,8 @@ p, li {
 .footer-links a:hover { color: var(--blue); }
 
 /* ---- BUTTONS ---- */
-.btn-primary { background: var(--blue); color: #fff; border: none; padding: 12px 28px; font-size: 13px; font-weight: 500; letter-spacing: 0.02em; transition: opacity 0.2s, transform 0.15s; display: inline-block; text-align: center; }
-.btn-primary:hover { opacity: 0.85; }
+.btn-primary { background: var(--blue); color: #fff; border: none; border-radius: 4px; padding: 12px 28px; font-size: 13px; font-weight: 500; letter-spacing: 0.02em; transition: all 0.2s; display: inline-block; text-align: center; box-shadow: 0 4px 14px rgba(65, 143, 255, 0.2); }
+.btn-primary:hover { background: #2d7ae8; transform: translateY(-1px); box-shadow: 0 6px 20px rgba(65, 143, 255, 0.4), 0 0 10px rgba(65, 143, 255, 0.2); }
 .btn-primary:active { transform: scale(0.98); }
 .btn-primary.sending { pointer-events: none; opacity: 0.5; }
 

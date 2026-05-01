@@ -490,19 +490,19 @@
         <span class="icon">🏠</span> Forside
       </button>
       <button class="sidebar-item" onclick="showSection('specialer')">
-        <span class="icon">⭐</span> Specialer
+        <span class="icon">⭐</span> Kernekompetencer
         <span class="badge" id="badge-specialer">0</span>
       </button>
       <button class="sidebar-item" onclick="showSection('projekter')">
-        <span class="icon">📁</span> Projekter
+        <span class="icon">📁</span> Business Cases
         <span class="badge" id="badge-projekter">0</span>
       </button>
       <button class="sidebar-item" onclick="showSection('ansaettelser')">
-        <span class="icon">💼</span> Ansættelser
+        <span class="icon">💼</span> Komm. Erfaring
         <span class="badge" id="badge-ansaettelser">0</span>
       </button>
       <button class="sidebar-item" onclick="showSection('uddannelse')">
-        <span class="icon">🎓</span> Uddannelse
+        <span class="icon">🎓</span> Udd. (Skjult)
         <span class="badge" id="badge-uddannelse">0</span>
       </button>
       <button class="sidebar-item" onclick="showSection('anbefalinger')">
@@ -941,10 +941,10 @@ function showSection(key) {
 
 const sectionMeta = {
   forside:       { title:'Forside',         sub:'Rediger hero, bento-bokse og forsideindhold',   add:false, save:true  },
-  specialer:     { title:'Specialer',       sub:'Tilføj og rediger dine faglige specialer',       add:true,  save:true  },
-  projekter:     { title:'Projekter',       sub:'Tilføj, rediger og slet projekter',              add:true,  save:true  },
-  ansaettelser:  { title:'Ansættelser',     sub:'Rediger din arbejdserfaring',                    add:true,  save:true  },
-  uddannelse:    { title:'Uddannelse',      sub:'Rediger uddannelse og certificeringer',          add:true,  save:true  },
+  specialer:     { title:'Kernekompetencer', sub:'Tilføj og rediger dine 3 primære fokusområder', add:true,  save:true  },
+  projekter:     { title:'Business Cases & ROI', sub:'Tilføj, rediger og slet business cases',    add:true,  save:true  },
+  ansaettelser:  { title:'Kommerciel Erfaring', sub:'Rediger din kommercielle baggrund',          add:true,  save:true  },
+  uddannelse:    { title:'Uddannelse (Skjult)', sub:'Rediger uddannelse (Vises kun på fuldt CV)', add:true,  save:true  },
   anbefalinger:  { title:'Anbefalinger',    sub:'Tilføj og rediger anbefalinger fra samarbejdspartnere', add:true, save:true },
   om:            { title:'Om mig',          sub:'Rediger din biografi og personlige info',        add:false, save:true  },
   kontakt:       { title:'Kontakt & Sociale medier', sub:'Email, telefon og sociale profiler',   add:false, save:true  },

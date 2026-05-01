@@ -16,7 +16,54 @@ document.addEventListener('DOMContentLoaded', () => {
   initContactOverlay();
   initHamburger();
   initBottomNav();
+  initParallax();
 });
+
+/* ---- TYPEWRITER ---- */
+window.initTypewriter = function(element, words) {
+  let wordIndex = 0;
+  let charIndex = 0;
+  let isDeleting = false;
+
+  function type() {
+    const currentWord = words[wordIndex];
+    if (isDeleting) {
+      charIndex--;
+    } else {
+      charIndex++;
+    }
+
+    element.textContent = currentWord.substring(0, charIndex);
+
+    let typeSpeed = isDeleting ? 40 : 80;
+
+    if (!isDeleting && charIndex === currentWord.length) {
+      typeSpeed = 2000;
+      isDeleting = true;
+    } else if (isDeleting && charIndex === 0) {
+      isDeleting = false;
+      wordIndex = (wordIndex + 1) % words.length;
+      typeSpeed = 500;
+    }
+
+    setTimeout(type, typeSpeed);
+  }
+  
+  type();
+};
+
+/* ---- PARALLAX ---- */
+function initParallax() {
+  const heroImg = document.querySelector('.hero-img');
+  if (!heroImg) return;
+  
+  window.addEventListener('scroll', () => {
+    const scrolled = window.pageYOffset;
+    if (scrolled < 800) {
+      heroImg.style.transform = `translateY(${scrolled * 0.4}px) scale(1.05)`;
+    }
+  });
+}
 
 /* ---- THEME ---- */
 function initTheme() {

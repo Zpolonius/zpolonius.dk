@@ -85,12 +85,18 @@
       background: var(--blue);
       color: #fff;
       border: none;
-      padding: 10px 22px;
+      border-radius: 4px;
+      padding: 12px 24px;
       font-size: 13px;
       font-weight: 500;
-      transition: background 0.2s;
+      transition: all 0.2s;
+      box-shadow: 0 4px 14px rgba(65, 143, 255, 0.2);
     }
-    .hero-btn-primary:hover { background: #2d7ae8; }
+    .hero-btn-primary:hover { 
+      background: #2d7ae8; 
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(65, 143, 255, 0.4), 0 0 10px rgba(65, 143, 255, 0.2);
+    }
     .hero-btn-secondary {
       background: transparent;
       color: rgba(255,255,255,0.6);
@@ -122,7 +128,12 @@
       transition: background 0.2s;
       position: relative;
     }
-    .bento-cell:hover { background: rgba(255,255,255,0.025); }
+    .bento-cell:hover { 
+      background: rgba(255,255,255,0.025); 
+      box-shadow: 0 10px 30px rgba(65, 143, 255, 0.08), 0 0 15px rgba(65, 143, 255, 0.05);
+      border-color: rgba(65, 143, 255, 0.2);
+      z-index: 10;
+    }
     .bento-cell:hover .cell-arrow { opacity: 1; }
     .bento-cell:nth-child(3n) { border-right: none; }
     .bento-cell.selected {
@@ -409,8 +420,8 @@
         <h1 class="hero-name" id="heroName">Zacharias<br>Polonius</h1>
         <p class="hero-tagline">De små detaljer leder til store forandringer — inden for AI, teknisk support og kundesuccess.</p>
           <div class="hero-actions">
-            <a href="projects.html" class="hero-btn-primary">Se projekter →</a>
-            <a href="cv-print.html" class="hero-btn-secondary" target="_blank">Download CV</a>
+            <button class="hero-btn-primary" data-contact>Book et review →</button>
+            <a href="#projectsSection" class="hero-btn-secondary">Se Business Cases ↓</a>
           </div>
       </div>
       <div class="hero-right fade-up fade-up-2">
@@ -446,21 +457,21 @@
   <!-- PROJEKTER -->
   <div id="projectsSection">
     <div class="section-header">
-      <span class="section-title">Udvalgte projekter</span>
+      <span class="section-title">Business Cases & ROI</span>
       <a href="projects.html" class="section-link">Se alle →</a>
     </div>
     <div class="proj-grid" id="featuredProjects">
       <!-- Rendered dynamically -->
     </div>
     <div class="section-footer">
-      <a href="projects.html" class="btn-outline">Se alle projekter</a>
+      <a href="projects.html" class="btn-outline">Se alle cases</a>
     </div>
   </div>
 
   <!-- CV STRIP -->
   <div id="cvSection">
     <div class="section-header">
-      <span class="section-title">Seneste erfaring</span>
+      <span class="section-title">Kommerciel Erfaring</span>
       <a href="cv.html" class="section-link">Se fuldt CV →</a>
     </div>
     <div class="cv-strip" id="featuredExperience">
@@ -491,7 +502,7 @@
   </div>
 
   <!-- UDDANNELSE -->
-  <div id="eduSection">
+  <div id="eduSection" style="display:none;">
     <div class="section-header">
       <span class="section-title">Uddannelse</span>
       <a href="cv.html#uddannelse" class="section-link">Se alle →</a>
@@ -505,7 +516,7 @@
   </div>
 
   <!-- FRIVILLIGT ARBEJDE -->
-  <div id="volSection">
+  <div id="volSection" style="display:none;">
     <div class="section-header">
       <span class="section-title">Frivilligt arbejde</span>
       <a href="projects.html?filter=volunteer" class="section-link">Se alle →</a>
@@ -520,8 +531,8 @@
 
   <!-- CTA -->
   <div class="cta-bar">
-    <p class="cta-text"><strong>Interesseret i et samarbejde?</strong> Tøv ikke med at tage kontakt — jeg vender tilbage inden for 24 timer.</p>
-    <button class="btn-primary" data-contact>Tag kontakt →</button>
+    <p class="cta-text"><strong>Klar til at barbere sekunder af din checkout og øge konverteringen?</strong> Lad os tage en snak om jeres tech-stack.</p>
+    <button class="btn-primary" data-contact>Book et review →</button>
   </div>
 
   <!-- FOOTER -->
@@ -630,6 +641,7 @@
     </button>
   </nav>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.0/vanilla-tilt.min.js"></script>
   <script src="js/main.js?v=1.0.2"></script>
   <script>
     // Sikkerheds-funktioner
@@ -665,7 +677,14 @@
       if (hName && s.name) hName.innerHTML = s.name.replace(' ', '<br>');
       
       const hLabel = document.querySelector('.hero-label');
-      if (hLabel && h.role) hLabel.textContent = h.role;
+      if (hLabel && h.role) {
+        if (window.initTypewriter && h.role.includes('|')) {
+          const words = h.role.split('|').map(s=>s.trim());
+          window.initTypewriter(hLabel, words);
+        } else {
+          hLabel.textContent = h.role;
+        }
+      }
       
       const hTagline = document.querySelector('.hero-tagline');
       if (hTagline && h.intro) hTagline.textContent = h.intro;
@@ -704,6 +723,17 @@
             <span class="cell-arrow">Åbn →</span>
           </div>
         `).join('');
+        
+        // Initialize VanillaTilt on Bento Cells
+        if (typeof VanillaTilt !== 'undefined') {
+          VanillaTilt.init(document.querySelectorAll(".bento-cell"), {
+            max: 5,
+            speed: 400,
+            glare: true,
+            "max-glare": 0.08,
+            scale: 1.02
+          });
+        }
       }
 
       // Featured Projects (latest 3)
