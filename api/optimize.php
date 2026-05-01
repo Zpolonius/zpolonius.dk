@@ -84,4 +84,4 @@ $optimized_text = $result['candidates'][0]['content']['parts'][0]['text'] ?? '';
 $optimized_text = preg_replace('/^```html\s*/i', '', $optimized_text);
 $optimized_text = preg_replace('/```\s*$/', '', $optimized_text);
 
-echo json_encode(['ok' => true, 'optimized' => trim($optimized_text)]);
+echo json_encode(['ok' => true, 'optimized' => trim($optimized_text), 'model_used' => $model]);

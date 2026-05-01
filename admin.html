@@ -653,14 +653,17 @@
     setAILoading(true);
 
     try {
-      const aiModel = data.site?.ai_model || 'gemini-2.0-flash';
+      // Brug model fra modalen hvis den er åben, ellers site-indstilling
+      const modalModel = document.getElementById('modalAIModel').value;
+      const aiModel = modalModel || data.site?.ai_model || 'gemini-1.5-flash';
+
       const response = await fetch('api/optimize.php', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'same-origin',
-        body: JSON.stringify({ 
-          text: textToOptimize, 
-          context: context, 
+        body: JSON.stringify({
+          text: textToOptimize,
+          context: context,
           instruction: instruction,
           model: aiModel
         })
@@ -670,6 +673,8 @@
       if (res.ok) {
         lastOptimizedHTML = res.optimized;
         document.getElementById('aiPreview').innerHTML = res.optimized;
+        // Opdater også dropdown hvis vi lige har brugt en anden model
+        if (res.model_used) document.getElementById('modalAIModel').value = res.model_used;
       } else {
         showToast('AI Fejl: ' + res.error, true);
         if (instruction === '') closeAIModal();
@@ -680,15 +685,24 @@
     } finally {
       setAILoading(false);
     }
-  }
+    }
 
-  function openAIModal() {
+    function openAIModal() {
     document.getElementById('aiModal').classList.add('show');
     document.getElementById('aiFeedback').value = '';
     document.getElementById('aiPreview').innerHTML = '';
-    document.getElementById('currentAIModelDisp').textContent = data.site?.ai_model || 'gemini-2.0-flash';
-  }
 
+    // Hent modeller til modalen
+    fetch('api/models.php', { credentials: 'same-origin' })
+      .then(r => r.json())
+      .then(res => {
+        if (res.ok) {
+          const sel = document.getElementById('modalAIModel');
+          const current = data.site?.ai_model || 'gemini-1.5-flash';
+          sel.innerHTML = res.models.map(m => `<option value="${m.id}" ${m.id===current?'selected':''}>${m.name}</option>`).join('');
+        }
+      });
+    }
   function closeAIModal() {
     document.getElementById('aiModal').classList.remove('show');
   }
