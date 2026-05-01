@@ -91,6 +91,9 @@ body {
 /* ---- RICH TEXT CONTENT ---- */
 .rich-text { color: var(--text-muted); line-height: 1.8; }
 .rich-text p { font-size: 15px; margin-bottom: 16px; max-width: 720px; }
+.rich-text .ql-align-center { text-align: center; margin-left: auto; margin-right: auto; }
+.rich-text .ql-align-right { text-align: right; }
+.rich-text u { text-decoration: underline; }
 .rich-text h2 { font-size: 20px; font-weight: 600; color: var(--text); margin-top: 32px; margin-bottom: 12px; border:none; }
 .rich-text h3 { font-size: 17px; font-weight: 600; color: var(--text); margin-top: 24px; margin-bottom: 8px; }
 .rich-text ul, .rich-text ol { margin-left: 20px; margin-bottom: 20px; max-width: 720px; }

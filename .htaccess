@@ -17,7 +17,7 @@ ErrorDocument 404 /404.html
 # RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 
 # Blokér adgang til følsomme filer
-<FilesMatch "(wp-config\.php|\.env|migrate\.php|generate-hash\.php)">
+<FilesMatch "(wp-config\.php|\.env|migrate\.php|generate-hash\.php)$">
     Order allow,deny
     Deny from all
 </FilesMatch>

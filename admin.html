@@ -519,14 +519,13 @@
   <span id="toastMsg">Gemt!</span>
 </div>
 
+<script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
 <script>
 /* ============================================================
    ADMIN PANEL — ZACHARIAS POLONIUS
    Password: sættes i api/config.php på serveren
 
    ============================================================ */
-<script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
-<script>
   let data = {};
   let currentSection = 'forside';
   let editingId = null;
@@ -580,16 +579,16 @@
       placeholder: 'Skriv din tekst her...',
       modules: {
         toolbar: [
-          ['bold', 'italic'],
-          [{ 'list': 'ordered'}, { 'list': 'bullet' }],
           [{ 'header': [2, 3, false] }],
-          ['clean']
+          ['bold', 'italic', 'underline'],
+          [{ 'align': [] }],
+          [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+          ['link', 'clean']
         ]
       }
     });
     if (content) quillEditor.clipboard.dangerouslyPasteHTML(content);
   }
-
 
 /* ---- LOGIN — validering sker server-side i api/login.php ---- */
 function doLogin() {
@@ -882,7 +881,15 @@ function renderSpecialer(area) {
 
 function openForm(editIdx) {
   const isEdit = editIdx !== undefined;
-  const item = isEdit ? (currentSection === 'specialer' ? data.specialer[editIdx] : {}) : {};
+  let item = {};
+  if (isEdit) {
+    if (currentSection === 'specialer')    item = data.specialer[editIdx];
+    else if (currentSection === 'projekter') item = data.projects[editIdx];
+    else if (currentSection === 'ansaettelser') item = data.cv.jobs[editIdx];
+    else if (currentSection === 'uddannelse')   item = data.cv.education[editIdx];
+    else if (currentSection === 'anbefalinger') item = data.cv.recommendations[editIdx];
+  }
+  
   if (currentSection === 'specialer') openSpecialForm(isEdit, editIdx, item);
   else if (currentSection === 'projekter') openProjectForm(isEdit, editIdx, item);
   else if (currentSection === 'ansaettelser') openJobForm(isEdit, editIdx, item);
@@ -897,7 +904,13 @@ function openSpecialForm(isEdit, idx, item={}) {
     <div class="form-layout">
       <div class="form-main">
         <div class="field"><label class="field-label">Titel / label</label><input class="f-input" id="sp-label" value="${item.label||''}"></div>
-        <div class="field"><label class="field-label">Beskrivelse</label><textarea class="f-textarea" style="height:120px;" id="sp-desc">${item.desc||''}</textarea></div>
+        <div class="field">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+            <label class="field-label" style="margin-bottom:0;">Beskrivelse</label>
+            <button type="button" class="btn-ai" onclick="optimizeWithAI('specialty')">✨ Optimér med AI</button>
+          </div>
+          <div id="quillEditor" style="height:200px;"></div>
+        </div>
         <div class="field-row">
           <div class="field"><label class="field-label">Ikon (emoji)</label><input class="f-input" id="sp-icon" value="${item.icon||'◆'}"></div>
           <div class="field"><label class="field-label">Farve</label>
@@ -923,11 +936,13 @@ function openSpecialForm(isEdit, idx, item={}) {
       </div>
     </div>`;
   openFormPanel(isEdit ? 'Rediger speciale' : 'Tilføj speciale', () => {
-    const obj = { id: item.id || slug(document.getElementById('sp-label').value), label: document.getElementById('sp-label').value, desc: document.getElementById('sp-desc').value, icon: document.getElementById('sp-icon').value, color: document.getElementById('sp-color').value, skills: document.getElementById('sp-skills').value.split(',').map(s=>s.trim()).filter(Boolean), cover: getUploadPath('sp-cover') || item.cover || '', cover_pos: document.getElementById('sp-cover-pos').value, cover_alt: document.getElementById('sp-cover-alt').value, file: getUploadPath('sp-file') || item.file || '', visible: document.getElementById('sp-vis').value === "1" };
+    const bodyContent = quillEditor ? quillEditor.root.innerHTML : '';
+    const obj = { id: item.id || slug(document.getElementById('sp-label').value), label: document.getElementById('sp-label').value, desc: bodyContent, icon: document.getElementById('sp-icon').value, color: document.getElementById('sp-color').value, skills: document.getElementById('sp-skills').value.split(',').map(s=>s.trim()).filter(Boolean), cover: getUploadPath('sp-cover') || item.cover || '', cover_pos: document.getElementById('sp-cover-pos').value, cover_alt: document.getElementById('sp-cover-alt').value, file: getUploadPath('sp-file') || item.file || '', visible: document.getElementById('sp-vis').value === "1" };
     if (isEdit) data.specialer[idx] = obj;
     else data.specialer.push(obj);
     closeForm(); updateBadges(); renderSection('specialer'); showToast(isEdit ? 'Speciale opdateret' : 'Speciale tilføjet');
   });
+  initQuill('#quillEditor', item.desc || '');
 }
 
 /* ---- PROJEKTER ---- */
@@ -1101,7 +1116,13 @@ function openEduForm(isEdit, idx, item={}) {
           <div class="field"><label class="field-label">Institution</label><input class="f-input" id="ed-inst" value="${item.institution||''}"></div>
           <div class="field"><label class="field-label">Periode</label><input class="f-input" id="ed-period" value="${item.period||''}"></div>
         </div>
-        <div class="field"><label class="field-label">Beskrivelse</label><textarea class="f-textarea" style="height:120px;" id="ed-desc">${item.desc||''}</textarea></div>
+        <div class="field">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+            <label class="field-label" style="margin-bottom:0;">Beskrivelse</label>
+            <button type="button" class="btn-ai" onclick="optimizeWithAI('education')">✨ Optimér med AI</button>
+          </div>
+          <div id="quillEditor" style="height:200px;"></div>
+        </div>
       </div>
       <div class="form-sidebar">
         <div class="field"><label class="field-label">Status</label>
@@ -1118,11 +1139,13 @@ function openEduForm(isEdit, idx, item={}) {
       </div>
     </div>`;
   openFormPanel(isEdit ? 'Rediger uddannelse' : 'Tilføj uddannelse', () => {
-    const obj = { id: item.id || slug(document.getElementById('ed-title').value), title: document.getElementById('ed-title').value, institution: document.getElementById('ed-inst').value, period: document.getElementById('ed-period').value, desc: document.getElementById('ed-desc').value, skills: document.getElementById('ed-skills').value.split(',').map(s=>s.trim()).filter(Boolean), cover: getUploadPath('ed-cover') || item.cover || '', cover_pos: document.getElementById('ed-cover-pos').value, cover_alt: document.getElementById('ed-cover-alt').value, file: getUploadPath('ed-file') || item.file || '', visible: document.getElementById('ed-vis').value === "1", category:'education' };
+    const bodyContent = quillEditor ? quillEditor.root.innerHTML : '';
+    const obj = { id: item.id || slug(document.getElementById('ed-title').value), title: document.getElementById('ed-title').value, institution: document.getElementById('ed-inst').value, period: document.getElementById('ed-period').value, desc: bodyContent, skills: document.getElementById('ed-skills').value.split(',').map(s=>s.trim()).filter(Boolean), cover: getUploadPath('ed-cover') || item.cover || '', cover_pos: document.getElementById('ed-cover-pos').value, cover_alt: document.getElementById('ed-cover-alt').value, file: getUploadPath('ed-file') || item.file || '', visible: document.getElementById('ed-vis').value === "1", category:'education' };
     if (isEdit) data.cv.education[idx] = obj;
     else data.cv.education.push(obj);
     closeForm(); updateBadges(); renderSection('uddannelse'); showToast(isEdit ? 'Uddannelse opdateret' : 'Uddannelse tilføjet');
   });
+  initQuill('#quillEditor', item.desc || '');
 }
 
 /* ---- ANBEFALINGER ---- */
@@ -1313,10 +1336,11 @@ function openFormPanel(title, onSubmit) {
   document.getElementById('panelBackdrop').classList.add('show');
 }
 function submitForm() { if(submitCallback) submitCallback(); }
-function closeForm()  {
+function closeForm() {
   document.getElementById('formPanel').classList.remove('open');
   document.getElementById('panelBackdrop').classList.remove('show');
   submitCallback = null;
+  quillEditor = null;
 }
 
 /* ---- IMAGE UPLOAD ---- */
