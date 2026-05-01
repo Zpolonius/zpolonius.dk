@@ -662,11 +662,15 @@
 
         // Cover
         const img = document.getElementById('coverImg');
+        const coverEl = document.getElementById('cover');
         if (entry.cover) {
           img.src = entry.cover;
           img.alt = esc(entry.cover_alt || name);
+          img.style.display = 'block';
           if (entry.cover_pos) img.style.objectPosition = entry.cover_pos;
+          document.getElementById('coverFallback').classList.remove('show');
         } else {
+          img.style.display = 'none';
           document.getElementById('coverFallback').classList.add('show');
         }
 
