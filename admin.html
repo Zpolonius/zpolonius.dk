@@ -595,25 +595,38 @@
   let deleteTarget = null;
   let quillEditor = null;
 
+  /* ---- UTILS ---- */
+  function stripHtml(html) {
+    if (!html) return '';
+    const div = document.createElement('div');
+    div.innerHTML = html;
+    return div.textContent || div.innerText || "";
+  }
+
   /* ---- AI OPTIMIZATION ---- */
   let lastAIContext = '';
   let lastOptimizedHTML = '';
 
   async function optimizeWithAI(context, instruction = '') {
     lastAIContext = context;
+    let textToOptimize = '';
     
-    // Hent tekst fra Quill eller textarea
-    const textToOptimize = quillEditor ? quillEditor.getText() : '';
+    // Tjek Quill
+    if (typeof Quill !== 'undefined' && quillEditor && quillEditor.getText) {
+      textToOptimize = quillEditor.getText();
+    } 
+    // Fallback til legacy/textarea
+    if (!textToOptimize || textToOptimize.trim().length < 5) {
+      const legacy = document.getElementById('legacyEditor');
+      if (legacy) textToOptimize = legacy.value;
+    }
 
-    if (!textToOptimize.trim() || textToOptimize.length < 10) {
+    if (!textToOptimize || textToOptimize.trim().length < 5) {
       showToast('Skriv venligst lidt mere tekst før optimering', true);
       return;
     }
 
-    if (!document.getElementById('aiModal').classList.contains('show')) {
-      openAIModal();
-    }
-    
+    if (!document.getElementById('aiModal').classList.contains('show')) openAIModal();
     setAILoading(true);
 
     try {
@@ -636,7 +649,7 @@
         document.getElementById('aiPreview').innerHTML = res.optimized;
       } else {
         showToast('AI Fejl: ' + res.error, true);
-        if (instruction === '') closeAIModal(); // Luk kun hvis det var første forsøg
+        if (instruction === '') closeAIModal();
       }
     } catch (err) {
       showToast('Kunne ikke forbinde til AI-tjenesten', true);
@@ -670,9 +683,17 @@
   }
 
   function insertAIResult() {
-    if (lastOptimizedHTML && quillEditor) {
-      quillEditor.clipboard.dangerouslyPasteHTML(lastOptimizedHTML);
-      showToast('Tekst opdateret!');
+    if (lastOptimizedHTML) {
+      if (typeof Quill !== 'undefined' && quillEditor && quillEditor.clipboard) {
+        quillEditor.clipboard.dangerouslyPasteHTML(lastOptimizedHTML);
+        showToast('Tekst opdateret!');
+      } else {
+        const legacy = document.getElementById('legacyEditor');
+        if (legacy) {
+          legacy.value = stripHtml(lastOptimizedHTML);
+          showToast('Tekst opdateret (uden formatering)!');
+        }
+      }
     }
     closeAIModal();
   }

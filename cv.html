@@ -252,15 +252,15 @@
     </button>
   </nav>
 
-  <script src="js/main.js?v=1.0.1"></script>
+  <script src="js/main.js?v=1.0.2"></script>
   <script>
-    // Fallback
-    const esc = window.esc || ((str) => {
+    function esc(str) {
+      if (typeof window.esc === 'function') return window.esc(str);
       if (!str) return '';
       const div = document.createElement('div');
       div.textContent = str;
       return div.innerHTML;
-    });
+    }
 
     fetch('data/content.json?t=' + Date.now())
       .then(r => r.json())

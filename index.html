@@ -630,15 +630,22 @@
     </button>
   </nav>
 
-  <script src="js/main.js?v=1.0.1"></script>
+  <script src="js/main.js?v=1.0.2"></script>
   <script>
-    // Fallback: definer esc lokalt hvis main.js ikke er klar endnu
-    const esc = window.esc || ((str) => {
+    // Sikkerheds-funktioner
+    function esc(str) {
       if (!str) return '';
       const div = document.createElement('div');
       div.textContent = str;
       return div.innerHTML;
-    });
+    }
+    
+    function stripHtml(html) {
+      if (!html) return '';
+      const div = document.createElement('div');
+      div.innerHTML = html;
+      return div.textContent || div.innerText || "";
+    }
 
     let contentData = {};
 
@@ -647,7 +654,8 @@
       .then(data => {
         contentData = data;
         renderHome(data);
-      });
+      })
+      .catch(err => console.error('Kunne ikke hente data:', err));
 
     function renderHome(data) {
       // Hero
@@ -774,7 +782,7 @@
         }
 
         recGrid.innerHTML = latestRecs.map(r => {
-          const raw = r.intro || r.text || '';
+          const raw = r.intro || stripHtml(r.text || '');
           const words = raw.trim().split(/\s+/);
           const truncated = words.length > 150 ? words.slice(0, 150).join(' ') + '...' : raw;
           return `
