@@ -680,15 +680,14 @@
         if (res.model_used) document.getElementById('modalAIModel').value = res.model_used;
       } else {
         showToast('AI Fejl: ' + res.error, true);
-        if (instruction === '') closeAIModal();
+        document.getElementById('aiPreview').innerHTML = `<div style="color:var(--red);padding:20px;text-align:center;"><strong>AI-tjenesten svarede med en fejl:</strong><br>${res.error}<br><br><small>Prøv eventuelt at skifte model nedenfor.</small></div>`;
       }
-    } catch (err) {
+      } catch (err) {
       showToast('Kunne ikke forbinde til AI-tjenesten', true);
-      if (instruction === '') closeAIModal();
-    } finally {
+      document.getElementById('aiPreview').innerHTML = `<div style="color:var(--red);padding:20px;text-align:center;"><strong>Forbindelsesfejl</strong><br>Der kunne ikke oprettes forbindelse til AI-serveren (fejl 503 eller netværk).<br><br><small>Prøv en anden model eller vent et øjeblik.</small></div>`;
+      } finally {
       setAILoading(false);
-    }
-    }
+      }    }
 
     function openAIModal() {
     document.getElementById('aiModal').classList.add('show');
