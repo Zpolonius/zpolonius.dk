@@ -64,6 +64,19 @@
     .persontype-title { font-size: 16px; font-weight: 600; color: var(--text); letter-spacing: -0.02em; margin-bottom: 12px; }
     .persontype-desc  { font-size: 13px; color: var(--text-muted); line-height: 1.75; }
     .persontype-tags  { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 14px; }
+
+    /* SKILLS STRIP */
+    .skills-strip { display: grid; grid-template-columns: repeat(4, 1fr); border-bottom: 0.5px solid var(--border); }
+    .skill-group { padding: 22px 28px; border-right: 0.5px solid var(--border); }
+    .skill-group:last-child { border-right: none; }
+    .skill-group-title { font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-faint); margin-bottom: 12px; }
+    .skill-tags { display: flex; flex-wrap: wrap; gap: 5px; }
+
+    @media (max-width: 768px) {
+      .skills-strip { grid-template-columns: 1fr 1fr; }
+      .skill-group:nth-child(2n) { border-right: none; }
+      .skill-group:nth-child(n+3) { border-top: 0.5px solid var(--border); }
+    }
   </style>
 </head>
 <body>
@@ -147,6 +160,14 @@
         <div id="socialList"><!-- JS --></div>
       </div>
     </div>
+  </div>
+
+  <!-- SKILLS -->
+  <div class="section-header">
+    <span class="section-title">Faglige kompetencer</span>
+  </div>
+  <div class="skills-strip" id="skillsStrip">
+    <!-- Rendered dynamically by JS -->
   </div>
 
   <!-- PERSONTYPE -->
@@ -345,6 +366,23 @@
         if (socials.linkedin)  socEl.innerHTML += `<div class="bio-sidebar-item"><a href="${socials.linkedin}"  target="_blank" style="color:var(--blue);">LinkedIn →</a></div>`;
         if (socials.instagram) socEl.innerHTML += `<div class="bio-sidebar-item"><a href="${socials.instagram}" target="_blank" style="color:var(--blue);">Instagram →</a></div>`;
         if (socials.facebook)  socEl.innerHTML += `<div class="bio-sidebar-item"><a href="${socials.facebook}"  target="_blank" style="color:var(--blue);">Facebook →</a></div>`;
+
+        // Kompetencer (Dynamic)
+        const ks = document.getElementById('skillsStrip');
+        if (ks) {
+          const komp = data.om?.kompetencer || [];
+          ks.innerHTML = komp.map(grp => `
+            <div class="skill-group">
+              <div class="skill-group-title">${esc(grp.category)}</div>
+              <div class="skill-tags">
+                ${grp.tags.map(t => {
+                  const isBlue = ["ai", "tech", "checkout", "api", "flutter", "coding", "software", "sql", "xml"].some(key => grp.category.toLowerCase().includes(key) || t.toLowerCase().includes(key));
+                  return `<span class="skill-tag ${isBlue?'blue':''}">${esc(t)}</span>`;
+                }).join('')}
+              </div>
+            </div>
+          `).join('');
+        }
       });
   </script>
 </body>

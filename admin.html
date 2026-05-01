@@ -1659,7 +1659,13 @@ function openFormPanel(title, onSubmit) {
   document.getElementById('formPanel').classList.add('open');
   document.getElementById('panelBackdrop').classList.add('show');
 }
-function submitForm() { if(submitCallback) submitCallback(); }
+function submitForm() { 
+  if(submitCallback) {
+    submitCallback();
+    // Auto-gem til serveren med det samme
+    setTimeout(saveAll, 100);
+  }
+}
 function closeForm() {
   document.getElementById('formPanel').classList.remove('open');
   document.getElementById('panelBackdrop').classList.remove('show');
@@ -1926,4 +1932,6 @@ function showToast(msg, isError=false) {
 </script>
 </body>
 </html>
+
+l>
 
