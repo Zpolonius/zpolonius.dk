@@ -72,11 +72,12 @@ if (!$data || empty($data['name']) || empty($data['email']) || empty($data['mess
 $name    = htmlspecialchars(trim($data['name']));
 $email   = filter_var(trim($data['email']), FILTER_SANITIZE_EMAIL);
 $company = htmlspecialchars(trim($data['company'] ?? ''));
+$url     = htmlspecialchars(trim($data['url'] ?? ''));
 $subject = htmlspecialchars(trim($data['subject'] ?? 'Generel henvendelse'));
 $message = htmlspecialchars(trim($data['message']));
 
 // Længdebegrænsning
-if (strlen($name) > 100 || strlen($message) > 5000 || strlen($company) > 100) {
+if (strlen($name) > 100 || strlen($message) > 5000 || strlen($company) > 100 || strlen($url) > 200) {
     echo json_encode(['ok' => false, 'error' => 'Teksten er for lang']); exit;
 }
 
@@ -92,6 +93,7 @@ $body .= str_repeat('-', 40) . "\n\n";
 $body .= "Navn:    $name\n";
 $body .= "Email:   $email\n";
 if ($company) $body .= "Firma:   $company\n";
+if ($url)     $body .= "Webshop: $url\n";
 $body .= "Emne:    $subject\n\n";
 $body .= "Besked:\n$message\n\n";
 $body .= str_repeat('-', 40) . "\n";

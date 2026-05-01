@@ -146,7 +146,7 @@ function openContact() {
   const bar = document.getElementById('contactProgressBar');
   if (bar) bar.style.width = '0%';
   document.querySelectorAll('#contactOverlay .pill').forEach(p => p.classList.remove('selected'));
-  ['f-name','f-email','f-company','f-msg'].forEach(id => {
+  ['f-name','f-email','f-company','f-url','f-msg'].forEach(id => {
     const el = document.getElementById(id);
     if (el) { el.value = ''; el.classList.remove('error','valid'); }
   });
@@ -201,6 +201,7 @@ function submitContact() {
     body: JSON.stringify({
       name, email,
       company: document.getElementById('f-company')?.value.trim(),
+      url: document.getElementById('f-url')?.value.trim(),
       subject: document.querySelector('#contactOverlay .pill.selected')?.textContent,
       message: msg
     })

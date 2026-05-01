@@ -172,13 +172,14 @@
             <label class="field-label">Email</label>
             <input class="input" type="email" id="f-email" placeholder="din@email.dk">
           </div>
+          <div class="field"><label class="field-label">Webshop URL (valgfrit)</label><input class="input" type="text" id="f-url" placeholder="https://dinshop.dk"></div>
           <div class="field">
             <label class="field-label">Emne</label>
             <div class="pills" style="margin-top:4px;">
               <button class="pill">Jobmulighed</button>
               <button class="pill">Samarbejde</button>
               <button class="pill">AI-projekt</button>
-              <button class="pill">Checkout</button>
+              <button class="pill">Checkout review</button>
               <button class="pill">Andet</button>
             </div>
           </div>
@@ -273,7 +274,7 @@
       });
     });
 
-    ['f-name','f-email','f-msg'].forEach(id => {
+    ['f-name','f-email','f-url','f-msg'].forEach(id => {
       document.getElementById(id)?.addEventListener('input', updateContactProgress);
     });
 
@@ -312,19 +313,27 @@
         body: JSON.stringify({
           name, email,
           company: document.getElementById('f-company').value.trim(),
+          url: document.getElementById('f-url').value.trim(),
           subject: document.querySelector('.pill.selected')?.textContent || 'Generel henvendelse',
           message: msg
         })
       })
-      .then(() => {
-        document.getElementById('senderName').textContent = name.split(' ')[0];
-        document.getElementById('formSection').style.display = 'none';
-        document.getElementById('contactSuccess').classList.add('show');
+      .then(r => r.json())
+      .then(res => {
+        if (res.ok) {
+          document.getElementById('senderName').textContent = name.split(' ')[0];
+          document.getElementById('formSection').style.display = 'none';
+          document.getElementById('contactSuccess').classList.add('show');
+        } else {
+          btn.classList.remove('sending');
+          btn.textContent = 'Send besked →';
+          alert('Fejl: ' + (res.error || 'Kunne ikke sende besked'));
+        }
       })
       .catch(() => {
-        document.getElementById('senderName').textContent = name.split(' ')[0];
-        document.getElementById('formSection').style.display = 'none';
-        document.getElementById('contactSuccess').classList.add('show');
+        btn.classList.remove('sending');
+        btn.textContent = 'Send besked →';
+        alert('Der opstod en netværksfejl. Prøv venligst igen.');
       });
     }
   </script>
