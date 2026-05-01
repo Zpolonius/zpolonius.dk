@@ -409,6 +409,29 @@
     .upload-preview-path { font-size: 10px; color: var(--blue); font-family: monospace; }
     .upload-preview-clear { background: transparent; border: 0.5px solid var(--border); color: var(--faint); padding: 4px 8px; font-size: 10px; cursor: pointer; font-family: var(--font); transition: all 0.2s; flex-shrink: 0; }
     .upload-preview-clear:hover { border-color: var(--red); color: var(--red); }
+
+    /* ---- FOCUS PICKER ---- */
+    .focus-picker-wrap { margin-top: 10px; }
+    .focus-picker-label { font-size: 11px; color: var(--text-faint); margin-bottom: 6px; display: block; }
+    .focus-picker-container { 
+      position: relative; width: 100%; max-width: 200px; aspect-ratio: 16/9; 
+      background: var(--bg-input); border: 0.5px solid var(--border); 
+      cursor: crosshair; overflow: hidden; 
+    }
+    .focus-picker-img { width: 100%; height: 100%; object-fit: contain; opacity: 0.8; }
+    .focus-picker-dot { 
+      position: absolute; width: 14px; height: 14px; 
+      border: 2px solid #fff; border-radius: 50%; 
+      background: var(--blue); box-shadow: 0 0 10px rgba(0,0,0,0.5); 
+      transform: translate(-50%, -50%); pointer-events: none; 
+      transition: all 0.1s ease-out;
+    }
+    .focus-picker-dot::after {
+      content: ''; position: absolute; top: 50%; left: 50%; 
+      width: 30px; height: 30px; border: 0.5px solid rgba(255,255,255,0.3); 
+      border-radius: 50%; transform: translate(-50%, -50%);
+    }
+
     .upload-progress { height: 2px; background: var(--border); margin-top: 8px; display: none; }
     .upload-progress-bar { height: 100%; background: var(--blue); width: 0%; transition: width 0.3s; }
     .upload-error { font-size: 11px; color: var(--red); margin-top: 6px; display: none; }
@@ -1712,6 +1735,11 @@ function uploadImage(file, id, folder) {
       document.getElementById('prevname-' + id).textContent = res.name;
       document.getElementById('prevpath-' + id).textContent = res.path;
       prev.classList.add('show');
+
+      // Opdater også fokus-pickerens billede hvis den findes
+      const focusImg = document.getElementById('focus-img-' + id + '-pos');
+      if (focusImg) focusImg.src = res.path;
+
       showToast('Billede uploadet: ' + res.name);
     } else {
       errEl.textContent = res.error || 'Upload fejlede';
@@ -1835,17 +1863,44 @@ function uploadFile(file, id) {
 
 /* ---- UTILS ---- */
 function slug(str) { return str.toLowerCase().replace(/[æ]/g,'ae').replace(/[ø]/g,'oe').replace(/[å]/g,'aa').replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,''); }
-function createPositionSelector(id, val='center center') {
-  return `<div class="field" style="margin-top:8px;">
-    <label class="field-label">Billedfokus (beskæring)</label>
-    <select class="f-select" id="${id}">
-      <option value="center center" ${val==='center center'?'selected':''}>Midten (standard)</option>
-      <option value="center top" ${val==='center top'?'selected':''}>Toppen (f.eks. ansigt)</option>
-      <option value="center bottom" ${val==='center bottom'?'selected':''}>Bunden</option>
-      <option value="left center" ${val==='left center'?'selected':''}>Venstre side</option>
-      <option value="right center" ${val==='right center'?'selected':''}>Højre side</option>
-    </select>
-  </div>`;
+function createPositionSelector(id, val='50% 50%') {
+  if (val === 'center center') val = '50% 50%';
+  if (val === 'center top')    val = '50% 0%';
+  if (val === 'center bottom') val = '50% 100%';
+  if (val === 'left center')   val = '0% 50%';
+  if (val === 'right center')  val = '100% 50%';
+
+  const [x, y] = val.split(' ');
+  const parentId = id.replace('-pos', '');
+  const currentImg = document.getElementById('imgpath-' + parentId)?.value || '';
+
+  return `
+    <div class="focus-picker-wrap">
+      <label class="focus-picker-label">Billedfokus (klik på billedet)</label>
+      <div class="focus-picker-container" onclick="setFocusPoint(event, '${id}')">
+        <img src="${currentImg}" class="focus-picker-img" id="focus-img-${id}" onerror="this.src='data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22200%22%20height%3D%22112%22%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20fill%3D%22%23222%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2250%25%22%20fill%3D%22%23444%22%20font-family%3D%22sans-serif%22%20font-size%3D%2210%22%20text-anchor%3D%22middle%22%3EIngen%20billede%3C%2Ftext%3E%3C%2Fsvg%3E'">
+        <div class="focus-picker-dot" id="focus-dot-${id}" style="left:${x}; top:${y};"></div>
+      </div>
+      <input type="hidden" id="${id}" value="${val}">
+    </div>`;
+}
+
+function setFocusPoint(e, id) {
+  const container = e.currentTarget;
+  const rect = container.getBoundingClientRect();
+  const x = Math.round(((e.clientX - rect.left) / rect.width) * 100);
+  const y = Math.round(((e.clientY - rect.top) / rect.height) * 100);
+  const val = `${x}% ${y}%`;
+  
+  document.getElementById(id).value = val;
+  const dot = document.getElementById('focus-dot-' + id);
+  dot.style.left = x + '%';
+  dot.style.top = y + '%';
+
+  // Live preview på selve upload-previewet
+  const previewId = id.replace('-pos', '');
+  const previewImg = document.querySelector('#prev-' + previewId + ' img');
+  if (previewImg) previewImg.style.objectPosition = val;
 }
 function emptyState(icon, title, text) { return `<div class="empty"><div class="empty-icon">${icon}</div><h3>${title}</h3><p>${text}</p></div>`; }
 function showToast(msg, isError=false) {
@@ -1857,11 +1912,4 @@ function showToast(msg, isError=false) {
 </script>
 </body>
 </html>
-ById('toast');
-  document.getElementById('toastMsg').textContent = msg;
-  t.className = 'toast show' + (isError?' error':'');
-  setTimeout(() => t.classList.remove('show'), 3000);
-}
-</script>
-</body>
-</html>
+
