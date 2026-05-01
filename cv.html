@@ -263,13 +263,13 @@
           if (j.visible === false) return;
           tl.innerHTML += `
             <div class="timeline-year">
-              <div class="timeline-year-val">${j.period}</div>
+              <div class="timeline-year-val">${esc(j.period)}</div>
               <div class="timeline-year-dot"></div>
             </div>
             <a class="timeline-content" href="detail.html?id=${j.id}">
-              <div class="timeline-role">${j.role}</div>
-              <div class="timeline-company">${j.company}</div>
-              <div class="timeline-desc">${j.desc || ''}</div>
+              <div class="timeline-role">${esc(j.role)}</div>
+              <div class="timeline-company">${esc(j.company)}</div>
+              <div class="timeline-desc">${esc(j.desc || '')}</div>
               <span class="timeline-arrow">→</span>
             </a>`;
         });
@@ -280,10 +280,10 @@
           if (e.visible === false) return;
           eg.innerHTML += `
             <a class="edu-card" href="detail.html?id=${e.id}">
-              <div class="edu-period">${e.period}</div>
-              <div class="edu-title">${e.title}</div>
-              <div class="edu-inst">${e.institution}</div>
-              <div class="edu-desc">${e.desc || ''}</div>
+              <div class="edu-period">${esc(e.period)}</div>
+              <div class="edu-title">${esc(e.title)}</div>
+              <div class="edu-inst">${esc(e.institution)}</div>
+              <div class="edu-desc">${esc(e.desc || '')}</div>
             </a>`;
         });
 
@@ -294,12 +294,12 @@
           rg.innerHTML += `
             <div class="rec-card">
               <div class="rec-mark">"</div>
-              <p class="rec-text">${r.intro || r.text}</p>
+              <p class="rec-text">${esc(r.intro || r.text)}</p>
               <div class="rec-author-wrap">
-                ${r.photo ? `<img src="${r.photo}" alt="${r.photo_alt||r.name}" class="rec-avatar" style="object-position: ${r.photo_pos || 'center center'}">` : ''}
+                ${r.photo ? `<img src="${r.photo}" alt="${esc(r.photo_alt||r.name)}" class="rec-avatar" style="object-position: ${r.photo_pos || 'center center'}">` : ''}
                 <div class="rec-meta">
-                  <div class="rec-name">${r.name}</div>
-                  <div class="rec-role">${r.role}</div>
+                  <div class="rec-name">${esc(r.name)}</div>
+                  <div class="rec-role">${esc(r.role)}</div>
                 </div>
               </div>
               <a href="detail.html?id=${r.id}" class="section-link" style="margin-top:20px; display:inline-block; font-size:12px;">Læs hele udtalelsen →</a>
@@ -312,11 +312,11 @@
           const komp = data.om?.kompetencer || [];
           ks.innerHTML = komp.map(grp => `
             <div class="skill-group">
-              <div class="skill-group-title">${grp.category}</div>
+              <div class="skill-group-title">${esc(grp.category)}</div>
               <div class="skill-tags">
                 ${grp.tags.map(t => {
                   const isBlue = ["ai", "tech", "checkout", "api", "flutter", "coding", "software", "sql", "xml"].some(key => grp.category.toLowerCase().includes(key) || t.toLowerCase().includes(key));
-                  return `<span class="skill-tag ${isBlue?'blue':''}">${t}</span>`;
+                  return `<span class="skill-tag ${isBlue?'blue':''}">${esc(t)}</span>`;
                 }).join('')}
               </div>
             </div>

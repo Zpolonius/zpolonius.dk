@@ -302,7 +302,7 @@
         const bioEl = document.getElementById('bioContent');
         if (om.bio) {
           om.bio.split('\n\n').forEach(p => {
-            if (p.trim()) bioEl.innerHTML += `<p class="bio-para">${p.trim()}</p>`;
+            if (p.trim()) bioEl.innerHTML += `<p class="bio-para">${esc(p.trim())}</p>`;
           });
         }
 
@@ -316,13 +316,13 @@
         // Sprog
         const sprogEl = document.getElementById('sprogList');
         (om.sprog || ['Dansk (modersmål)', 'Engelsk (flydende)']).forEach(s => {
-          sprogEl.innerHTML += `<div class="bio-sidebar-item">${s}</div>`;
+          sprogEl.innerHTML += `<div class="bio-sidebar-item">${esc(s)}</div>`;
         });
 
         // Interesser
         const intEl = document.getElementById('interesserList');
         (om.interesser || []).forEach(i => {
-          intEl.innerHTML += `<div class="bio-sidebar-item">${i}</div>`;
+          intEl.innerHTML += `<div class="bio-sidebar-item">${esc(i)}</div>`;
         });
 
         // Social

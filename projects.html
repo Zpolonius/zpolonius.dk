@@ -276,10 +276,10 @@
           if (s.visible === false) return;
           strip.innerHTML += `
             <div class="special-cell">
-              <div class="special-icon-wrap ${s.color==='green'?'green':''}">${s.icon||'◆'}</div>
+              <div class="special-icon-wrap ${s.color==='green'?'green':''}">${esc(s.icon||'◆')}</div>
               <div>
-                <div class="special-cell-title">${s.label}</div>
-                <div class="special-cell-desc">${s.desc||''}</div>
+                <div class="special-cell-title">${esc(s.label)}</div>
+                <div class="special-cell-desc">${esc(s.desc||'')}</div>
               </div>
             </div>`;
         });
@@ -311,15 +311,15 @@
           card.innerHTML = `
             ${p.cover ? `
               <div class="proj-card-img-wrap">
-                <img src="${p.cover}" alt="${p.cover_alt||p.title}" class="proj-card-img" style="object-position: ${p.cover_pos || 'center center'}" onerror="this.parentElement.style.display='none'">
+                <img src="${p.cover}" alt="${esc(p.cover_alt||p.title)}" class="proj-card-img" style="object-position: ${p.cover_pos || 'center center'}" onerror="this.parentElement.style.display='none'">
               </div>
             ` : ''}
             <div class="proj-card-body">
-              <div class="tag ${catClass[p.category]||''} proj-tag">${catLabels[p.category]||p.tag||p.category}</div>
-              <div class="proj-title">${p.title}</div>
-              ${p.period ? `<div class="proj-period">${p.period}</div>` : ''}
-              <div class="proj-desc">${p.desc||''}</div>
-              ${(p.skills||[]).length ? `<div class="proj-skills">${p.skills.slice(0,4).map(s=>`<span class="proj-skill">${s}</span>`).join('')}</div>` : ''}
+              <div class="tag ${catClass[p.category]||''} proj-tag">${esc(catLabels[p.category]||p.tag||p.category)}</div>
+              <div class="proj-title">${esc(p.title)}</div>
+              ${p.period ? `<div class="proj-period">${esc(p.period)}</div>` : ''}
+              <div class="proj-desc">${esc(p.desc||'')}</div>
+              ${(p.skills||[]).length ? `<div class="proj-skills">${p.skills.slice(0,4).map(s=>`<span class="proj-skill">${esc(s)}</span>`).join('')}</div>` : ''}
               <span class="proj-arrow">Læs mere →</span>
             </div>`;
           grid.insertBefore(card, noRes);

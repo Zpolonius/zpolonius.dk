@@ -633,61 +633,68 @@
         const company = entry.company || '';
 
         // Page meta
-        document.title = `${name}${company ? ' · ' + company : ''} — Zacharias Polonius`;
-        document.getElementById('pageDesc').content = entry.intro || entry.desc || '';
+        document.title = `${esc(name)}${company ? ' · ' + esc(company) : ''} — Zacharias Polonius`;
+        const pDesc = document.getElementById('pageDesc');
+        if (pDesc) pDesc.content = esc(entry.intro || entry.desc || '');
 
         // Breadcrumb
-        document.getElementById('bcParent').textContent = parentLabel[cat] || 'Projekter';
-        document.getElementById('bcParent').href = parentHref[cat] || 'projects.html';
-        document.getElementById('bcCurrent').textContent = name + (company ? ' · ' + company : '');
+        const bcP = document.getElementById('bcParent');
+        if (bcP) {
+          bcP.textContent = cat === 'recommendation' ? 'Anbefalinger' : (data.projects.some(p=>p.id===entryId) ? 'Projekter' : 'CV');
+          bcP.href = parentHref[cat] || 'projects.html';
+        }
+        const bcC = document.getElementById('bcCurrent');
+        if (bcC) bcC.textContent = esc(name) + (company ? ' · ' + esc(company) : '');
 
         // Cover
         const img = document.getElementById('coverImg');
         if (entry.cover) {
           img.src = entry.cover;
-          img.alt = entry.cover_alt || name;
+          img.alt = esc(entry.cover_alt || name);
           if (entry.cover_pos) img.style.objectPosition = entry.cover_pos;
         } else {
           document.getElementById('coverFallback').classList.add('show');
         }
 
         const coverTagEl = document.getElementById('coverTag');
-        coverTagEl.textContent = tagLabel[cat] || cat;
-        coverTagEl.className = `cover-tag ${tagClass[cat] || ''}`;
+        if (coverTagEl) {
+          coverTagEl.textContent = esc(tagLabel[cat] || cat);
+          coverTagEl.className = `cover-tag ${tagClass[cat] || ''}`;
+        }
 
-        document.getElementById('coverTitle').textContent = name;
-        document.getElementById('coverCompany').textContent = company;
-        document.getElementById('coverPeriod').textContent = entry.period || '';
+        document.getElementById('coverTitle').textContent = esc(name);
+        document.getElementById('coverCompany').textContent = esc(company);
+        document.getElementById('coverPeriod').textContent = esc(entry.period || '');
         if (entry.cover) document.getElementById('coverCredit').textContent = 'Foto · Z. Polonius';
 
         // Intro
-        document.getElementById('introText').textContent = entry.intro || entry.desc || '';
+        document.getElementById('introText').textContent = esc(entry.intro || entry.desc || '');
 
         // Meta column
         const metaRows = [];
         if (cat === 'recommendation') {
-          metaRows.push(['Person', `<strong>${entry.name}</strong>`]);
-          if (entry.role) metaRows.push(['Rolle / Virksomhed', entry.role]);
+          metaRows.push(['Person', `<strong>${esc(entry.name)}</strong>`]);
+          if (entry.role) metaRows.push(['Rolle / Virksomhed', esc(entry.role)]);
         } else {
-          if (company) metaRows.push(['Virksomhed / Sted', `<strong>${company}</strong>`]);
-          if (entry.period) metaRows.push(['Periode', entry.period]);
+          if (company) metaRows.push(['Virksomhed / Sted', `<strong>${esc(company)}</strong>`]);
+          if (entry.period) metaRows.push(['Periode', esc(entry.period)]);
         }
-        if (entry.category && entry.category !== 'recommendation') metaRows.push(['Kategori', tagLabel[cat]]);
+        if (entry.category && entry.category !== 'recommendation') metaRows.push(['Kategori', esc(tagLabel[cat])]);
         if (entry.links && entry.links.length) {
-          metaRows.push(['Links', entry.links.map(l => `<a href="${l.url}" target="_blank">${l.label} →</a>`).join('<br>')]);
+          metaRows.push(['Links', entry.links.map(l => `<a href="${l.url}" target="_blank">${esc(l.label)} →</a>`).join('<br>')]);
         }
         document.getElementById('metaCol').innerHTML = metaRows.map(([k,v]) =>
-          `<div class="meta-row"><div class="meta-key">${k}</div><div class="meta-val">${v}</div></div>`
+          `<div class="meta-row"><div class="meta-key">${esc(k)}</div><div class="meta-val">${v}</div></div>`
         ).join('');
 
         // Main content
         let mainHTML = `<div class="section-lbl">${cat === 'recommendation' ? 'Udtalelse' : 'Detaljer & beskrivelse'}</div>`;
         if (cat === 'recommendation' && entry.photo) {
           mainHTML += `<div style="display:flex; align-items:center; gap:20px; margin-bottom:30px; padding:20px; background:rgba(255,255,255,0.03); border:0.5px solid var(--border);">
-            <img src="${entry.photo}" alt="${entry.photo_alt||entry.name}" style="width:80px; height:80px; border-radius:50%; object-fit:cover; border:2px solid var(--bg-card); object-position: ${entry.photo_pos || 'center center'};">
+            <img src="${entry.photo}" alt="${esc(entry.photo_alt||entry.name)}" style="width:80px; height:80px; border-radius:50%; object-fit:cover; border:2px solid var(--bg-card); object-position: ${entry.photo_pos || 'center center'};">
             <div>
-              <div style="font-size:18px; font-weight:600; color:var(--text);">${entry.name}</div>
-              <div style="font-size:14px; color:var(--text-faint);">${entry.role||''}</div>
+              <div style="font-size:18px; font-weight:600; color:var(--text);">${esc(entry.name)}</div>
+              <div style="font-size:14px; color:var(--text-faint);">${esc(entry.role||'')}</div>
             </div>
           </div>`;
         }
@@ -701,18 +708,18 @@
             // Gammelt format (Markdown-ish) for bagudkompatibilitet
             rawContent.split('\n\n').forEach(para => {
               if (para.startsWith('###')) {
-                mainHTML += `<h3 class="content-h3">${para.replace('### ','')}</h3>`;
+                mainHTML += `<h3 class="content-h3">${esc(para.replace('### ',''))}</h3>`;
               } else if (para.startsWith('##')) {
-                mainHTML += `<h2 class="content-h2">${para.replace('## ','')}</h2>`;
+                mainHTML += `<h2 class="content-h2">${esc(para.replace('## ',''))}</h2>`;
               } else {
-                mainHTML += `<p class="content-p">${para}</p>`;
+                mainHTML += `<p class="content-p">${esc(para)}</p>`;
               }
             });
           }
         }
         if (entry.tasks && entry.tasks.length) {
           mainHTML += `<h2 class="content-h2">Konkrete opgaver</h2><ul class="content-list">`;
-          entry.tasks.forEach(t => { mainHTML += `<li>${t}</li>`; });
+          entry.tasks.forEach(t => { mainHTML += `<li>${esc(t)}</li>`; });
           mainHTML += `</ul>`;
         }
         if (entry.url) {
@@ -729,14 +736,14 @@
           <div class="sidebar-inner">`;
         if (entry.skills && entry.skills.length) {
           sideHTML += `<div class="section-lbl">Kompetencer</div><div class="sidebar-card" style="padding-bottom:12px;">`;
-          entry.skills.forEach(s => { sideHTML += `<span class="skill-tag blue">${s}</span>`; });
+          entry.skills.forEach(s => { sideHTML += `<span class="skill-tag blue">${esc(s)}</span>`; });
           sideHTML += `</div>`;
         }
         if ((entry.links && entry.links.length) || entry.file) {
           sideHTML += `<div class="section-lbl">Materiale & Links</div>`;
           if (entry.links && entry.links.length) {
             sideHTML += `<div class="sidebar-card"><div class="sidebar-card-lbl">Links</div>`;
-            entry.links.forEach(l => { sideHTML += `<a href="${l.url}" class="sidebar-link" target="_blank">${l.label} →</a>`; });
+            entry.links.forEach(l => { sideHTML += `<a href="${l.url}" class="sidebar-link" target="_blank">${esc(l.label)} →</a>`; });
             sideHTML += `</div>`;
           }
           if (entry.file) {
@@ -744,10 +751,10 @@
             sideHTML += `
               <div class="sidebar-card" style="border-color:var(--border-blue);">
                 <div class="sidebar-card-lbl">Download</div>
-                <a href="${entry.file}" class="sidebar-download" download="${fname}">
+                <a href="${entry.file}" class="sidebar-download" download="${esc(fname)}">
                   <span class="sidebar-download-icon">📄</span>
                   <span class="sidebar-download-info">
-                    <span class="sidebar-download-name">${fname}</span>
+                    <span class="sidebar-download-name">${esc(fname)}</span>
                     <span class="sidebar-download-hint">Klik for at downloade</span>
                   </span>
                   <span class="sidebar-download-arrow">↓</span>
