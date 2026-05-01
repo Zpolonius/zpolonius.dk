@@ -307,12 +307,19 @@
           card.href = `detail.html?id=${p.id}`;
           card.dataset.cat = p.category;
           card.innerHTML = `
-            <div class="tag ${catClass[p.category]||''} proj-tag">${catLabels[p.category]||p.tag||p.category}</div>
-            <div class="proj-title">${p.title}</div>
-            ${p.period ? `<div class="proj-period">${p.period}</div>` : ''}
-            <div class="proj-desc">${p.desc||''}</div>
-            ${(p.skills||[]).length ? `<div class="proj-skills">${p.skills.slice(0,4).map(s=>`<span class="proj-skill">${s}</span>`).join('')}</div>` : ''}
-            <span class="proj-arrow">Læs mere →</span>`;
+            ${p.cover ? `
+              <div class="proj-card-img-wrap">
+                <img src="${p.cover}" alt="${p.cover_alt||p.title}" class="proj-card-img" style="object-position: ${p.cover_pos || 'center center'}" onerror="this.parentElement.style.display='none'">
+              </div>
+            ` : ''}
+            <div class="proj-card-body">
+              <div class="tag ${catClass[p.category]||''} proj-tag">${catLabels[p.category]||p.tag||p.category}</div>
+              <div class="proj-title">${p.title}</div>
+              ${p.period ? `<div class="proj-period">${p.period}</div>` : ''}
+              <div class="proj-desc">${p.desc||''}</div>
+              ${(p.skills||[]).length ? `<div class="proj-skills">${p.skills.slice(0,4).map(s=>`<span class="proj-skill">${s}</span>`).join('')}</div>` : ''}
+              <span class="proj-arrow">Læs mere →</span>
+            </div>`;
           grid.insertBefore(card, noRes);
         });
 

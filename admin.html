@@ -580,10 +580,12 @@ function saveAll() {
     data.hero.role   = document.getElementById('fe-role').value;
     data.hero.status = document.getElementById('fe-status').value;
     data.hero.cover  = getUploadPath('fe-cover') || document.getElementById('imgpath-fe-cover')?.value || data.hero.cover;
+    data.hero.cover_pos = document.getElementById('fe-cover-pos').value;
   } else if (currentSection === 'om') {
     if (!data.om) data.om = {};
     data.om.bio        = document.getElementById('om-bio').value;
     data.om.photo      = getUploadPath('om-photo') || data.om.photo || '';
+    data.om.photo_pos  = document.getElementById('om-photo-pos').value;
     data.om.persontype = document.getElementById('om-type').value;
     data.om.sprog      = document.getElementById('om-sprog').value.split(',').map(s=>s.trim()).filter(Boolean);
     data.om.interesser = document.getElementById('om-int').value.split(',').map(s=>s.trim()).filter(Boolean);
@@ -709,6 +711,7 @@ function renderForside(area) {
           ${createUploadZone('fe-cover','cover', h.cover||'assets/cover.webp')}
           <div class="field-hint" style="margin-top:6px;">Dette er hero-billedet på forsiden</div>
         </div>
+        ${createPositionSelector('fe-cover-pos', h.cover_pos)}
       </div>
 
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
@@ -739,6 +742,7 @@ function saveForside() {
   data.hero.role   = document.getElementById('fe-role').value;
   data.hero.status = document.getElementById('fe-status').value;
   data.hero.cover  = getUploadPath('fe-cover') || document.getElementById('imgpath-fe-cover')?.value || data.hero.cover;
+  data.hero.cover_pos = document.getElementById('fe-cover-pos').value;
   saveAll();
 }
 
@@ -828,12 +832,13 @@ function openSpecialForm(isEdit, idx, item={}) {
         </div>
         <div class="field"><label class="field-label">Keywords / Tags</label><input class="f-input" id="sp-skills" value="${(item.skills||[]).join(', ')}" placeholder="F.eks. B2B, Salg, API"></div>
         <div class="field"><label class="field-label">Cover-billede</label>${createUploadZone('sp-cover','cover',item.cover||'')}</div>
+        ${createPositionSelector('sp-cover-pos', item.cover_pos)}
         <div class="field"><label class="field-label">Billede Alt-tekst</label><input class="f-input" id="sp-cover-alt" value="${item.cover_alt||''}" placeholder="Til SEO og skærmlæsere"></div>
         <div class="field"><label class="field-label">Vedhæftet fil (PDF)</label>${createFileZone('sp-file', item.file||'')}</div>
       </div>
     </div>`;
   openFormPanel(isEdit ? 'Rediger speciale' : 'Tilføj speciale', () => {
-    const obj = { id: item.id || slug(document.getElementById('sp-label').value), label: document.getElementById('sp-label').value, desc: document.getElementById('sp-desc').value, icon: document.getElementById('sp-icon').value, color: document.getElementById('sp-color').value, skills: document.getElementById('sp-skills').value.split(',').map(s=>s.trim()).filter(Boolean), cover: getUploadPath('sp-cover') || item.cover || '', cover_alt: document.getElementById('sp-cover-alt').value, file: getUploadPath('sp-file') || item.file || '', visible: document.getElementById('sp-vis').value === "1" };
+    const obj = { id: item.id || slug(document.getElementById('sp-label').value), label: document.getElementById('sp-label').value, desc: document.getElementById('sp-desc').value, icon: document.getElementById('sp-icon').value, color: document.getElementById('sp-color').value, skills: document.getElementById('sp-skills').value.split(',').map(s=>s.trim()).filter(Boolean), cover: getUploadPath('sp-cover') || item.cover || '', cover_pos: document.getElementById('sp-cover-pos').value, cover_alt: document.getElementById('sp-cover-alt').value, file: getUploadPath('sp-file') || item.file || '', visible: document.getElementById('sp-vis').value === "1" };
     if (isEdit) data.specialer[idx] = obj;
     else data.specialer.push(obj);
     closeForm(); updateBadges(); renderSection('specialer'); showToast(isEdit ? 'Speciale opdateret' : 'Speciale tilføjet');
@@ -892,12 +897,13 @@ function openProjectForm(isEdit, idx, item={}) {
         <div class="field"><label class="field-label">Kompetencer / Keywords</label><input class="f-input" id="pj-skills" value="${(item.skills||[]).join(', ')}" placeholder="f.eks. AI, Scrum, React"><div class="field-hint">Kommasepareret</div></div>
         <div class="field"><label class="field-label">Link URL (valgfrit)</label><input class="f-input" id="pj-url" value="${item.url||''}" placeholder="https://..."></div>
         <div class="field"><label class="field-label">Cover-billede</label>${createUploadZone('pj-cover','projects',item.cover||'')}</div>
+        ${createPositionSelector('pj-cover-pos', item.cover_pos)}
         <div class="field"><label class="field-label">Billede Alt-tekst</label><input class="f-input" id="pj-cover-alt" value="${item.cover_alt||''}" placeholder="Til SEO og skærmlæsere"></div>
         <div class="field"><label class="field-label">Vedhæftet fil (PDF)</label>${createFileZone('pj-file', item.file||'')}</div>
       </div>
     </div>`;
   openFormPanel(isEdit ? 'Rediger projekt' : 'Tilføj projekt', () => {
-    const obj = { id: item.id || slug(document.getElementById('pj-title').value), title: document.getElementById('pj-title').value, category: document.getElementById('pj-cat').value, tag: { ai:'AI', checkout:'Checkout', work:'Arbejde', volunteer:'Frivillig' }[document.getElementById('pj-cat').value], period: document.getElementById('pj-period').value, desc: document.getElementById('pj-desc').value, intro: document.getElementById('pj-intro').value, body: document.getElementById('pj-body').value, skills: document.getElementById('pj-skills').value.split(',').map(s=>s.trim()).filter(Boolean), cover: getUploadPath('pj-cover') || item.cover || '', cover_alt: document.getElementById('pj-cover-alt').value, file: getUploadPath('pj-file') || item.file || '', url: document.getElementById('pj-url').value || undefined, visible: document.getElementById('pj-vis').value === "1" };
+    const obj = { id: item.id || slug(document.getElementById('pj-title').value), title: document.getElementById('pj-title').value, category: document.getElementById('pj-cat').value, tag: { ai:'AI', checkout:'Checkout', work:'Arbejde', volunteer:'Frivillig' }[document.getElementById('pj-cat').value], period: document.getElementById('pj-period').value, desc: document.getElementById('pj-desc').value, intro: document.getElementById('pj-intro').value, body: document.getElementById('pj-body').value, skills: document.getElementById('pj-skills').value.split(',').map(s=>s.trim()).filter(Boolean), cover: getUploadPath('pj-cover') || item.cover || '', cover_pos: document.getElementById('pj-cover-pos').value, cover_alt: document.getElementById('pj-cover-alt').value, file: getUploadPath('pj-file') || item.file || '', url: document.getElementById('pj-url').value || undefined, visible: document.getElementById('pj-vis').value === "1" };
     if (isEdit) data.projects[idx] = obj;
     else data.projects.push(obj);
     closeForm(); updateBadges(); renderSection('projekter'); showToast(isEdit ? 'Projekt opdateret' : 'Projekt tilføjet');
@@ -949,12 +955,13 @@ function openJobForm(isEdit, idx, item={}) {
         </div>
         <div class="field"><label class="field-label">Kompetencer / Keywords</label><input class="f-input" id="jb-skills" value="${(item.skills||[]).join(', ')}"></div>
         <div class="field"><label class="field-label">Cover-billede</label>${createUploadZone('jb-cover','projects',item.cover||'')}</div>
+        ${createPositionSelector('jb-cover-pos', item.cover_pos)}
         <div class="field"><label class="field-label">Billede Alt-tekst</label><input class="f-input" id="jb-cover-alt" value="${item.cover_alt||''}"></div>
         <div class="field"><label class="field-label">Vedhæftet fil (PDF)</label>${createFileZone('jb-file', item.file||'')}</div>
       </div>
     </div>`;
   openFormPanel(isEdit ? 'Rediger ansættelse' : 'Tilføj ansættelse', () => {
-    const obj = { id: item.id || slug((document.getElementById('jb-role').value)+'-'+(document.getElementById('jb-company').value)), role: document.getElementById('jb-role').value, company: document.getElementById('jb-company').value, period: document.getElementById('jb-period').value, desc: document.getElementById('jb-desc').value, intro: document.getElementById('jb-intro').value, body: document.getElementById('jb-body').value, skills: document.getElementById('jb-skills').value.split(',').map(s=>s.trim()).filter(Boolean), cover: getUploadPath('jb-cover') || item.cover || '', cover_alt: document.getElementById('jb-cover-alt').value, file: getUploadPath('jb-file') || item.file || '', visible: document.getElementById('jb-vis').value === "1", category:'work' };
+    const obj = { id: item.id || slug((document.getElementById('jb-role').value)+'-'+(document.getElementById('jb-company').value)), role: document.getElementById('jb-role').value, company: document.getElementById('jb-company').value, period: document.getElementById('jb-period').value, desc: document.getElementById('jb-desc').value, intro: document.getElementById('jb-intro').value, body: document.getElementById('jb-body').value, skills: document.getElementById('jb-skills').value.split(',').map(s=>s.trim()).filter(Boolean), cover: getUploadPath('jb-cover') || item.cover || '', cover_pos: document.getElementById('jb-cover-pos').value, cover_alt: document.getElementById('jb-cover-alt').value, file: getUploadPath('jb-file') || item.file || '', visible: document.getElementById('jb-vis').value === "1", category:'work' };
     if (isEdit) data.cv.jobs[idx] = obj;
     else data.cv.jobs.push(obj);
     closeForm(); updateBadges(); renderSection('ansaettelser'); showToast(isEdit ? 'Ansættelse opdateret' : 'Ansættelse tilføjet');
@@ -1004,12 +1011,13 @@ function openEduForm(isEdit, idx, item={}) {
         </div>
         <div class="field"><label class="field-label">Kompetencer / Keywords</label><input class="f-input" id="ed-skills" value="${(item.skills||[]).join(', ')}"></div>
         <div class="field"><label class="field-label">Cover-billede</label>${createUploadZone('ed-cover','cover',item.cover||'')}</div>
+        ${createPositionSelector('ed-cover-pos', item.cover_pos)}
         <div class="field"><label class="field-label">Billede Alt-tekst</label><input class="f-input" id="ed-cover-alt" value="${item.cover_alt||''}"></div>
         <div class="field"><label class="field-label">Vedhæftet fil (PDF)</label>${createFileZone('ed-file', item.file||'')}</div>
       </div>
     </div>`;
   openFormPanel(isEdit ? 'Rediger uddannelse' : 'Tilføj uddannelse', () => {
-    const obj = { id: item.id || slug(document.getElementById('ed-title').value), title: document.getElementById('ed-title').value, institution: document.getElementById('ed-inst').value, period: document.getElementById('ed-period').value, desc: document.getElementById('ed-desc').value, skills: document.getElementById('ed-skills').value.split(',').map(s=>s.trim()).filter(Boolean), cover: getUploadPath('ed-cover') || item.cover || '', cover_alt: document.getElementById('ed-cover-alt').value, file: getUploadPath('ed-file') || item.file || '', visible: document.getElementById('ed-vis').value === "1", category:'education' };
+    const obj = { id: item.id || slug(document.getElementById('ed-title').value), title: document.getElementById('ed-title').value, institution: document.getElementById('ed-inst').value, period: document.getElementById('ed-period').value, desc: document.getElementById('ed-desc').value, skills: document.getElementById('ed-skills').value.split(',').map(s=>s.trim()).filter(Boolean), cover: getUploadPath('ed-cover') || item.cover || '', cover_pos: document.getElementById('ed-cover-pos').value, cover_alt: document.getElementById('ed-cover-alt').value, file: getUploadPath('ed-file') || item.file || '', visible: document.getElementById('ed-vis').value === "1", category:'education' };
     if (isEdit) data.cv.education[idx] = obj;
     else data.cv.education.push(obj);
     closeForm(); updateBadges(); renderSection('uddannelse'); showToast(isEdit ? 'Uddannelse opdateret' : 'Uddannelse tilføjet');
@@ -1061,14 +1069,16 @@ function openRecForm(isEdit, idx, item={}) {
         </div>
         <div class="field"><label class="field-label">Keywords / Tags</label><input class="f-input" id="rc-skills" value="${(item.skills||[]).join(', ')}"></div>
         <div class="field"><label class="field-label">Profilbillede (Avatar)</label>${createUploadZone('rc-photo','photo',item.photo||'')}</div>
+        ${createPositionSelector('rc-photo-pos', item.photo_pos)}
         <div class="field"><label class="field-label">Profilbillede Alt-tekst</label><input class="f-input" id="rc-photo-alt" value="${item.photo_alt||''}"></div>
         <div class="field"><label class="field-label">Cover-billede</label>${createUploadZone('rc-cover','cover',item.cover||'')}</div>
+        ${createPositionSelector('rc-cover-pos', item.cover_pos)}
         <div class="field"><label class="field-label">Cover Alt-tekst</label><input class="f-input" id="rc-cover-alt" value="${item.cover_alt||''}"></div>
         <div class="field"><label class="field-label">Vedhæftet fil (PDF)</label>${createFileZone('rc-file', item.file||'')}</div>
       </div>
     </div>`;
   openFormPanel(isEdit ? 'Rediger anbefaling' : 'Tilføj anbefaling', () => {
-    const obj = { id: item.id || slug(document.getElementById('rc-name').value), name: document.getElementById('rc-name').value, role: document.getElementById('rc-role').value, intro: document.getElementById('rc-intro').value, text: document.getElementById('rc-text').value, skills: document.getElementById('rc-skills').value.split(',').map(s=>s.trim()).filter(Boolean), photo: getUploadPath('rc-photo') || item.photo || '', photo_alt: document.getElementById('rc-photo-alt').value, cover: getUploadPath('rc-cover') || item.cover || '', cover_alt: document.getElementById('rc-cover-alt').value, file: getUploadPath('rc-file') || item.file || '', visible: document.getElementById('rc-vis').value === "1", category:'recommendation' };
+    const obj = { id: item.id || slug(document.getElementById('rc-name').value), name: document.getElementById('rc-name').value, role: document.getElementById('rc-role').value, intro: document.getElementById('rc-intro').value, text: document.getElementById('rc-text').value, skills: document.getElementById('rc-skills').value.split(',').map(s=>s.trim()).filter(Boolean), photo: getUploadPath('rc-photo') || item.photo || '', photo_pos: document.getElementById('rc-photo-pos').value, photo_alt: document.getElementById('rc-photo-alt').value, cover: getUploadPath('rc-cover') || item.cover || '', cover_pos: document.getElementById('rc-cover-pos').value, cover_alt: document.getElementById('rc-cover-alt').value, file: getUploadPath('rc-file') || item.file || '', visible: document.getElementById('rc-vis').value === "1", category:'recommendation' };
     if (isEdit) data.cv.recommendations[idx] = obj;
     else data.cv.recommendations.push(obj);
     closeForm(); updateBadges(); renderSection('anbefalinger'); showToast(isEdit ? 'Anbefaling opdateret' : 'Anbefaling tilføjet');
@@ -1082,6 +1092,7 @@ function renderOm(area) {
     <div style="max-width:680px;">
       <div class="field"><label class="field-label">Biografi</label><textarea class="f-textarea" style="height:180px;" id="om-bio">${o.bio||''}</textarea><div class="field-hint">Brug dobbelt linjeskift til afsnit</div></div>
       <div class="field"><label class="field-label">Profilbillede</label>${createUploadZone('om-photo','photo', o.photo||'')}</div>
+      ${createPositionSelector('om-photo-pos', o.photo_pos)}
       <div class="field"><label class="field-label">Persontype / beskrivelse</label><textarea class="f-textarea" style="height:60px;" id="om-type">${o.persontype||''}</textarea></div>
       <div class="field-row">
         <div class="field"><label class="field-label">Sprog (kommasepareret)</label><input class="f-input" id="om-sprog" value="${(o.sprog||[]).join(', ')}"></div>
@@ -1097,6 +1108,7 @@ function saveOm() {
   if (!data.om) data.om = {};
   data.om.bio        = document.getElementById('om-bio').value;
   data.om.photo      = getUploadPath('om-photo') || data.om.photo || '';
+  data.om.photo_pos  = document.getElementById('om-photo-pos').value;
   data.om.persontype = document.getElementById('om-type').value;
   data.om.sprog      = document.getElementById('om-sprog').value.split(',').map(s=>s.trim()).filter(Boolean);
   data.om.interesser = document.getElementById('om-int').value.split(',').map(s=>s.trim()).filter(Boolean);
@@ -1401,6 +1413,18 @@ function uploadFile(file, id) {
 
 /* ---- UTILS ---- */
 function slug(str) { return str.toLowerCase().replace(/[æ]/g,'ae').replace(/[ø]/g,'oe').replace(/[å]/g,'aa').replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,''); }
+function createPositionSelector(id, val='center center') {
+  return `<div class="field" style="margin-top:8px;">
+    <label class="field-label">Billedfokus (beskæring)</label>
+    <select class="f-select" id="${id}">
+      <option value="center center" ${val==='center center'?'selected':''}>Midten (standard)</option>
+      <option value="center top" ${val==='center top'?'selected':''}>Toppen (f.eks. ansigt)</option>
+      <option value="center bottom" ${val==='center bottom'?'selected':''}>Bunden</option>
+      <option value="left center" ${val==='left center'?'selected':''}>Venstre side</option>
+      <option value="right center" ${val==='right center'?'selected':''}>Højre side</option>
+    </select>
+  </div>`;
+}
 function emptyState(icon, title, text) { return `<div class="empty"><div class="empty-icon">${icon}</div><h3>${title}</h3><p>${text}</p></div>`; }
 function showToast(msg, isError=false) {
   const t = document.getElementById('toast');

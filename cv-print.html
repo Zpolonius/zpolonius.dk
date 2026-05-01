@@ -298,6 +298,7 @@
         document.getElementById('cvRole').textContent = hero.role || "";
         document.getElementById('cvTagline').textContent = `"${site.tagline}"`;
         document.getElementById('cvPhoto').src = om.photo || "assets/photo.jpg";
+        if (om.photo_pos) document.getElementById('cvPhoto').style.objectPosition = om.photo_pos;
         document.getElementById('cvPhone').textContent = site.phone || "";
         document.getElementById('cvEmail').textContent = site.email || "";
         document.getElementById('cvLocation').textContent = site.location || "Bjæverskov, Danmark";

@@ -628,7 +628,11 @@
       if (h.role) document.querySelector('.hero-label').textContent = h.role;
       if (h.intro) document.querySelector('.hero-tagline').textContent = h.intro;
       if (h.status) document.querySelector('.status-pill').innerHTML = `<span class="status-dot"></span> ${h.status}`;
-      if (h.cover) document.querySelector('.hero-img').src = h.cover;
+      if (h.cover) {
+        const hImg = document.querySelector('.hero-img');
+        hImg.src = h.cover;
+        if (h.cover_pos) hImg.style.objectPosition = h.cover_pos;
+      }
       
       // Footer & Links
       if (s.email && s.phone) document.querySelector('.footer-left').textContent = `${s.email} · ${s.phone}`;
@@ -663,7 +667,7 @@
           <a href="detail.html?id=${p.id}" class="proj-card">
             ${p.cover ? `
               <div class="proj-card-img-wrap">
-                <img src="${p.cover}" alt="${p.cover_alt||p.title}" class="proj-card-img" onerror="this.parentElement.style.display='none'">
+                <img src="${p.cover}" alt="${p.cover_alt||p.title}" class="proj-card-img" style="object-position: ${p.cover_pos || 'center center'}" onerror="this.parentElement.style.display='none'">
               </div>
             ` : ''}
             <div class="proj-card-body">
@@ -710,7 +714,7 @@
               <div class="quote-mark">"</div>
               <p class="quote-text">${truncated}</p>
               <div class="rec-author-wrap">
-                ${r.photo ? `<img src="${r.photo}" alt="${r.photo_alt||r.name}" class="rec-avatar" onerror="this.src='data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2240%22%20height%3D%2240%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%23555%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M20%2021v-2a4%204%200%200%200-4-4H8a4%204%200%200%200-4%204v2%22%3E%3C%2Fpath%3E%3Ccircle%20cx%3D%2212%22%20cy%3D%227%22%20r%3D%224%22%3E%3C%2Fcircle%3E%3C%2Fsvg%3E'">` : ''}
+                ${r.photo ? `<img src="${r.photo}" alt="${r.photo_alt||r.name}" class="rec-avatar" style="object-position: ${r.photo_pos || 'center center'}" onerror="this.src='data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2240%22%20height%3D%2240%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%23555%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M20%2021v-2a4%204%200%200%200-4-4H8a4%204%200%200%200-4%204v2%22%3E%3C%2Fpath%3E%3Ccircle%20cx%3D%2212%22%20cy%3D%227%22%20r%3D%224%22%3E%3C%2Fcircle%3E%3C%2Fsvg%3E'">` : ''}
                 <div class="rec-meta">
                   <div class="rec-name">${r.name}</div>
                   <div class="rec-role">${r.role}</div>

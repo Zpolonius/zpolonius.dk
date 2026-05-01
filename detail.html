@@ -650,8 +650,13 @@
 
         // Cover
         const img = document.getElementById('coverImg');
-        if (entry.cover) { img.src = entry.cover; img.alt = entry.cover_alt || name; }
-        else { document.getElementById('coverFallback').classList.add('show'); }
+        if (entry.cover) {
+          img.src = entry.cover;
+          img.alt = entry.cover_alt || name;
+          if (entry.cover_pos) img.style.objectPosition = entry.cover_pos;
+        } else {
+          document.getElementById('coverFallback').classList.add('show');
+        }
 
         const coverTagEl = document.getElementById('coverTag');
         coverTagEl.textContent = tagLabel[cat] || cat;
@@ -686,7 +691,7 @@
         let mainHTML = `<div class="section-lbl">${cat === 'recommendation' ? 'Udtalelse' : 'Detaljer & beskrivelse'}</div>`;
         if (cat === 'recommendation' && entry.photo) {
           mainHTML += `<div style="display:flex; align-items:center; gap:20px; margin-bottom:30px; padding:20px; background:rgba(255,255,255,0.03); border:0.5px solid var(--border);">
-            <img src="${entry.photo}" alt="${entry.photo_alt||entry.name}" style="width:80px; height:80px; border-radius:50%; object-fit:cover; border:2px solid var(--bg-card);">
+            <img src="${entry.photo}" alt="${entry.photo_alt||entry.name}" style="width:80px; height:80px; border-radius:50%; object-fit:cover; border:2px solid var(--bg-card); object-position: ${entry.photo_pos || 'center center'};">
             <div>
               <div style="font-size:18px; font-weight:600; color:var(--text);">${entry.name}</div>
               <div style="font-size:14px; color:var(--text-faint);">${entry.role||''}</div>

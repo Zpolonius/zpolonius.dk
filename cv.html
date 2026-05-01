@@ -332,7 +332,7 @@
               <div class="rec-mark">"</div>
               <p class="rec-text">${r.intro || r.text}</p>
               <div class="rec-author-wrap">
-                ${r.photo ? `<img src="${r.photo}" alt="${r.photo_alt||r.name}" class="rec-avatar">` : ''}
+                ${r.photo ? `<img src="${r.photo}" alt="${r.photo_alt||r.name}" class="rec-avatar" style="object-position: ${r.photo_pos || 'center center'}">` : ''}
                 <div class="rec-meta">
                   <div class="rec-name">${r.name}</div>
                   <div class="rec-role">${r.role}</div>

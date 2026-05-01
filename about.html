@@ -288,8 +288,13 @@
         const site = data.site || {};
 
         // Photo
-        if (om.photo) document.getElementById('aboutPhoto').src = om.photo;
-        else document.getElementById('photoFallback').style.display = 'flex';
+        if (om.photo) {
+          const aPhoto = document.getElementById('aboutPhoto');
+          aPhoto.src = om.photo;
+          if (om.photo_pos) aPhoto.style.objectPosition = om.photo_pos;
+        } else {
+          document.getElementById('photoFallback').style.display = 'flex';
+        }
 
         // Bio paragraphs
         const bioEl = document.getElementById('bioContent');
