@@ -126,46 +126,8 @@
   <div class="section-header">
     <span class="section-title">Kompetencer</span>
   </div>
-  <div class="skills-strip">
-    <div class="skill-group">
-      <div class="skill-group-title">Checkout & E-commerce</div>
-      <div class="skill-tags">
-        <span class="skill-tag blue">Checkout-optimering</span>
-        <span class="skill-tag blue">Konverteringsrate</span>
-        <span class="skill-tag blue">API-integration</span>
-        <span class="skill-tag blue">Shopify</span>
-        <span class="skill-tag blue">DanDomain</span>
-      </div>
-    </div>
-    <div class="skill-group">
-      <div class="skill-group-title">AI & Teknologi</div>
-      <div class="skill-tags">
-        <span class="skill-tag blue">AI-værktøjer</span>
-        <span class="skill-tag blue">Vibe Coding</span>
-        <span class="skill-tag blue">Prompt Engineering</span>
-        <span class="skill-tag blue">Flutter</span>
-        <span class="skill-tag blue">REST API</span>
-      </div>
-    </div>
-    <div class="skill-group">
-      <div class="skill-group-title">Ledelse & Support</div>
-      <div class="skill-tags">
-        <span class="skill-tag">Teamledelse</span>
-        <span class="skill-tag">Teknisk support</span>
-        <span class="skill-tag">Kundesuccess</span>
-        <span class="skill-tag">Helpdesk</span>
-        <span class="skill-tag">Dokumentation</span>
-      </div>
-    </div>
-    <div class="skill-group">
-      <div class="skill-group-title">Sprog & Metode</div>
-      <div class="skill-tags">
-        <span class="skill-tag">Dansk</span>
-        <span class="skill-tag">Engelsk</span>
-        <span class="skill-tag">Scrum / PSPO I</span>
-        <span class="skill-tag">Agil udvikling</span>
-      </div>
-    </div>
+  <div class="skills-strip" id="skillsStrip">
+    <!-- Rendered dynamically by JS -->
   </div>
 
   <!-- UDDANNELSE -->
@@ -343,6 +305,23 @@
               <a href="detail.html?id=${r.id}" class="section-link" style="margin-top:20px; display:inline-block; font-size:12px;">Læs hele udtalelsen →</a>
             </div>`;
         });
+
+        // Kompetencer (Dynamic)
+        const ks = document.getElementById('skillsStrip');
+        if (ks) {
+          const komp = data.om?.kompetencer || [];
+          ks.innerHTML = komp.map(grp => `
+            <div class="skill-group">
+              <div class="skill-group-title">${grp.category}</div>
+              <div class="skill-tags">
+                ${grp.tags.map(t => {
+                  const isBlue = ["ai", "tech", "checkout", "api", "flutter", "coding", "software", "sql", "xml"].some(key => grp.category.toLowerCase().includes(key) || t.toLowerCase().includes(key));
+                  return `<span class="skill-tag ${isBlue?'blue':''}">${t}</span>`;
+                }).join('')}
+              </div>
+            </div>
+          `).join('');
+        }
       });
   </script>
 </body>

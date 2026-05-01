@@ -7,14 +7,37 @@ Options -Indexes
 # Custom 404 side
 ErrorDocument 404 /404.html
 
+# --- SIKKERHEDS HEADERS (Google & Trust Anbefalinger) ---
+<IfModule mod_headers.c>
+    # Beskyt mod Clickjacking
+    Header set X-Frame-Options "SAMEORIGIN"
+    
+    # Beskyt mod MIME-sniffing
+    Header set X-Content-Type-Options "nosniff"
+    
+    # Referrer Policy
+    Header set Referrer-Policy "strict-origin-when-cross-origin"
+    
+    # Browser features (XSS beskyttelse og privatliv)
+    Header set Permissions-Policy "geolocation=(), camera=(), microphone=()"
+
+    # Content Security Policy (CSP)
+    # Tillader scripts fra eget domæne, Quill CDN og Google Fonts
+    Header set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' cdn.quilljs.com; style-src 'self' 'unsafe-inline' fonts.googleapis.com cdn.quilljs.com; font-src 'self' fonts.gstatic.com; img-src 'self' data:; connect-src 'self' generativelanguage.googleapis.com;"
+
+    # Force HTTPS (HSTS) - Gælder i 1 år
+    Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+</IfModule>
+
 # Redirect www til non-www (valgfrit — kommenter ud hvis ikke ønsket)
 # RewriteEngine On
 # RewriteCond %{HTTP_HOST} ^www\.(.*)$ [NC]
 # RewriteRule ^(.*)$ https://%1/$1 [R=301,L]
 
-# Sørg for HTTPS (valgfrit — kommenter ud hvis Simply håndterer det)
-# RewriteCond %{HTTPS} off
-# RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+# Sørg for HTTPS
+RewriteEngine On
+RewriteCond %{HTTPS} off
+RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 
 # Blokér adgang til følsomme filer
 <FilesMatch "(wp-config\.php|\.env|migrate\.php|generate-hash\.php)$">

@@ -771,17 +771,30 @@ function loadData() {
 }
 
 function saveAll() {
+  // SIKKERHEDS-SPÆRRE: Gem aldrig hvis data er tom eller korrupt
+  if (!data || !data.site || !data.hero) {
+    console.error('CRITICAL: Attempted to save empty or corrupt data object.', data);
+    showToast('Fejl: Data er korrupt. Genindlæs siden.', true);
+    return;
+  }
+
+  // Sikre at lister findes
+  if (!data.specialer) data.specialer = [];
+  if (!data.projects)  data.projects = [];
+  if (!data.bento)     data.bento = [];
+  if (!data.cv)        data.cv = { jobs:[], education:[], recommendations:[] };
+
   // Synkroniser data fra inputs i den nuværende sektion før gem
   if (currentSection === 'forside') {
     data.hero.intro  = document.getElementById('fe-intro').value;
     data.hero.role   = document.getElementById('fe-role').value;
     data.hero.status = document.getElementById('fe-status').value;
-    data.hero.cover  = getUploadPath('fe-cover') || document.getElementById('imgpath-fe-cover')?.value || data.hero.cover;
+    data.hero.cover  = getUploadPath('fe-cover', data.hero.cover);
     data.hero.cover_pos = document.getElementById('fe-cover-pos').value;
   } else if (currentSection === 'om') {
     if (!data.om) data.om = {};
     data.om.bio        = document.getElementById('om-bio').value;
-    data.om.photo      = getUploadPath('om-photo') || data.om.photo || '';
+    data.om.photo      = getUploadPath('om-photo', data.om.photo);
     data.om.photo_pos  = document.getElementById('om-photo-pos').value;
     data.om.persontype = document.getElementById('om-type').value;
     data.om.sprog      = document.getElementById('om-sprog').value.split(',').map(s=>s.trim()).filter(Boolean);
@@ -799,11 +812,14 @@ function saveAll() {
     data.site.name = document.getElementById('st-name').value;
     data.site.tagline = document.getElementById('st-tag').value;
     data.site.accent_color = document.getElementById('st-colorhex').value;
+    data.site.ai_model     = document.getElementById('st-ai-model').value;
   }
 
   const btn = document.getElementById('btnSave');
+  const status = document.getElementById('saveStatus');
   btn.textContent = 'Gemmer...';
   btn.style.opacity = '0.6';
+  if (status) status.textContent = '⏳ Gemmer...';
 
   fetch('api/save.php', {
     method: 'POST',
@@ -815,8 +831,15 @@ function saveAll() {
   .then(res => {
     btn.textContent = 'Gem ændringer';
     btn.style.opacity = '1';
-    if (res.ok) showToast('Ændringer gemt!');
-    else showToast('Fejl: ' + res.error, true);
+    if (res.ok) {
+      showToast('Ændringer gemt!');
+      if (status) {
+        status.textContent = '✓ Gemt';
+        status.style.color = 'var(--green)';
+      }
+    } else {
+      showToast('Fejl: ' + res.error, true);
+    }
   })
   .catch(() => {
     btn.textContent = 'Gem ændringer';
@@ -947,10 +970,11 @@ function renderForside(area) {
 }
 
 function saveForside() {
+  if (!data.hero) data.hero = {};
   data.hero.intro  = document.getElementById('fe-intro').value;
   data.hero.role   = document.getElementById('fe-role').value;
   data.hero.status = document.getElementById('fe-status').value;
-  data.hero.cover  = getUploadPath('fe-cover') || document.getElementById('imgpath-fe-cover')?.value || data.hero.cover;
+  data.hero.cover  = getUploadPath('fe-cover', data.hero.cover);
   data.hero.cover_pos = document.getElementById('fe-cover-pos').value;
   saveAll();
 }
@@ -1070,7 +1094,7 @@ function openSpecialForm(isEdit, idx, item={}) {
     </div>`;
   openFormPanel(isEdit ? 'Rediger speciale' : 'Tilføj speciale', () => {
     const bodyContent = getEditorContent();
-    const obj = { id: item.id || slug(document.getElementById('sp-label').value), label: document.getElementById('sp-label').value, desc: bodyContent, icon: document.getElementById('sp-icon').value, color: document.getElementById('sp-color').value, skills: document.getElementById('sp-skills').value.split(',').map(s=>s.trim()).filter(Boolean), cover: getUploadPath('sp-cover') || item.cover || '', cover_pos: document.getElementById('sp-cover-pos').value, cover_alt: document.getElementById('sp-cover-alt').value, file: getUploadPath('sp-file') || item.file || '', visible: document.getElementById('sp-vis').value === "1" };
+    const obj = { id: item.id || slug(document.getElementById('sp-label').value), label: document.getElementById('sp-label').value, desc: bodyContent, icon: document.getElementById('sp-icon').value, color: document.getElementById('sp-color').value, skills: document.getElementById('sp-skills').value.split(',').map(s=>s.trim()).filter(Boolean), cover: getUploadPath('sp-cover', item.cover), cover_pos: document.getElementById('sp-cover-pos').value, cover_alt: document.getElementById('sp-cover-alt').value, file: getUploadPath('sp-file', item.file), visible: document.getElementById('sp-vis').value === "1" };
     if (isEdit) data.specialer[idx] = obj;
     else data.specialer.push(obj);
     closeForm(); updateBadges(); renderSection('specialer'); showToast(isEdit ? 'Speciale opdateret' : 'Speciale tilføjet');
@@ -1143,7 +1167,7 @@ function openProjectForm(isEdit, idx, item={}) {
     </div>`;
   openFormPanel(isEdit ? 'Rediger projekt' : 'Tilføj projekt', () => {
     const bodyContent = getEditorContent();
-    const obj = { id: item.id || slug(document.getElementById('pj-title').value), title: document.getElementById('pj-title').value, category: document.getElementById('pj-cat').value, tag: { ai:'AI', checkout:'Checkout', work:'Arbejde', volunteer:'Frivillig' }[document.getElementById('pj-cat').value], period: document.getElementById('pj-period').value, desc: document.getElementById('pj-desc').value, intro: document.getElementById('pj-intro').value, body: bodyContent, skills: document.getElementById('pj-skills').value.split(',').map(s=>s.trim()).filter(Boolean), cover: getUploadPath('pj-cover') || item.cover || '', cover_pos: document.getElementById('pj-cover-pos').value, cover_alt: document.getElementById('pj-cover-alt').value, file: getUploadPath('pj-file') || item.file || '', url: document.getElementById('pj-url').value || undefined, visible: document.getElementById('pj-vis').value === "1" };
+    const obj = { id: item.id || slug(document.getElementById('pj-title').value), title: document.getElementById('pj-title').value, category: document.getElementById('pj-cat').value, tag: { ai:'AI', checkout:'Checkout', work:'Arbejde', volunteer:'Frivillig' }[document.getElementById('pj-cat').value], period: document.getElementById('pj-period').value, desc: document.getElementById('pj-desc').value, intro: document.getElementById('pj-intro').value, body: bodyContent, skills: document.getElementById('pj-skills').value.split(',').map(s=>s.trim()).filter(Boolean), cover: getUploadPath('pj-cover', item.cover), cover_pos: document.getElementById('pj-cover-pos').value, cover_alt: document.getElementById('pj-cover-alt').value, file: getUploadPath('pj-file', item.file), url: document.getElementById('pj-url').value || undefined, visible: document.getElementById('pj-vis').value === "1" };
     if (isEdit) data.projects[idx] = obj;
     else data.projects.push(obj);
     closeForm(); updateBadges(); renderSection('projekter'); showToast(isEdit ? 'Projekt opdateret' : 'Projekt tilføjet');
@@ -1209,7 +1233,7 @@ function openJobForm(isEdit, idx, item={}) {
     </div>`;
   openFormPanel(isEdit ? 'Rediger ansættelse' : 'Tilføj ansættelse', () => {
     const bodyContent = getEditorContent();
-    const obj = { id: item.id || slug((document.getElementById('jb-role').value)+'-'+(document.getElementById('jb-company').value)), role: document.getElementById('jb-role').value, company: document.getElementById('jb-company').value, period: document.getElementById('jb-period').value, desc: document.getElementById('jb-desc').value, intro: document.getElementById('jb-intro').value, body: bodyContent, skills: document.getElementById('jb-skills').value.split(',').map(s=>s.trim()).filter(Boolean), cover: getUploadPath('jb-cover') || item.cover || '', cover_pos: document.getElementById('jb-cover-pos').value, cover_alt: document.getElementById('jb-cover-alt').value, file: getUploadPath('jb-file') || item.file || '', visible: document.getElementById('jb-vis').value === "1", category:'work' };
+    const obj = { id: item.id || slug((document.getElementById('jb-role').value)+'-'+(document.getElementById('jb-company').value)), role: document.getElementById('jb-role').value, company: document.getElementById('jb-company').value, period: document.getElementById('jb-period').value, desc: document.getElementById('jb-desc').value, intro: document.getElementById('jb-intro').value, body: bodyContent, skills: document.getElementById('jb-skills').value.split(',').map(s=>s.trim()).filter(Boolean), cover: getUploadPath('jb-cover', item.cover), cover_pos: document.getElementById('jb-cover-pos').value, cover_alt: document.getElementById('jb-cover-alt').value, file: getUploadPath('jb-file', item.file), visible: document.getElementById('jb-vis').value === "1", category:'work' };
     if (isEdit) data.cv.jobs[idx] = obj;
     else data.cv.jobs.push(obj);
     closeForm(); updateBadges(); renderSection('ansaettelser'); showToast(isEdit ? 'Ansættelse opdateret' : 'Ansættelse tilføjet');
@@ -1280,10 +1304,10 @@ function openEduForm(isEdit, idx, item={}) {
       period:      document.getElementById('ed-period').value,
       desc:        bodyContent,
       skills:      document.getElementById('ed-skills').value.split(',').map(s=>s.trim()).filter(Boolean),
-      cover:       getUploadPath('ed-cover') || item.cover || '',
+      cover:       getUploadPath('ed-cover', item.cover),
       cover_pos:   document.getElementById('ed-cover-pos').value,
       cover_alt:   document.getElementById('ed-cover-alt').value,
-      file:        getUploadPath('ed-file') || item.file || '',
+      file:        getUploadPath('ed-file', item.file),
       visible:     document.getElementById('ed-vis').value === "1",
       category:    'education'
     };
@@ -1362,13 +1386,13 @@ function openRecForm(isEdit, idx, item={}) {
       intro:     document.getElementById('rc-intro').value,
       text:      textContent,
       skills:    document.getElementById('rc-skills').value.split(',').map(s=>s.trim()).filter(Boolean),
-      photo:     getUploadPath('rc-photo') || item.photo || '',
+      photo:     getUploadPath('rc-photo', item.photo),
       photo_pos: document.getElementById('rc-photo-pos').value,
       photo_alt: document.getElementById('rc-photo-alt').value,
-      cover:     getUploadPath('rc-cover') || item.cover || '',
+      cover:     getUploadPath('rc-cover', item.cover),
       cover_pos: document.getElementById('rc-cover-pos').value,
       cover_alt: document.getElementById('rc-cover-alt').value,
-      file:      getUploadPath('rc-file') || item.file || '',
+      file:      getUploadPath('rc-file', item.file),
       visible:   document.getElementById('rc-vis').value === "1",
       category:  'recommendation'
     };
@@ -1382,6 +1406,17 @@ function openRecForm(isEdit, idx, item={}) {
 /* ---- OM MIG ---- */
 function renderOm(area) {
   const o = data.om || {};
+  // Migration: Hvis der ikke er nogen kompetencer endnu, foreslå standard-sættet
+  if (!o.kompetencer || o.kompetencer.length === 0) {
+    o.kompetencer = [
+      { category: "Checkout & E-commerce", tags: ["Checkout-optimering", "Konverteringsrate", "API-integration", "Shopify", "DanDomain"] },
+      { category: "AI & Teknologi", tags: ["AI-værktøjer", "Vibe Coding", "Prompt Engineering", "Flutter", "REST API"] },
+      { category: "Ledelse & Support", tags: ["Teamledelse", "Teknisk support", "Kundesuccess", "Helpdesk", "Dokumentation"] },
+      { category: "Sprog & Metode", tags: ["Dansk", "Engelsk", "Scrum / PSPO I", "Agil udvikling"] }
+    ];
+  }
+  const k = o.kompetencer || [];
+
   area.innerHTML = `
     <div style="max-width:680px;">
       <div class="field"><label class="field-label">Biografi</label><textarea class="f-textarea" style="height:180px;" id="om-bio">${o.bio||''}</textarea><div class="field-hint">Brug dobbelt linjeskift til afsnit</div></div>
@@ -1392,16 +1427,61 @@ function renderOm(area) {
         <div class="field"><label class="field-label">Sprog (kommasepareret)</label><input class="f-input" id="om-sprog" value="${(o.sprog||[]).join(', ')}"></div>
         <div class="field"><label class="field-label">Interesser (kommasepareret)</label><input class="f-input" id="om-int" value="${(o.interesser||[]).join(', ')}"></div>
       </div>
-      <div style="margin-top:8px;display:flex;justify-content:flex-end;">
-        <button class="btn-submit" style="width:auto;padding:9px 24px;" onclick="saveOm()">Gem om mig</button>
+
+      <div style="margin:24px 0 14px; display:flex; justify-content:space-between; align-items:center;">
+        <div style="font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:var(--faint);">Kompetence-grupper (CV)</div>
+        <button class="btn-edit" style="font-size:10px;padding:4px 10px;" onclick="editKomp()">+ Tilføj gruppe</button>
+      </div>
+      
+      <div class="bento-list">
+        ${k.map((grp, i) => `
+          <div class="bento-row">
+            <div class="bento-handle">⠿</div>
+            <div class="bento-label-val">
+              <div class="bento-label-txt">${grp.category}</div>
+              <div class="bento-main-txt" style="font-size:11px; font-weight:normal; color:var(--muted);">${grp.tags.join(', ')}</div>
+            </div>
+            <div style="display:flex; gap:6px;">
+              <button class="btn-edit" onclick="editKomp(${i})">Ret</button>
+              <button class="btn-del" onclick="deleteEntry('kompetencer', ${i})">✕</button>
+            </div>
+          </div>
+        `).join('')}
+      </div>
+
+      <div style="margin-top:24px;display:flex;justify-content:flex-end;">
+        <button class="btn-submit" style="width:auto;padding:9px 24px;" onclick="saveOm()">Gem alt om mig</button>
       </div>
     </div>`;
+}
+
+function editKomp(i) {
+  const isEdit = i !== undefined;
+  const grp = isEdit ? data.om.kompetencer[i] : { category: '', tags: [] };
+  
+  document.getElementById('formTitle').textContent = isEdit ? 'Rediger kompetence-gruppe' : 'Tilføj kompetence-gruppe';
+  document.getElementById('formBody').innerHTML = `
+    <div class="field"><label class="field-label">Kategori / Titel</label><input class="f-input" id="komp-cat" value="${grp.category}"></div>
+    <div class="field"><label class="field-label">Kompetencer (tags)</label>
+      <textarea class="f-textarea" id="komp-tags" style="height:100px;" placeholder="Skriv kompetencer adskilt af komma...">${grp.tags.join(', ')}</textarea>
+      <div class="field-hint">Kommasepareret liste</div>
+    </div>`;
+    
+  openFormPanel(isEdit ? 'Rediger gruppe' : 'Tilføj gruppe', () => {
+    const newGrp = {
+      category: document.getElementById('komp-cat').value,
+      tags: document.getElementById('komp-tags').value.split(',').map(s=>s.trim()).filter(Boolean)
+    };
+    if (isEdit) data.om.kompetencer[i] = newGrp;
+    else data.om.kompetencer.push(newGrp);
+    closeForm(); renderSection('om'); showToast('Kompetencer opdateret');
+  });
 }
 
 function saveOm() {
   if (!data.om) data.om = {};
   data.om.bio        = document.getElementById('om-bio').value;
-  data.om.photo      = getUploadPath('om-photo') || data.om.photo || '';
+  data.om.photo      = getUploadPath('om-photo', data.om.photo);
   data.om.photo_pos  = document.getElementById('om-photo-pos').value;
   data.om.persontype = document.getElementById('om-type').value;
   data.om.sprog      = document.getElementById('om-sprog').value.split(',').map(s=>s.trim()).filter(Boolean);
@@ -1487,9 +1567,10 @@ function renderSite(area) {
 }
 
 function saveSite() {
+  if (!data.site) data.site = {};
   data.site.name         = document.getElementById('st-name').value;
   data.site.tagline      = document.getElementById('st-tag').value;
-  data.site.logo         = getUploadPath('st-logo') || data.site.logo || '';
+  data.site.logo         = getUploadPath('st-logo', data.site.logo);
   data.site.accent_color = document.getElementById('st-colorhex').value;
   data.site.ai_model     = document.getElementById('st-ai-model').value;
   saveAll();
@@ -1504,6 +1585,7 @@ function deleteEntry(section, idx) {
     else if (section === 'ansaettelser') data.cv.jobs.splice(idx,1);
     else if (section === 'uddannelse')   data.cv.education.splice(idx,1);
     else if (section === 'anbefalinger') data.cv.recommendations.splice(idx,1);
+    else if (section === 'kompetencer')  data.om.kompetencer.splice(idx,1);
     updateBadges(); renderSection(currentSection); showToast('Indgang slettet');
   };
   document.getElementById('confirmDialog').classList.add('show');
@@ -1631,8 +1713,10 @@ function clearUpload(id) {
   document.getElementById('err-' + id).style.display = 'none';
 }
 
-function getUploadPath(id) {
-  return document.getElementById('imgpath-' + id)?.value || '';
+function getUploadPath(id, fallback='') {
+  const el = document.getElementById('imgpath-' + id);
+  // Hvis elementet findes i DOM'en, stoler vi på dets værdi (også hvis den er tom)
+  return el ? el.value : fallback;
 }
 
 /* ---- PDF / FIL UPLOAD ---- */
