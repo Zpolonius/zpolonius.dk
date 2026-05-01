@@ -18,7 +18,7 @@ $data = json_decode(file_get_contents('php://input'), true);
 $text = $data['text'] ?? '';
 $context = $data['context'] ?? 'generelt';
 $instruction = $data['instruction'] ?? ''; // Brugerens specifikke feedback/kommentar
-$model = $data['model'] ?? 'gemini-2.5-flash'; // Opdateret fallback
+$model = $data['model'] ?? 'gemini-3.1-flash'; // Opdateret fallback til nyeste version
 
 if (empty($text)) {
     echo json_encode(['ok' => false, 'error' => 'Ingen tekst at optimere']);

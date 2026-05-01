@@ -404,7 +404,7 @@
     .upload-zone-hint { font-size: 10px; color: var(--faint); margin-top: 4px; }
     .upload-preview { margin-top: 10px; border: 0.5px solid var(--border); padding: 10px; display: none; align-items: center; gap: 12px; background: var(--bg-input); }
     .upload-preview.show { display: flex; }
-    .upload-preview img { width: 48px; height: 48px; object-fit: cover; flex-shrink: 0; }
+    .upload-preview img { width: 48px; height: 48px; object-fit: cover; object-position: center; flex-shrink: 0; border: 0.5px solid var(--border); }
     .upload-preview-name { font-size: 12px; color: var(--text); margin-bottom: 2px; }
     .upload-preview-path { font-size: 10px; color: var(--blue); font-family: monospace; }
     .upload-preview-clear { background: transparent; border: 0.5px solid var(--border); color: var(--faint); padding: 4px 8px; font-size: 10px; cursor: pointer; font-family: var(--font); transition: all 0.2s; flex-shrink: 0; }
@@ -1850,6 +1850,14 @@ function createPositionSelector(id, val='center center') {
 function emptyState(icon, title, text) { return `<div class="empty"><div class="empty-icon">${icon}</div><h3>${title}</h3><p>${text}</p></div>`; }
 function showToast(msg, isError=false) {
   const t = document.getElementById('toast');
+  document.getElementById('toastMsg').textContent = msg;
+  t.className = 'toast show' + (isError?' error':'');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+</script>
+</body>
+</html>
+ById('toast');
   document.getElementById('toastMsg').textContent = msg;
   t.className = 'toast show' + (isError?' error':'');
   setTimeout(() => t.classList.remove('show'), 3000);
