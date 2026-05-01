@@ -23,7 +23,7 @@ ErrorDocument 404 /404.html
 
     # Content Security Policy (CSP)
     # Tillader scripts fra eget domæne, Quill CDN og Google Fonts
-    Header set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' cdn.quilljs.com; style-src 'self' 'unsafe-inline' fonts.googleapis.com cdn.quilljs.com; font-src 'self' fonts.gstatic.com; img-src 'self' data:; connect-src 'self' generativelanguage.googleapis.com;"
+    Header set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' cdn.quilljs.com cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' fonts.googleapis.com cdn.quilljs.com cdn.jsdelivr.net; font-src 'self' fonts.gstatic.com; img-src 'self' data:; connect-src 'self' generativelanguage.googleapis.com;"
 
     # Force HTTPS (HSTS) - Gælder i 1 år
     Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
