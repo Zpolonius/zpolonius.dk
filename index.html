@@ -645,18 +645,28 @@
       // Hero
       const h = data.hero || {};
       const s = data.site || {};
-      if (s.name) document.getElementById('heroName').innerHTML = s.name.replace(' ', '<br>');
-      if (h.role) document.querySelector('.hero-label').textContent = h.role;
-      if (h.intro) document.querySelector('.hero-tagline').textContent = h.intro;
-      if (h.status) document.querySelector('.status-pill').innerHTML = `<span class="status-dot"></span> ${h.status}`;
-      if (h.cover) {
-        const hImg = document.querySelector('.hero-img');
+      const hName = document.getElementById('heroName');
+      if (hName && s.name) hName.innerHTML = s.name.replace(' ', '<br>');
+      
+      const hLabel = document.querySelector('.hero-label');
+      if (hLabel && h.role) hLabel.textContent = h.role;
+      
+      const hTagline = document.querySelector('.hero-tagline');
+      if (hTagline && h.intro) hTagline.textContent = h.intro;
+      
+      const sPill = document.querySelector('.status-pill');
+      if (sPill && h.status) sPill.innerHTML = `<span class="status-dot"></span> ${h.status}`;
+      
+      const hImg = document.querySelector('.hero-img');
+      if (hImg && h.cover) {
         hImg.src = h.cover;
         if (h.cover_pos) hImg.style.objectPosition = h.cover_pos;
       }
       
       // Footer & Links
-      if (s.email && s.phone) document.querySelector('.footer-left').textContent = `${s.email} · ${s.phone}`;
+      const fLeft = document.querySelector('.footer-left');
+      if (fLeft && s.email && s.phone) fLeft.textContent = `${s.email} · ${s.phone}`;
+      
       if (s.social) {
         const li = document.querySelector('a[href*="linkedin"]');
         const ig = document.querySelector('a[href*="instagram"]');
@@ -750,7 +760,8 @@
         const latestRecs = (data.cv?.recommendations || []).filter(r => r.visible !== false).slice(0, 5);
         
         if (latestRecs.length === 0) {
-          document.getElementById('recSection').style.display = 'none';
+          const recSec = document.getElementById('recSection');
+          if (recSec) recSec.style.display = 'none';
           return;
         }
 
@@ -774,9 +785,11 @@
         }).join('');
 
         // Carousel dots
-        recNav.innerHTML = latestRecs.map((_, i) => `
-          <div class="carousel-dot ${i===0?'active':''}" onclick="goToSlide(${i})"></div>
-        `).join('');
+        if (recNav) {
+          recNav.innerHTML = latestRecs.map((_, i) => `
+            <div class="carousel-dot ${i===0?'active':''}" onclick="goToSlide(${i})"></div>
+          `).join('');
+        }
 
         // Carousel logic
         let currentSlide = 0;
@@ -785,7 +798,7 @@
 
         window.goToSlide = function(index) {
           currentSlide = index;
-          recGrid.style.transform = `translateX(-${index * 100}%)`;
+          if (recGrid) recGrid.style.transform = `translateX(-${index * 100}%)`;
           document.querySelectorAll('.carousel-dot').forEach((dot, i) => {
             dot.classList.toggle('active', i === index);
           });
@@ -803,7 +816,7 @@
         }
 
         if (totalSlides > 1) resetInterval();
-        else recNav.style.display = 'none';
+        else if (recNav) recNav.style.display = 'none';
       }
     }
 

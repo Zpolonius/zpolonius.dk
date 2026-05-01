@@ -4,9 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Admin — Zacharias Polonius</title>
+  <link rel="stylesheet" href="https://cdn.quilljs.com/1.3.6/quill.snow.css">
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-    @import url('https://cdn.quilljs.com/1.3.6/quill.snow.css');
 
     :root {
       --bg:        #0f0f0f;
@@ -574,6 +574,15 @@
   }
 
   function initQuill(selector, content) {
+    const container = document.querySelector(selector);
+    if (!container) return;
+    
+    if (typeof Quill === 'undefined') {
+      console.warn('Quill library not loaded. Falling back to textarea.');
+      container.innerHTML = `<textarea id="legacyEditor" style="width:100%;height:300px;background:var(--bg-input);color:var(--text);border:0.5px solid var(--border-md);padding:12px;font-family:inherit;font-size:14px;outline:none;">${content}</textarea>`;
+      return;
+    }
+
     quillEditor = new Quill(selector, {
       theme: 'snow',
       placeholder: 'Skriv din tekst her...',
@@ -713,18 +722,30 @@ function saveAll() {
 }
 
 function updateBadges() {
-  document.getElementById('badge-specialer').textContent   = (data.specialer||[]).length;
-  document.getElementById('badge-projekter').textContent   = (data.projects||[]).length;
-  document.getElementById('badge-ansaettelser').textContent = (data.cv?.jobs||[]).length;
-  document.getElementById('badge-uddannelse').textContent  = (data.cv?.education||[]).length;
-  document.getElementById('badge-anbefalinger').textContent = (data.cv?.recommendations||[]).length;
+  const s = data.specialer || [];
+  const p = data.projects || [];
+  const j = data.cv?.jobs || [];
+  const e = data.cv?.education || [];
+  const r = data.cv?.recommendations || [];
+
+  const bS = document.getElementById('badge-specialer');
+  if (bS) bS.textContent = s.length;
+  const bP = document.getElementById('badge-projekter');
+  if (bP) bP.textContent = p.length;
+  const bJ = document.getElementById('badge-ansaettelser');
+  if (bJ) bJ.textContent = j.length;
+  const bE = document.getElementById('badge-uddannelse');
+  if (bE) bE.textContent = e.length;
+  const bR = document.getElementById('badge-anbefalinger');
+  if (bR) bR.textContent = r.length;
 }
 
 /* ---- NAVIGATION ---- */
 function showSection(key) {
   currentSection = key;
   document.querySelectorAll('.sidebar-item').forEach(i => i.classList.remove('active'));
-  event.currentTarget.classList.add('active');
+  const target = window.event ? window.event.currentTarget : null;
+  if (target && target.classList) target.classList.add('active');
   closeForm();
   renderSection(key);
 }
@@ -883,11 +904,11 @@ function openForm(editIdx) {
   const isEdit = editIdx !== undefined;
   let item = {};
   if (isEdit) {
-    if (currentSection === 'specialer')    item = data.specialer[editIdx];
-    else if (currentSection === 'projekter') item = data.projects[editIdx];
-    else if (currentSection === 'ansaettelser') item = data.cv.jobs[editIdx];
-    else if (currentSection === 'uddannelse')   item = data.cv.education[editIdx];
-    else if (currentSection === 'anbefalinger') item = data.cv.recommendations[editIdx];
+    if (currentSection === 'specialer')    item = (data.specialer || [])[editIdx] || {};
+    else if (currentSection === 'projekter') item = (data.projects || [])[editIdx] || {};
+    else if (currentSection === 'ansaettelser') item = (data.cv?.jobs || [])[editIdx] || {};
+    else if (currentSection === 'uddannelse')   item = (data.cv?.education || [])[editIdx] || {};
+    else if (currentSection === 'anbefalinger') item = (data.cv?.recommendations || [])[editIdx] || {};
   }
   
   if (currentSection === 'specialer') openSpecialForm(isEdit, editIdx, item);
@@ -898,6 +919,14 @@ function openForm(editIdx) {
 }
 
 function editSpecial(i) { openSpecialForm(true, i, data.specialer[i]); }
+function getEditorContent() {
+  if (typeof Quill !== 'undefined' && quillEditor && quillEditor.root) {
+    return quillEditor.root.innerHTML;
+  }
+  const legacy = document.getElementById('legacyEditor');
+  return legacy ? legacy.value : '';
+}
+
 function openSpecialForm(isEdit, idx, item={}) {
   const isVis = item.visible !== false;
   document.getElementById('formBody').innerHTML = `
@@ -936,7 +965,7 @@ function openSpecialForm(isEdit, idx, item={}) {
       </div>
     </div>`;
   openFormPanel(isEdit ? 'Rediger speciale' : 'Tilføj speciale', () => {
-    const bodyContent = quillEditor ? quillEditor.root.innerHTML : '';
+    const bodyContent = getEditorContent();
     const obj = { id: item.id || slug(document.getElementById('sp-label').value), label: document.getElementById('sp-label').value, desc: bodyContent, icon: document.getElementById('sp-icon').value, color: document.getElementById('sp-color').value, skills: document.getElementById('sp-skills').value.split(',').map(s=>s.trim()).filter(Boolean), cover: getUploadPath('sp-cover') || item.cover || '', cover_pos: document.getElementById('sp-cover-pos').value, cover_alt: document.getElementById('sp-cover-alt').value, file: getUploadPath('sp-file') || item.file || '', visible: document.getElementById('sp-vis').value === "1" };
     if (isEdit) data.specialer[idx] = obj;
     else data.specialer.push(obj);
@@ -1009,7 +1038,7 @@ function openProjectForm(isEdit, idx, item={}) {
       </div>
     </div>`;
   openFormPanel(isEdit ? 'Rediger projekt' : 'Tilføj projekt', () => {
-    const bodyContent = quillEditor ? quillEditor.root.innerHTML : '';
+    const bodyContent = getEditorContent();
     const obj = { id: item.id || slug(document.getElementById('pj-title').value), title: document.getElementById('pj-title').value, category: document.getElementById('pj-cat').value, tag: { ai:'AI', checkout:'Checkout', work:'Arbejde', volunteer:'Frivillig' }[document.getElementById('pj-cat').value], period: document.getElementById('pj-period').value, desc: document.getElementById('pj-desc').value, intro: document.getElementById('pj-intro').value, body: bodyContent, skills: document.getElementById('pj-skills').value.split(',').map(s=>s.trim()).filter(Boolean), cover: getUploadPath('pj-cover') || item.cover || '', cover_pos: document.getElementById('pj-cover-pos').value, cover_alt: document.getElementById('pj-cover-alt').value, file: getUploadPath('pj-file') || item.file || '', url: document.getElementById('pj-url').value || undefined, visible: document.getElementById('pj-vis').value === "1" };
     if (isEdit) data.projects[idx] = obj;
     else data.projects.push(obj);
@@ -1075,7 +1104,7 @@ function openJobForm(isEdit, idx, item={}) {
       </div>
     </div>`;
   openFormPanel(isEdit ? 'Rediger ansættelse' : 'Tilføj ansættelse', () => {
-    const bodyContent = quillEditor ? quillEditor.root.innerHTML : '';
+    const bodyContent = getEditorContent();
     const obj = { id: item.id || slug((document.getElementById('jb-role').value)+'-'+(document.getElementById('jb-company').value)), role: document.getElementById('jb-role').value, company: document.getElementById('jb-company').value, period: document.getElementById('jb-period').value, desc: document.getElementById('jb-desc').value, intro: document.getElementById('jb-intro').value, body: bodyContent, skills: document.getElementById('jb-skills').value.split(',').map(s=>s.trim()).filter(Boolean), cover: getUploadPath('jb-cover') || item.cover || '', cover_pos: document.getElementById('jb-cover-pos').value, cover_alt: document.getElementById('jb-cover-alt').value, file: getUploadPath('jb-file') || item.file || '', visible: document.getElementById('jb-vis').value === "1", category:'work' };
     if (isEdit) data.cv.jobs[idx] = obj;
     else data.cv.jobs.push(obj);
@@ -1139,8 +1168,21 @@ function openEduForm(isEdit, idx, item={}) {
       </div>
     </div>`;
   openFormPanel(isEdit ? 'Rediger uddannelse' : 'Tilføj uddannelse', () => {
-    const bodyContent = quillEditor ? quillEditor.root.innerHTML : '';
-    const obj = { id: item.id || slug(document.getElementById('ed-title').value), title: document.getElementById('ed-title').value, institution: document.getElementById('ed-inst').value, period: document.getElementById('ed-period').value, desc: bodyContent, skills: document.getElementById('ed-skills').value.split(',').map(s=>s.trim()).filter(Boolean), cover: getUploadPath('ed-cover') || item.cover || '', cover_pos: document.getElementById('ed-cover-pos').value, cover_alt: document.getElementById('ed-cover-alt').value, file: getUploadPath('ed-file') || item.file || '', visible: document.getElementById('ed-vis').value === "1", category:'education' };
+    const bodyContent = getEditorContent();
+    const obj = {
+      id:          item.id || slug(document.getElementById('ed-title').value),
+      title:       document.getElementById('ed-title').value,
+      institution: document.getElementById('ed-inst').value,
+      period:      document.getElementById('ed-period').value,
+      desc:        bodyContent,
+      skills:      document.getElementById('ed-skills').value.split(',').map(s=>s.trim()).filter(Boolean),
+      cover:       getUploadPath('ed-cover') || item.cover || '',
+      cover_pos:   document.getElementById('ed-cover-pos').value,
+      cover_alt:   document.getElementById('ed-cover-alt').value,
+      file:        getUploadPath('ed-file') || item.file || '',
+      visible:     document.getElementById('ed-vis').value === "1",
+      category:    'education'
+    };
     if (isEdit) data.cv.education[idx] = obj;
     else data.cv.education.push(obj);
     closeForm(); updateBadges(); renderSection('uddannelse'); showToast(isEdit ? 'Uddannelse opdateret' : 'Uddannelse tilføjet');
@@ -1156,7 +1198,7 @@ function renderAnbefalinger(area) {
       <div class="quote-row-header">
         <div>
           <div class="quote-name">
-            ${r.name} 
+            ${r.name}
             ${r.visible===false?'<span style="font-size:9px;color:var(--amber);border:1px solid var(--amber);padding:1px 4px;border-radius:4px;margin-left:6px;font-weight:normal;">Udkast</span>':''}
           </div>
           <div class="quote-role-txt">${r.role||''}</div>
@@ -1208,8 +1250,24 @@ function openRecForm(isEdit, idx, item={}) {
       </div>
     </div>`;
   openFormPanel(isEdit ? 'Rediger anbefaling' : 'Tilføj anbefaling', () => {
-    const textContent = quillEditor ? quillEditor.root.innerHTML : '';
-    const obj = { id: item.id || slug(document.getElementById('rc-name').value), name: document.getElementById('rc-name').value, role: document.getElementById('rc-role').value, intro: document.getElementById('rc-intro').value, text: textContent, skills: document.getElementById('rc-skills').value.split(',').map(s=>s.trim()).filter(Boolean), photo: getUploadPath('rc-photo') || item.photo || '', photo_pos: document.getElementById('rc-photo-pos').value, photo_alt: document.getElementById('rc-photo-alt').value, cover: getUploadPath('rc-cover') || item.cover || '', cover_pos: document.getElementById('rc-cover-pos').value, cover_alt: document.getElementById('rc-cover-alt').value, file: getUploadPath('rc-file') || item.file || '', visible: document.getElementById('rc-vis').value === "1", category:'recommendation' };
+    const textContent = getEditorContent();
+    const obj = {
+      id:        item.id || slug(document.getElementById('rc-name').value),
+      name:      document.getElementById('rc-name').value,
+      role:      document.getElementById('rc-role').value,
+      intro:     document.getElementById('rc-intro').value,
+      text:      textContent,
+      skills:    document.getElementById('rc-skills').value.split(',').map(s=>s.trim()).filter(Boolean),
+      photo:     getUploadPath('rc-photo') || item.photo || '',
+      photo_pos: document.getElementById('rc-photo-pos').value,
+      photo_alt: document.getElementById('rc-photo-alt').value,
+      cover:     getUploadPath('rc-cover') || item.cover || '',
+      cover_pos: document.getElementById('rc-cover-pos').value,
+      cover_alt: document.getElementById('rc-cover-alt').value,
+      file:      getUploadPath('rc-file') || item.file || '',
+      visible:   document.getElementById('rc-vis').value === "1",
+      category:  'recommendation'
+    };
     if (isEdit) data.cv.recommendations[idx] = obj;
     else data.cv.recommendations.push(obj);
     closeForm(); updateBadges(); renderSection('anbefalinger'); showToast(isEdit ? 'Anbefaling opdateret' : 'Anbefaling tilføjet');
