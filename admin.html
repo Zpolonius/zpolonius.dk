@@ -6,6 +6,7 @@
   <title>Admin — Zacharias Polonius</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+    @import url('https://cdn.quilljs.com/1.3.6/quill.snow.css');
 
     :root {
       --bg:        #0f0f0f;
@@ -215,6 +216,30 @@
       transition:opacity 0.2s; border-radius: 4px;
     }
     .btn-submit:hover { opacity:0.85; }
+
+    .btn-ai {
+      background: linear-gradient(135deg, #418FFF, #9b51e0);
+      color: white; border: none; padding: 5px 12px; font-size: 10px; font-weight: 600;
+      border-radius: 4px; cursor: pointer; display: flex; align-items: center; gap: 6px;
+      transition: all 0.2s; box-shadow: 0 4px 12px rgba(65, 143, 255, 0.2);
+      font-family: 'Inter', sans-serif;
+    }
+    .btn-ai:hover { transform: translateY(-1px); box-shadow: 0 6px 16px rgba(65, 143, 255, 0.3); }
+    .btn-ai:active { transform: translateY(0); }
+    .btn-ai:disabled { background: var(--border-md); cursor: not-allowed; opacity: 0.6; }
+
+    /* ---- QUILL OVERRIDES ---- */
+    .ql-toolbar.ql-snow { border: 0.5px solid var(--border-md) !important; background: var(--bg-card); border-top-left-radius: 4px; border-top-right-radius: 4px; padding: 12px !important; }
+    .ql-container.ql-snow { border: 0.5px solid var(--border-md) !important; border-bottom-left-radius: 4px; border-bottom-right-radius: 4px; font-family: 'Inter', sans-serif !important; font-size: 14px !important; background: var(--bg-input); color: var(--text) !important; min-height: 250px; }
+    .ql-snow .ql-stroke { stroke: var(--muted) !important; }
+    .ql-snow .ql-fill { fill: var(--muted) !important; }
+    .ql-snow .ql-picker { color: var(--muted) !important; }
+    .ql-editor { min-height: 250px; line-height: 1.6 !important; }
+    .ql-editor strong { font-weight: 700; color: #fff; }
+    .ql-editor h2, .ql-editor h3 { color: #fff; border:none; margin-top: 15px; margin-bottom: 10px; }
+    .ql-snow.ql-toolbar button:hover .ql-stroke, .ql-snow .ql-toolbar button:hover .ql-stroke { stroke: var(--blue) !important; }
+    .ql-snow .ql-active .ql-stroke { stroke: var(--blue) !important; }
+
     .btn-cancel {
       background:transparent; color:var(--muted); border:0.5px solid var(--border);
       padding:10px 20px; font-size:13px; cursor:pointer;
@@ -500,11 +525,71 @@
    Password: sættes i api/config.php på serveren
 
    ============================================================ */
+<script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
+<script>
+  let data = {};
+  let currentSection = 'forside';
+  let editingId = null;
+  let deleteTarget = null;
+  let quillEditor = null;
 
-let data = {};
-let currentSection = 'forside';
-let editingId = null;
-let deleteTarget = null;
+  /* ---- AI OPTIMIZATION ---- */
+  async function optimizeWithAI(context) {
+    const btn = event.currentTarget;
+    const originalText = btn.textContent;
+
+    // Hent tekst fra Quill eller textarea
+    const textToOptimize = quillEditor ? quillEditor.getText() : '';
+
+    if (!textToOptimize.trim() || textToOptimize.length < 10) {
+      showToast('Skriv venligst lidt mere tekst før optimering', true);
+      return;
+    }
+
+    btn.disabled = true;
+    btn.textContent = '✨ Tænker...';
+
+    try {
+      const response = await fetch('api/optimize.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'same-origin',
+        body: JSON.stringify({ text: textToOptimize, context: context })
+      });
+
+      const res = await response.json();
+      if (res.ok) {
+        if (quillEditor) {
+          quillEditor.clipboard.dangerouslyPasteHTML(res.optimized);
+        }
+        showToast('Tekst optimeret!');
+      } else {
+        showToast('AI Fejl: ' + res.error, true);
+      }
+    } catch (err) {
+      showToast('Kunne ikke forbinde til AI-tjenesten', true);
+    } finally {
+      btn.disabled = false;
+      btn.textContent = originalText;
+    }
+  }
+
+  function initQuill(selector, content) {
+    quillEditor = new Quill(selector, {
+      theme: 'snow',
+      placeholder: 'Skriv din tekst her...',
+      modules: {
+        toolbar: [
+          ['bold', 'italic'],
+          [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+          [{ 'header': [2, 3, false] }],
+          ['clean']
+        ]
+      }
+    });
+    if (content) quillEditor.clipboard.dangerouslyPasteHTML(content);
+  }
+
 
 /* ---- LOGIN — validering sker server-side i api/login.php ---- */
 function doLogin() {
@@ -885,7 +970,13 @@ function openProjectForm(isEdit, idx, item={}) {
         </div>
         <div class="field"><label class="field-label">Kort beskrivelse (forside)</label><textarea class="f-textarea" style="height:60px;" id="pj-desc">${item.desc||''}</textarea></div>
         <div class="field"><label class="field-label">Intro (vises øverst på detailside)</label><textarea class="f-textarea" id="pj-intro">${item.intro||''}</textarea></div>
-        <div class="field"><label class="field-label">Indhold / brødtekst</label><textarea class="f-textarea" style="height:200px;" id="pj-body">${item.body||''}</textarea><div class="field-hint">Brug dobbelt linjeskift til afsnit</div></div>
+        <div class="field">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+            <label class="field-label" style="margin-bottom:0;">Indhold / brødtekst</label>
+            <button type="button" class="btn-ai" onclick="optimizeWithAI('project')">✨ Optimér med AI</button>
+          </div>
+          <div id="quillEditor" style="height:300px;"></div>
+        </div>
       </div>
       <div class="form-sidebar">
         <div class="field"><label class="field-label">Status</label>
@@ -903,11 +994,13 @@ function openProjectForm(isEdit, idx, item={}) {
       </div>
     </div>`;
   openFormPanel(isEdit ? 'Rediger projekt' : 'Tilføj projekt', () => {
-    const obj = { id: item.id || slug(document.getElementById('pj-title').value), title: document.getElementById('pj-title').value, category: document.getElementById('pj-cat').value, tag: { ai:'AI', checkout:'Checkout', work:'Arbejde', volunteer:'Frivillig' }[document.getElementById('pj-cat').value], period: document.getElementById('pj-period').value, desc: document.getElementById('pj-desc').value, intro: document.getElementById('pj-intro').value, body: document.getElementById('pj-body').value, skills: document.getElementById('pj-skills').value.split(',').map(s=>s.trim()).filter(Boolean), cover: getUploadPath('pj-cover') || item.cover || '', cover_pos: document.getElementById('pj-cover-pos').value, cover_alt: document.getElementById('pj-cover-alt').value, file: getUploadPath('pj-file') || item.file || '', url: document.getElementById('pj-url').value || undefined, visible: document.getElementById('pj-vis').value === "1" };
+    const bodyContent = quillEditor ? quillEditor.root.innerHTML : '';
+    const obj = { id: item.id || slug(document.getElementById('pj-title').value), title: document.getElementById('pj-title').value, category: document.getElementById('pj-cat').value, tag: { ai:'AI', checkout:'Checkout', work:'Arbejde', volunteer:'Frivillig' }[document.getElementById('pj-cat').value], period: document.getElementById('pj-period').value, desc: document.getElementById('pj-desc').value, intro: document.getElementById('pj-intro').value, body: bodyContent, skills: document.getElementById('pj-skills').value.split(',').map(s=>s.trim()).filter(Boolean), cover: getUploadPath('pj-cover') || item.cover || '', cover_pos: document.getElementById('pj-cover-pos').value, cover_alt: document.getElementById('pj-cover-alt').value, file: getUploadPath('pj-file') || item.file || '', url: document.getElementById('pj-url').value || undefined, visible: document.getElementById('pj-vis').value === "1" };
     if (isEdit) data.projects[idx] = obj;
     else data.projects.push(obj);
     closeForm(); updateBadges(); renderSection('projekter'); showToast(isEdit ? 'Projekt opdateret' : 'Projekt tilføjet');
   });
+  initQuill('#quillEditor', item.body || '');
 }
 
 /* ---- ANSÆTTELSER ---- */
@@ -944,7 +1037,13 @@ function openJobForm(isEdit, idx, item={}) {
         <div class="field"><label class="field-label">Periode</label><input class="f-input" id="jb-period" value="${item.period||''}"></div>
         <div class="field"><label class="field-label">Kort beskrivelse (forside)</label><textarea class="f-textarea" style="height:60px;" id="jb-desc">${item.desc||''}</textarea></div>
         <div class="field"><label class="field-label">Intro (detailside)</label><textarea class="f-textarea" id="jb-intro">${item.intro||''}</textarea></div>
-        <div class="field"><label class="field-label">Indhold / brødtekst</label><textarea class="f-textarea" style="height:150px;" id="jb-body">${item.body||''}</textarea></div>
+        <div class="field">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+            <label class="field-label" style="margin-bottom:0;">Indhold / brødtekst</label>
+            <button type="button" class="btn-ai" onclick="optimizeWithAI('job')">✨ Optimér med AI</button>
+          </div>
+          <div id="quillEditor" style="height:250px;"></div>
+        </div>
       </div>
       <div class="form-sidebar">
         <div class="field"><label class="field-label">Status</label>
@@ -961,11 +1060,13 @@ function openJobForm(isEdit, idx, item={}) {
       </div>
     </div>`;
   openFormPanel(isEdit ? 'Rediger ansættelse' : 'Tilføj ansættelse', () => {
-    const obj = { id: item.id || slug((document.getElementById('jb-role').value)+'-'+(document.getElementById('jb-company').value)), role: document.getElementById('jb-role').value, company: document.getElementById('jb-company').value, period: document.getElementById('jb-period').value, desc: document.getElementById('jb-desc').value, intro: document.getElementById('jb-intro').value, body: document.getElementById('jb-body').value, skills: document.getElementById('jb-skills').value.split(',').map(s=>s.trim()).filter(Boolean), cover: getUploadPath('jb-cover') || item.cover || '', cover_pos: document.getElementById('jb-cover-pos').value, cover_alt: document.getElementById('jb-cover-alt').value, file: getUploadPath('jb-file') || item.file || '', visible: document.getElementById('jb-vis').value === "1", category:'work' };
+    const bodyContent = quillEditor ? quillEditor.root.innerHTML : '';
+    const obj = { id: item.id || slug((document.getElementById('jb-role').value)+'-'+(document.getElementById('jb-company').value)), role: document.getElementById('jb-role').value, company: document.getElementById('jb-company').value, period: document.getElementById('jb-period').value, desc: document.getElementById('jb-desc').value, intro: document.getElementById('jb-intro').value, body: bodyContent, skills: document.getElementById('jb-skills').value.split(',').map(s=>s.trim()).filter(Boolean), cover: getUploadPath('jb-cover') || item.cover || '', cover_pos: document.getElementById('jb-cover-pos').value, cover_alt: document.getElementById('jb-cover-alt').value, file: getUploadPath('jb-file') || item.file || '', visible: document.getElementById('jb-vis').value === "1", category:'work' };
     if (isEdit) data.cv.jobs[idx] = obj;
     else data.cv.jobs.push(obj);
     closeForm(); updateBadges(); renderSection('ansaettelser'); showToast(isEdit ? 'Ansættelse opdateret' : 'Ansættelse tilføjet');
   });
+  initQuill('#quillEditor', item.body || '');
 }
 
 /* ---- UDDANNELSE ---- */
@@ -1058,7 +1159,13 @@ function openRecForm(isEdit, idx, item={}) {
           <div class="field"><label class="field-label">Titel / rolle</label><input class="f-input" id="rc-role" value="${item.role||''}"></div>
         </div>
         <div class="field"><label class="field-label">Intro / Kort tekst (vises på forsiden)</label><textarea class="f-textarea" style="height:60px;" id="rc-intro">${item.intro||''}</textarea></div>
-        <div class="field"><label class="field-label">Fuld anbefalingstekst (vises på detaljesiden)</label><textarea class="f-textarea" style="height:200px;" id="rc-text">${item.text||''}</textarea></div>
+        <div class="field">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+            <label class="field-label" style="margin-bottom:0;">Fuld anbefalingstekst (vises på detaljesiden)</label>
+            <button type="button" class="btn-ai" onclick="optimizeWithAI('recommendation')">✨ Optimér med AI</button>
+          </div>
+          <div id="quillEditor" style="height:250px;"></div>
+        </div>
       </div>
       <div class="form-sidebar">
         <div class="field"><label class="field-label">Status</label>
@@ -1078,11 +1185,13 @@ function openRecForm(isEdit, idx, item={}) {
       </div>
     </div>`;
   openFormPanel(isEdit ? 'Rediger anbefaling' : 'Tilføj anbefaling', () => {
-    const obj = { id: item.id || slug(document.getElementById('rc-name').value), name: document.getElementById('rc-name').value, role: document.getElementById('rc-role').value, intro: document.getElementById('rc-intro').value, text: document.getElementById('rc-text').value, skills: document.getElementById('rc-skills').value.split(',').map(s=>s.trim()).filter(Boolean), photo: getUploadPath('rc-photo') || item.photo || '', photo_pos: document.getElementById('rc-photo-pos').value, photo_alt: document.getElementById('rc-photo-alt').value, cover: getUploadPath('rc-cover') || item.cover || '', cover_pos: document.getElementById('rc-cover-pos').value, cover_alt: document.getElementById('rc-cover-alt').value, file: getUploadPath('rc-file') || item.file || '', visible: document.getElementById('rc-vis').value === "1", category:'recommendation' };
+    const textContent = quillEditor ? quillEditor.root.innerHTML : '';
+    const obj = { id: item.id || slug(document.getElementById('rc-name').value), name: document.getElementById('rc-name').value, role: document.getElementById('rc-role').value, intro: document.getElementById('rc-intro').value, text: textContent, skills: document.getElementById('rc-skills').value.split(',').map(s=>s.trim()).filter(Boolean), photo: getUploadPath('rc-photo') || item.photo || '', photo_pos: document.getElementById('rc-photo-pos').value, photo_alt: document.getElementById('rc-photo-alt').value, cover: getUploadPath('rc-cover') || item.cover || '', cover_pos: document.getElementById('rc-cover-pos').value, cover_alt: document.getElementById('rc-cover-alt').value, file: getUploadPath('rc-file') || item.file || '', visible: document.getElementById('rc-vis').value === "1", category:'recommendation' };
     if (isEdit) data.cv.recommendations[idx] = obj;
     else data.cv.recommendations.push(obj);
     closeForm(); updateBadges(); renderSection('anbefalinger'); showToast(isEdit ? 'Anbefaling opdateret' : 'Anbefaling tilføjet');
   });
+  initQuill('#quillEditor', item.text || '');
 }
 
 /* ---- OM MIG ---- */

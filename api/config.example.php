@@ -17,3 +17,7 @@ define('SESSION_TIMEOUT', 28800);
 
 // Sti til content.json
 define('CONTENT_FILE', __DIR__ . '/../data/content.json');
+
+// Gemini AI API Key (Hentes fra Google AI Studio)
+define('GEMINI_API_KEY', 'INDSÆT_DIN_GEMINI_API_KEY_HER');
+

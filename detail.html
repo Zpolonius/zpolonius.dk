@@ -701,15 +701,21 @@
 
         const rawContent = entry.text || entry.body;
         if (rawContent) {
-          rawContent.split('\n\n').forEach(para => {
-            if (para.startsWith('###')) {
-              mainHTML += `<h3 class="content-h3">${para.replace('### ','')}</h3>`;
-            } else if (para.startsWith('##')) {
-              mainHTML += `<h2 class="content-h2">${para.replace('## ','')}</h2>`;
-            } else {
-              mainHTML += `<p class="content-p">${para}</p>`;
-            }
-          });
+          // Hvis teksten indeholder HTML tags (fra Quill), indsæt den direkte
+          if (/<[a-z][\s\S]*>/i.test(rawContent)) {
+            mainHTML += `<div class="rich-text">${rawContent}</div>`;
+          } else {
+            // Gammelt format (Markdown-ish) for bagudkompatibilitet
+            rawContent.split('\n\n').forEach(para => {
+              if (para.startsWith('###')) {
+                mainHTML += `<h3 class="content-h3">${para.replace('### ','')}</h3>`;
+              } else if (para.startsWith('##')) {
+                mainHTML += `<h2 class="content-h2">${para.replace('## ','')}</h2>`;
+              } else {
+                mainHTML += `<p class="content-p">${para}</p>`;
+              }
+            });
+          }
         }
         if (entry.tasks && entry.tasks.length) {
           mainHTML += `<h2 class="content-h2">Konkrete opgaver</h2><ul class="content-list">`;

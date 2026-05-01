@@ -76,6 +76,28 @@ body {
   -webkit-font-smoothing: antialiased;
   transition: background 0.3s ease, color 0.3s ease;
 }
+
+/* ---- AI BUTTON ---- */
+.btn-ai {
+  background: linear-gradient(135deg, #418FFF, #9b51e0);
+  color: white; border: none; padding: 5px 12px; font-size: 10px; font-weight: 600;
+  border-radius: 4px; cursor: pointer; display: flex; align-items: center; gap: 6px;
+  transition: all 0.2s; box-shadow: 0 4px 12px rgba(65, 143, 255, 0.2);
+  font-family: 'Inter', sans-serif;
+}
+.btn-ai:hover { transform: translateY(-1px); box-shadow: 0 6px 16px rgba(65, 143, 255, 0.3); }
+.btn-ai:disabled { background: #444; opacity: 0.6; cursor: not-allowed; }
+
+/* ---- RICH TEXT CONTENT ---- */
+.rich-text { color: var(--text-muted); line-height: 1.8; }
+.rich-text p { font-size: 15px; margin-bottom: 16px; max-width: 720px; }
+.rich-text h2 { font-size: 20px; font-weight: 600; color: var(--text); margin-top: 32px; margin-bottom: 12px; border:none; }
+.rich-text h3 { font-size: 17px; font-weight: 600; color: var(--text); margin-top: 24px; margin-bottom: 8px; }
+.rich-text ul, .rich-text ol { margin-left: 20px; margin-bottom: 20px; max-width: 720px; }
+.rich-text li { margin-bottom: 8px; font-size: 15px; }
+.rich-text strong { color: var(--text); font-weight: 600; }
+.rich-text a { color: var(--blue); text-decoration: underline; }
+
 a { color: inherit; text-decoration: none; }
 img { display: block; max-width: 100%; }
 button { font-family: var(--font); cursor: pointer; }

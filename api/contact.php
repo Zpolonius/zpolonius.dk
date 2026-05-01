@@ -98,10 +98,19 @@ $body .= str_repeat('-', 40) . "\n";
 $body .= "IP-hash: $ip_hash\n";
 $body .= "Tidspunkt: " . date('Y-m-d H:i:s') . "\n";
 
-$headers  = "From: noreply@zpolonius.dk\r\n";
-$headers .= "Reply-To: $email\r\n";
-$headers .= "X-Mailer: PHP/" . phpversion();
+// Headers til Simply.com (vigtigt: From skal ofte være en mail på domænet)
+$headers   = [];
+$headers[] = 'From: Zacharias Polonius <noreply@zpolonius.dk>';
+$headers[] = 'Reply-To: ' . $email;
+$headers[] = 'X-Mailer: PHP/' . phpversion();
+$headers[] = 'Content-Type: text/plain; charset=UTF-8';
 
-$sent = mail('zacharias@polonius.dk', $emailSubject, $body, $headers);
+// Send mail - på Simply er det ofte nødvendigt med det femte parameter (-f)
+$sent = mail('zacharias@polonius.dk', $emailSubject, $body, implode("\r\n", $headers), '-f noreply@zpolonius.dk');
 
-echo json_encode(['ok' => $sent ?: true]); // Vis succes selv ved mail-fejl for UX
+if (!$sent) {
+    // Log fejlen lokalt hvis muligt, eller returner fejl til JS
+    echo json_encode(['ok' => false, 'error' => 'Serveren kunne ikke sende mailen lige nu.']);
+} else {
+    echo json_encode(['ok' => true]);
+}

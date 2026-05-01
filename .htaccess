@@ -1,5 +1,8 @@
 # Zacharias Polonius — zpolonius.dk
-# Root .htaccess
+# VIGTIGT: Denne fil SKAL hedde præcis ".htaccess" på serveren.
+
+# Forhindr mappe-visning (sikkerhed)
+Options -Indexes
 
 # Custom 404 side
 ErrorDocument 404 /404.html

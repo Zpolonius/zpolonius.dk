@@ -205,8 +205,21 @@ function submitContact() {
       message: msg
     })
   })
-  .then(() => showContactSuccess())
-  .catch(() => showContactSuccess());
+  .then(r => r.json())
+  .then(res => {
+    if (res.ok) {
+      showContactSuccess();
+    } else {
+      btn.classList.remove('sending');
+      btn.textContent = 'Send besked →';
+      alert('Fejl: ' + (res.error || 'Kunne ikke sende besked'));
+    }
+  })
+  .catch(() => {
+    btn.classList.remove('sending');
+    btn.textContent = 'Send besked →';
+    alert('Der opstod en netværksfejl. Prøv venligst igen.');
+  });
 }
 
 function showContactSuccess() {
