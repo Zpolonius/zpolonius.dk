@@ -826,12 +826,11 @@
       const bGrid = document.getElementById('bentoGrid');
       if (bGrid && data.bento) {
         bGrid.innerHTML = data.bento.map((b, i) => `
-          <div class="bento-cell fade-up fade-up-${(i%3)+1}" tabindex="0" onclick="openDetail('${i}')" onkeydown="if(event.key==='Enter'||event.key===' ') { event.preventDefault(); openDetail('${i}'); }">
+          <div class="bento-cell fade-up" tabindex="0" onclick="openDetail('${i}')">
             <div class="cell-label">${esc(b.label)}</div>
             <div class="cell-title">${esc(b.value)}</div>
             <div class="cell-sub">${esc(b.sub)}</div>
-            <div class="cell-desc">${esc(b.desc)}</div>
-            <span class="cell-arrow">Åbn →</span>
+            <span class="cell-arrow">${esc(b.cta || 'Mere →')}</span>
           </div>
         `).join('');
         

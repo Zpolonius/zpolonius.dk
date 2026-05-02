@@ -105,11 +105,11 @@
         {
             "label": "Min kernekompetence",
             "value": "The Bridge",
-            "unit": "år",
             "sub": "Brobyggeren",
             "desc": "Oversætter tekniske svagheder til finansielle risici og forretningsværdi.",
             "accent": "blue",
-            "detail": "erfaring"
+            "detail": "erfaring",
+            "cta": "Hvad det betyder for din forretning →"
         },
         {
             "label": "Rolle",
@@ -117,7 +117,8 @@
             "sub": "Strategisk rådgivning",
             "desc": "C-level sparring omkring tech-stack og ROI.",
             "accent": "none",
-            "detail": "rolle"
+            "detail": "rolle",
+            "cta": "Se hvordan jeg rådgiver →"
         },
         {
             "label": "Fokus",
@@ -125,7 +126,8 @@
             "sub": "Checkout & CRO",
             "desc": "Adfærdsdesign og UX-principper der barberer sekunder af købsrejsen og øger bundlinjen.",
             "accent": "green",
-            "detail": "pspo"
+            "detail": "pspo",
+            "cta": "Se værdien af en audit →"
         },
         {
             "label": "Uddannelse",
@@ -133,7 +135,8 @@
             "sub": "+ Eventkoordinator",
             "desc": "Speciale i service management og kommunikation.",
             "accent": "none",
-            "detail": "uddannelse"
+            "detail": "uddannelse",
+            "cta": "Se min faglige ballast →"
         },
         {
             "label": "Speciale",
@@ -141,7 +144,8 @@
             "sub": "Konvertering og vibe coding",
             "desc": "Optimerer checkout-flows og bygger AI-drevne løsninger.",
             "accent": "blue",
-            "detail": "ai"
+            "detail": "ai",
+            "cta": "Se mine specialer →"
         },
         {
             "label": "Om mig",
@@ -150,6 +154,7 @@
             "desc": "Nysgerrig og altid på udkig efter den smarte løsning.",
             "accent": "none",
             "detail": "om",
+            "cta": "Lær mig bedre at kende →",
             "url": ""
         }
     ],

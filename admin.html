@@ -1057,13 +1057,13 @@ function editBento(i) {
     <div class="field"><label class="field-label">Label (lille tekst over)</label><input class="f-input" id="fb-label" value="${box.label||''}"></div>
     <div class="field"><label class="field-label">Værdi (stor tekst)</label><input class="f-input" id="fb-value" value="${box.value||''}"></div>
     <div class="field"><label class="field-label">Undertekst</label><input class="f-input" id="fb-sub" value="${box.sub||''}"></div>
-    <div class="field"><label class="field-label">Beskrivelse (lille grå tekst)</label><textarea class="f-textarea" id="fb-desc">${box.desc||''}</textarea></div>
-    <div class="field"><label class="field-label">Knap URL (valgfrit)</label><input class="f-input" id="fb-url" value="${box.url||''}" placeholder="f.eks. cv.html eller about.html"></div>
+    <div class="field"><label class="field-label">Beskrivelse (vises i popup)</label><textarea class="f-textarea" id="fb-desc" style="height:100px;">${box.desc||''}</textarea></div>
+    <div class="field"><label class="field-label">Call to Action (Knap-tekst)</label><input class="f-input" id="fb-cta" value="${box.cta||''}" placeholder="f.eks. Se værdien her →"></div>
     <div class="field"><label class="field-label">Accent-farve</label>
       <select class="f-select" id="fb-accent">
-        <option value="none" ${box.accent==='none'?'selected':''}>Ingen</option>
-        <option value="blue" ${box.accent==='blue'?'selected':''}>Blå</option>
-        <option value="green" ${box.accent==='green'?'selected':''}>Grøn</option>
+        <option value="none" ${box.accent==='none'?'selected':''}>Ingen (Muted)</option>
+        <option value="blue" ${box.accent==='blue'?'selected':''}>Blå (Highlight)</option>
+        <option value="green" ${box.accent==='green'?'selected':''}>Grøn (Success)</option>
       </select>
     </div>`;
   openFormPanel('Rediger bento-boks', () => {
@@ -1071,7 +1071,7 @@ function editBento(i) {
     data.bento[i].value  = document.getElementById('fb-value').value;
     data.bento[i].sub    = document.getElementById('fb-sub').value;
     data.bento[i].desc   = document.getElementById('fb-desc').value;
-    data.bento[i].url    = document.getElementById('fb-url').value;
+    data.bento[i].cta    = document.getElementById('fb-cta').value;
     data.bento[i].accent = document.getElementById('fb-accent').value;
     closeForm(); renderSection('forside'); showToast('Bento-boks opdateret');
   });
