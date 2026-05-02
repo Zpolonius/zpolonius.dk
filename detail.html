@@ -365,13 +365,34 @@
       if (item.company || item.role) document.getElementById('coverCompany').textContent = (item.role ? item.role + ' @ ' : '') + (item.company || item.institution || '');
       if (item.period) document.getElementById('coverPeriod').textContent = item.period;
       
+      // SEO Updates
+      const pageTitle = (item.title || item.name) + " — Zacharias Polonius";
+      document.title = pageTitle;
+      const metaDesc = item.meta_desc || item.excerpt || item.desc || "";
+      if (metaDesc) {
+        let metaTag = document.querySelector('meta[name="description"]');
+        if (!metaTag) {
+          metaTag = document.createElement('meta');
+          metaTag.name = "description";
+          document.head.appendChild(metaTag);
+        }
+        metaTag.content = metaDesc.substring(0, 160);
+      }
+      
       const img = document.getElementById('coverImg');
+      const fallback = document.getElementById('coverFallback');
+      
       if (item.cover || item.photo) {
-        img.src = item.cover || item.photo;
+        const imgPath = item.cover || item.photo;
+        console.log("Loading cover image:", imgPath);
+        img.src = imgPath;
+        img.style.display = 'block'; 
+        fallback.classList.remove('show'); 
         if (item.cover_pos || item.photo_pos) img.style.objectPosition = item.cover_pos || item.photo_pos;
       } else {
+        console.log("No cover image found for this item.");
         img.style.display = 'none';
-        document.getElementById('coverFallback').classList.add('show');
+        fallback.classList.add('show');
       }
 
       // Intro

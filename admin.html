@@ -2129,6 +2129,11 @@ function openArticleForm(isEdit, idx, item={}) {
         <div class="field"><label class="field-label">Cover-billede</label>${createUploadZone('ar-cover','articles',item.cover||'')}</div>
         ${createPositionSelector('ar-cover-pos', item.cover_pos)}
         <div class="field"><label class="field-label">Billede Alt-tekst</label><input class="f-input" id="ar-cover-alt" value="${item.cover_alt||''}"></div>
+        <div class="field" style="margin-top:16px; padding-top:16px; border-top:1px solid var(--border);">
+          <label class="field-label" style="color:var(--blue);">SEO-Metabeskrivelse</label>
+          <textarea class="f-textarea" id="ar-meta-desc" style="height:80px; font-size:12px;" placeholder="Beskrivelse til Google (anbefalet 150-160 tegn)">${item.meta_desc||''}</textarea>
+          <div class="field-hint">Hvis tom, bruges resuméet automatisk.</div>
+        </div>
       </div>
     </div>`;
   
@@ -2145,6 +2150,7 @@ function openArticleForm(isEdit, idx, item={}) {
       cover_pos: document.getElementById('ar-cover-pos').value,
       cover_alt: document.getElementById('ar-cover-alt').value,
       reading_time: document.getElementById('ar-reading-time').value.trim() || undefined,
+      meta_desc: document.getElementById('ar-meta-desc').value.trim(),
       body: bodyContent,
       visible: document.getElementById('ar-vis').value === "1"
     };
