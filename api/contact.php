@@ -65,8 +65,18 @@ file_put_contents($rate_file, json_encode(array_values($attempts)));
 $raw  = file_get_contents('php://input');
 $data = json_decode($raw, true);
 
+session_start();
+
 if (!$data || empty($data['name']) || empty($data['email']) || empty($data['message'])) {
     echo json_encode(['ok' => false, 'error' => 'Udfyld venligst alle felter']); exit;
+}
+
+// CSRF Validering
+$token = $data['csrf_token'] ?? '';
+if (empty($_SESSION['csrf_token']) || $token !== $_SESSION['csrf_token']) {
+    http_response_code(403);
+    echo json_encode(['ok' => false, 'error' => 'Sikkerhedsfejl (CSRF). Prøv at genindlæse siden.']);
+    exit;
 }
 
 $name    = htmlspecialchars(trim($data['name']));

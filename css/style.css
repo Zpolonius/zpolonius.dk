@@ -401,6 +401,13 @@ textarea.input { resize: none; height: 100px; line-height: 1.6; }
 .fade-up-3 { animation-delay: 0.20s; opacity: 0; }
 .fade-up-4 { animation-delay: 0.28s; opacity: 0; }
 
+/* Ensure arrows are visible on touch devices */
+@media (hover: none) {
+  .proj-arrow, .article-arrow, .cell-arrow {
+    opacity: 1 !important;
+  }
+}
+
 /* ============================================
    MOBILRESPONSIVITET
    ============================================ */

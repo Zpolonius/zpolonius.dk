@@ -461,12 +461,30 @@
       }
       if (item.category) metaHtml += `<div class="meta-item"><div class="meta-item-label">Kategori</div><div class="meta-item-val">${esc(item.category)}</div></div>`;
       if (item.client) metaHtml += `<div class="meta-item"><div class="meta-item-label">Klient</div><div class="meta-item-val">${esc(item.client)}</div></div>`;
+      // Links & Files
+      let linksHtml = '';
+      
+      // Check for direct URL (e.g. review-manager)
+      if (item.url) {
+        linksHtml += `<a href="${item.url}" target="_blank" class="btn-outline" style="font-size:12px; padding:8px 14px; margin-bottom:8px; display:inline-block;">Gå til Projekt ↗</a>`;
+      }
+      
+      // Check for PDF/File
+      if (item.file) {
+        const isPdf = item.file.toLowerCase().endsWith('.pdf');
+        const label = isPdf ? 'Se Dokument (PDF) 📄' : 'Se Ressource ↗';
+        linksHtml += `<a href="${item.file}" target="_blank" class="btn-outline" style="font-size:12px; padding:8px 14px; margin-bottom:8px; display:inline-block;">${label}</a>`;
+      }
+      
+      // Check for links array
       if (item.links && item.links.length > 0) {
-        metaHtml += `<div class="meta-item"><div class="meta-item-label">Links</div><div class="meta-links">`;
         item.links.forEach(l => {
-          metaHtml += `<a href="${l.url}" target="_blank" class="btn-outline" style="font-size:12px; padding:8px 14px;">${esc(l.label)} ↗</a>`;
+          linksHtml += `<a href="${l.url}" target="_blank" class="btn-outline" style="font-size:12px; padding:8px 14px; margin-bottom:8px; display:inline-block;">${esc(l.label)} ↗</a>`;
         });
-        metaHtml += `</div></div>`;
+      }
+
+      if (linksHtml) {
+        metaHtml += `<div class="meta-item"><div class="meta-item-label">Ressourcer</div><div class="meta-links">${linksHtml}</div></div>`;
       }
       
       // Skills in Sidebar

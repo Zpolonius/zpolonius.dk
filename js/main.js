@@ -2,6 +2,9 @@
    Z. POLONIUS — SHARED JAVASCRIPT
    ============================================ */
 
+/* ---- GLOBALS ---- */
+let currentCSRFToken = '';
+
 /* ---- UTILS ---- */
 function esc(str) {
   if (!str) return '';
@@ -560,6 +563,12 @@ function openContact() {
 
   document.getElementById('contactOverlay')?.classList.add('active');
   document.body.style.overflow = 'hidden';
+  
+  // Hent CSRF token
+  fetch('api/csrf.php')
+    .then(r => r.json())
+    .then(data => { if (data.ok) currentCSRFToken = data.token; });
+
   setTimeout(() => document.getElementById('f-name')?.focus(), 400);
 }
 
@@ -610,7 +619,8 @@ function submitContact() {
       company: document.getElementById('f-company')?.value.trim(),
       url: document.getElementById('f-url')?.value.trim(),
       subject: document.querySelector('#contactOverlay .pill.selected')?.textContent,
-      message: msg
+      message: msg,
+      csrf_token: currentCSRFToken
     })
   })
   .then(r => r.json())
