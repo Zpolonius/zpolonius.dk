@@ -200,6 +200,35 @@
       margin-bottom: 4px;
     }
 
+    /* PRINT STYLES FOR PDF */
+    @media print {
+      body { background: white; color: black; font-size: 12pt; }
+      #global-header, .download-bar, #global-cta-bar, .timeline-arrow, .sidebar-view-btn, #global-footer, .section-link { display: none !important; }
+      .page-hero { padding: 40px 0; background: none; border-bottom: 2px solid #000; }
+      .page-hero-title { color: black; font-size: 32pt; }
+      .page-hero-desc { color: #333; max-width: 100%; }
+      .timeline { display: block; page-break-inside: auto; }
+      .timeline-year { 
+        display: inline-block; width: 100%; border: none; background: none; 
+        padding: 10px 0 0; font-weight: bold; border-top: 0.5px solid #ccc;
+      }
+      .timeline-content { 
+        display: block; border: none; padding: 5px 0 20px; 
+        background: none !important; page-break-inside: avoid;
+      }
+      .timeline-role { color: black; font-size: 14pt; }
+      .timeline-company { color: #418FFF; font-weight: bold; }
+      .timeline-desc { color: #444; font-size: 11pt; }
+      .section-header { page-break-before: always; margin-top: 40px; border-bottom: 1px solid #000; }
+      .section-title { color: black; font-size: 18pt; }
+      .edu-grid { display: block; }
+      .edu-card { border: none; padding: 15px 0; page-break-inside: avoid; }
+      .edu-title { color: black; }
+      
+      /* Undgå at klippe midt i et job */
+      .timeline-year, .timeline-content { page-break-inside: avoid; }
+    }
+
     .edu-inst {
       font-size: 13px;
       color: var(--text-muted);
@@ -410,9 +439,9 @@
     <!-- Rendered by JS -->
   </div>
 
-  <!-- FRIVILLIGT ARBEJDE (Mindre fremtrædende) -->
+  <!-- FRIVILLIGT ARBEJDE -->
   <div class="section-header" id="frivilligt">
-    <span class="section-title">Anden erfaring & Bestyrelsesarbejde</span>
+    <span class="section-title">Anden erfaring & Frivilligt arbejde</span>
   </div>
   <div class="timeline" id="volTimeline">
     <!-- Rendered by JS (Volunteer Category) -->
