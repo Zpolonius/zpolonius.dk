@@ -67,8 +67,15 @@
     }
     .status-pill {
       margin-bottom: 16px;
-      background: rgba(255,255,255,0.05);
-      backdrop-filter: blur(4px);
+      background: rgba(255,255,255,0.1);
+      backdrop-filter: blur(8px);
+      color: #fff;
+      border: 0.5px solid rgba(255,255,255,0.2);
+    }
+    [data-theme="light"] .status-pill {
+      background: rgba(0,0,0,0.05);
+      color: var(--text);
+      border-color: var(--border-md);
     }
     .hero-name {
       font-size: 52px;
@@ -125,34 +132,37 @@
     .bento {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      border-bottom: 0.5px solid var(--border);
+      gap: 20px;
+      padding: 20px 40px;
     }
     .bento-cell {
       padding: 24px 28px;
-      border-right: 0.5px solid var(--border);
-      border-bottom: 0.5px solid var(--border);
+      background: var(--bg-card);
+      backdrop-filter: blur(10px);
+      border: 0.5px solid var(--border-md);
+      border-radius: 20px;
       cursor: pointer;
-      transition: background 0.2s;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
       position: relative;
     }
     .bento-cell:hover { 
-      background: rgba(255,255,255,0.025); 
-      box-shadow: 0 10px 30px rgba(65, 143, 255, 0.08), 0 0 15px rgba(65, 143, 255, 0.05);
-      border-color: rgba(65, 143, 255, 0.2);
+      transform: translateY(-5px);
+      background: rgba(255,255,255,0.05); 
+      box-shadow: 0 15px 40px rgba(0,0,0,0.2), 0 0 20px rgba(65, 143, 255, 0.1);
+      border-color: var(--blue);
       z-index: 10;
     }
     .bento-cell:focus-visible {
       outline: 2px solid var(--blue);
       outline-offset: -2px;
-      background: rgba(65,143,255,0.05);
+      background: rgba(65,143,255,0.08);
       border-color: var(--blue);
       z-index: 10;
     }
     .bento-cell:hover .cell-arrow { opacity: 1; }
-    .bento-cell:nth-child(3n) { border-right: none; }
     .bento-cell.selected {
-      background: rgba(65,143,255,0.05);
-      border-color: rgba(65,143,255,0.2);
+      background: rgba(65,143,255,0.08);
+      border-color: var(--blue);
     }
     .cell-label {
       font-size: 9px;
@@ -271,15 +281,24 @@
     .proj-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      padding: 20px 40px;
     }
     .proj-card {
       padding: 0;
-      border-right: 0.5px solid var(--border);
-      border-bottom: 0.5px solid var(--border);
-      transition: background 0.2s;
+      border: 0.5px solid var(--border-md);
+      border-radius: 20px;
+      overflow: hidden;
+      background: var(--bg-card);
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
       position: relative;
       display: flex;
       flex-direction: column;
+    }
+    .proj-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+      background: rgba(255,255,255,0.05);
     }
     .proj-card-img-wrap {
       width: 100%;
@@ -300,9 +319,7 @@
     .proj-card-body {
       padding: 24px 28px;
     }
-    .proj-card:hover { background: rgba(255,255,255,0.025); }
     .proj-card:hover .proj-arrow { opacity: 1; }
-    .proj-card:nth-child(3n) { border-right: none; }
     .proj-tag { margin-bottom: 12px; }
     .proj-title {
       font-size: 14px;
@@ -330,16 +347,22 @@
     .cv-strip {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      padding: 20px 40px;
     }
     .cv-item {
       padding: 22px 28px;
-      border-right: 0.5px solid var(--border);
-      border-bottom: 0.5px solid var(--border);
+      border: 0.5px solid var(--border-md);
+      border-radius: 20px;
+      background: var(--bg-card);
       display: block;
-      transition: background 0.2s;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
     }
-    .cv-item:hover { background: rgba(255,255,255,0.025); }
-    .cv-item:nth-child(3n) { border-right: none; }
+    .cv-item:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+      background: rgba(255,255,255,0.05);
+    }
     .cv-year { font-size: 10px; color: var(--blue); letter-spacing: 0.1em; margin-bottom: 4px; }
     .cv-role { font-size: 13px; font-weight: 600; color: var(--text); letter-spacing: -0.01em; margin-bottom: 3px; }
     .cv-company { font-size: 11px; color: var(--text-faint); margin-bottom: 6px; }
@@ -349,7 +372,7 @@
     .rec-container {
       position: relative;
       overflow: hidden;
-      border-bottom: 0.5px solid var(--border);
+      padding: 60px 0;
     }
     .quote-carousel {
       display: flex;
@@ -358,19 +381,33 @@
     }
     .quote-card {
       min-width: 100%;
-      padding: 48px 40px;
-      border-right: 0.5px solid var(--border);
+      padding: 60px 40px;
       box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
     }
-    .quote-mark { font-size: 28px; color: var(--blue); font-weight: 700; margin-bottom: 14px; line-height: 1; }
-    .quote-text { font-size: 15px; color: var(--text-muted); line-height: 1.8; margin-bottom: 18px; font-style: italic; }
+    .quote-inner {
+      max-width: 800px;
+      background: var(--bg-card);
+      backdrop-filter: blur(10px);
+      border: 0.5px solid var(--border-md);
+      border-radius: 40px;
+      padding: 60px 50px;
+      box-shadow: 0 30px 60px rgba(0,0,0,0.12);
+      position: relative;
+    }
+    .quote-mark { font-size: 40px; color: var(--blue); font-weight: 700; margin-bottom: 20px; line-height: 1; opacity: 0.4; }
+    .quote-text { font-size: 18px; color: var(--text); line-height: 1.8; margin-bottom: 24px; font-style: italic; }
 
     .carousel-nav {
       position: absolute;
-      bottom: 24px;
-      right: 40px;
+      bottom: 40px;
+      left: 50%;
+      transform: translateX(-50%);
       display: flex;
-      gap: 8px;
+      gap: 12px;
       z-index: 5;
     }
     .carousel-dot {
@@ -396,20 +433,23 @@
       .quote-card { padding: 32px 24px 60px; }
       .carousel-nav { right: 50%; transform: translateX(50%); bottom: 20px; }
       
-      /* BENTO - VERTICAL LIST ON MOBILE */
+      /* BENTO - 2-COLUMN GRID ON MOBILE */
       .bento {
         display: grid;
-        grid-template-columns: 1fr;
-        gap: 0;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+        padding: 16px 20px;
         border-bottom: none;
       }
       .bento-cell {
-        padding: 16px 20px;
+        padding: 14px 16px;
         min-width: 0;
-        border-right: none;
-        border-bottom: 0.5px solid var(--border);
+        border-radius: 14px;
+        border: 0.5px solid var(--border-md);
       }
-      .cell-title { font-size: 18px; }
+      .cell-title { font-size: 14px; }
+      .cell-label { font-size: 8px; }
+      .cell-sub { font-size: 10px; }
       .cell-desc { display: none; } /* Skjul lang tekst på mobil for "nice small box" effekt */
       .bento-cell:hover .cell-arrow { opacity: 1; }
 
@@ -428,13 +468,37 @@
         scroll-snap-align: center;
         min-width: 100%;
         border-right: none;
+        padding: 40px 20px;
+      }
+      .quote-inner {
+        padding: 40px 24px;
+        border-radius: 30px;
       }
 
-      /* 1-COLUMN LAYOUTS FOR CARDS */
-      .proj-grid, .cv-strip {
+      .nav-btn { display: none; } /* Skjul kontakt-knap i header på mobil */
+      .nav-hamburger { 
+        display: flex; 
+        color: var(--text); 
+        border-color: var(--border-md);
+        z-index: 100;
+      }
+      .nav-right { gap: 12px; }
+
+      /* 1-COLUMN LAYOUTS FOR PROJECTS */
+      .proj-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+        padding: 20px;
+      }
+      .proj-card {
+        border-radius: 16px;
+        border: 0.5px solid var(--border-md);
+        background: var(--bg-card);
+      }
+      .cv-strip {
         grid-template-columns: 1fr;
       }
-      .proj-card, .cv-item {
+      .cv-item {
         border-right: none;
       }
       .proj-card-img-wrap { height: 220px; }
@@ -489,7 +553,9 @@
       <li><a href="contact.html">Kontakt</a></li>
     </ul>
     <div class="nav-right">
-      <button class="nav-hamburger" id="hamburgerBtn" aria-label="Menu" aria-expanded="false">☰</button>
+      <button class="nav-hamburger" id="hamburgerBtn" aria-label="Menu" aria-expanded="false">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+      </button>
       <button class="theme-switch" onclick="toggleTheme()" title="Skift tema">☀</button>
       <button class="nav-btn" data-contact>Kontakt</button>
     </div>
@@ -938,16 +1004,18 @@
           const truncated = words.length > 150 ? words.slice(0, 150).join(' ') + '...' : raw;
           return `
             <div class="quote-card">
-              <div class="quote-mark">"</div>
-              <p class="quote-text">${esc(truncated)}</p>
-              <div class="rec-author-wrap">
-                ${r.photo ? `<img src="${r.photo}" alt="${esc(r.photo_alt||r.name)}" class="rec-avatar" style="object-position: ${r.photo_pos || 'center center'}" onerror="this.src='data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2240%22%20height%3D%2240%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%23555%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M20%2021v-2a4%204%200%200%200-4-4H8a4%204%200%200%200-4%204v2%22%3E%3C%2Fpath%3E%3Ccircle%20cx%3D%2212%22%20cy%3D%227%22%20r%3D%224%22%3E%3C%2Fcircle%3E%3C%2Fsvg%3E'">` : ''}
-                <div class="rec-meta">
-                  <div class="rec-name">${esc(r.name)}</div>
-                  <div class="rec-role">${esc(r.role)}</div>
+              <div class="quote-inner">
+                <div class="quote-mark">"</div>
+                <p class="quote-text">${esc(truncated)}</p>
+                <div class="rec-author-wrap" style="justify-content: center;">
+                  ${r.photo ? `<img src="${r.photo}" alt="${esc(r.photo_alt||r.name)}" class="rec-avatar" style="object-position: ${r.photo_pos || 'center center'}" onerror="this.src='data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2240%22%20height%3D%2240%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%23555%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M20%2021v-2a4%204%200%200%200-4-4H8a4%204%200%200%200-4%204v2%22%3E%3C%2Fpath%3E%3Ccircle%20cx%3D%2212%22%20cy%3D%227%22%20r%3D%224%22%3E%3C%2Fcircle%3E%3C%2Fsvg%3E'">` : ''}
+                  <div class="rec-meta">
+                    <div class="rec-name">${esc(r.name)}</div>
+                    <div class="rec-role">${esc(r.role)}</div>
+                  </div>
                 </div>
+                <a href="detail.html?id=${r.id}" class="section-link" style="margin-top:24px; display:inline-block; font-size:11px;">Læs hele udtalelsen →</a>
               </div>
-              <a href="detail.html?id=${r.id}" class="section-link" style="margin-top:16px; display:inline-block; font-size:11px;">Læs hele udtalelsen →</a>
             </div>`;
         }).join('');
 
