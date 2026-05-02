@@ -773,13 +773,11 @@
 
     let contentData = {};
 
-    fetch('data/content.json?t=' + Date.now())
-      .then(r => r.json())
-      .then(data => {
-        contentData = data;
-        renderHome(data);
-      })
-      .catch(err => console.error('Kunne ikke hente data:', err));
+    loadContentData().then(data => {
+      if (!data) return;
+      contentData = data;
+      renderHome(data);
+    });
 
     function renderHome(data) {
       // Hero

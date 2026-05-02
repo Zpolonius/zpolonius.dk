@@ -13,6 +13,33 @@ function esc(str) {
   return div.innerHTML;
 }
 
+/**
+ * Centraliseret indlæsning af content.json med fejlhåndtering
+ */
+window.loadContentData = async function() {
+  try {
+    const response = await fetch('data/content.json?t=' + Date.now());
+    if (!response.ok) throw new Error('Kunne ikke hente data-filen (HTTP ' + response.status + ')');
+    const data = await response.json();
+    return data;
+  } catch (err) {
+    console.error('Data-fejl:', err);
+    // Vis en brugerbesked hvis muligt
+    const main = document.querySelector('main') || document.body;
+    const errorDiv = document.createElement('div');
+    errorDiv.className = 'error-state';
+    errorDiv.innerHTML = `
+      <div style="padding: 100px 40px; text-align: center; color: var(--text-faint);">
+        <h2 style="color: var(--text); margin-bottom: 16px;">Hov! Indholdet kunne ikke indlæses 📡</h2>
+        <p>Der opstod en fejl ved hentning af portefølje-data. Prøv at genindlæse siden eller kontakt mig direkte.</p>
+        <button onclick="location.reload()" class="btn-outline" style="margin-top: 24px;">Genindlæs side ↻</button>
+      </div>
+    `;
+    main.prepend(errorDiv);
+    return null;
+  }
+};
+
 document.addEventListener('DOMContentLoaded', () => {
   // Apply entry animation
   requestAnimationFrame(() => {

@@ -124,11 +124,10 @@
       return div.textContent || div.innerText || "";
     }
 
-    fetch('data/content.json?t=' + Date.now())
-      .then(r => r.json())
-      .then(data => {
-        const s = data.site || {};
-        const recs = (data.cv?.recommendations || []).filter(r => r.visible !== false);
+    loadContentData().then(data => {
+      if (!data) return;
+      const s = data.site || {};
+      const recs = (data.cv?.recommendations || []).filter(r => r.visible !== false);
         
         // Count
         document.getElementById('recCount').textContent = recs.length;

@@ -525,10 +525,9 @@
       return div.innerHTML;
     }
 
-    fetch('data/content.json?t=' + Date.now())
-      .then(r => r.json())
-      .then(data => {
-        const cv = data.cv || {};
+    loadContentData().then(data => {
+      if (!data) return;
+      const cv = data.cv || {};
 
         // --- 1. JOBS (WORK ONLY) ---
         const tl = document.getElementById('jobTimeline');

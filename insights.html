@@ -183,10 +183,9 @@
       return div.innerHTML;
     }
 
-    fetch('data/content.json?t=' + Date.now())
-      .then(r => r.json())
-      .then(data => {
-        const articles = (data.articles || []).filter(a => a.visible !== false).reverse();
+    loadContentData().then(data => {
+      if (!data) return;
+      const articles = (data.articles || []).filter(a => a.visible !== false).reverse();
 
         // Count
         document.getElementById('articleCount').textContent = articles.length;

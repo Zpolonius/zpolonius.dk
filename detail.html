@@ -325,20 +325,19 @@
     if (!itemId) {
       show404();
     } else {
-      fetch('data/content.json?t=' + Date.now())
-        .then(r => r.json())
-        .then(data => {
-          const allItems = [
-            ...(data.projects || []),
-            ...(data.cv?.jobs || []),
-            ...(data.cv?.education || []),
-            ...(data.cv?.recommendations || []),
-            ...(data.articles || [])
-          ];
-          const item = allItems.find(x => x.id === itemId);
-          if (!item) { show404(); return; }
-          renderDetail(item, allItems);
-        });
+      loadContentData().then(data => {
+        if (!data) return;
+        const allItems = [
+          ...(data.projects || []),
+          ...(data.cv?.jobs || []),
+          ...(data.cv?.education || []),
+          ...(data.cv?.recommendations || []),
+          ...(data.articles || [])
+        ];
+        const item = allItems.find(x => x.id === itemId);
+        if (!item) { show404(); return; }
+        renderDetail(item, allItems);
+      });
     }
 
     function show404() {

@@ -216,10 +216,9 @@
     const catLabels = { ai:'AI', checkout:'Checkout', konvertering:'Konvertering', work:'Arbejde', volunteer:'Frivillig' };
     const catClass  = { ai:'tag-ai', checkout:'tag-ai', konvertering:'tag-ai', work:'tag-work', volunteer:'tag-vol' };
 
-    fetch('data/content.json?t=' + Date.now())
-      .then(r => r.json())
-      .then(data => {
-        const visibleProjects = (data.projects||[]).filter(p => p.visible !== false);
+    loadContentData().then(data => {
+      if (!data) return;
+      const visibleProjects = (data.projects||[]).filter(p => p.visible !== false);
 
         // Count
         document.getElementById('projCount').textContent = visibleProjects.length;
