@@ -86,35 +86,39 @@ if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
 }
 
 // --- SEND EMAIL ---
-$emailSubject = "[$subject] Ny besked fra $name — zpolonius.dk";
+$to        = defined('MAIL_TO')        ? MAIL_TO        : 'zacharias@polonius.dk';
+$from      = defined('MAIL_FROM')      ? MAIL_FROM      : 'kontakt@zpolonius.dk';
+$from_name = defined('MAIL_FROM_NAME') ? MAIL_FROM_NAME : 'Portefølje Kontakt';
 
+// Encode subject for UTF-8 to handle "ø" and other chars
+$encodedSubject = "=?UTF-8?B?" . base64_encode("[$subject] Ny besked fra $name") . "?=";
+
+// Lav en meget simpel tekst-besked (spam-filtre elsker simpel tekst)
 $body  = "Ny besked fra zpolonius.dk\n";
-$body .= str_repeat('-', 40) . "\n\n";
+$body .= "----------------------------------------\n\n";
 $body .= "Navn:    $name\n";
 $body .= "Email:   $email\n";
 if ($company) $body .= "Firma:   $company\n";
 if ($url)     $body .= "Webshop: $url\n";
 $body .= "Emne:    $subject\n\n";
 $body .= "Besked:\n$message\n\n";
-$body .= str_repeat('-', 40) . "\n";
-$body .= "IP-hash: $ip_hash\n";
-$body .= "Tidspunkt: " . date('Y-m-d H:i:s') . "\n";
+$body .= "----------------------------------------\n";
+$body .= "Sendt: " . date('d.m.Y H:i') . "\n";
 
-// Headers til Simply.com (vigtigt: From SKAL være en mail på domænet for at undgå spam-filtre)
-$from_email = 'noreply@zpolonius.dk'; // Sørg for at denne konto eksisterer eller er tilladt på Simply
-$headers   = [];
-$headers[] = 'From: Portefølje Kontakt <' . $from_email . '>';
-$headers[] = 'Reply-To: ' . $email;
-$headers[] = 'X-Mailer: PHP/' . phpversion();
-$headers[] = 'Content-Type: text/plain; charset=UTF-8';
+// Simple headers
+$headers = [
+    "From: $from_name <$from>",
+    "Reply-To: $name <$email>",
+    "Content-Type: text/plain; charset=UTF-8",
+    "X-Mailer: PHP/" . phpversion()
+];
 
-// Send mail - på Simply er det absolut nødvendigt med det femte parameter (-f) for at verificere afsender
-$to = 'zacharias@polonius.dk';
-$sent = mail($to, $emailSubject, $body, implode("\r\n", $headers), "-f $from_email");
+// Send mail - vi bruger -f parameteren præcis som i diagnose.php
+$sent = mail($to, $encodedSubject, $body, implode("\r\n", $headers), "-f $from");
 
 if (!$sent) {
-    // Log fejlen lokalt hvis muligt, eller returner fejl til JS
-    echo json_encode(['ok' => false, 'error' => 'Serveren kunne ikke sende mailen lige nu.']);
+    error_log("contact.php: mail() fejlede for $email");
+    echo json_encode(['ok' => false, 'error' => 'Serveren kunne ikke sende mailen.']);
 } else {
     echo json_encode(['ok' => true]);
 }
