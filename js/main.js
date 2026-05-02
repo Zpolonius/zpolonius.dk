@@ -679,3 +679,10 @@ window.typeHTML = function(element, htmlString, speed = 8) {
   }
   processNextRootChild();
 };
+/* ---- HELPERS ---- */
+window.getReadingTime = function(html) {
+  if (!html) return 0;
+  const text = html.replace(/<[^>]*>/g, ' '); // Fjern HTML tags
+  const words = text.trim().split(/\s+/).length;
+  return Math.ceil(words / 200); // Gennemsnitlig læsehastighed: 200 ord/min
+};

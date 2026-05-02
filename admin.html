@@ -2000,6 +2000,7 @@ function renderArtikler(area) {
     <div class="entry-card">
       <div class="entry-card-header">
         <span class="entry-card-tag ${a.visible===false?'draft':''}">${a.date||'Ingen dato'}</span>
+        ${a.reading_time ? `<span class="entry-card-tag" style="border-color:var(--blue);color:var(--blue);margin-left:6px;">${a.reading_time} min.</span>` : '<span class="entry-card-tag" style="margin-left:6px; opacity:0.5;">Auto</span>'}
         ${a.visible===false?'<span class="entry-card-tag draft" style="border-color:var(--amber);color:var(--amber);margin-left:6px;">Udkast</span>':''}
         <div class="entry-card-actions">
           <button class="btn-edit" onclick="editArticle(${i})">Rediger</button>
@@ -2036,6 +2037,10 @@ function openArticleForm(isEdit, idx, item={}) {
             <option value="0" ${!isVis?'selected':''}>Skjult (Udkast)</option>
           </select>
         </div>
+        <div class="field"><label class="field-label">Læsetid (minutter)</label>
+          <input class="f-input" type="number" id="ar-reading-time" value="${item.reading_time||''}" placeholder="Auto">
+          <div class="field-hint">Lad stå tom for automatisk beregning</div>
+        </div>
         <div class="field"><label class="field-label">Cover-billede</label>${createUploadZone('ar-cover','articles',item.cover||'')}</div>
         ${createPositionSelector('ar-cover-pos', item.cover_pos)}
         <div class="field"><label class="field-label">Billede Alt-tekst</label><input class="f-input" id="ar-cover-alt" value="${item.cover_alt||''}"></div>
@@ -2054,6 +2059,7 @@ function openArticleForm(isEdit, idx, item={}) {
       cover: getUploadPath('ar-cover', item.cover),
       cover_pos: document.getElementById('ar-cover-pos').value,
       cover_alt: document.getElementById('ar-cover-alt').value,
+      reading_time: document.getElementById('ar-reading-time').value.trim() || undefined,
       body: bodyContent,
       visible: document.getElementById('ar-vis').value === "1"
     };

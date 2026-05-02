@@ -202,7 +202,10 @@
             ` : ''}
             <div class="article-body">
               <div>
-                <div class="article-date">${esc(a.date || 'Indsigt')}</div>
+                <div class="article-date">
+                  ${esc(a.date || 'Indsigt')} 
+                  ${a.reading_time ? `· ${a.reading_time} min. læsning` : (a.body ? `· ${window.getReadingTime(a.body)} min. læsning` : '')}
+                </div>
                 <div class="article-title">${esc(a.title)}</div>
                 <div class="article-excerpt">${esc(a.excerpt || '')}</div>
               </div>

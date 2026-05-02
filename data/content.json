@@ -15,7 +15,7 @@
         "ai_model": "gemini-flash-lite-latest"
     },
     "hero": {
-        "role": "Technical Commercial Lead | Digital Arkitekt | E-commerce Expert | Strategisk Brobygger",
+        "role": "Checkout Arkitekt | Bygger bro mellem kompleks teknologi og målbar forretningsværdi | Hjulpet +100 webshops med konvertering",
         "cover": "assets\/cover.webp",
         "status": "Checkout Arkitekt & Digital nytænker",
         "intro": "Jeg taler både API og EBITDA — Fra forladte kurve til loyale kunder. Jeg bygger bro mellem kompleks teknologi og målbar forretningsværdi.",
@@ -940,7 +940,7 @@
         {
             "id": "fra-udgift-til-vaekst-goer-returhaandtering-til-din-stoerste-konkurrencefordel-i-2026",
             "title": "Fra udgift til vækst: Gør returhåndtering til din største konkurrencefordel i 2026",
-            "date": "",
+            "date": "Januar 2026",
             "excerpt": "Returvarer i januar betragtes ofte som et nødvendigt onde og en direkte omkostning. Men med en strategisk tilgang og de rette værktøjer (som Reversio eller Returnflows) kan du transformere returprocessen fra et dræn på ressourcerne til en motor for Customer Lifetime Value (CLV). Ved at fjerne friktion og automatisere flowet reducerer du pres på kundeservice, optimerer lagerdriften og sikrer, at kunden vælger dig igen næste gang.",
             "cover": "assets\/general\/1767857566131.jpg",
             "cover_pos": "50% 50%",

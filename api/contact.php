@@ -86,39 +86,33 @@ if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
 }
 
 // --- SEND EMAIL ---
-$to        = defined('MAIL_TO')        ? MAIL_TO        : 'zacharias@polonius.dk';
-$from      = defined('MAIL_FROM')      ? MAIL_FROM      : 'kontakt@zpolonius.dk';
-$from_name = defined('MAIL_FROM_NAME') ? MAIL_FROM_NAME : 'Portefølje Kontakt';
+$to   = defined('MAIL_TO')   ? MAIL_TO   : 'zacharias@polonius.dk';
+$from = defined('MAIL_FROM') ? MAIL_FROM : 'kontakt@zpolonius.dk';
 
-// Encode subject for UTF-8 to handle "ø" and other chars
-$encodedSubject = "=?UTF-8?B?" . base64_encode("[$subject] Ny besked fra $name") . "?=";
+// Meget simpelt emne uden specialtegn i starten
+$emailSubject = "Ny besked: $subject ($name)";
 
-// Lav en meget simpel tekst-besked (spam-filtre elsker simpel tekst)
-$body  = "Ny besked fra zpolonius.dk\n";
-$body .= "----------------------------------------\n\n";
-$body .= "Navn:    $name\n";
-$body .= "Email:   $email\n";
-if ($company) $body .= "Firma:   $company\n";
-if ($url)     $body .= "Webshop: $url\n";
-$body .= "Emne:    $subject\n\n";
+// Tekst-besked
+$body  = "Navn: $name\n";
+$body .= "Email: $email\n";
+if ($company) $body .= "Firma: $company\n";
+if ($url)     $body .= "Webshop: $url\n\n";
 $body .= "Besked:\n$message\n\n";
 $body .= "----------------------------------------\n";
-$body .= "Sendt: " . date('d.m.Y H:i') . "\n";
+$body .= "Sendt via kontaktformular på zpolonius.dk\n";
 
-// Simple headers
+// Headers - IDENTISK stil med diagnose.php
 $headers = [
-    "From: $from_name <$from>",
-    "Reply-To: $name <$email>",
+    "From: $from",
     "Content-Type: text/plain; charset=UTF-8",
     "X-Mailer: PHP/" . phpversion()
 ];
 
-// Send mail - vi bruger -f parameteren præcis som i diagnose.php
-$sent = mail($to, $encodedSubject, $body, implode("\r\n", $headers), "-f $from");
+// Send mail med -f parameter ligesom diagnose.php
+$sent = mail($to, $emailSubject, $body, implode("\r\n", $headers), "-f $from");
 
 if (!$sent) {
-    error_log("contact.php: mail() fejlede for $email");
-    echo json_encode(['ok' => false, 'error' => 'Serveren kunne ikke sende mailen.']);
+    echo json_encode(['ok' => false, 'error' => 'mail() returnerede false']);
 } else {
     echo json_encode(['ok' => true]);
 }
