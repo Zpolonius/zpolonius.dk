@@ -1,5 +1,6 @@
 # PHP
 api/config.php
+generate-hash.php
 
 # OS files
 .DS_Store
@@ -7,3 +8,4 @@ Thumbs.db
 
 # Logs
 *.log
+
