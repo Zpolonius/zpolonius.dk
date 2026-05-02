@@ -34,14 +34,17 @@
     .filter-bar {
       display: flex; align-items: center; gap: 8px;
       padding: 14px 40px; border-bottom: 0.5px solid var(--border);
-      overflow-x: auto;
+      overflow-x: auto; -webkit-overflow-scrolling: touch;
+      position: relative; z-index: 10;
+      scrollbar-width: none;
     }
+    .filter-bar::-webkit-scrollbar { display: none; }
     .filter-btn {
       font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase;
-      padding: 6px 16px; border: 0.5px solid var(--border);
+      padding: 10px 20px; border: 0.5px solid var(--border);
       color: var(--text-faint); background: transparent; cursor: pointer;
       font-family: var(--font); transition: all 0.2s; white-space: nowrap;
-      flex-shrink: 0;
+      flex-shrink: 0; min-height: 40px; display: flex; align-items: center;
     }
     .filter-btn:hover { border-color: var(--border-md); color: var(--text-muted); }
     .filter-btn.active { border-color: var(--blue); color: var(--blue); background: rgba(65,143,255,0.06); }
@@ -228,7 +231,10 @@
           const btn = document.createElement('button');
           btn.className = 'filter-btn';
           btn.textContent = catLabels[cat] || cat;
-          btn.onclick = function() { filterProjects(cat, this); };
+          btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            filterProjects(cat, this);
+          });
           bar.appendChild(btn);
         });
 

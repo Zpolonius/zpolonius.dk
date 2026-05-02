@@ -83,6 +83,7 @@ function initSharedLayout() {
       <div class="footer-col-title">Sider</div>
       <ul class="footer-nav">
         <li><a href="index.html">Hjem</a></li>
+        <li><a href="about.html">Om mig</a></li>
         <li><a href="projects.html">Business Cases</a></li>
         <li><a href="insights.html">Indsigter</a></li>
         <li><a href="cv.html">CV & Erfaring</a></li>
