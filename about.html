@@ -127,6 +127,7 @@
       <div>
         <div class="about-hero-label">Om mig</div>
         <h1 class="about-hero-name" id="heroName">Zacharias<br>Polonius</h1>
+        <div id="statusPillContainer"></div>
         <p class="about-hero-bio" id="heroBio">Indlæser...</p>
         <div class="about-hero-actions">
           <button class="about-hero-btn-p" data-contact>Tag kontakt →</button>
@@ -145,22 +146,7 @@
 
   <!-- INFO STRIP -->
   <div class="info-grid" id="infoGrid">
-    <div class="info-cell">
-      <div class="info-cell-label">Bopæl</div>
-      <div class="info-cell-val"><strong>Bjæverskov</strong>Danmark</div>
-    </div>
-    <div class="info-cell">
-      <div class="info-cell-label">Familie</div>
-      <div class="info-cell-val"><strong>Gift</strong>To sønner</div>
-    </div>
-    <div class="info-cell">
-      <div class="info-cell-label">Nuværende rolle</div>
-      <div class="info-cell-val"><strong>Technical Account Manager</strong>Bring · 2023 — nu</div>
-    </div>
-    <div class="info-cell">
-      <div class="info-cell-label">Erfaring</div>
-      <div class="info-cell-val"><strong>10+ år</strong>Tech, support og ledelse</div>
-    </div>
+    <!-- Rendered dynamically by JS -->
   </div>
 
   <!-- BIO + SIDEBAR -->
@@ -197,7 +183,18 @@
 
   <!-- PERSONTYPE -->
   <div class="section-header">
-    <span class="section-title">Personlighed & arbejdsstil</span>
+    <span class="section-title">Min Tilgang & Filosofi</span>
+  </div>
+  <div class="persontype-wrap">
+    <div class="persontype-cell">
+      <div class="persontype-title">Mennesket før Teknik</div>
+      <div class="persontype-desc">Teknologi er kun et værktøj. Jeg tror på, at de bedste løsninger skabes, når vi forstår de mennesker, der skal bruge dem. Min baggrund fra service-branchen sikrer, at jeg aldrig glemmer brugeroplevelsen.</div>
+    </div>
+    <div class="persontype-cell">
+      <div class="persontype-title">Brobyggeren</div>
+      <div class="persontype-desc">Jeg elsker at oversætte komplekse tekniske udfordringer til forretningsmuligheder. Jeg taler både flydende 'udvikler' og 'ledelse', hvilket gør mig til den ideelle bindeled i ethvert projekt.</div>
+    </div>
+  </div>
   </div>
   <div class="persontype-wrap">
     <div class="persontype-cell">
@@ -253,6 +250,10 @@
       .then(data => {
         const om = data.om || {};
         const site = data.site || {};
+        const h = data.hero || {};
+
+        // Hero Name
+        if (site.name) document.getElementById('heroName').innerHTML = site.name.replace(' ', '<br>');
 
         // Photo
         const aPhoto = document.getElementById('aboutPhoto');
@@ -269,6 +270,7 @@
 
         // Bio paragraphs
         const bioEl = document.getElementById('bioContent');
+        bioEl.innerHTML = ''; // Clear indlæser...
         if (om.bio) {
           om.bio.split('\n\n').forEach(p => {
             if (p.trim()) bioEl.innerHTML += `<p class="bio-para">${esc(p.trim())}</p>`;
@@ -278,24 +280,47 @@
         // Hero bio — first paragraph
         const firstPara = (om.bio || '').split('\n\n')[0] || '';
         document.getElementById('heroBio').textContent = firstPara;
+        
+        // Status Pill
+        if (h.status) {
+          document.getElementById('statusPillContainer').innerHTML = `
+            <div class="status-pill" style="margin-bottom: 24px; border-color: var(--border-blue); color: var(--blue);">
+              <span class="status-dot"></span> ${esc(h.status)}
+            </div>`;
+        }
 
-        // Persontype
-        if (om.persontype) document.getElementById('persontypeDesc').textContent = om.persontype;
+        // Info Grid
+        const info = document.getElementById('infoGrid');
+        const infoCells = om.facts || [
+          { label: 'Bopæl', val: site.location || 'Danmark', sub: 'Sjælland' },
+          { label: 'Familie', val: 'Gift', sub: 'To sønner' },
+          { label: 'Rolle', val: 'Checkout Arkitekt', sub: 'Bring · 2023 — nu' },
+          { label: 'Erfaring', val: '10+ år', sub: 'E-commerce & AI' }
+        ];
+        info.innerHTML = infoCells.map(c => `
+          <div class="info-cell">
+            <div class="info-cell-label">${esc(c.label)}</div>
+            <div class="info-cell-val"><strong>${esc(c.val)}</strong>${esc(c.sub)}</div>
+          </div>
+        `).join('');
 
         // Sprog
         const sprogEl = document.getElementById('sprogList');
+        sprogEl.innerHTML = '';
         (om.sprog || ['Dansk (modersmål)', 'Engelsk (flydende)']).forEach(s => {
           sprogEl.innerHTML += `<div class="bio-sidebar-item">${esc(s)}</div>`;
         });
 
         // Interesser
         const intEl = document.getElementById('interesserList');
+        intEl.innerHTML = '';
         (om.interesser || []).forEach(i => {
           intEl.innerHTML += `<div class="bio-sidebar-item">${esc(i)}</div>`;
         });
 
         // Social
         const socEl = document.getElementById('socialList');
+        socEl.innerHTML = '';
         const socials = site.social || {};
         if (socials.linkedin)  socEl.innerHTML += `<div class="bio-sidebar-item"><a href="${socials.linkedin}"  target="_blank" style="color:var(--blue);">LinkedIn →</a></div>`;
         if (socials.instagram) socEl.innerHTML += `<div class="bio-sidebar-item"><a href="${socials.instagram}" target="_blank" style="color:var(--blue);">Instagram →</a></div>`;
@@ -310,7 +335,7 @@
               <div class="skill-group-title">${esc(grp.category)}</div>
               <div class="skill-tags">
                 ${grp.tags.map(t => {
-                  const isBlue = ["ai", "tech", "checkout", "api", "flutter", "coding", "software", "sql", "xml"].some(key => grp.category.toLowerCase().includes(key) || t.toLowerCase().includes(key));
+                  const isBlue = ["ai", "tech", "checkout", "api", "flutter", "coding", "software", "sql", "xml", "cro"].some(key => grp.category.toLowerCase().includes(key) || t.toLowerCase().includes(key));
                   return `<span class="skill-tag ${isBlue?'blue':''}">${esc(t)}</span>`;
                 }).join('')}
               </div>

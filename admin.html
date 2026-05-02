@@ -1504,6 +1504,25 @@ function renderOm(area) {
       </div>
 
       <div style="margin:24px 0 14px; display:flex; justify-content:space-between; align-items:center;">
+        <div style="font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:var(--faint);">Quick Facts (Info Grid)</div>
+        <button class="btn-edit" style="font-size:10px;padding:4px 10px;" onclick="editFact()">+ Tilføj Fact</button>
+      </div>
+      <div class="bento-list" style="margin-bottom:32px;">
+        ${(o.facts||[]).map((f, i) => `
+          <div class="bento-row">
+            <div class="bento-label-val">
+              <div class="bento-label-txt">${f.label}</div>
+              <div class="bento-main-txt">${f.val} · ${f.sub}</div>
+            </div>
+            <div style="display:flex; gap:6px;">
+              <button class="btn-edit" onclick="editFact(${i})">Ret</button>
+              <button class="btn-del" onclick="deleteEntry('facts', ${i})">✕</button>
+            </div>
+          </div>
+        `).join('')}
+      </div>
+
+      <div style="margin:24px 0 14px; display:flex; justify-content:space-between; align-items:center;">
         <div style="font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:var(--faint);">Kompetence-grupper (CV)</div>
         <button class="btn-edit" style="font-size:10px;padding:4px 10px;" onclick="editKomp()">+ Tilføj gruppe</button>
       </div>
@@ -1528,6 +1547,29 @@ function renderOm(area) {
         <button class="btn-submit" style="width:auto;padding:9px 24px;" onclick="saveOm()">Gem alt om mig</button>
       </div>
     </div>`;
+}
+
+function editFact(i) {
+  const isEdit = i !== undefined;
+  const f = isEdit ? data.om.facts[i] : { label: '', val: '', sub: '' };
+  
+  document.getElementById('formTitle').textContent = isEdit ? 'Rediger Fact' : 'Tilføj Fact';
+  document.getElementById('formBody').innerHTML = `
+    <div class="field"><label class="field-label">Overskrift (f.eks. Bopæl)</label><input class="f-input" id="fact-label" value="${f.label}"></div>
+    <div class="field"><label class="field-label">Værdi (f.eks. Bjæverskov)</label><input class="f-input" id="fact-val" value="${f.val}"></div>
+    <div class="field"><label class="field-label">Undertekst (f.eks. Danmark)</label><input class="f-input" id="fact-sub" value="${f.sub}"></div>`;
+    
+  openFormPanel(isEdit ? 'Rediger' : 'Tilføj', () => {
+    const newF = {
+      label: document.getElementById('fact-label').value,
+      val: document.getElementById('fact-val').value,
+      sub: document.getElementById('fact-sub').value
+    };
+    if(!data.om.facts) data.om.facts = [];
+    if (isEdit) data.om.facts[i] = newF;
+    else data.om.facts.push(newF);
+    closeForm(); renderSection('om'); showToast('Facts opdateret');
+  });
 }
 
 function editKomp(i) {

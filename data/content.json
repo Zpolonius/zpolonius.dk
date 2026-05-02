@@ -15,7 +15,7 @@
         "ai_model": "gemini-flash-lite-latest"
     },
     "hero": {
-        "role": "Checkout Arkitekt | Bygger bro mellem kompleks teknologi og målbar forretningsværdi | Hjulpet +100 webshops med konvertering",
+        "role": "Checkout Arkitekt | Bygger bro mellem kompleks teknologi og målbar forretningsværdi | Hjulpet +100 webshops med konvertering | AI Entusiast | Digital Brobygger",
         "cover": "assets\/cover.webp",
         "status": "Checkout Arkitekt & Digital nytænker",
         "intro": "Jeg taler både API og EBITDA — Fra forladte kurve til loyale kunder. Jeg bygger bro mellem kompleks teknologi og målbar forretningsværdi.",
@@ -166,6 +166,12 @@
             "Teknologi & AI",
             "E-commerce",
             "Frivilligt arbejde"
+        ],
+        "facts": [
+            { "label": "Bopæl", "val": "Bjæverskov", "sub": "Danmark" },
+            { "label": "Familie", "val": "Gift", "sub": "To sønner" },
+            { "label": "Rolle", "val": "Checkout Arkitekt", "sub": "Bring · 2023 — nu" },
+            { "label": "Erfaring", "val": "10+ år", "sub": "E-commerce & AI" }
         ],
         "kompetencer": [
             {
