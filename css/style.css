@@ -206,11 +206,52 @@ p, li {
 .skill-tag.blue { border-color: var(--border-blue); color: var(--blue); }
 
 /* ---- FOOTER ---- */
-.footer { display: flex; align-items: center; justify-content: space-between; padding: 20px 40px; }
+.footer {
+  background: var(--bg-deep);
+  border-top: 0.5px solid var(--border);
+  padding: 80px 40px 120px;
+  display: grid;
+  grid-template-columns: 2fr 1fr 1.5fr 1fr;
+  gap: 60px;
+  position: relative;
+  z-index: 10;
+}
+.footer-col-title {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+  margin-bottom: 24px;
+}
+.footer-brand .nav-logo { font-size: 22px; margin-bottom: 16px; display: block; text-decoration: none; }
+.footer-tagline { font-size: 14px; color: var(--text-muted); line-height: 1.6; max-width: 280px; }
+.footer-nav { list-style: none; padding: 0; margin: 0; }
+.footer-nav li { margin-bottom: 14px; }
+.footer-nav a { font-size: 14px; color: var(--text-muted); text-decoration: none; transition: color 0.2s; }
+.footer-nav a:hover { color: var(--blue); }
+
+.footer-credits { font-size: 12px; color: var(--text-ghost); line-height: 1.8; }
+.footer-credits p { margin-bottom: 12px; }
+.credit-logos { display: flex; align-items: center; gap: 16px; margin-top: 16px; opacity: 0.4; transition: opacity 0.3s; }
+.credit-logos:hover { opacity: 0.8; }
+.credit-logo { height: 18px; width: auto; color: var(--text); }
+
+.footer-social { display: flex; gap: 20px; align-items: center; }
+.social-icon { color: var(--text-muted); transition: all 0.2s; display: flex; align-items: center; justify-content: center; }
+.social-icon:hover { color: var(--blue); transform: translateY(-3px); }
+
+@media (max-width: 768px) {
+  .footer {
+    grid-template-columns: 1fr;
+    padding: 60px 24px 140px;
+    gap: 40px;
+    text-align: left;
+  }
+  .footer-social { justify-content: flex-start; }
+}
+
 .footer-left { font-size: 11px; color: var(--text-ghost); letter-spacing: 0.04em; }
-.footer-links { display: flex; gap: 20px; }
-.footer-links a { font-size: 11px; color: var(--text-faint); letter-spacing: 0.04em; transition: color 0.2s; }
-.footer-links a:hover { color: var(--blue); }
 
 /* ---- BUTTONS ---- */
 .btn-primary { background: var(--blue); color: #fff; border: none; border-radius: 4px; padding: 12px 28px; font-size: 13px; font-weight: 500; letter-spacing: 0.02em; transition: all 0.2s; display: inline-block; text-align: center; box-shadow: 0 4px 14px rgba(65, 143, 255, 0.2); }

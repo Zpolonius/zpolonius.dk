@@ -410,6 +410,42 @@
       gap: 12px;
       z-index: 5;
     }
+    .carousel-arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 48px;
+      height: 48px;
+      background: var(--bg-card);
+      backdrop-filter: blur(10px);
+      border: 0.5px solid var(--border-md);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 10;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      color: var(--text);
+      opacity: 0;
+      pointer-events: none;
+    }
+    .rec-container:hover .carousel-arrow {
+      opacity: 1;
+      pointer-events: all;
+    }
+    .carousel-arrow:hover {
+      background: var(--blue);
+      color: #fff;
+      border-color: var(--blue);
+      transform: translateY(-50%) scale(1.1);
+    }
+    .prev-btn { left: 40px; }
+    .next-btn { right: 40px; }
+
+    @media (max-width: 768px) {
+      .carousel-arrow { display: none; }
+    }
     .carousel-dot {
       width: 6px; height: 6px;
       border-radius: 50%;
@@ -659,12 +695,18 @@
   </div>
 
   <!-- ANBEFALINGER -->
-  <div id="recSection">
+  <section class="section" id="recSection" style="position: relative;">
     <div class="section-header">
       <span class="section-title">Anbefalinger</span>
       <a href="recommendations.html" class="section-link">Se alle →</a>
     </div>
     <div class="rec-container">
+      <button class="carousel-arrow prev-btn" onclick="prevSlide()" aria-label="Forrige">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+      </button>
+      <button class="carousel-arrow next-btn" onclick="nextSlide()" aria-label="Næste">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+      </button>
       <div class="quote-carousel" id="featuredRecommendations">
         <!-- Rendered dynamically -->
       </div>
@@ -709,11 +751,55 @@
 
   <!-- FOOTER -->
   <footer class="footer">
-    <div class="footer-left">zacharias@polonius.dk · 3068 7041</div>
-    <div class="footer-links">
-      <a href="https://www.linkedin.com/in/zpolonius/" target="_blank">LinkedIn</a>
-      <a href="https://www.instagram.com/zackp91/" target="_blank">Instagram</a>
-      <a href="https://www.facebook.com/zpolonius" target="_blank">Facebook</a>
+    <div class="footer-col footer-brand">
+      <a href="index.html" class="nav-logo">Z<span>.</span>Polonius</a>
+      <p class="footer-tagline">Bygger bro mellem kompleks teknologi og målbar forretningsværdi.</p>
+      <div class="footer-left" style="margin-top: 24px;">
+        Bjæverskov, Danmark<br>
+        zacharias@polonius.dk · 3068 7041
+      </div>
+    </div>
+
+    <div class="footer-col">
+      <div class="footer-col-title">Sider</div>
+      <ul class="footer-nav">
+        <li><a href="index.html">Hjem</a></li>
+        <li><a href="projects.html">Business Cases</a></li>
+        <li><a href="index.html#blogSection">Indsigter</a></li>
+        <li><a href="cv.html">CV & Erfaring</a></li>
+        <li><a href="recommendations.html">Anbefalinger</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-col">
+      <div class="footer-col-title">Platform & Værktøjer</div>
+      <div class="footer-credits">
+        <p>Made with Claude, Gemini CLI and Antigravity.</p>
+        <div class="credit-logos">
+          <!-- Claude icon placeholder -->
+          <svg class="credit-logo" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L4.5 20.29l.71.71L12 18l6.79 3 .71-.71z"/></svg>
+          <!-- Gemini icon placeholder -->
+          <svg class="credit-logo" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.4 7.6L22 12l-7.6 2.4L12 22l-2.4-7.6L2 12l7.6-2.4z"/></svg>
+          <!-- Antigravity icon placeholder -->
+          <svg class="credit-logo" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3L2 12h3v9h14v-9h3L12 3zm0 4.84L16.16 11H7.84L12 7.84z"/></svg>
+        </div>
+        <p style="margin-top: 16px; font-size: 11px;">Designed with Google Stitch.<br>Vibed by Zacharias Bakahuge Polonius.</p>
+      </div>
+    </div>
+
+    <div class="footer-col">
+      <div class="footer-col-title">Social</div>
+      <div class="footer-social">
+        <a href="https://www.linkedin.com/in/zpolonius/" target="_blank" class="social-icon" title="LinkedIn">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>
+        </a>
+        <a href="https://www.instagram.com/zackp91/" target="_blank" class="social-icon" title="Instagram">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+        </a>
+        <a href="https://www.facebook.com/zpolonius" target="_blank" class="social-icon" title="Facebook">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>
+        </a>
+      </div>
     </div>
   </footer>
 
@@ -1064,14 +1150,19 @@
           }, { passive: true });
         }
 
-        function nextSlide() {
+        window.prevSlide = function() {
+          currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
+          goToSlide(currentSlide);
+        };
+
+        window.nextSlide = function() {
           currentSlide = (currentSlide + 1) % totalSlides;
           goToSlide(currentSlide);
-        }
+        };
 
         function resetInterval() {
           clearInterval(carouselInterval);
-          carouselInterval = setInterval(nextSlide, 5000);
+          carouselInterval = setInterval(window.nextSlide, 5000);
         }
 
         if (totalSlides > 1) resetInterval();
