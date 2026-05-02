@@ -39,6 +39,9 @@ RewriteEngine On
 RewriteCond %{HTTPS} off
 RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 
+# Dynamisk Sitemap Rewrite (xml -> php)
+RewriteRule ^sitemap\.xml$ sitemap.php [L]
+
 # Blokér adgang til følsomme filer
 <FilesMatch "(wp-config\.php|\.env|migrate\.php|generate-hash\.php)$">
     Order allow,deny

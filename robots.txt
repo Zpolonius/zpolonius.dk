@@ -1,0 +1,11 @@
+User-agent: *
+Allow: /
+
+# Ekskluder følsomme mapper og admin
+Disallow: /api/
+Disallow: /data/
+Disallow: /admin.html
+Disallow: /login.html
+
+# Sitemap lokation
+Sitemap: https://zpolonius.dk/sitemap.xml

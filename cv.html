@@ -4,9 +4,22 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CV — Zacharias Polonius</title>
-  <meta name="description"
-    content="Erhvervserfaring og kompetencer — Technical Account Manager med fokus på checkout-optimering, AI og digital forretningsværdi.">
+  <title>CV — Zacharias Polonius | Erfaring & Kompetencer</title>
+  <meta name="description" content="Professionel profil for Zacharias Polonius. Technical Account Manager med fokus på checkout-optimering og AI.">
+  
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://zpolonius.dk/cv.html">
+  <meta property="og:title" content="CV — Zacharias Polonius | Erfaring">
+  <meta property="og:description" content="Teknisk profil med kommercielt fokus. Se erhvervserfaring og resultater.">
+  <meta property="og:image" content="https://zpolonius.dk/assets/og-cv.jpg">
+
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:url" content="https://zpolonius.dk/cv.html">
+  <meta property="twitter:title" content="CV — Zacharias Polonius | Erfaring">
+  <meta property="twitter:description" content="Teknisk profil med kommercielt fokus. Se erhvervserfaring og resultater.">
+  <meta property="twitter:image" content="https://zpolonius.dk/assets/og-cv.jpg">
   <link rel="stylesheet" href="css/style.css">
   <style>
     /* CV SPECIFIC REFINEMENTS */
@@ -545,8 +558,9 @@
               <div class="skill-group-title">${esc(grp.category)}</div>
               <div class="skill-tags">
                 ${grp.tags.map(t => {
-            const isBlue = ["ai", "tech", "checkout", "api", "flutter", "coding", "software", "sql", "xml", "cro", "optimization"].some(key => grp.category.toLowerCase().includes(key) || t.toLowerCase().includes(key));
-            return `<span class="skill-tag ${isBlue ? 'blue' : ''}">${esc(t)}</span>`;
+            const cleanTag = t.replace(/<\/?[^>]+(>|$)/g, "").trim();
+            const isBlue = ["ai", "tech", "checkout", "api", "flutter", "coding", "software", "sql", "xml", "cro", "optimization"].some(key => grp.category.toLowerCase().includes(key) || cleanTag.toLowerCase().includes(key));
+            return `<span class="skill-tag ${isBlue ? 'blue' : ''}">${esc(cleanTag)}</span>`;
           }).join('')}
               </div>
             </div>

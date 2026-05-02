@@ -1237,9 +1237,28 @@ function openProjectForm(isEdit, idx, item={}) {
         <div class="field"><label class="field-label">Vedhæftet fil (PDF)</label>${createFileZone('pj-file', item.file||'')}</div>
       </div>
     </div>`;
-  openFormPanel(isEdit ? 'Rediger projekt' : 'Tilføj projekt', () => {
+    openFormPanel(isEdit ? 'Rediger projekt' : 'Tilføj projekt', () => {
     const bodyContent = getEditorContent();
-    const obj = { id: item.id || slug(document.getElementById('pj-title').value), title: document.getElementById('pj-title').value, category: document.getElementById('pj-cat').value, tag: { ai:'AI', checkout:'Checkout', work:'Arbejde', volunteer:'Frivillig' }[document.getElementById('pj-cat').value], period: document.getElementById('pj-period').value, desc: document.getElementById('pj-desc').value, intro: document.getElementById('pj-intro').value, body: bodyContent, skills: document.getElementById('pj-skills').value.split(',').map(s=>s.trim()).filter(Boolean), cover: getUploadPath('pj-cover', item.cover), cover_pos: document.getElementById('pj-cover-pos').value, cover_alt: document.getElementById('pj-cover-alt').value, file: getUploadPath('pj-file', item.file), url: document.getElementById('pj-url').value || undefined, visible: document.getElementById('pj-vis').value === "1" };
+    const cleanDesc = document.getElementById('pj-desc').value.replace(/<\/?[^>]+(>|$)/g, "").trim();
+    const cleanSkills = document.getElementById('pj-skills').value.split(',').map(s=>s.replace(/<\/?[^>]+(>|$)/g, "").trim()).filter(Boolean);
+    
+    const obj = { 
+      id: item.id || slug(document.getElementById('pj-title').value), 
+      title: document.getElementById('pj-title').value, 
+      category: document.getElementById('pj-cat').value, 
+      tag: { ai:'AI', checkout:'Checkout', work:'Arbejde', volunteer:'Frivillig' }[document.getElementById('pj-cat').value], 
+      period: document.getElementById('pj-period').value, 
+      desc: cleanDesc, 
+      intro: document.getElementById('pj-intro').value, 
+      body: bodyContent, 
+      skills: cleanSkills, 
+      cover: getUploadPath('pj-cover', item.cover), 
+      cover_pos: document.getElementById('pj-cover-pos').value, 
+      cover_alt: document.getElementById('pj-cover-alt').value, 
+      file: getUploadPath('pj-file', item.file), 
+      url: document.getElementById('pj-url').value || undefined, 
+      visible: document.getElementById('pj-vis').value === "1" 
+    };
     if (isEdit) data.projects[idx] = obj;
     else data.projects.push(obj);
     closeForm(); updateBadges(); renderSection('projekter'); showToast(isEdit ? 'Projekt opdateret' : 'Projekt tilføjet');
@@ -1255,7 +1274,9 @@ function renderAnsaettelser(area) {
   area.innerHTML = list.length ? `<div class="entry-grid">${list.map((j,i) => `
     <div class="entry-card">
       <div class="entry-card-header">
-        <span class="entry-card-tag work ${j.visible===false?'draft':''}">Arbejde</span>
+        <span class="entry-card-tag ${j.category||'work'} ${j.visible===false?'draft':''}">
+          ${j.category==='volunteer' ? 'Frivillig' : 'Arbejde'}
+        </span>
         ${j.visible===false?'<span class="entry-card-tag draft" style="border-color:var(--amber);color:var(--amber);margin-left:6px;">Udkast</span>':''}
         <div class="entry-card-actions">
           <button class="btn-edit" onclick="editJob(${i})">Rediger</button>
@@ -1292,6 +1313,12 @@ function openJobForm(isEdit, idx, item={}) {
         </div>
       </div>
       <div class="form-sidebar">
+        <div class="field"><label class="field-label">Kategori</label>
+          <select class="f-select" id="jb-cat">
+            <option value="work"      ${item.category==='work'?'selected':''}>Erhvervserfaring</option>
+            <option value="volunteer" ${item.category==='volunteer'?'selected':''}>Frivilligt arbejde / Andet</option>
+          </select>
+        </div>
         <div class="field"><label class="field-label">Status</label>
           <select class="f-select" id="jb-vis">
             <option value="1" ${isVis?'selected':''}>Synlig (Live)</option>
@@ -1307,7 +1334,23 @@ function openJobForm(isEdit, idx, item={}) {
     </div>`;
   openFormPanel(isEdit ? 'Rediger ansættelse' : 'Tilføj ansættelse', () => {
     const bodyContent = getEditorContent();
-    const obj = { id: item.id || slug((document.getElementById('jb-role').value)+'-'+(document.getElementById('jb-company').value)), role: document.getElementById('jb-role').value, company: document.getElementById('jb-company').value, period: document.getElementById('jb-period').value, desc: document.getElementById('jb-desc').value, intro: document.getElementById('jb-intro').value, body: bodyContent, skills: document.getElementById('jb-skills').value.split(',').map(s=>s.trim()).filter(Boolean), cover: getUploadPath('jb-cover', item.cover), cover_pos: document.getElementById('jb-cover-pos').value, cover_alt: document.getElementById('jb-cover-alt').value, file: getUploadPath('jb-file', item.file), visible: document.getElementById('jb-vis').value === "1", category:'work' };
+    const obj = { 
+      id: item.id || slug((document.getElementById('jb-role').value)+'-'+(document.getElementById('jb-company').value)), 
+      role: document.getElementById('jb-role').value, 
+      company: document.getElementById('jb-company').value, 
+      period: document.getElementById('jb-period').value, 
+      desc: document.getElementById('jb-desc').value, 
+      intro: document.getElementById('jb-intro').value, 
+      body: bodyContent, 
+      skills: document.getElementById('jb-skills').value.split(',').map(s=>s.trim()).filter(Boolean), 
+      cover: getUploadPath('jb-cover', item.cover), 
+      cover_pos: document.getElementById('jb-cover-pos').value, 
+      cover_alt: document.getElementById('jb-cover-alt').value, 
+      file: getUploadPath('jb-file', item.file), 
+      visible: document.getElementById('jb-vis').value === "1", 
+      category: document.getElementById('jb-cat').value,
+      tag: document.getElementById('jb-cat').value === 'volunteer' ? 'Frivillig' : 'Arbejde'
+    };
     if (isEdit) data.cv.jobs[idx] = obj;
     else data.cv.jobs.push(obj);
     closeForm(); updateBadges(); renderSection('ansaettelser'); showToast(isEdit ? 'Ansættelse opdateret' : 'Ansættelse tilføjet');
@@ -1587,7 +1630,7 @@ function editKomp(i) {
   openFormPanel(isEdit ? 'Rediger gruppe' : 'Tilføj gruppe', () => {
     const newGrp = {
       category: document.getElementById('komp-cat').value,
-      tags: document.getElementById('komp-tags').value.split(',').map(s=>s.trim()).filter(Boolean)
+      tags: document.getElementById('komp-tags').value.split(',').map(s=>s.replace(/<\/?[^>]+(>|$)/g, "").trim()).filter(Boolean)
     };
     if (isEdit) data.om.kompetencer[i] = newGrp;
     else data.om.kompetencer.push(newGrp);

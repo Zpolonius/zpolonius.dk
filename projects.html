@@ -3,8 +3,22 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Projekter — Zacharias Polonius</title>
-  <meta name="description" content="Projekter og cases inden for AI, checkout-optimering, konvertering og teknisk account management.">
+  <title>Business Cases & Projekter — Zacharias Polonius</title>
+  <meta name="description" content="Udforsk konkrete resultater inden for checkout-optimering, AI-integration og teknisk rådgivning.">
+  
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://zpolonius.dk/projects.html">
+  <meta property="og:title" content="Business Cases & Projekter — Zacharias Polonius">
+  <meta property="og:description" content="Se hvordan jeg skaber forretningsværdi gennem teknologi.">
+  <meta property="og:image" content="https://zpolonius.dk/assets/og-projects.jpg">
+
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:url" content="https://zpolonius.dk/projects.html">
+  <meta property="twitter:title" content="Business Cases & Projekter — Zacharias Polonius">
+  <meta property="twitter:description" content="Se hvordan jeg skaber forretningsværdi gennem teknologi.">
+  <meta property="twitter:image" content="https://zpolonius.dk/assets/og-projects.jpg">
   <link rel="stylesheet" href="css/style.css">
   <style>
     .page-hero {
@@ -261,8 +275,11 @@
               <div class="tag ${catClass[p.category]||''} proj-tag">${esc(catLabels[p.category]||p.tag||p.category)}</div>
               <div class="proj-title">${esc(p.title)}</div>
               ${p.period ? `<div class="proj-period">${esc(p.period)}</div>` : ''}
-              <div class="proj-desc">${esc(p.desc||'')}</div>
-              ${(p.skills||[]).length ? `<div class="proj-skills">${p.skills.slice(0,4).map(s=>`<span class="proj-skill">${esc(s)}</span>`).join('')}</div>` : ''}
+              <div class="proj-desc">${esc((p.desc||'').replace(/<\/?[^>]+(>|$)/g, "").trim())}</div>
+              ${(p.skills||[]).length ? `<div class="proj-skills">${p.skills.slice(0,4).map(s=>{
+                const cleanS = s.replace(/<\/?[^>]+(>|$)/g, "").trim();
+                return `<span class="proj-skill">${esc(cleanS)}</span>`;
+              }).join('')}</div>` : ''}
               <span class="proj-arrow">Læs mere →</span>
             </div>`;
           grid.insertBefore(card, noRes);
