@@ -159,6 +159,7 @@
   <div id="global-floating-cta"></div>
 
   <!-- PAGE HERO -->
+  <main>
   <div class="page-hero">
     <div class="fade-up fade-up-1">
       <div class="page-hero-label">Indsigter & Artikler</div>
@@ -180,6 +181,8 @@
   <div class="articles-grid" id="articlesGrid">
     <div class="no-articles" id="noArticles">Ingen artikler endnu — kom tilbage snart.</div>
   </div>
+
+  </main>
 
   <!-- CENTRAL CTA BAR -->
   <div id="global-cta-bar"></div>
@@ -223,6 +226,7 @@
                      alt="${esc(a.cover_alt || a.title)}"
                      class="article-img"
                      style="object-position: ${a.cover_pos || 'center center'}"
+                     loading="lazy"
                      onerror="this.parentElement.style.display='none'">
               </div>
             ` : ''}

@@ -47,3 +47,25 @@ RewriteRule ^sitemap\.xml$ sitemap.php [L]
     Order allow,deny
     Deny from all
 </FilesMatch>
+
+# --- CACHING (Browser Cache Optimization) ---
+<IfModule mod_expires.c>
+    ExpiresActive On
+    
+    # Standard: 1 måned
+    ExpiresDefault "access plus 1 month"
+    
+    # CSS & JS: 1 år (da de har versions-tags eller sjældent ændres)
+    ExpiresByType text/css "access plus 1 year"
+    ExpiresByType application/javascript "access plus 1 year"
+    
+    # Billeder: 1 år
+    ExpiresByType image/webp "access plus 1 year"
+    ExpiresByType image/png "access plus 1 year"
+    ExpiresByType image/jpeg "access plus 1 year"
+    ExpiresByType image/svg+xml "access plus 1 year"
+    ExpiresByType image/x-icon "access plus 1 year"
+    
+    # Fonts: 1 år
+    ExpiresByType font/woff2 "access plus 1 year"
+</IfModule>

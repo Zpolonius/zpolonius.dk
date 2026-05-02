@@ -15,12 +15,12 @@
   --border-blue:  rgba(65,143,255,0.35);
   --border-green: rgba(65,164,71,0.35);
   --text:         #e8e8e8;
-  --text-muted:   rgba(255,255,255,0.6);
-  --text-faint:   rgba(255,255,255,0.4);
+  --text-muted:   rgba(255,255,255,0.75);
+  --text-faint:   rgba(255,255,255,0.55);
   --text-ghost:   rgba(255,255,255,0.18);
   --blue:         #418FFF;
   --green:        #41A447;
-  --font:         'Inter', sans-serif;
+  --font:         'Inter', system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
   --overlay-bg:   rgba(8,8,8,0.92);
 
   /* ---- RADIUS TOKENS ---- */

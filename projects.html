@@ -174,6 +174,7 @@
   <div id="global-floating-cta"></div>
 
   <!-- PAGE HERO -->
+  <main>
   <div class="page-hero">
     <div class="fade-up fade-up-1">
       <div class="page-hero-label">Projekter & Cases</div>
@@ -206,6 +207,8 @@
   <div class="proj-grid" id="projGrid">
     <div class="no-results" id="noResults">Ingen projekter i denne kategori endnu.</div>
   </div>
+
+  </main>
 
   <!-- CENTRAL CTA BAR -->
   <div id="global-cta-bar"></div>
@@ -284,7 +287,7 @@
           card.innerHTML = `
             ${p.cover ? `
               <div class="proj-card-img-wrap">
-                <img src="${p.cover}" alt="${esc(p.cover_alt||p.title)}" class="proj-card-img" style="object-position: ${p.cover_pos || 'center center'}" onerror="this.parentElement.style.display='none'">
+                <img src="${p.cover}" alt="${esc(p.cover_alt||p.title)}" class="proj-card-img" style="object-position: ${p.cover_pos || 'center center'}" loading="lazy" onerror="this.parentElement.style.display='none'">
               </div>
             ` : ''}
             <div class="proj-card-body">

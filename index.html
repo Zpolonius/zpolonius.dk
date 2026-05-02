@@ -40,6 +40,10 @@
   }
   </script>
 
+  <!-- Resource Prioritization -->
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" as="style">
+  <link rel="preload" href="css/style.css" as="style">
+
   <!-- Preconnect for faster font loading -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -604,12 +608,16 @@
   <div id="global-floating-cta"></div>
 
   <!-- HERO -->
+  <main>
   <section class="hero">
     <div class="hero-fallback"></div>
     <img
       class="hero-img"
       src="assets/cover.webp"
       alt="Zacharias Polonius"
+      width="1920"
+      height="520"
+      fetchpriority="high"
     />
     <div class="hero-content">
       <div class="fade-up fade-up-1">
@@ -685,7 +693,7 @@
     <div class="section-header">
       <span class="section-title">Podcast: "Hvorfor levering ødelægger konverteringen"</span>
     </div>
-    <div class="media-container" style="background: var(--bg-card); border: 0.5px solid var(--border-md); padding: 16px; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); margin: 0 20px 40px 20px; transition: border-color 0.3s;">
+    <div class="media-container" style="background: var(--bg-card); border: 0.5px solid var(--border-md); padding: 16px; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); margin: 0 20px 40px 20px; transition: border-color 0.3s; min-height: 184px;">
       <iframe title="Spotify Podcast Episode: Vibe Coding & AI" data-testid="embed-iframe" style="border-radius:12px" src="https://open.spotify.com/embed/episode/1IMoB5xodoIzsVIgDosrv0?utm_source=generator&theme=0" width="100%" height="152" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
     </div>
   </div>
@@ -756,10 +764,11 @@
       <a href="projects.html?filter=volunteer" class="btn-outline">Se alt frivilligt arbejde</a>
     </div>
   </div>
-
-
+  </main>
 
   <!-- FOOTER -->
+  </main>
+
   <!-- CENTRAL CTA BAR -->
   <div id="global-cta-bar"></div>
 
@@ -871,7 +880,7 @@
           <a href="detail.html?id=${p.id}" class="proj-card">
             ${p.cover ? `
               <div class="proj-card-img-wrap">
-                <img src="${p.cover}" alt="${esc(p.cover_alt||p.title)}" class="proj-card-img" style="object-position: ${p.cover_pos || 'center center'}" onerror="this.parentElement.style.display='none'">
+                <img src="${p.cover}" alt="${esc(p.cover_alt||p.title)}" class="proj-card-img" style="object-position: ${p.cover_pos || 'center center'}" loading="lazy" onerror="this.parentElement.style.display='none'">
               </div>
             ` : ''}
             <div class="proj-card-body">
@@ -895,7 +904,7 @@
             <a href="detail.html?id=${a.id}" class="proj-card">
               ${a.cover ? `
                 <div class="proj-card-img-wrap">
-                  <img src="${a.cover}" alt="${esc(a.title)}" class="proj-card-img" style="object-position: ${a.cover_pos || 'center center'}" onerror="this.parentElement.style.display='none'">
+                  <img src="${a.cover}" alt="${esc(a.title)}" class="proj-card-img" style="object-position: ${a.cover_pos || 'center center'}" loading="lazy" onerror="this.parentElement.style.display='none'">
                 </div>
               ` : ''}
               <div class="proj-card-body">
@@ -976,7 +985,7 @@
                 <div class="quote-mark">"</div>
                 <p class="quote-text">${esc(truncated)}</p>
                 <div class="rec-author-wrap" style="justify-content: center;">
-                  ${r.photo ? `<img src="${r.photo}" alt="${esc(r.photo_alt||r.name)}" class="rec-avatar" style="object-position: ${r.photo_pos || 'center center'}" onerror="this.src='data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2240%22%20height%3D%2240%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%23555%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M20%2021v-2a4%204%200%200%200-4-4H8a4%204%200%200%200-4%204v2%22%3E%3C%2Fpath%3E%3Ccircle%20cx%3D%2212%22%20cy%3D%227%22%20r%3D%224%22%3E%3C%2Fcircle%3E%3C%2Fsvg%3E'">` : ''}
+                  ${r.photo ? `<img src="${r.photo}" alt="${esc(r.photo_alt||r.name)}" class="rec-avatar" style="object-position: ${r.photo_pos || 'center center'}" loading="lazy" onerror="this.src='data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2240%22%20height%3D%2240%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%23555%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M20%2021v-2a4%204%200%200%200-4-4H8a4%204%200%200%200-4%204v2%22%3E%3C%2Fpath%3E%3Ccircle%20cx%3D%2212%22%20cy%3D%227%22%20r%3D%224%22%3E%3C%2Fcircle%3E%3C%2Fsvg%3E'">` : ''}
                   <div class="rec-meta">
                     <div class="rec-name">${esc(r.name)}</div>
                     <div class="rec-role">${esc(r.role)}</div>
