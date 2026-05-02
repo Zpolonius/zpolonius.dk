@@ -78,50 +78,39 @@
     .cover-period { font-size: 14px; color: rgba(255,255,255,0.6); margin-bottom: 4px; }
     .cover-photo-credit { font-size: 10px; color: rgba(255,255,255,0.4); text-transform: uppercase; letter-spacing: 0.05em; }
 
-    /* INTRO + META */
-    .intro-wrap {
-      max-width: 800px;
+    /* NEW DETAIL GRID LAYOUT */
+    .detail-grid {
+      display: grid;
+      grid-template-columns: 200px 1fr;
+      gap: 80px;
+      max-width: 1100px;
       margin: 0 auto;
       padding: 80px 40px;
-      border-bottom: 0.5px solid var(--border);
+    }
+
+    .meta-sidebar {
+      position: sticky;
+      top: 120px;
+      height: fit-content;
       display: flex;
       flex-direction: column;
-      gap: 40px;
+      gap: 32px;
     }
+
     .intro-text {
-      font-size: 22px;
-      line-height: 1.6;
+      font-size: 24px;
+      line-height: 1.5;
       color: var(--text);
       font-weight: 400;
       letter-spacing: -0.01em;
+      margin-bottom: 48px;
     }
-    .meta-col { 
-      display: grid; 
-      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); 
-      gap: 32px; 
-      padding: 24px 0;
-      border-top: 0.5px solid var(--border);
-    }
-    .meta-item-label {
-      font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em;
-      color: var(--text-faint); margin-bottom: 8px;
-    }
-    .meta-item-val { font-size: 14px; color: var(--text-muted); line-height: 1.5; }
-    .meta-links { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 12px; }
 
-    /* CONTENT WRAP */
-    .content-wrap {
-      max-width: 800px;
-      margin: 0 auto;
-      padding: 60px 40px 100px;
-      display: flex;
-      flex-direction: column;
-      gap: 60px;
-    }
     .content-main {
       font-size: 16px;
       line-height: 1.8;
       color: var(--text-muted);
+      max-width: 720px; /* Perfekt læsebredde */
     }
     .content-main h2 { font-size: 28px; color: var(--text); margin: 48px 0 24px; letter-spacing: -0.02em; }
     .content-main h3 { font-size: 22px; color: var(--text); margin: 32px 0 16px; }
@@ -223,11 +212,21 @@
       .cover-title { font-size: 32px; }
       .cover-right { display: none; }
       
-      .intro-wrap { grid-template-columns: 1fr; gap: 40px; padding: 48px 20px; }
-      .intro-text { font-size: 18px; }
-      
-      .content-wrap { grid-template-columns: 1fr; gap: 40px; padding: 48px 20px; }
-      .sidebar-block { margin-bottom: 32px; }
+      .detail-grid {
+        grid-template-columns: 1fr;
+        padding: 40px 20px;
+        gap: 40px;
+      }
+      .meta-sidebar {
+        position: static;
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 20px;
+        padding-bottom: 32px;
+        border-bottom: 0.5px solid var(--border);
+      }
+      .intro-text { font-size: 18px; margin-bottom: 32px; }
+      .sidebar { grid-template-columns: 1fr; }
 
       .detail-cta { margin: 40px 20px 60px; padding: 48px 24px; border-radius: 20px; }
       .detail-cta-title { font-size: 28px; }
@@ -278,18 +277,20 @@
       </div>
     </div>
 
-    <!-- INTRO + META -->
-    <div class="intro-wrap">
-      <div class="intro-col">
-        <p class="intro-text" id="introText"></p>
-      </div>
-      <div class="meta-col" id="metaCol"></div>
-    </div>
+    <div class="detail-grid">
+      <!-- LEFT SIDEBAR -->
+      <aside class="meta-sidebar" id="metaCol"></aside>
 
-    <!-- CONTENT + SIDEBAR -->
-    <div class="content-wrap">
-      <div class="content-main" id="contentMain"></div>
-      <div class="sidebar" id="contentSidebar"></div>
+      <!-- MAIN CONTENT -->
+      <main class="detail-main">
+        <div id="introContainer">
+          <div class="intro-text" id="introText"></div>
+        </div>
+        
+        <div class="content-main" id="contentMain"></div>
+        
+        <div class="sidebar" id="contentSidebar"></div>
+      </main>
     </div>
 
     <!-- CONVERSION CTA -->
@@ -376,20 +377,6 @@
       document.getElementById('bcParent').textContent = parentName[cat] || 'Projekter';
       document.getElementById('bcCurrent').textContent = item.title || item.name;
 
-      // Cover
-      const titleEl = document.getElementById('coverTitle');
-      const fullTitle = item.title || item.name || "";
-      titleEl.textContent = ""; // Reset
-      
-      let charIdx = 0;
-      function type() {
-        if (charIdx < fullTitle.length) {
-          titleEl.textContent += fullTitle.charAt(charIdx);
-          charIdx++;
-          setTimeout(type, 40); // Hastighed: 40ms pr bogstav
-        }
-      }
-      setTimeout(type, 300); // Lille forsinkelse før start
       document.getElementById('coverTag').textContent = item.tag || item.category || 'Case';
       if (item.company || item.role) document.getElementById('coverCompany').textContent = (item.role ? item.role + ' @ ' : '') + (item.company || item.institution || '');
       if (item.period) document.getElementById('coverPeriod').textContent = item.period;
@@ -424,8 +411,47 @@
         fallback.classList.add('show');
       }
 
-      // Intro
-      document.getElementById('introText').innerHTML = item.intro || item.desc || '';
+      // Intro with Typewriter
+      const introEl = document.getElementById('introText');
+      const fullIntro = item.intro || item.desc || "";
+      introEl.innerHTML = ""; // Reset
+      
+      let introIdx = 0;
+      function typeIntro() {
+        if (introIdx < fullIntro.length) {
+          // Vi tjekker om vi rammer et HTML tag (<p>, <strong> osv)
+          if (fullIntro[introIdx] === '<') {
+            const endTag = fullIntro.indexOf('>', introIdx);
+            if (endTag !== -1) {
+              introEl.innerHTML += fullIntro.substring(introIdx, endTag + 1);
+              introIdx = endTag + 1;
+              typeIntro(); // Fortsæt med det samme efter tagget
+              return;
+            }
+          }
+          introEl.innerHTML += fullIntro.charAt(introIdx);
+          introIdx++;
+          setTimeout(typeIntro, 15); // Hurtigere fart til den lange tekst
+        }
+      }
+
+      // Title typewriter (allerede implementeret tidligere)
+      const titleEl = document.getElementById('coverTitle');
+      const fullTitle = item.title || item.name || "";
+      titleEl.textContent = ""; 
+      
+      let charIdx = 0;
+      function typeTitle() {
+        if (charIdx < fullTitle.length) {
+          titleEl.textContent += fullTitle.charAt(charIdx);
+          charIdx++;
+          setTimeout(typeTitle, 40);
+        } else {
+          // Når titlen er færdig, start introen!
+          setTimeout(typeIntro, 200);
+        }
+      }
+      setTimeout(typeTitle, 300);
 
       // Meta
       let metaHtml = '';
@@ -442,19 +468,21 @@
         });
         metaHtml += `</div></div>`;
       }
+      
+      // Skills in Sidebar
+      if (item.skills && item.skills.length > 0) {
+        metaHtml += `<div class="meta-item" style="margin-top:16px;"><div class="meta-item-label">Kompetencer</div><div class="skill-pills">`;
+        item.skills.forEach(s => { metaHtml += `<span class="skill-pill">${esc(s)}</span>`; });
+        metaHtml += `</div></div>`;
+      }
+      
       document.getElementById('metaCol').innerHTML = metaHtml;
 
       // Body Content
       document.getElementById('contentMain').innerHTML = item.body || item.text || '<p>Ingen yderligere beskrivelse tilgængelig.</p>';
 
-      // Sidebar
-      let sideHtml = '';
-      if (item.skills && item.skills.length > 0) {
-        sideHtml += `<div class="sidebar-block"><div class="sidebar-title">Kompetencer</div><div class="skill-pills">`;
-        item.skills.forEach(s => { sideHtml += `<span class="skill-pill">${esc(s)}</span>`; });
-        sideHtml += `</div></div>`;
-      }
-      document.getElementById('contentSidebar').innerHTML = sideHtml;
+      // Clear footer sidebar as it's now in the side-sidebar
+      document.getElementById('contentSidebar').innerHTML = '';
 
       // Entry Nav (Prev/Next)
       const currentCatItems = allItems.filter(x => x.category === item.category && x.visible !== false);

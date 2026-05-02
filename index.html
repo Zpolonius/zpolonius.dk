@@ -872,7 +872,7 @@
       const blogSec = document.getElementById('blogSection');
       const blogGridEl = document.getElementById('blogGrid');
       if (blogSec && blogGridEl) {
-        const arts = (data.articles || []).filter(a => a.visible !== false).slice(0, 3);
+        const arts = (data.articles || []).filter(a => a.visible !== false).reverse().slice(0, 3);
         if (arts.length > 0) {
           blogSec.style.display = 'block';
           blogGridEl.innerHTML = arts.map(a => `
