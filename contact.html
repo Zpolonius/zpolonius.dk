@@ -228,20 +228,23 @@
       return div.innerHTML;
     });
 
+    // CSRF Fetch
+    let pageCSRFToken = '';
+    fetch('api/csrf.php').then(r=>r.json()).then(d=>{ if(d.ok) pageCSRFToken = d.token; });
+
     // Load contact info from content.json
-    fetch('data/content.json')
-      .then(r => r.json())
-      .then(data => {
-        const s = data.site || {};
-        if (s.email) {
-          document.getElementById('contactEmail').href = `mailto:${s.email}`;
-          document.getElementById('contactEmail').textContent = s.email;
-        }
-        if (s.phone) {
-          document.getElementById('contactPhone').href = `tel:${s.phone.replace(/\s/g,'')}`;
-          document.getElementById('contactPhone').textContent = s.phone;
-        }
-      });
+    loadContentData().then(data => {
+      if (!data) return;
+      const s = data.site || {};
+      if (s.email) {
+        document.getElementById('contactEmail').href = `mailto:${s.email}`;
+        document.getElementById('contactEmail').textContent = s.email;
+      }
+      if (s.phone) {
+        document.getElementById('contactPhone').href = `tel:${s.phone.replace(/\s/g,'')}`;
+        document.getElementById('contactPhone').textContent = s.phone;
+      }
+    });
 
     // Pills
     document.querySelectorAll('.pill').forEach(pill => {
@@ -293,7 +296,8 @@
           company: document.getElementById('f-company').value.trim(),
           url: document.getElementById('f-url').value.trim(),
           subject: document.querySelector('.pill.selected')?.textContent || 'Generel henvendelse',
-          message: msg
+          message: msg,
+          csrf_token: pageCSRFToken
         })
       })
       .then(r => r.json())

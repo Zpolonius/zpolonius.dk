@@ -19,6 +19,22 @@
   <meta property="twitter:title" content="Indsigter & Artikler — Zacharias Polonius">
   <meta property="twitter:description" content="Praksisnære perspektiver på teknologi og forretning.">
   <meta property="twitter:image" content="https://zpolonius.dk/assets/og-insights.jpg">
+  <link rel="canonical" href="https://zpolonius.dk/insights.html">
+
+  <!-- Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "Zacharias Polonius",
+    "url": "https://zpolonius.dk/insights.html",
+    "jobTitle": "Technical Commercial Lead",
+    "sameAs": [
+      "https://www.linkedin.com/in/zachariaspolonius/",
+      "https://github.com/zpolonius"
+    ]
+  }
+  </script>
   <link rel="stylesheet" href="css/style.css">
   <style>
     /* PAGE HERO */
@@ -95,11 +111,9 @@
     }
     .article-arrow {
       display: inline-block; margin-top: 20px;
-      font-size: 12px; color: var(--blue); opacity: 0;
-      transition: opacity 0.2s, transform 0.2s;
+      font-size: 12px; color: var(--blue);
       font-weight: 500; letter-spacing: 0.04em;
     }
-    .article-card:hover .article-arrow { transform: translateX(4px); }
 
     /* EMPTY STATE */
     .no-articles {
@@ -133,7 +147,6 @@
       }
       .article-title { font-size: 18px; }
       .article-excerpt { -webkit-line-clamp: 4; }
-      .article-arrow { opacity: 1; } /* Always visible on mobile */
     }
   </style>
 </head>

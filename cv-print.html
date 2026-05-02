@@ -285,11 +285,11 @@
     </main>
   </div>
 
+  <script src="js/main.js"></script>
   <script>
-    fetch('data/content.json')
-      .then(r => r.json())
-      .then(data => {
-        const site = data.site || {};
+    loadContentData().then(data => {
+      if (!data) return;
+      const site = data.site || {};
         const hero = data.hero || {};
         const om = data.om || {};
         

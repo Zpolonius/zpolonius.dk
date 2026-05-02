@@ -16,7 +16,6 @@ echo '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' . PHP_EOL;
 // 1. STATISKE SIDER
 $staticPages = [
     "" => 1.0,
-    "index.html" => 1.0,
     "about.html" => 0.8,
     "projects.html" => 0.9,
     "insights.html" => 0.9,

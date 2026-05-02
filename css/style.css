@@ -893,6 +893,27 @@ textarea.input { resize: none; height: 100px; line-height: 1.6; }
 @media (max-width: 768px) {
   .floating-cta { display: none; } /* Hidden on mobile in favor of Bottom Nav */
 }
+
+/* ---- SHARED ARROWS & CTA INDICATORS ---- */
+.proj-arrow, .article-arrow, .cell-arrow {
+  opacity: 0;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+/* Hover reveal on desktop */
+.proj-card:hover .proj-arrow,
+.article-card:hover .article-arrow,
+.bento-cell:hover .cell-arrow {
+  opacity: 1;
+}
+
+/* Always visible on touch devices */
+@media (hover: none) {
+  .proj-arrow, .article-arrow, .cell-arrow {
+    opacity: 1 !important;
+  }
+}
+
 /* ============================================
    PAGE TRANSITIONS (Disabled temporarily to fix visibility)
    ============================================ */

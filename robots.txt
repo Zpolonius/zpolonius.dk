@@ -8,4 +8,4 @@ Disallow: /admin.html
 Disallow: /login.html
 
 # Sitemap lokation
-Sitemap: https://zpolonius.dk/sitemap.xml
+Sitemap: https://zpolonius.dk/sitemap.php
