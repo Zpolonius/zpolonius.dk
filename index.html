@@ -51,9 +51,9 @@
     .hero-content {
       position: absolute;
       inset: 0;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      align-items: flex-end;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
       padding: 48px 40px;
       z-index: 2;
     }
@@ -63,7 +63,12 @@
       letter-spacing: 0.15em;
       color: #418FFF;
       text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+    .status-pill {
       margin-bottom: 16px;
+      background: rgba(255,255,255,0.05);
+      backdrop-filter: blur(4px);
     }
     .hero-name {
       font-size: 52px;
@@ -381,9 +386,83 @@
     }
 
     @media (max-width: 768px) {
+      html {
+        scroll-snap-type: y proximity;
+        scroll-padding-top: 60px;
+      }
+      section, #projectsSection, #cvSection, #recSection, #mediaSection, #blogSection, .footer {
+        scroll-snap-align: start;
+      }
       .quote-card { padding: 32px 24px 60px; }
       .carousel-nav { right: 50%; transform: translateX(50%); bottom: 20px; }
+      
+      /* BENTO - VERTICAL LIST ON MOBILE */
+      .bento {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 0;
+        border-bottom: none;
+      }
+      .bento-cell {
+        padding: 16px 20px;
+        min-width: 0;
+        border-right: none;
+        border-bottom: 0.5px solid var(--border);
+      }
+      .cell-title { font-size: 18px; }
+      .cell-desc { display: none; } /* Skjul lang tekst på mobil for "nice small box" effekt */
+      .bento-cell:hover .cell-arrow { opacity: 1; }
+
+      /* SCROLLABLE RECOMMENDATIONS */
+      .rec-container {
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+      }
+      .rec-container::-webkit-scrollbar { display: none; }
+      .quote-carousel {
+        transform: none !important; /* Overstyre JS på mobil */
+      }
+      .quote-card {
+        scroll-snap-align: center;
+        min-width: 100%;
+        border-right: none;
+      }
+
+      /* 1-COLUMN LAYOUTS FOR CARDS */
+      .proj-grid, .cv-strip {
+        grid-template-columns: 1fr;
+      }
+      .proj-card, .cv-item {
+        border-right: none;
+      }
+      .proj-card-img-wrap { height: 220px; }
     }
+
+    /* ---- SCROLL HINT ---- */
+    .scroll-hint {
+      position: absolute;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      color: #fff;
+      opacity: 0.6;
+      animation: bounce 2s infinite;
+      pointer-events: none;
+      z-index: 10;
+    }
+    .scroll-hint-line { width: 1px; height: 30px; background: currentColor; }
+    @keyframes bounce {
+      0%, 20%, 50%, 80%, 100% {transform: translateX(-50%) translateY(0);}
+      40% {transform: translateX(-50%) translateY(-10px);}
+      60% {transform: translateX(-50%) translateY(-5px);}
+    }
+
 
     /* ---- CTA ---- */    .cta-bar {
       display: flex;
@@ -429,17 +508,18 @@
         <div class="hero-label">Technical Account Manager · Bring</div>
         <h1 class="hero-name" id="heroName">Zacharias<br>Polonius</h1>
         <p class="hero-tagline">De små detaljer leder til store forandringer — inden for AI, teknisk support og kundesuccess.</p>
+        <div class="status-pill">
+          <span class="status-dot"></span>
+          Digital Arkitekt & Forretningsstrateg
+        </div>
           <div class="hero-actions">
             <button class="hero-btn-primary" data-contact>Book et review →</button>
             <a href="#projectsSection" class="hero-btn-secondary">Se Business Cases ↓</a>
           </div>
       </div>
-      <div class="hero-right fade-up fade-up-2">
-        <div class="status-pill">
-          <span class="status-dot"></span>
-          Tilgængelig for nye muligheder
-        </div>
-      </div>
+    </div>
+    <div class="scroll-hint">
+      <div class="scroll-hint-line"></div>
     </div>
   </section>
 
@@ -559,11 +639,7 @@
     </div>
   </div>
 
-  <!-- CTA -->
-  <div class="cta-bar">
-    <p class="cta-text"><strong>Klar til at barbere sekunder af din checkout og øge konverteringen?</strong> Lad os tage en snak om jeres tech-stack.</p>
-    <button class="btn-primary" data-contact>Book et review →</button>
-  </div>
+
 
   <!-- FOOTER -->
   <footer class="footer">
@@ -653,21 +729,6 @@
     <a class="bottom-nav-item" href="index.html#blogSection" data-page="indsigter">
       <span class="bottom-nav-icon">📝</span>
       <span class="bottom-nav-label">Indsigter</span>
-    </a>
-    <div class="bottom-nav-divider"></div>
-    <a class="bottom-nav-item" href="cv.html" data-page="cv">
-      <span class="bottom-nav-icon">◎</span>
-      <span class="bottom-nav-label">CV</span>
-    </a>
-    <div class="bottom-nav-divider"></div>
-    <a class="bottom-nav-item" href="recommendations.html" data-page="anbefalinger">
-      <span class="bottom-nav-icon">💬</span>
-      <span class="bottom-nav-label">Anb.</span>
-    </a>
-    <div class="bottom-nav-divider"></div>
-    <a class="bottom-nav-item" href="about.html" data-page="om">
-      <span class="bottom-nav-icon">◉</span>
-      <span class="bottom-nav-label">Om</span>
     </a>
     <div class="bottom-nav-divider"></div>
     <button class="bottom-nav-contact" data-contact-mobile>
@@ -904,12 +965,36 @@
 
         window.goToSlide = function(index) {
           currentSlide = index;
-          if (recGrid) recGrid.style.transform = `translateX(-${index * 100}%)`;
+          const container = document.getElementById('recSection')?.querySelector('.rec-container');
+          if (window.innerWidth <= 768 && container) {
+            container.scrollTo({
+              left: index * container.offsetWidth,
+              behavior: 'smooth'
+            });
+          } else if (recGrid) {
+            recGrid.style.transform = `translateX(-${index * 100}%)`;
+          }
           document.querySelectorAll('.carousel-dot').forEach((dot, i) => {
             dot.classList.toggle('active', i === index);
           });
           resetInterval();
         };
+
+        // Sync dots on scroll (mobile)
+        const container = document.getElementById('recSection')?.querySelector('.rec-container');
+        if (container) {
+          container.addEventListener('scroll', () => {
+            if (window.innerWidth <= 768) {
+              const index = Math.round(container.scrollLeft / container.offsetWidth);
+              if (index !== currentSlide) {
+                currentSlide = index;
+                document.querySelectorAll('.carousel-dot').forEach((dot, i) => {
+                  dot.classList.toggle('active', i === index);
+                });
+              }
+            }
+          }, { passive: true });
+        }
 
         function nextSlide() {
           currentSlide = (currentSlide + 1) % totalSlides;
@@ -949,5 +1034,9 @@
       document.querySelectorAll('.bento-cell').forEach(c => c.classList.remove('selected'));
     }
   </script>
+  <button class="floating-cta" data-contact>
+    <span class="icon">✉</span>
+    Kontakt mig
+  </button>
 </body>
 </html>
