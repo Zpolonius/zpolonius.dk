@@ -90,6 +90,6 @@ Distributed under the MIT License. See `LICENSE` for more information.
 
 ## 🤝 Contact
 
-Zacharias Polonius - [@zachariaspolonius](https://www.linkedin.com/in/zachariaspolonius/) - zacharias@polonius.dk
+Zacharias Polonius - [@zachariaspolonius](https://www.linkedin.com/in/zpolonius/) - zacharias@polonius.dk
 
-Project Link: [https://github.com/zpolonius/zpoloniusdk](https://github.com/zpolonius/zpoloniusdk)
+Project Link: [https://github.com/zpolonius/zpolonius.dk](https://github.com/Zpolonius/zpolonius.dk)
