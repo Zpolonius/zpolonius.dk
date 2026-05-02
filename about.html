@@ -73,16 +73,53 @@
     .skill-tags { display: flex; flex-wrap: wrap; gap: 5px; }
 
     @media (max-width: 768px) {
+      /* HERO — stack photo below text */
+      .about-hero {
+        grid-template-columns: 1fr;
+        min-height: auto;
+      }
+      .about-hero-left {
+        padding: 32px 20px 28px;
+        border-right: none;
+        border-bottom: 0.5px solid var(--border);
+      }
+      .about-hero-name { font-size: 32px; }
+      .about-hero-right { height: 280px; }
+      .about-hero-actions { flex-direction: column; gap: 8px; }
+      .about-hero-btn-p, .about-hero-btn-s { text-align: center; }
+
+      /* INFO GRID — 2 columns */
+      .info-grid { grid-template-columns: 1fr 1fr; }
+      .info-cell:nth-child(2n) { border-right: none; }
+      .info-cell:nth-child(n+3) { border-top: 0.5px solid var(--border); }
+      .info-cell { padding: 16px 20px; }
+
+      /* BIO — stack */
+      .bio-wrap { grid-template-columns: 1fr; }
+      .bio-main { padding: 24px 20px; border-right: none; border-bottom: 0.5px solid var(--border); }
+      .bio-sidebar { padding: 24px 20px; }
+      .bio-para { font-size: 14px; }
+
+      /* PERSONTYPE — stack */
+      .persontype-wrap { grid-template-columns: 1fr; }
+      .persontype-cell { padding: 24px 20px; border-right: none; border-bottom: 0.5px solid var(--border); }
+      .persontype-cell:last-child { border-bottom: none; }
+
+      /* SKILLS STRIP — 2 columns */
       .skills-strip { grid-template-columns: 1fr 1fr; }
       .skill-group:nth-child(2n) { border-right: none; }
       .skill-group:nth-child(n+3) { border-top: 0.5px solid var(--border); }
+      .skill-group { padding: 16px 20px; }
     }
   </style>
 </head>
 <body>
-
-  <!-- SHARED HEADER -->
+  <!-- SHARED WIDGETS -->
   <header id="global-header"></header>
+  <div id="global-menu"></div>
+  <div id="global-contact"></div>
+  <nav id="global-bottom-nav"></nav>
+  <div id="global-floating-cta"></div>
 
   <!-- HERO -->
   <div class="about-hero">
@@ -191,10 +228,6 @@
   <!-- SHARED FOOTER -->
   <footer id="global-footer" class="footer"></footer>
 
-  <!-- SHARED WIDGETS -->
-  <div id="global-contact"></div>
-  <nav id="global-bottom-nav"></nav>
-  <div id="global-floating-cta"></div>
 
   <!-- CONTACT OVERLAY PLACEHOLDER REMOVED - NOW IN MAIN.JS -->
   <!-- BOTTOM NAV PLACEHOLDER REMOVED - NOW IN MAIN.JS -->

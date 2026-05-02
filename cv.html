@@ -310,45 +310,60 @@
     }
 
     @media (max-width: 768px) {
-      .timeline {
-        grid-template-columns: 80px 1fr;
+      /* PAGE HERO */
+      .page-hero {
+        padding: 32px 20px 28px;
+      }
+      .page-hero-title { font-size: 32px; }
+      .page-hero-desc { font-size: 13px; }
+
+      /* DOWNLOAD BAR */
+      .download-bar {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+        padding: 16px 20px;
       }
 
-      .timeline-year {
-        padding: 24px 15px;
-      }
+      /* TIMELINE — compact sidebar */
+      .timeline { grid-template-columns: 72px 1fr; }
+      .timeline-year { padding: 20px 12px; }
+      .timeline-year-val { font-size: 10px; }
+      .timeline-content { padding: 20px; }
+      .timeline-content:hover { padding-left: 20px; } /* No shift on mobile */
+      .timeline-role { font-size: 15px; }
+      .timeline-desc { font-size: 13px; }
 
-      .timeline-content {
-        padding: 24px 20px;
-      }
+      /* EDUCATION — 1 column */
+      .edu-grid { grid-template-columns: 1fr; }
+      .edu-card { padding: 24px 20px; border-right: none; }
 
-      .edu-grid {
-        grid-template-columns: 1fr;
-      }
+      /* RECOMMENDATIONS — 1 column */
+      .rec-grid { grid-template-columns: 1fr; }
+      .rec-card { padding: 28px 20px; border-right: none; }
+      .rec-text { font-size: 13px; }
 
-      .rec-grid {
-        grid-template-columns: 1fr;
-      }
+      /* SKILLS — 2 columns */
+      .skills-strip { grid-template-columns: 1fr 1fr; }
+      .skill-group { padding: 20px; border-right: 0.5px solid var(--border); }
+      .skill-group:nth-child(2n) { border-right: none; }
+      .skill-group:nth-child(n+3) { border-top: 0.5px solid var(--border); }
 
-      .skills-strip {
-        grid-template-columns: 1fr 1fr;
-      }
-
-      .vol-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .page-hero-title {
-        font-size: 36px;
-      }
+      /* VOLUNTEER */
+      .vol-section { padding: 24px 20px; }
+      .vol-grid { grid-template-columns: 1fr; gap: 12px; }
+      .vol-card { padding: 18px; }
     }
   </style>
 </head>
 
 <body>
-
-  <!-- SHARED HEADER -->
+  <!-- SHARED WIDGETS -->
   <header id="global-header"></header>
+  <div id="global-menu"></div>
+  <div id="global-contact"></div>
+  <nav id="global-bottom-nav"></nav>
+  <div id="global-floating-cta"></div>
 
   <div class="page-hero fade-up fade-up-1">
     <div class="page-hero-label">Curriculum Vitae</div>
@@ -406,13 +421,13 @@
   <!-- CENTRAL CTA BAR -->
   <div id="global-cta-bar"></div>
 
+  <!-- GLOBAL BENTO -->
+  <div id="global-bento"></div>
+  <div id="global-detail-panel"></div>
+
   <!-- SHARED FOOTER -->
   <footer id="global-footer" class="footer"></footer>
 
-  <!-- SHARED WIDGETS -->
-  <div id="global-contact"></div>
-  <nav id="global-bottom-nav"></nav>
-  <div id="global-floating-cta"></div>
 
   <script src="js/main.js?v=1.0.2"></script>
   <script>

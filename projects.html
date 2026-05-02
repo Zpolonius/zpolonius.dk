@@ -99,18 +99,51 @@
       color: var(--text-faint); font-size: 13px; display: none;
     }
     .no-results.show { display: block; }
+
+    @media (max-width: 768px) {
+      /* PAGE HERO — compact on mobile */
+      .page-hero {
+        grid-template-columns: 1fr;
+        padding: 32px 20px 28px;
+        gap: 20px;
+      }
+      .page-hero-title { font-size: 26px; }
+      .page-hero-stat { text-align: left; }
+      .page-hero-stat-num { font-size: 28px; }
+
+      /* FILTER BAR — scrollable */
+      .filter-bar { padding: 12px 20px; gap: 6px; }
+      .filter-btn { padding: 6px 14px; font-size: 10px; }
+
+      /* SPECIALER STRIP — 1 column stacked */
+      .specialer-strip { grid-template-columns: 1fr; }
+      .special-cell { padding: 18px 20px; border-right: none; }
+      .special-cell:nth-child(n) { border-top: 0.5px solid var(--border); }
+      .special-cell:first-child { border-top: none; }
+
+      /* PROJECT GRID — 1 column, full width */
+      .proj-grid { grid-template-columns: 1fr; }
+      .proj-card { border-right: none !important; }
+      .proj-card:nth-child(3n) { border-right: none; }
+      .proj-card-body { padding: 20px; }
+      .proj-card-img-wrap { height: 200px; }
+      .proj-title { font-size: 17px; }
+    }
   </style>
 </head>
 <body>
-
-  <!-- SHARED HEADER -->
+  <!-- SHARED WIDGETS -->
   <header id="global-header"></header>
+  <div id="global-menu"></div>
+  <div id="global-contact"></div>
+  <nav id="global-bottom-nav"></nav>
+  <div id="global-floating-cta"></div>
 
   <!-- PAGE HERO -->
   <div class="page-hero">
     <div class="fade-up fade-up-1">
       <div class="page-hero-label">Projekter & Cases</div>
-      <h1 class="page-hero-title">Hvad jeg<br>har bygget</h1>
+      <h1 class="page-hero-title">Du har tilføjet<br>noget til verden,<br>som ikke var der før.</h1>
       <p class="page-hero-desc">Fra AI-drevne apps til checkout-optimering og teknisk rådgivning — her er et udvalg af mine projekter og cases.</p>
     </div>
     <div class="page-hero-stat fade-up fade-up-2">
@@ -146,10 +179,6 @@
   <!-- SHARED FOOTER -->
   <footer id="global-footer" class="footer"></footer>
 
-  <!-- SHARED WIDGETS -->
-  <div id="global-contact"></div>
-  <nav id="global-bottom-nav"></nav>
-  <div id="global-floating-cta"></div>
 
   <script src="js/main.js?v=1.0.3"></script>
   <script>

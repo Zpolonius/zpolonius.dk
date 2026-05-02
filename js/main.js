@@ -17,6 +17,8 @@ document.addEventListener('DOMContentLoaded', () => {
   initParallax();
 });
 
+window.contentData = null; // Global cache for bento & common data
+
 /* ---- SHARED LAYOUT SYSTEM ---- */
 function initSharedLayout() {
   const header = document.getElementById('global-header');
@@ -25,6 +27,9 @@ function initSharedLayout() {
   const bottomNav = document.getElementById('global-bottom-nav');
   const floatingCta = document.getElementById('global-floating-cta');
   const ctaBar = document.getElementById('global-cta-bar');
+  const menu = document.getElementById('global-menu');
+  const bentoGlobal = document.getElementById('global-bento');
+  const detailPanelGlobal = document.getElementById('global-detail-panel');
 
   const navHtml = `
     <nav class="nav">
@@ -32,26 +37,36 @@ function initSharedLayout() {
       <ul class="nav-links desktop-only">
         <li><a href="index.html">Hjem</a></li>
         <li><a href="projects.html">Projekter</a></li>
-        <li><a href="index.html#blogSection">Indsigter</a></li>
+        <li><a href="insights.html">Indsigter</a></li>
         <li><a href="about.html">Om mig</a></li>
         <li><a href="cv.html">CV & Erfaring</a></li>
         <li><a href="recommendations.html">Anbefalinger</a></li>
         <li><a href="#" data-contact>Kontakt</a></li>
       </ul>
       <div class="nav-right">
-        <ul class="nav-burger-links" id="burgerLinks">
-          <li class="mobile-only"><a href="index.html">Hjem</a></li>
-          <li class="mobile-only"><a href="projects.html">Projekter</a></li>
-          <li class="mobile-only"><a href="index.html#blogSection">Indsigter</a></li>
-          <li class="mobile-only"><a href="about.html">Om mig</a></li>
-          <li class="mobile-only"><a href="cv.html">CV & Erfaring</a></li>
-          <li class="mobile-only"><a href="recommendations.html">Anbefalinger</a></li>
-          <li class="mobile-only"><a href="#" data-contact>Kontakt</a></li>
-        </ul>
+        <button class="nav-hamburger mobile-only" id="hamburgerBtn" aria-label="Menu" aria-expanded="false">
+          <svg class="icon-menu" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+          <svg class="icon-close" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
         <button class="theme-switch" onclick="toggleTheme()" title="Skift tema">☀</button>
         <button class="nav-btn desktop-only" data-contact>Book et review →</button>
       </div>
     </nav>
+  `;
+
+  const menuHtml = `
+    <ul class="nav-burger-links" id="burgerLinks">
+      <li class="burger-close-row">
+        <button class="burger-close-btn" id="burgerCloseBtn" aria-label="Luk menu">✕ Luk</button>
+      </li>
+      <li class="mobile-only"><a href="index.html">Hjem</a></li>
+      <li class="mobile-only"><a href="projects.html">Projekter</a></li>
+      <li class="mobile-only"><a href="insights.html">Indsigter</a></li>
+      <li><a href="about.html">Om mig</a></li>
+      <li><a href="cv.html">CV & Erfaring</a></li>
+      <li><a href="recommendations.html">Anbefalinger</a></li>
+      <li class="mobile-only"><a href="#" data-contact>Kontakt</a></li>
+    </ul>
   `;
 
   const footerHtml = `
@@ -69,7 +84,7 @@ function initSharedLayout() {
       <ul class="footer-nav">
         <li><a href="index.html">Hjem</a></li>
         <li><a href="projects.html">Business Cases</a></li>
-        <li><a href="index.html#blogSection">Indsigter</a></li>
+        <li><a href="insights.html">Indsigter</a></li>
         <li><a href="cv.html">CV & Erfaring</a></li>
         <li><a href="recommendations.html">Anbefalinger</a></li>
       </ul>
@@ -180,7 +195,7 @@ function initSharedLayout() {
         <span class="bottom-nav-label">Projekter</span>
       </a>
       <div class="bottom-nav-divider"></div>
-      <a class="bottom-nav-item" href="index.html#blogSection" data-page="indsigter">
+      <a class="bottom-nav-item" href="insights.html" data-page="indsigter">
         <span class="bottom-nav-icon">📝</span>
         <span class="bottom-nav-label">Indsigter</span>
       </a>
@@ -214,19 +229,104 @@ function initSharedLayout() {
     </div>
   `;
 
+  const bentoHtml = `<div class="bento" id="bentoGrid"></div>`;
+  
+  const detailPanelHtml = `
+    <div class="detail-panel" id="detailPanel">
+      <div class="detail-content">
+        <div class="detail-header">
+          <div class="tag tag-ai" id="dTag"></div>
+          <h2 class="detail-title" id="dTitle"></h2>
+        </div>
+        <div class="detail-body">
+          <p class="detail-desc" id="dDesc"></p>
+          <div class="detail-actions">
+            <a href="#" class="detail-btn" id="dBtn" style="display:none;">Se mere</a>
+            <button class="detail-close" onclick="closeDetail()">Luk ✕</button>
+          </div>
+        </div>
+        <div class="detail-meta" id="dMeta"></div>
+      </div>
+    </div>
+  `;
+
   if (header) header.innerHTML = navHtml;
   if (footer) footer.innerHTML = footerHtml;
   if (contact) contact.innerHTML = contactHtml;
   if (bottomNav) bottomNav.innerHTML = bottomNavHtml;
   if (floatingCta) floatingCta.innerHTML = floatingCtaHtml;
   if (ctaBar) ctaBar.innerHTML = ctaBarHtml;
+  if (menu) menu.innerHTML = menuHtml;
+  if (bentoGlobal) bentoGlobal.innerHTML = bentoHtml;
+  if (detailPanelGlobal) detailPanelGlobal.innerHTML = detailPanelHtml;
 
   // Re-init interactive parts
   initHamburger();
   initBottomNav();
   initActiveNav();
   initContactOverlay();
+  // Only inject global bento on subpages — index.html manages its own
+  const isIndex = window.location.pathname.endsWith('index.html') || window.location.pathname === '/' || window.location.pathname.endsWith('/');
+  if (!isIndex) initGlobalBento();
 }
+
+window.initGlobalBento = function() {
+  const bGrid = document.getElementById('bentoGrid');
+  if (!bGrid) return;
+
+  const render = (data) => {
+    bGrid.innerHTML = data.bento.map((b, i) => `
+      <div class="bento-cell" tabindex="0" onclick="window.innerWidth <= 768 ? this.classList.toggle('expanded') : openDetail('${i}')" onkeydown="if(event.key==='Enter'||event.key===' ') { event.preventDefault(); window.innerWidth <= 768 ? this.classList.toggle('expanded') : openDetail('${i}'); }">
+        <div class="cell-label">${esc(b.label)}</div>
+        <div class="cell-title">${esc(b.value)}</div>
+        <div class="cell-sub">${esc(b.sub)}</div>
+        <div class="cell-desc">${esc(b.desc)}</div>
+        <span class="cell-arrow">Åbn →</span>
+      </div>
+    `).join('');
+    
+    if (typeof VanillaTilt !== 'undefined') {
+      VanillaTilt.init(document.querySelectorAll(".bento-cell"), {
+        max: 5, speed: 400, glare: true, "max-glare": 0.08, scale: 1.02
+      });
+    }
+  };
+
+  if (window.contentData) {
+    render(window.contentData);
+  } else {
+    fetch('data/content.json?t=' + Date.now())
+      .then(r => r.json())
+      .then(data => {
+        window.contentData = data;
+        render(data);
+      });
+  }
+};
+
+window.openDetail = function(index) {
+  if (!window.contentData) return;
+  const d = window.contentData.bento[index];
+  if (!d) return;
+  document.getElementById('dTag').textContent = d.label;
+  document.getElementById('dTitle').textContent = d.value;
+  document.getElementById('dDesc').textContent = d.desc;
+  
+  const panel = document.getElementById('detailPanel');
+  if (panel) {
+    panel.classList.add('active');
+    panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+  document.querySelectorAll('.bento-cell').forEach(c => c.classList.remove('selected'));
+  if (window.event) window.event.currentTarget.classList.add('selected');
+  document.getElementById('dMeta').innerHTML = `<div class="detail-row"><span class="detail-key">Info</span><span class="detail-val">${d.sub}</span></div>`;
+};
+
+window.closeDetail = function() {
+  const panel = document.getElementById('detailPanel');
+  if (panel) panel.classList.remove('active');
+  document.querySelectorAll('.bento-cell').forEach(c => c.classList.remove('selected'));
+};
 
 /* ---- TYPEWRITER ---- */
 window.initTypewriter = function(element, words) {
@@ -323,45 +423,42 @@ function initHamburger() {
   const burgerLinks = document.getElementById('burgerLinks');
   const hamburgerBtn = document.getElementById('hamburgerBtn');
   const mobileBurgerBtn = document.getElementById('mobileBurgerBtn');
+  const burgerCloseBtn = document.getElementById('burgerCloseBtn');
 
   if (!burgerLinks) return;
 
-  function toggleMenu() {
-    const isOpen = burgerLinks.classList.toggle('open');
-    if (hamburgerBtn) hamburgerBtn.setAttribute('aria-expanded', isOpen);
-    if (mobileBurgerBtn) mobileBurgerBtn.classList.toggle('active', isOpen);
+  function setOpen(open) {
+    burgerLinks.classList.toggle('open', open);
+    if (hamburgerBtn) {
+      hamburgerBtn.setAttribute('aria-expanded', open);
+      hamburgerBtn.querySelector('.icon-menu').style.display = open ? 'none' : '';
+      hamburgerBtn.querySelector('.icon-close').style.display = open ? '' : 'none';
+    }
+    if (mobileBurgerBtn) mobileBurgerBtn.classList.toggle('active', open);
+    // Prevent body scroll when menu open
+    document.body.style.overflow = open ? 'hidden' : '';
   }
 
-  hamburgerBtn?.addEventListener('click', (e) => {
-    e.stopPropagation();
-    toggleMenu();
-  });
+  function toggleMenu() { setOpen(!burgerLinks.classList.contains('open')); }
 
-  mobileBurgerBtn?.addEventListener('click', (e) => {
-    e.stopPropagation();
-    toggleMenu();
-  });
+  hamburgerBtn?.addEventListener('click', (e) => { e.stopPropagation(); toggleMenu(); });
+  mobileBurgerBtn?.addEventListener('click', (e) => { e.stopPropagation(); toggleMenu(); });
+  burgerCloseBtn?.addEventListener('click', () => setOpen(false));
 
   // Close menu when clicking outside
   document.addEventListener('click', (e) => {
     if (burgerLinks.classList.contains('open')) {
-      if (!burgerLinks.contains(e.target) && 
-          !hamburgerBtn?.contains(e.target) && 
+      if (!burgerLinks.contains(e.target) &&
+          !hamburgerBtn?.contains(e.target) &&
           !mobileBurgerBtn?.contains(e.target)) {
-        burgerLinks.classList.remove('open');
-        hamburgerBtn?.setAttribute('aria-expanded', false);
-        mobileBurgerBtn?.classList.remove('active');
+        setOpen(false);
       }
     }
   });
 
   // Close menu when clicking a link
   burgerLinks.querySelectorAll('a').forEach(a => {
-    a.addEventListener('click', () => {
-      burgerLinks.classList.remove('open');
-      hamburgerBtn?.setAttribute('aria-expanded', false);
-      mobileBurgerBtn?.classList.remove('active');
-    });
+    a.addEventListener('click', () => setOpen(false));
   });
 }
 

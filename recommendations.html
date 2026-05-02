@@ -45,16 +45,30 @@
     .rec-skill { font-size: 9px; letter-spacing: 0.06em; padding: 3px 7px; border: 0.5px solid var(--border); color: var(--text-faint); text-transform: uppercase; }
 
     @media (max-width: 768px) {
+      .page-hero {
+        grid-template-columns: 1fr;
+        padding: 32px 20px 28px;
+        gap: 20px;
+      }
+      .page-hero-title { font-size: 32px; }
+      .page-hero-stat { text-align: left; }
+      .page-hero-stat-num { font-size: 28px; }
+
+      /* RECOMMENDATIONS — full width stacked */
       .rec-grid { grid-template-columns: 1fr; }
       .rec-card:nth-child(n) { border-right: none; }
-      .rec-card { padding: 32px 20px; }
+      .rec-card { padding: 28px 20px; }
+      .rec-text { font-size: 14px; }
     }
   </style>
 </head>
 <body>
-
-  <!-- SHARED HEADER -->
+  <!-- SHARED WIDGETS -->
   <header id="global-header"></header>
+  <div id="global-menu"></div>
+  <div id="global-contact"></div>
+  <nav id="global-bottom-nav"></nav>
+  <div id="global-floating-cta"></div>
 
   <!-- PAGE HERO -->
   <div class="page-hero">
@@ -80,10 +94,6 @@
   <!-- SHARED FOOTER -->
   <footer id="global-footer" class="footer"></footer>
 
-  <!-- SHARED WIDGETS -->
-  <div id="global-contact"></div>
-  <nav id="global-bottom-nav"></nav>
-  <div id="global-floating-cta"></div>
 
   <script src="js/main.js?v=1.0.3"></script>
   <script>

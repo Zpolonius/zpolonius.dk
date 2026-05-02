@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Indsigter — Zacharias Polonius</title>
+  <meta name="description" content="Artikler og indsigter om checkout-optimering, e-commerce, AI og teknisk commercial lead — af Zacharias Polonius.">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    /* PAGE HERO */
+    .page-hero {
+      padding: 52px 40px 44px;
+      border-bottom: 0.5px solid var(--border);
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: flex-end;
+      gap: 32px;
+    }
+    .page-hero-label {
+      font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase;
+      color: var(--blue); margin-bottom: 14px;
+    }
+    .page-hero-title {
+      font-size: 44px; font-weight: 700; letter-spacing: -0.04em;
+      color: var(--text); line-height: 1.0; margin-bottom: 14px;
+    }
+    .page-hero-desc {
+      font-size: 14px; color: var(--text-muted); line-height: 1.7; max-width: 480px;
+    }
+    .page-hero-stat { text-align: right; }
+    .page-hero-stat-num { font-size: 36px; font-weight: 700; color: var(--blue); letter-spacing: -0.03em; }
+    .page-hero-stat-lbl { font-size: 11px; color: var(--text-faint); letter-spacing: 0.08em; text-transform: uppercase; margin-top: 2px; }
+
+    /* ARTICLES GRID */
+    .articles-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+    }
+    .article-card {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      border-bottom: 0.5px solid var(--border);
+      text-decoration: none;
+      transition: background 0.2s;
+      position: relative;
+    }
+    .article-card:hover { background: rgba(65,143,255,0.03); }
+    .article-card:hover .article-arrow { opacity: 1; }
+    .article-card:hover .article-img { transform: scale(1.03); }
+
+    .article-img-wrap {
+      height: 200px;
+      overflow: hidden;
+      border-right: 0.5px solid var(--border);
+      background: var(--bg-card);
+    }
+    .article-img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+    }
+    .article-body {
+      padding: 32px 40px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .article-date {
+      font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--blue); margin-bottom: 12px;
+    }
+    .article-title {
+      font-size: 20px; font-weight: 700; letter-spacing: -0.02em;
+      color: var(--text); line-height: 1.25; margin-bottom: 12px;
+    }
+    .article-excerpt {
+      font-size: 14px; color: var(--text-muted); line-height: 1.7;
+      display: -webkit-box; -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical; overflow: hidden;
+      flex: 1;
+    }
+    .article-arrow {
+      display: inline-block; margin-top: 20px;
+      font-size: 12px; color: var(--blue); opacity: 0;
+      transition: opacity 0.2s, transform 0.2s;
+      font-weight: 500; letter-spacing: 0.04em;
+    }
+    .article-card:hover .article-arrow { transform: translateX(4px); }
+
+    /* EMPTY STATE */
+    .no-articles {
+      padding: 80px 40px; text-align: center;
+      color: var(--text-faint); font-size: 14px; display: none;
+    }
+    .no-articles.show { display: block; }
+
+    @media (max-width: 768px) {
+      /* PAGE HERO */
+      .page-hero {
+        grid-template-columns: 1fr;
+        padding: 32px 20px 28px;
+        gap: 20px;
+      }
+      .page-hero-title { font-size: 32px; }
+      .page-hero-stat { text-align: left; }
+      .page-hero-stat-num { font-size: 28px; }
+
+      /* ARTICLE CARDS — stack vertically */
+      .article-card {
+        grid-template-columns: 1fr;
+      }
+      .article-img-wrap {
+        height: 220px;
+        border-right: none;
+        border-bottom: 0.5px solid var(--border);
+      }
+      .article-body {
+        padding: 22px 20px 28px;
+      }
+      .article-title { font-size: 18px; }
+      .article-excerpt { -webkit-line-clamp: 4; }
+      .article-arrow { opacity: 1; } /* Always visible on mobile */
+    }
+  </style>
+</head>
+<body>
+  <!-- SHARED WIDGETS -->
+  <header id="global-header"></header>
+  <div id="global-menu"></div>
+  <div id="global-contact"></div>
+  <nav id="global-bottom-nav"></nav>
+  <div id="global-floating-cta"></div>
+
+  <!-- PAGE HERO -->
+  <div class="page-hero">
+    <div class="fade-up fade-up-1">
+      <div class="page-hero-label">Indsigter & Artikler</div>
+      <h1 class="page-hero-title">De fleste ser data.<br>Få ser muligheden.</h1>
+      <p class="page-hero-desc">Praksisnære perspektiver på checkout, e-commerce og AI — skrevet af en der oversætter teknologi til forretningsværdi.</p>
+    </div>
+    <div class="page-hero-stat fade-up fade-up-2">
+      <div class="page-hero-stat-num" id="articleCount">—</div>
+      <div class="page-hero-stat-lbl">Artikler</div>
+    </div>
+  </div>
+
+  <!-- SECTION HEADER -->
+  <div class="section-header">
+    <span class="section-title">Alle indsigter</span>
+  </div>
+
+  <!-- ARTICLES LIST -->
+  <div class="articles-grid" id="articlesGrid">
+    <div class="no-articles" id="noArticles">Ingen artikler endnu — kom tilbage snart.</div>
+  </div>
+
+  <!-- CENTRAL CTA BAR -->
+  <div id="global-cta-bar"></div>
+
+  <!-- SHARED FOOTER -->
+  <footer id="global-footer" class="footer"></footer>
+
+  <script src="js/main.js?v=1.0.4"></script>
+  <script>
+    function esc(str) {
+      if (!str) return '';
+      const div = document.createElement('div');
+      div.textContent = str;
+      return div.innerHTML;
+    }
+
+    fetch('data/content.json?t=' + Date.now())
+      .then(r => r.json())
+      .then(data => {
+        const articles = (data.articles || []).filter(a => a.visible !== false);
+
+        // Count
+        document.getElementById('articleCount').textContent = articles.length;
+
+        const grid = document.getElementById('articlesGrid');
+        const noArt = document.getElementById('noArticles');
+        grid.appendChild(noArt);
+
+        if (articles.length === 0) {
+          noArt.classList.add('show');
+          return;
+        }
+
+        articles.forEach(a => {
+          const card = document.createElement('a');
+          card.className = 'article-card fade-up';
+          card.href = `detail.html?id=${a.id}`;
+          card.innerHTML = `
+            ${a.cover ? `
+              <div class="article-img-wrap">
+                <img src="${a.cover}"
+                     alt="${esc(a.cover_alt || a.title)}"
+                     class="article-img"
+                     style="object-position: ${a.cover_pos || 'center center'}"
+                     onerror="this.parentElement.style.display='none'">
+              </div>
+            ` : ''}
+            <div class="article-body">
+              <div>
+                <div class="article-date">${esc(a.date || 'Indsigt')}</div>
+                <div class="article-title">${esc(a.title)}</div>
+                <div class="article-excerpt">${esc(a.excerpt || '')}</div>
+              </div>
+              <span class="article-arrow">Læs artikel →</span>
+            </div>
+          `;
+          grid.insertBefore(card, noArt);
+        });
+      });
+  </script>
+</body>
+</html>
