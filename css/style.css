@@ -856,3 +856,22 @@ textarea.input { resize: none; height: 100px; line-height: 1.6; }
 @media (max-width: 768px) {
   .floating-cta { display: none; } /* Hidden on mobile in favor of Bottom Nav */
 }
+/* ============================================
+   PAGE TRANSITIONS
+   ============================================ */
+body { 
+  opacity: 0; 
+}
+body.page-ready {
+  animation: pageFadeIn 0.8s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+}
+body.page-leaving { 
+  opacity: 0; 
+  transform: translateY(-20px); 
+  transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+@keyframes pageFadeIn {
+  from { opacity: 0; transform: translateY(20px); filter: blur(5px); }
+  to { opacity: 1; transform: translateY(0); filter: blur(0); }
+}

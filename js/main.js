@@ -11,11 +11,36 @@ function esc(str) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+  // Apply entry animation
+  requestAnimationFrame(() => {
+    document.body.classList.add('page-ready');
+  });
+
   initSharedLayout();
   initTheme();
   initContactOverlay();
   initParallax();
+  initPageTransitions();
 });
+
+function initPageTransitions() {
+  document.addEventListener('click', e => {
+    const a = e.target.closest('a');
+    if (!a) return;
+    
+    const href = a.getAttribute('href');
+    const target = a.getAttribute('target');
+    
+    // Kun interne links, ikke popups, ikke nye faner, ikke # links
+    if (href && !href.startsWith('http') && !href.startsWith('#') && target !== '_blank' && !a.hasAttribute('data-contact')) {
+      e.preventDefault();
+      document.body.classList.add('page-leaving');
+      setTimeout(() => {
+        window.location.href = href;
+      }, 400); // Lidt længere tid til at fade ud
+    }
+  });
+}
 
 window.contentData = null; // Global cache for bento & common data
 
