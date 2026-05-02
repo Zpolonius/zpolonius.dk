@@ -80,11 +80,13 @@
 
     /* INTRO + META */
     .intro-wrap {
-      display: grid;
-      grid-template-columns: 1fr 320px;
-      gap: 80px;
+      max-width: 800px;
+      margin: 0 auto;
       padding: 80px 40px;
       border-bottom: 0.5px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      gap: 40px;
     }
     .intro-text {
       font-size: 22px;
@@ -93,7 +95,13 @@
       font-weight: 400;
       letter-spacing: -0.01em;
     }
-    .meta-col { display: flex; flex-direction: column; gap: 32px; }
+    .meta-col { 
+      display: grid; 
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); 
+      gap: 32px; 
+      padding: 24px 0;
+      border-top: 0.5px solid var(--border);
+    }
     .meta-item-label {
       font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em;
       color: var(--text-faint); margin-bottom: 8px;
@@ -103,11 +111,12 @@
 
     /* CONTENT WRAP */
     .content-wrap {
-      display: grid;
-      grid-template-columns: 1fr 320px;
-      gap: 80px;
-      padding: 80px 40px;
-      background: rgba(255,255,255,0.01);
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 60px 40px 100px;
+      display: flex;
+      flex-direction: column;
+      gap: 60px;
     }
     .content-main {
       font-size: 16px;
@@ -121,8 +130,16 @@
     .content-main li { margin-bottom: 12px; }
     .content-main strong { color: var(--text); font-weight: 600; }
 
-    /* SIDEBAR */
-    .sidebar-block { margin-bottom: 48px; }
+    /* SIDEBAR (Now centered footer info) */
+    .sidebar {
+      margin-top: 40px;
+      padding-top: 40px;
+      border-top: 0.5px solid var(--border);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+    }
+    .sidebar-block { margin-bottom: 0; }
     .sidebar-title {
       font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em;
       color: var(--text-faint); margin-bottom: 20px;
@@ -272,7 +289,7 @@
     <!-- CONTENT + SIDEBAR -->
     <div class="content-wrap">
       <div class="content-main" id="contentMain"></div>
-      <div class="content-sidebar" id="contentSidebar"></div>
+      <div class="sidebar" id="contentSidebar"></div>
     </div>
 
     <!-- CONVERSION CTA -->
@@ -360,7 +377,19 @@
       document.getElementById('bcCurrent').textContent = item.title || item.name;
 
       // Cover
-      document.getElementById('coverTitle').textContent = item.title || item.name;
+      const titleEl = document.getElementById('coverTitle');
+      const fullTitle = item.title || item.name || "";
+      titleEl.textContent = ""; // Reset
+      
+      let charIdx = 0;
+      function type() {
+        if (charIdx < fullTitle.length) {
+          titleEl.textContent += fullTitle.charAt(charIdx);
+          charIdx++;
+          setTimeout(type, 40); // Hastighed: 40ms pr bogstav
+        }
+      }
+      setTimeout(type, 300); // Lille forsinkelse før start
       document.getElementById('coverTag').textContent = item.tag || item.category || 'Case';
       if (item.company || item.role) document.getElementById('coverCompany').textContent = (item.role ? item.role + ' @ ' : '') + (item.company || item.institution || '');
       if (item.period) document.getElementById('coverPeriod').textContent = item.period;
@@ -396,7 +425,7 @@
       }
 
       // Intro
-      document.getElementById('introText').textContent = item.intro || item.desc || '';
+      document.getElementById('introText').innerHTML = item.intro || item.desc || '';
 
       // Meta
       let metaHtml = '';

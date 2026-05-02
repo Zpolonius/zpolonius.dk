@@ -234,7 +234,7 @@
               <div class="special-icon-wrap ${s.color==='green'?'green':''}">${esc(s.icon||'◆')}</div>
               <div>
                 <div class="special-cell-title">${esc(s.label)}</div>
-                <div class="special-cell-desc">${esc(s.desc||'')}</div>
+                <div class="special-cell-desc">${stripHtml(s.desc||'')}</div>
               </div>
             </div>`;
         });
