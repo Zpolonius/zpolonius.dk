@@ -1507,14 +1507,14 @@ function renderOm(area) {
         <div style="font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:var(--faint);">Quick Facts (Info Grid)</div>
         <button class="btn-edit" style="font-size:10px;padding:4px 10px;" onclick="editFact()">+ Tilføj Fact</button>
       </div>
-      <div class="bento-list" style="margin-bottom:32px;">
+      <div style="display:flex; flex-direction:column; gap:8px; margin-bottom:32px;">
         ${(o.facts||[]).map((f, i) => `
-          <div class="bento-row">
-            <div class="bento-label-val">
-              <div class="bento-label-txt">${f.label}</div>
-              <div class="bento-main-txt">${f.val} · ${f.sub}</div>
+          <div style="display:flex; align-items:center; justify-content:space-between; padding:12px 16px; background:rgba(255,255,255,0.03); border:0.5px solid var(--border); border-radius:4px;">
+            <div style="flex:1;">
+              <div style="font-size:10px; text-transform:uppercase; color:var(--blue); letter-spacing:0.05em; margin-bottom:2px;">${f.label}</div>
+              <div style="font-size:14px; color:#fff; font-weight:500;">${f.val} <span style="font-size:12px; color:var(--faint); font-weight:normal;">· ${f.sub}</span></div>
             </div>
-            <div style="display:flex; gap:6px;">
+            <div style="display:flex; gap:8px; margin-left:20px;">
               <button class="btn-edit" onclick="editFact(${i})">Ret</button>
               <button class="btn-del" onclick="deleteEntry('facts', ${i})">✕</button>
             </div>
