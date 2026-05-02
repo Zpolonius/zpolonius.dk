@@ -136,10 +136,59 @@ p, li {
 }
 .nav-logo { font-size: 15px; font-weight: 600; letter-spacing: -0.03em; color: var(--text); }
 .nav-logo span { color: var(--blue); }
-.nav-links { display: flex; gap: 28px; list-style: none; align-items: center; }
+.nav-links { display: flex; gap: 24px; list-style: none; align-items: center; }
 .nav-links a { color: var(--text-muted); font-size: 13px; letter-spacing: 0.01em; transition: color 0.2s; }
 .nav-links a:hover, .nav-links a.active { color: var(--text); }
 .nav-right { display: flex; align-items: center; gap: 10px; }
+
+/* ---- BURGER / MORE MENU (Desktop Dropdown) ---- */
+.nav-more-menu { position: relative; }
+.nav-burger-links {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background: var(--bg-nav);
+  backdrop-filter: blur(20px);
+  border: 0.5px solid var(--border-md);
+  border-radius: 8px;
+  list-style: none;
+  padding: 8px 0;
+  min-width: 180px;
+  display: none;
+  flex-direction: column;
+  margin-top: 12px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+.nav-burger-links.open { display: flex; }
+.nav-burger-links li a {
+  display: block;
+  padding: 10px 20px;
+  font-size: 13px;
+  color: var(--text-muted);
+  transition: all 0.2s;
+}
+.nav-burger-links li a:hover {
+  background: rgba(255,255,255,0.05);
+  color: var(--text);
+}
+.mobile-only { display: none !important; }
+
+@media (max-width: 768px) {
+  .desktop-only { display: none !important; }
+  .mobile-only { display: block !important; }
+  
+  .nav-burger-links {
+    position: fixed;
+    top: auto;
+    bottom: 80px;
+    left: 20px;
+    right: 20px;
+    width: auto;
+    border-radius: 20px;
+    margin-top: 0;
+    box-shadow: 0 -10px 40px rgba(0,0,0,0.4);
+  }
+}
 
 /* ---- THEME SWITCH ---- */
 .theme-switch {
@@ -660,4 +709,27 @@ textarea.input { resize: none; height: 100px; line-height: 1.6; }
   0%, 20%, 50%, 80%, 100% {transform: translateX(-50%) translateY(0);}
   40% {transform: translateX(-50%) translateY(-10px);}
   60% {transform: translateX(-50%) translateY(-5px);}
+}
+
+/* ---- CENTRAL CTA BAR ---- */
+.cta-bar-central {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 48px 40px;
+  border-top: 0.5px solid var(--border);
+  border-bottom: 0.5px solid var(--border);
+  background: var(--bg-deep);
+  margin-top: 0;
+}
+.cta-bar-content { flex: 1; margin-right: 32px; }
+.cta-bar-title { font-size: 16px; color: var(--text); font-weight: 600; margin-bottom: 4px; }
+.cta-bar-sub { font-size: 14px; color: var(--text-muted); }
+
+@media (max-width: 768px) {
+  .cta-bar-central { flex-direction: column; text-align: center; padding: 40px 20px; gap: 24px; }
+  .cta-bar-content { margin-right: 0; }
+  .cta-bar-title { font-size: 15px; }
+  .cta-bar-sub { font-size: 13px; }
+  .cta-bar-central .btn-primary { width: 100%; }
 }

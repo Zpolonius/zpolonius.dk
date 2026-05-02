@@ -103,20 +103,8 @@
 </head>
 <body>
 
-  <nav class="nav">
-    <a href="index.html" class="nav-logo">Z<span>.</span>Polonius</a>
-    <ul class="nav-links">
-      <li><a href="about.html">Om</a></li>
-      <li><a href="projects.html" class="active">Projekter</a></li>
-      <li><a href="cv.html">CV</a></li>
-      <li><a href="recommendations.html">Anbefalinger</a></li>
-      <li><a href="contact.html">Kontakt</a></li>
-    </ul>
-    <div class="nav-right">
-      <button class="theme-switch" onclick="toggleTheme()">☀</button>
-      <button class="nav-btn" data-contact>Kontakt</button>
-    </div>
-  </nav>
+  <!-- SHARED HEADER -->
+  <header id="global-header"></header>
 
   <!-- PAGE HERO -->
   <div class="page-hero">
@@ -152,115 +140,16 @@
     <div class="no-results" id="noResults">Ingen projekter i denne kategori endnu.</div>
   </div>
 
-  <!-- CTA -->
-  <div style="display:flex;align-items:center;justify-content:space-between;padding:32px 40px;border-top:0.5px solid var(--border);border-bottom:0.5px solid var(--border);">
-    <p style="font-size:14px;color:var(--text-muted);line-height:1.6;max-width:480px;">
-      <strong style="color:var(--text);font-weight:500;">Har du et projekt?</strong> Jeg er altid interesseret i spændende samarbejder inden for AI, checkout-optimering og teknisk rådgivning.
-    </p>
-    <button class="btn-primary" data-contact>Tag kontakt →</button>
-  </div>
+  <!-- CENTRAL CTA BAR -->
+  <div id="global-cta-bar"></div>
 
-  <footer class="footer">
-    <div class="footer-left">zacharias@polonius.dk · 3068 7041</div>
-    <div class="footer-links">
-      <a href="https://www.linkedin.com/in/zpolonius/" target="_blank">LinkedIn</a>
-      <a href="https://www.instagram.com/zackp91/" target="_blank">Instagram</a>
-      <a href="https://www.facebook.com/zpolonius" target="_blank">Facebook</a>
-    </div>
-  </footer>
+  <!-- SHARED FOOTER -->
+  <footer id="global-footer" class="footer"></footer>
 
-  <!-- CONTACT OVERLAY -->
-  <div class="overlay" id="contactOverlay">
-    <div class="overlay-bg"></div>
-    <div class="modal">
-      <div id="contactFormView">
-        <div class="modal-header">
-          <div>
-            <div class="modal-label">Kontakt</div>
-            <div class="modal-title">Lad os tage<br>en snak</div>
-            <div class="modal-sub">Jeg vender tilbage inden for 24 timer.</div>
-          </div>
-          <button class="modal-close" onclick="closeContact()">✕</button>
-        </div>
-        <div class="modal-progress"><div class="modal-progress-bar" id="contactProgressBar"></div></div>
-        <div class="modal-divider"></div>
-        <div class="modal-body">
-          <div class="field-row">
-            <div class="field"><label class="field-label">Navn</label><input class="input" type="text" id="f-name" placeholder="Dit fulde navn"></div>
-            <div class="field"><label class="field-label">Firma</label><input class="input" type="text" id="f-company" placeholder="Virksomhedsnavn"></div>
-          </div>
-          <div class="field"><label class="field-label">Webshop URL (valgfrit)</label><input class="input" type="text" id="f-url" placeholder="https://dinshop.dk"></div>
-          <div class="field"><label class="field-label">Email</label><input class="input" type="email" id="f-email" placeholder="din@email.dk"></div>
-          <div class="field">
-            <label class="field-label">Emne</label>
-            <div class="pills" style="margin-top:4px;">
-              <button class="pill">Jobmulighed</button>
-              <button class="pill">Samarbejde</button>
-              <button class="pill">AI-projekt</button>
-              <button class="pill">Checkout review</button>
-              <button class="pill">Andet</button>
-            </div>
-          </div>
-          <div class="field" style="margin-top:18px;"><label class="field-label">Besked</label><textarea class="input" id="f-msg" placeholder="Fortæl mig lidt om hvad du har i tankerne..."></textarea></div>
-          <div class="modal-footer">
-            <div class="modal-contact-info"><span>zacharias@polonius.dk</span><span>3068 7041</span></div>
-            <button class="btn-primary" id="contactSubmit">Send besked →</button>
-          </div>
-        </div>
-        <div class="modal-social">
-          <a href="https://www.linkedin.com/in/zpolonius/" target="_blank">LinkedIn</a>
-          <span class="modal-social-sep">·</span>
-          <a href="https://www.instagram.com/zackp91/" target="_blank">Instagram</a>
-          <span class="modal-social-sep">·</span>
-          <a href="https://www.facebook.com/zpolonius" target="_blank">Facebook</a>
-        </div>
-      </div>
-      <div class="success-view" id="contactSuccessView">
-        <div class="success-icon"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
-        <div class="success-title">Besked sendt!</div>
-        <div class="success-sub">Tak for din henvendelse. Jeg vender tilbage inden for 24 timer.</div>
-        <button class="btn-primary" onclick="closeContact()" style="margin-top:8px;">Luk vindue</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- FLOATING BOTTOM NAV (mobil) -->
-  <nav class="bottom-nav" id="bottomNav">
-    <a class="bottom-nav-item" href="index.html" data-page="hjem">
-      <span class="bottom-nav-icon">⌂</span>
-      <span class="bottom-nav-label">Hjem</span>
-    </a>
-    <div class="bottom-nav-divider"></div>
-    <a class="bottom-nav-item" href="projects.html" data-page="projekter">
-      <span class="bottom-nav-icon">◈</span>
-      <span class="bottom-nav-label">Projekter</span>
-    </a>
-    <div class="bottom-nav-divider"></div>
-    <a class="bottom-nav-item" href="index.html#blogSection" data-page="indsigter">
-      <span class="bottom-nav-icon">📝</span>
-      <span class="bottom-nav-label">Indsigter</span>
-    </a>
-    <div class="bottom-nav-divider"></div>
-    <a class="bottom-nav-item" href="cv.html" data-page="cv">
-      <span class="bottom-nav-icon">◎</span>
-      <span class="bottom-nav-label">CV</span>
-    </a>
-    <div class="bottom-nav-divider"></div>
-    <a class="bottom-nav-item" href="recommendations.html" data-page="anbefalinger">
-      <span class="bottom-nav-icon">💬</span>
-      <span class="bottom-nav-label">Anb.</span>
-    </a>
-    <div class="bottom-nav-divider"></div>
-    <a class="bottom-nav-item" href="about.html" data-page="om">
-      <span class="bottom-nav-icon">◉</span>
-      <span class="bottom-nav-label">Om</span>
-    </a>
-    <div class="bottom-nav-divider"></div>
-    <button class="bottom-nav-contact" data-contact-mobile>
-      <span class="bottom-nav-icon">✉</span>
-      <span class="bottom-nav-label">Kontakt</span>
-    </button>
-  </nav>
+  <!-- SHARED WIDGETS -->
+  <div id="global-contact"></div>
+  <nav id="global-bottom-nav"></nav>
+  <div id="global-floating-cta"></div>
 
   <script src="js/main.js?v=1.0.3"></script>
   <script>

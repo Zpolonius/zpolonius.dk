@@ -1,262 +1,418 @@
 <!DOCTYPE html>
 <html lang="da">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>CV — Zacharias Polonius</title>
-  <meta name="description" content="CV og arbejdserfaring — Technical Account Manager med 10+ års erfaring inden for tech, support og ledelse.">
+  <meta name="description"
+    content="Erhvervserfaring og kompetencer — Technical Account Manager med fokus på checkout-optimering, AI og digital forretningsværdi.">
   <link rel="stylesheet" href="css/style.css">
   <style>
+    /* CV SPECIFIC REFINEMENTS */
     .page-hero {
-      padding: 52px 40px 44px;
+      padding: 60px 40px 48px;
       border-bottom: 0.5px solid var(--border);
+      background: linear-gradient(to bottom, var(--bg-deep), var(--bg));
     }
-    .page-hero-label { font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--blue); margin-bottom: 14px; }
-    .page-hero-title { font-size: 44px; font-weight: 700; letter-spacing: -0.04em; color: var(--text); line-height: 1.0; margin-bottom: 14px; }
-    .page-hero-desc  { font-size: 14px; color: var(--text-muted); line-height: 1.7; max-width: 520px; }
+
+    .page-hero-label {
+      font-size: 10px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--blue);
+      margin-bottom: 14px;
+    }
+
+    .page-hero-title {
+      font-size: 48px;
+      font-weight: 700;
+      letter-spacing: -0.04em;
+      color: var(--text);
+      line-height: 1.0;
+      margin-bottom: 16px;
+    }
+
+    .page-hero-desc {
+      font-size: 15px;
+      color: var(--text-muted);
+      line-height: 1.7;
+      max-width: 580px;
+    }
 
     /* DOWNLOAD BAR */
     .download-bar {
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 14px 40px; border-bottom: 0.5px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 40px;
+      border-bottom: 0.5px solid var(--border);
       background: var(--bg-card);
     }
-    .download-bar-text { font-size: 12px; color: var(--text-faint); }
-    .download-btn {
-      font-size: 11px; color: var(--blue); border: 0.5px solid var(--border-blue);
-      background: transparent; padding: 6px 16px; cursor: pointer;
-      font-family: var(--font); letter-spacing: 0.04em; transition: all 0.2s;
+
+    .download-bar-text {
+      font-size: 12px;
+      color: var(--text-faint);
     }
-    .download-btn:hover { background: rgba(65,143,255,0.08); }
+
+    .download-btn {
+      font-size: 11px;
+      color: var(--blue);
+      border: 0.5px solid var(--border-blue);
+      background: transparent;
+      padding: 7px 18px;
+      cursor: pointer;
+      font-family: var(--font);
+      letter-spacing: 0.04em;
+      transition: all 0.2s;
+      border-radius: 4px;
+    }
+
+    .download-btn:hover {
+      background: rgba(65, 143, 255, 0.08);
+      transform: translateY(-1px);
+    }
 
     /* TIMELINE */
-    .timeline { display: grid; grid-template-columns: 200px 1fr; }
+    .timeline {
+      display: grid;
+      grid-template-columns: 200px 1fr;
+    }
+
     .timeline-year {
-      padding: 24px 28px; border-right: 0.5px solid var(--border);
+      padding: 32px 28px;
+      border-right: 0.5px solid var(--border);
       border-bottom: 0.5px solid var(--border);
-      display: flex; flex-direction: column; justify-content: flex-start;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      background: var(--bg-deep);
     }
-    .timeline-year-val { font-size: 11px; color: var(--blue); letter-spacing: 0.08em; font-weight: 500; }
+
+    .timeline-year-val {
+      font-size: 11px;
+      color: var(--blue);
+      letter-spacing: 0.08em;
+      font-weight: 600;
+    }
+
     .timeline-year-dot {
-      width: 6px; height: 6px; background: var(--blue);
-      border-radius: 50%; margin-top: 10px;
+      width: 7px;
+      height: 7px;
+      background: var(--blue);
+      border-radius: 50%;
+      margin-top: 12px;
+      box-shadow: 0 0 10px var(--blue);
     }
+
     .timeline-content {
-      padding: 24px 32px; border-bottom: 0.5px solid var(--border);
-      display: block; transition: background 0.2s; position: relative;
+      padding: 32px 40px;
+      border-bottom: 0.5px solid var(--border);
+      display: block;
+      transition: all 0.3s ease;
+      position: relative;
+      background: var(--bg);
     }
-    .timeline-content:hover { background: rgba(65,143,255,0.025); }
-    .timeline-content:hover .timeline-arrow { opacity: 1; }
-    .timeline-role { font-size: 15px; font-weight: 600; color: var(--text); letter-spacing: -0.02em; margin-bottom: 4px; }
-    .timeline-company { font-size: 13px; color: var(--blue); margin-bottom: 8px; font-weight: 500; }
-    .timeline-desc { font-size: 12px; color: var(--text-muted); line-height: 1.65; }
-    .timeline-arrow { position: absolute; right: 20px; top: 50%; transform: translateY(-50%); font-size: 11px; color: var(--blue); opacity: 0; transition: opacity 0.2s; }
+
+    .timeline-content:hover {
+      background: var(--bg-card);
+      padding-left: 48px;
+    }
+
+    .timeline-content:hover .timeline-arrow {
+      opacity: 1;
+      transform: translateY(-50%) translateX(10px);
+    }
+
+    .timeline-role {
+      font-size: 17px;
+      font-weight: 600;
+      color: var(--text);
+      letter-spacing: -0.02em;
+      margin-bottom: 4px;
+    }
+
+    .timeline-company {
+      font-size: 14px;
+      color: var(--blue);
+      margin-bottom: 12px;
+      font-weight: 500;
+    }
+
+    .timeline-desc {
+      font-size: 14px;
+      color: var(--text-muted);
+      line-height: 1.7;
+      max-width: 640px;
+    }
+
+    .timeline-arrow {
+      position: absolute;
+      right: 40px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 14px;
+      color: var(--blue);
+      opacity: 0;
+      transition: all 0.3s ease;
+    }
 
     /* EDUCATION */
-    .edu-grid { display: grid; grid-template-columns: repeat(3, 1fr); }
-    .edu-card {
-      padding: 24px 28px; border-right: 0.5px solid var(--border);
-      border-bottom: 0.5px solid var(--border);
-      display: block; transition: background 0.2s;
+    .edu-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      background: var(--bg);
     }
-    .edu-card:hover { background: rgba(65,143,255,0.025); }
-    .edu-card:nth-child(3n) { border-right: none; }
-    .edu-period { font-size: 10px; color: var(--blue); letter-spacing: 0.08em; margin-bottom: 6px; }
-    .edu-title { font-size: 14px; font-weight: 600; color: var(--text); letter-spacing: -0.02em; margin-bottom: 4px; }
-    .timeline-desc { font-size: 14px; color: var(--text-muted); line-height: 1.65; }
-    ...
-    .edu-desc  { font-size: 12px; color: var(--text-faint); line-height: 1.6; }
+
+    .edu-card {
+      padding: 32px 40px;
+      border-right: 0.5px solid var(--border);
+      border-bottom: 0.5px solid var(--border);
+      display: block;
+      transition: all 0.3s ease;
+      background: var(--bg);
+    }
+
+    .edu-card:hover {
+      background: var(--bg-card);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      z-index: 2;
+    }
+
+    .edu-card:nth-child(3n) {
+      border-right: none;
+    }
+
+    .edu-period {
+      font-size: 10px;
+      color: var(--blue);
+      letter-spacing: 0.1em;
+      margin-bottom: 8px;
+      font-weight: 600;
+    }
+
+    .edu-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--text);
+      letter-spacing: -0.01em;
+      margin-bottom: 4px;
+    }
+
+    .edu-inst {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+    }
+
+    .edu-desc {
+      font-size: 12px;
+      color: var(--text-faint);
+      line-height: 1.6;
+    }
 
     /* RECOMMENDATIONS */
-    .rec-grid { display: grid; grid-template-columns: repeat(2, 1fr); }
+    .rec-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      background: var(--bg-deep);
+    }
+
     .rec-card {
-      padding: 30px 40px; border-right: 0.5px solid var(--border);
+      padding: 48px 40px;
+      border-right: 0.5px solid var(--border);
+      border-bottom: 0.5px solid var(--border);
+      background: var(--bg);
+      transition: background 0.3s ease;
+    }
+
+    .rec-card:hover {
+      background: var(--bg-card);
+    }
+
+    .rec-card:nth-child(2n) {
+      border-right: none;
+    }
+
+    .rec-mark {
+      font-size: 32px;
+      color: var(--blue);
+      font-weight: 700;
+      line-height: 1;
+      margin-bottom: 16px;
+      opacity: 0.4;
+    }
+
+    .rec-text {
+      font-size: 15px;
+      color: var(--text-muted);
+      line-height: 1.8;
+      font-style: italic;
+      margin-bottom: 24px;
+    }
+
+    /* SKILLS STRIP */
+    .skills-strip {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 0.5px solid var(--border);
+      background: var(--bg-deep);
+    }
+
+    .skill-group {
+      padding: 32px 40px;
+      border-right: 0.5px solid var(--border);
+    }
+
+    .skill-group:last-child {
+      border-right: none;
+    }
+
+    .skill-group-title {
+      font-size: 10px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--text-faint);
+      margin-bottom: 16px;
+    }
+
+    .skill-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    /* VOLUNTEER SECTION */
+    .vol-section {
+      background: var(--bg-deep);
+      padding: 40px;
       border-bottom: 0.5px solid var(--border);
     }
-    .rec-card:nth-child(2n) { border-right: none; }
-    .rec-mark { font-size: 28px; color: var(--blue); font-weight: 700; line-height: 1; margin-bottom: 12px; }
-    .rec-text { font-size: 15px; color: var(--text-muted); line-height: 1.8; font-style: italic; margin-bottom: 16px; }
-    .rec-name { font-size: 14px; font-weight: 600; color: var(--text); }
-    .rec-role { font-size: 11px; color: var(--text-faint); margin-top: 2px; }
-    /* SKILLS STRIP */
-    .skills-strip { display: grid; grid-template-columns: repeat(4, 1fr); border-bottom: 0.5px solid var(--border); }
-    .skill-group { padding: 22px 28px; border-right: 0.5px solid var(--border); }
-    .skill-group:last-child { border-right: none; }
-    .skill-group-title { font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-faint); margin-bottom: 12px; }
-    .skill-tags { display: flex; flex-wrap: wrap; gap: 5px; }
+
+    .vol-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+    }
+
+    .vol-card {
+      padding: 24px 28px;
+      background: var(--bg-card);
+      border: 0.5px solid var(--border-md);
+      border-radius: 12px;
+      transition: all 0.3s ease;
+    }
+
+    .vol-card:hover {
+      border-color: var(--blue);
+      transform: translateY(-2px);
+    }
+
+    @media (max-width: 768px) {
+      .timeline {
+        grid-template-columns: 80px 1fr;
+      }
+
+      .timeline-year {
+        padding: 24px 15px;
+      }
+
+      .timeline-content {
+        padding: 24px 20px;
+      }
+
+      .edu-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .rec-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .skills-strip {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .vol-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .page-hero-title {
+        font-size: 36px;
+      }
+    }
   </style>
 </head>
+
 <body>
 
-  <nav class="nav">
-    <a href="index.html" class="nav-logo">Z<span>.</span>Polonius</a>
-    <ul class="nav-links">
-      <li><a href="about.html">Om</a></li>
-      <li><a href="projects.html">Projekter</a></li>
-      <li><a href="index.html#blogSection">Indsigter</a></li>
-      <li><a href="cv.html" class="active">CV</a></li>
-      <li><a href="recommendations.html">Anbefalinger</a></li>
-      <li><a href="contact.html">Kontakt</a></li>
-    </ul>
-    <div class="nav-right">
-      <button class="theme-switch" onclick="toggleTheme()">☀</button>
-      <button class="nav-btn" data-contact>Kontakt</button>
-    </div>
-  </nav>
+  <!-- SHARED HEADER -->
+  <header id="global-header"></header>
 
   <div class="page-hero fade-up fade-up-1">
     <div class="page-hero-label">Curriculum Vitae</div>
-    <h1 class="page-hero-title">Erfaring &<br>uddannelse</h1>
-    <p class="page-hero-desc">10+ år inden for tech, support, ledelse og AI — fra coffee shop manager til technical account manager.</p>
+    <h1 class="page-hero-title">Erfaring &<br>Kompetencer</h1>
+    <p class="page-hero-desc">10+ år i spændingsfeltet mellem teknologi og forretning. Mit fokus er at bygge bro mellem
+      komplekse systemer og målbar bundlinjeværdi.</p>
   </div>
 
   <div class="download-bar">
-    <span class="download-bar-text">Download mit fulde CV som PDF</span>
-    <a href="cv-print.html" class="download-btn" target="_blank">Download CV →</a>
+    <span class="download-bar-text">Behov for en print-version?</span>
+    <a href="cv-print.html" class="download-btn" target="_blank">Se PDF-version →</a>
   </div>
 
   <!-- ANSÆTTELSER -->
   <div class="section-header">
-    <span class="section-title">Ansættelser</span>
+    <span class="section-title">Erhvervserfaring</span>
   </div>
   <div id="jobTimeline" class="timeline">
-    <!-- Rendered by JS -->
+    <!-- Rendered by JS (Work Category) -->
   </div>
 
   <!-- KOMPETENCER -->
   <div class="section-header">
-    <span class="section-title">Kompetencer</span>
+    <span class="section-title">Kernerkompetencer</span>
   </div>
   <div class="skills-strip" id="skillsStrip">
     <!-- Rendered dynamically by JS -->
   </div>
 
-  <!-- UDDANNELSE -->
-  <div class="section-header" id="uddannelse">
-    <span class="section-title">Uddannelse & certificeringer</span>
-  </div>
-  <div class="edu-grid" id="eduGrid">
-    <!-- Rendered by JS -->
-  </div>
-
   <!-- ANBEFALINGER -->
   <div class="section-header" id="anbefalinger">
-    <span class="section-title">Anbefalinger</span>
+    <span class="section-title">Udvalgte Anbefalinger</span>
     <a href="recommendations.html" class="section-link">Se alle →</a>
   </div>
   <div class="rec-grid" id="recGrid">
     <!-- Rendered by JS -->
   </div>
 
-  <!-- CTA -->
-  <div style="display:flex;align-items:center;justify-content:space-between;padding:32px 40px;border-top:0.5px solid var(--border);border-bottom:0.5px solid var(--border);">
-    <p style="font-size:14px;color:var(--text-muted);line-height:1.6;max-width:480px;">
-      <strong style="color:var(--text);font-weight:500;">Interesseret i et samarbejde?</strong> Tag kontakt — jeg vender tilbage inden for 24 timer.
-    </p>
-    <button class="btn-primary" data-contact>Tag kontakt →</button>
+  <!-- UDDANNELSE -->
+  <div class="section-header" id="uddannelse">
+    <span class="section-title">Uddannelse & Certificeringer</span>
+  </div>
+  <div class="edu-grid" id="eduGrid">
+    <!-- Rendered by JS -->
   </div>
 
-  <footer class="footer">
-    <div class="footer-left">zacharias@polonius.dk · 3068 7041</div>
-    <div class="footer-links">
-      <a href="https://www.linkedin.com/in/zpolonius/" target="_blank">LinkedIn</a>
-      <a href="https://www.instagram.com/zackp91/" target="_blank">Instagram</a>
-      <a href="https://www.facebook.com/zpolonius" target="_blank">Facebook</a>
-    </div>
-  </footer>
-
-  <!-- CONTACT OVERLAY -->
-  <div class="overlay" id="contactOverlay">
-    <div class="overlay-bg"></div>
-    <div class="modal">
-      <div id="contactFormView">
-        <div class="modal-header">
-          <div>
-            <div class="modal-label">Kontakt</div>
-            <div class="modal-title">Lad os tage<br>en snak</div>
-            <div class="modal-sub">Jeg vender tilbage inden for 24 timer.</div>
-          </div>
-          <button class="modal-close" onclick="closeContact()">✕</button>
-        </div>
-        <div class="modal-progress"><div class="modal-progress-bar" id="contactProgressBar"></div></div>
-        <div class="modal-divider"></div>
-        <div class="modal-body">
-          <div class="field-row">
-            <div class="field"><label class="field-label">Navn</label><input class="input" type="text" id="f-name" placeholder="Dit fulde navn"></div>
-            <div class="field"><label class="field-label">Firma</label><input class="input" type="text" id="f-company" placeholder="Virksomhedsnavn"></div>
-          </div>
-          <div class="field"><label class="field-label">Webshop URL (valgfrit)</label><input class="input" type="text" id="f-url" placeholder="https://dinshop.dk"></div>
-          <div class="field"><label class="field-label">Email</label><input class="input" type="email" id="f-email" placeholder="din@email.dk"></div>
-          <div class="field">
-            <label class="field-label">Emne</label>
-            <div class="pills" style="margin-top:4px;">
-              <button class="pill">Jobmulighed</button>
-              <button class="pill">Samarbejde</button>
-              <button class="pill">AI-projekt</button>
-              <button class="pill">Checkout review</button>
-              <button class="pill">Andet</button>
-            </div>
-          </div>
-          <div class="field" style="margin-top:18px;"><label class="field-label">Besked</label><textarea class="input" id="f-msg" placeholder="Fortæl mig lidt om hvad du har i tankerne..."></textarea></div>
-          <div class="modal-footer">
-            <div class="modal-contact-info"><span>zacharias@polonius.dk</span><span>3068 7041</span></div>
-            <button class="btn-primary" id="contactSubmit">Send besked →</button>
-          </div>
-        </div>
-        <div class="modal-social">
-          <a href="https://www.linkedin.com/in/zpolonius/" target="_blank">LinkedIn</a>
-          <span class="modal-social-sep">·</span>
-          <a href="https://www.instagram.com/zackp91/" target="_blank">Instagram</a>
-          <span class="modal-social-sep">·</span>
-          <a href="https://www.facebook.com/zpolonius" target="_blank">Facebook</a>
-        </div>
-      </div>
-      <div class="success-view" id="contactSuccessView">
-        <div class="success-icon"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
-        <div class="success-title">Besked sendt!</div>
-        <div class="success-sub">Tak for din henvendelse. Jeg vender tilbage inden for 24 timer.</div>
-        <button class="btn-primary" onclick="closeContact()" style="margin-top:8px;">Luk vindue</button>
-      </div>
-    </div>
+  <!-- FRIVILLIGT ARBEJDE (Mindre fremtrædende) -->
+  <div class="section-header" id="frivilligt">
+    <span class="section-title">Anden erfaring & Bestyrelsesarbejde</span>
+  </div>
+  <div class="timeline" id="volTimeline">
+    <!-- Rendered by JS (Volunteer Category) -->
   </div>
 
-  <!-- FLOATING BOTTOM NAV (mobil) -->
-  <nav class="bottom-nav" id="bottomNav">
-    <a class="bottom-nav-item" href="index.html" data-page="hjem">
-      <span class="bottom-nav-icon">⌂</span>
-      <span class="bottom-nav-label">Hjem</span>
-    </a>
-    <div class="bottom-nav-divider"></div>
-    <a class="bottom-nav-item" href="projects.html" data-page="projekter">
-      <span class="bottom-nav-icon">◈</span>
-      <span class="bottom-nav-label">Projekter</span>
-    </a>
-    <div class="bottom-nav-divider"></div>
-    <a class="bottom-nav-item" href="index.html#blogSection" data-page="indsigter">
-      <span class="bottom-nav-icon">📝</span>
-      <span class="bottom-nav-label">Indsigter</span>
-    </a>
-    <div class="bottom-nav-divider"></div>
-    <a class="bottom-nav-item" href="cv.html" data-page="cv">
-      <span class="bottom-nav-icon">◎</span>
-      <span class="bottom-nav-label">CV</span>
-    </a>
-    <div class="bottom-nav-divider"></div>
-    <a class="bottom-nav-item" href="recommendations.html" data-page="anbefalinger">
-      <span class="bottom-nav-icon">💬</span>
-      <span class="bottom-nav-label">Anb.</span>
-    </a>
-    <div class="bottom-nav-divider"></div>
-    <a class="bottom-nav-item" href="about.html" data-page="om">
-      <span class="bottom-nav-icon">◉</span>
-      <span class="bottom-nav-label">Om</span>
-    </a>
-    <div class="bottom-nav-divider"></div>
-    <button class="bottom-nav-contact" data-contact-mobile>
-      <span class="bottom-nav-icon">✉</span>
-      <span class="bottom-nav-label">Kontakt</span>
-    </button>
-  </nav>
+  <!-- CENTRAL CTA BAR -->
+  <div id="global-cta-bar"></div>
+
+  <!-- SHARED FOOTER -->
+  <footer id="global-footer" class="footer"></footer>
+
+  <!-- SHARED WIDGETS -->
+  <div id="global-contact"></div>
+  <nav id="global-bottom-nav"></nav>
+  <div id="global-floating-cta"></div>
 
   <script src="js/main.js?v=1.0.2"></script>
   <script>
@@ -270,10 +426,13 @@
     fetch('data/content.json?t=' + Date.now())
       .then(r => r.json())
       .then(data => {
-        // Jobs timeline
+        const cv = data.cv || {};
+
+        // --- 1. JOBS (WORK ONLY) ---
         const tl = document.getElementById('jobTimeline');
-        (data.cv?.jobs || []).forEach(j => {
-          if (j.visible === false) return;
+        const workJobs = (cv.jobs || []).filter(j => j.visible !== false && (j.category === 'work' || !j.category));
+
+        workJobs.forEach(j => {
           tl.innerHTML += `
             <div class="timeline-year">
               <div class="timeline-year-val">${esc(j.period)}</div>
@@ -287,9 +446,45 @@
             </a>`;
         });
 
-        // Education
+        // --- 2. SKILLS ---
+        const ks = document.getElementById('skillsStrip');
+        if (ks) {
+          const komp = data.om?.kompetencer || [];
+          ks.innerHTML = komp.map(grp => `
+            <div class="skill-group">
+              <div class="skill-group-title">${esc(grp.category)}</div>
+              <div class="skill-tags">
+                ${grp.tags.map(t => {
+            const isBlue = ["ai", "tech", "checkout", "api", "flutter", "coding", "software", "sql", "xml", "cro", "optimization"].some(key => grp.category.toLowerCase().includes(key) || t.toLowerCase().includes(key));
+            return `<span class="skill-tag ${isBlue ? 'blue' : ''}">${esc(t)}</span>`;
+          }).join('')}
+              </div>
+            </div>
+          `).join('');
+        }
+
+        // --- 3. RECOMMENDATIONS ---
+        const rg = document.getElementById('recGrid');
+        (cv.recommendations || []).slice(0, 4).forEach(r => {
+          if (r.visible === false) return;
+          rg.innerHTML += `
+            <div class="rec-card">
+              <div class="rec-mark">"</div>
+              <p class="rec-text">${esc(r.intro || (r.text ? r.text.substring(0, 150) + '...' : ''))}</p>
+              <div class="rec-author-wrap">
+                ${r.photo ? `<img src="${r.photo}" alt="${esc(r.name)}" class="rec-avatar" style="object-position: ${r.photo_pos || 'center center'}">` : ''}
+                <div class="rec-meta">
+                  <div class="rec-name">${esc(r.name)}</div>
+                  <div class="rec-role">${esc(r.role)}</div>
+                </div>
+              </div>
+              <a href="detail.html?id=${r.id}" class="section-link" style="margin-top:24px; display:inline-block; font-size:12px;">Læs hele udtalelsen →</a>
+            </div>`;
+        });
+
+        // --- 4. EDUCATION ---
         const eg = document.getElementById('eduGrid');
-        (data.cv?.education || []).forEach(e => {
+        (cv.education || []).forEach(e => {
           if (e.visible === false) return;
           eg.innerHTML += `
             <a class="edu-card" href="detail.html?id=${e.id}">
@@ -300,42 +495,33 @@
             </a>`;
         });
 
-        // Recommendations
-        const rg = document.getElementById('recGrid');
-        (data.cv?.recommendations || []).forEach(r => {
-          if (r.visible === false) return;
-          rg.innerHTML += `
-            <div class="rec-card">
-              <div class="rec-mark">"</div>
-              <p class="rec-text">${esc(r.intro || r.text)}</p>
-              <div class="rec-author-wrap">
-                ${r.photo ? `<img src="${r.photo}" alt="${esc(r.photo_alt||r.name)}" class="rec-avatar" style="object-position: ${r.photo_pos || 'center center'}">` : ''}
-                <div class="rec-meta">
-                  <div class="rec-name">${esc(r.name)}</div>
-                  <div class="rec-role">${esc(r.role)}</div>
-                </div>
-              </div>
-              <a href="detail.html?id=${r.id}" class="section-link" style="margin-top:20px; display:inline-block; font-size:12px;">Læs hele udtalelsen →</a>
-            </div>`;
-        });
+        // --- 5. VOLUNTEER ---
+        const vt = document.getElementById('volTimeline');
+        const volJobs = (cv.jobs || []).filter(j => j.visible !== false && j.category === 'volunteer');
 
-        // Kompetencer (Dynamic)
-        const ks = document.getElementById('skillsStrip');
-        if (ks) {
-          const komp = data.om?.kompetencer || [];
-          ks.innerHTML = komp.map(grp => `
-            <div class="skill-group">
-              <div class="skill-group-title">${esc(grp.category)}</div>
-              <div class="skill-tags">
-                ${grp.tags.map(t => {
-                  const isBlue = ["ai", "tech", "checkout", "api", "flutter", "coding", "software", "sql", "xml"].some(key => grp.category.toLowerCase().includes(key) || t.toLowerCase().includes(key));
-                  return `<span class="skill-tag ${isBlue?'blue':''}">${esc(t)}</span>`;
-                }).join('')}
+        if (volJobs.length > 0) {
+          volJobs.forEach(j => {
+            vt.innerHTML += `
+              <div class="timeline-year">
+                <div class="timeline-year-val">${esc(j.period)}</div>
+                <div class="timeline-year-dot" style="background: var(--text-ghost); box-shadow: none;"></div>
               </div>
-            </div>
-          `).join('');
+              <a class="timeline-content" href="detail.html?id=${j.id}" style="opacity: 0.8;">
+                <div class="timeline-role">${esc(j.role)}</div>
+                <div class="timeline-company">${esc(j.company || 'Frivilligt arbejde')}</div>
+                <div class="timeline-desc">${esc(j.desc || '')}</div>
+                <span class="timeline-arrow">→</span>
+              </a>`;
+          });
+        } else {
+          document.getElementById('frivilligt').style.display = 'none';
         }
+      })
+      .catch(err => {
+        console.error('Error loading content:', err);
+        document.body.innerHTML += '<div style="padding:40px; color:red;">Kunne ikke indlæse CV-data. Prøv at genindlæse siden.</div>';
       });
   </script>
 </body>
+
 </html>
