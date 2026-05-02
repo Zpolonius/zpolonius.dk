@@ -30,16 +30,16 @@
   --bg-deep:      #eceae4;
   --bg-card:      #edecea;
   --bg-nav:       rgba(245,244,240,0.95);
-  --border:       rgba(0,0,0,0.08);
-  --border-md:    rgba(0,0,0,0.13);
-  --border-blue:  rgba(28,100,220,0.3);
-  --border-green: rgba(40,130,50,0.3);
+  --border:       rgba(0,0,0,0.12);
+  --border-md:    rgba(0,0,0,0.18);
+  --border-blue:  rgba(28,100,220,0.4);
+  --border-green: rgba(40,130,50,0.4);
   --text:         #1a1a1a;
-  --text-muted:   rgba(0,0,0,0.6);
-  --text-faint:   rgba(0,0,0,0.45);
-  --text-ghost:   rgba(0,0,0,0.2);
-  --blue:         #1c64dc;
-  --green:        #288232;
+  --text-muted:   rgba(0,0,0,0.75);
+  --text-faint:   rgba(0,0,0,0.60);
+  --text-ghost:   rgba(0,0,0,0.30);
+  --blue:         #1550c0;
+  --green:        #206b29;
   --overlay-bg:   rgba(20,20,20,0.75);
 }
 
@@ -50,16 +50,16 @@
     --bg-deep:      #eceae4;
     --bg-card:      #edecea;
     --bg-nav:       rgba(245,244,240,0.95);
-    --border:       rgba(0,0,0,0.08);
-    --border-md:    rgba(0,0,0,0.13);
-    --border-blue:  rgba(28,100,220,0.3);
-    --border-green: rgba(40,130,50,0.3);
+    --border:       rgba(0,0,0,0.12);
+    --border-md:    rgba(0,0,0,0.18);
+    --border-blue:  rgba(28,100,220,0.4);
+    --border-green: rgba(40,130,50,0.4);
     --text:         #1a1a1a;
-    --text-muted:   rgba(0,0,0,0.55);
-    --text-faint:   rgba(0,0,0,0.35);
-    --text-ghost:   rgba(0,0,0,0.14);
-    --blue:         #1c64dc;
-    --green:        #288232;
+    --text-muted:   rgba(0,0,0,0.75);
+    --text-faint:   rgba(0,0,0,0.60);
+    --text-ghost:   rgba(0,0,0,0.30);
+    --blue:         #1550c0;
+    --green:        #206b29;
     --overlay-bg:   rgba(20,20,20,0.75);
   }
 }
