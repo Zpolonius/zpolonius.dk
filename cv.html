@@ -277,23 +277,69 @@
     }
 
     /* ---- BENTO GRID ---- */
-    .bento { display: grid; grid-template-columns: repeat(3, 1fr); }
+    .bento {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      padding: 20px 40px;
+    }
     .bento-cell {
-      padding: 32px 36px; border-right: 0.5px solid var(--border);
-      border-bottom: 0.5px solid var(--border);
-      position: relative; transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-      cursor: pointer; background: var(--bg); overflow: hidden;
+      padding: 24px 28px;
+      background: var(--bg-card);
+      backdrop-filter: blur(10px);
+      border: 0.5px solid var(--border-md);
+      border-radius: 20px;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      position: relative;
     }
-    .bento-cell:nth-child(3n) { border-right: none; }
-    .bento-cell:hover {
-      background: rgba(255,255,255,0.03); padding-left: 42px;
+    .bento-cell:hover { 
+      transform: translateY(-5px);
+      background: rgba(255,255,255,0.05); 
+      box-shadow: 0 15px 40px rgba(0,0,0,0.2), 0 0 20px rgba(65, 143, 255, 0.1);
+      border-color: var(--blue);
+      z-index: 10;
     }
-    .cell-label { font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-faint); margin-bottom: 8px; }
-    .cell-title { font-size: 16px; font-weight: 600; color: var(--text); margin-bottom: 5px; line-height: 1.2; }
-    .cell-sub { font-size: 12px; color: var(--text-muted); margin-bottom: 8px; }
+    .bento-cell.selected {
+      background: rgba(65,143,255,0.08);
+      border-color: var(--blue);
+    }
+    .cell-label {
+      font-size: 9px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--text-faint);
+      margin-bottom: 8px;
+    }
+    .cell-title {
+      font-size: 16px;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      color: var(--text);
+      margin-bottom: 5px;
+      line-height: 1.2;
+    }
+    .cell-sub {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+    }
+    .cell-desc {
+      font-size: 11px;
+      color: var(--text-faint);
+      line-height: 1.6;
+      max-height: 0;
+      opacity: 0;
+      overflow: hidden;
+      transition: all 0.3s ease;
+    }
     .cell-arrow {
-      position: absolute; bottom: 14px; right: 16px;
-      font-size: 11px; color: var(--blue); opacity: 0; transition: opacity 0.2s;
+      position: absolute;
+      bottom: 14px; right: 16px;
+      font-size: 11px;
+      color: var(--blue);
+      opacity: 0;
+      transition: opacity 0.2s;
     }
     .bento-cell:hover .cell-arrow { opacity: 1; }
 
@@ -312,8 +358,19 @@
     .detail-val { font-size: 13px; color: var(--text-muted); }
 
     @media (max-width: 768px) {
-      .bento { grid-template-columns: 1fr; }
-      .bento-cell { border-right: none; }
+      .bento {
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+        padding: 16px 20px;
+      }
+      .bento-cell {
+        padding: 14px 16px;
+        border-radius: 14px;
+        border: 0.5px solid var(--border-md);
+      }
+      .cell-title { font-size: 14px; }
+      .bento-cell .cell-arrow { transition: transform 0.3s; opacity: 1; }
+      .bento-cell.expanded .cell-arrow { transform: rotate(90deg); }
       .detail-inner { grid-template-columns: 1fr; gap: 20px; padding: 24px 20px; }
       .timeline { grid-template-columns: 80px 1fr; }
       .timeline-year { padding: 24px 15px; }
@@ -642,56 +699,14 @@
         // --- 6. BENTO GRID (GLOBAL) ---
         const bGrid = document.getElementById('global-bento');
         if (bGrid && data.bento) {
-          bGrid.innerHTML = `
-            <div class="section-header">
-              <span class="section-title">Highlights & Fokus</span>
-            </div>
-            <div class="bento">
-              ${data.bento.map((b, i) => `
-                <div class="bento-cell fade-up" tabindex="0" onclick="openDetail('${i}')">
-                  <div class="cell-label">${esc(b.label)}</div>
-                  <div class="cell-title">${esc(b.value)}</div>
-                  <div class="cell-sub">${esc(b.sub)}</div>
-                  <span class="cell-arrow">${esc(b.cta || 'Mere →')}</span>
-                </div>
-              `).join('')}
-            </div>`;
+          // main.js will handle this if we let it
+          window.contentData = data;
+          initGlobalBento();
         }
-
-        window.contentData = data; // Cache for detail panel
       })
       .catch(err => {
         console.error('Error loading content:', err);
       });
-
-    // Bento Detail Logic
-    function openDetail(index) {
-      const bento = window.contentData.bento[index];
-      if(!bento) return;
-      const panel = document.getElementById('global-detail-panel');
-      panel.innerHTML = `
-        <div class="detail-panel active" id="detailPanel">
-          <div class="detail-inner">
-            <div>
-              <div class="detail-tag">${esc(bento.label)}</div>
-              <h2 class="detail-title">${esc(bento.value)}</h2>
-              <p class="detail-desc">${esc(bento.desc)}</p>
-              <div class="detail-actions">
-                <button class="detail-close" onclick="closeDetail()">Luk ✕</button>
-              </div>
-            </div>
-            <div class="detail-meta">
-              <div class="detail-row"><span class="detail-key">Fokus</span><span class="detail-val">${esc(bento.sub)}</span></div>
-            </div>
-          </div>
-        </div>`;
-      panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-    }
-
-    function closeDetail() {
-      const panel = document.getElementById('detailPanel');
-      if(panel) panel.classList.remove('active');
-    }
   </script>
 </body>
 

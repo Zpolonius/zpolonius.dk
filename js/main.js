@@ -14,13 +14,16 @@ function esc(str) {
 }
 
 /**
- * Centraliseret indlæsning af content.json med fejlhåndtering
+ * Centraliseret indlæsning af content.json med fejlhåndtering og caching
  */
 window.loadContentData = async function() {
+  if (window.contentData) return window.contentData;
+  
   try {
     const response = await fetch('data/content.json?t=' + Date.now());
     if (!response.ok) throw new Error('Kunne ikke hente data-filen (HTTP ' + response.status + ')');
     const data = await response.json();
+    window.contentData = data;
     return data;
   } catch (err) {
     console.error('Data-fejl:', err);
@@ -332,12 +335,14 @@ window.initGlobalBento = function() {
 
   const render = (data) => {
     bGrid.innerHTML = data.bento.map((b, i) => `
-      <div class="bento-cell" tabindex="0" onclick="window.innerWidth <= 768 ? this.classList.toggle('expanded') : openDetail('${i}')" onkeydown="if(event.key==='Enter'||event.key===' ') { event.preventDefault(); window.innerWidth <= 768 ? this.classList.toggle('expanded') : openDetail('${i}'); }">
+      <div class="bento-cell" tabindex="0" 
+           onclick="window.innerWidth <= 768 ? toggleBentoExpand(this) : openDetail('${i}')" 
+           onkeydown="if(event.key==='Enter'||event.key===' ') { event.preventDefault(); window.innerWidth <= 768 ? toggleBentoExpand(this) : openDetail('${i}'); }">
         <div class="cell-label">${esc(b.label)}</div>
         <div class="cell-title">${esc(b.value)}</div>
         <div class="cell-sub">${esc(b.sub)}</div>
         <div class="cell-desc">${esc(b.desc)}</div>
-        <span class="cell-arrow">Åbn →</span>
+        <span class="cell-arrow">${esc(b.cta || 'Mere →')}</span>
       </div>
     `).join('');
     
@@ -360,22 +365,39 @@ window.initGlobalBento = function() {
   }
 };
 
+window.toggleBentoExpand = function(el) {
+  const isExpanded = el.classList.contains('expanded');
+  document.querySelectorAll('.bento-cell').forEach(c => c.classList.remove('expanded', 'selected'));
+  if (!isExpanded) {
+    el.classList.add('expanded');
+  }
+};
+
 window.openDetail = function(index) {
   if (!window.contentData) return;
   const d = window.contentData.bento[index];
   if (!d) return;
-  document.getElementById('dTag').textContent = d.label;
-  document.getElementById('dTitle').textContent = d.value;
-  document.getElementById('dDesc').textContent = d.desc;
   
+  const tag = document.getElementById('dTag');
+  const title = document.getElementById('dTitle');
+  const desc = document.getElementById('dDesc');
   const panel = document.getElementById('detailPanel');
+  
+  if (tag) tag.textContent = d.label;
+  if (title) title.textContent = d.value;
+  if (desc) desc.textContent = d.desc;
+  
   if (panel) {
     panel.classList.add('active');
-    panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   }
-  document.querySelectorAll('.bento-cell').forEach(c => c.classList.remove('selected'));
-  if (window.event) window.event.currentTarget.classList.add('selected');
-  document.getElementById('dMeta').innerHTML = `<div class="detail-row"><span class="detail-key">Info</span><span class="detail-val">${d.sub}</span></div>`;
+  
+  document.querySelectorAll('.bento-cell').forEach(c => c.classList.remove('selected', 'expanded'));
+  if (window.event && window.event.currentTarget) {
+    window.event.currentTarget.classList.add('selected');
+  }
+  
+  const meta = document.getElementById('dMeta');
+  if (meta) meta.innerHTML = `<div class="detail-row"><span class="detail-key">Info</span><span class="detail-val">${d.sub}</span></div>`;
 };
 
 window.closeDetail = function() {

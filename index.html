@@ -222,6 +222,10 @@
       font-size: 11px;
       color: var(--text-faint);
       line-height: 1.6;
+      max-height: 0;
+      opacity: 0;
+      overflow: hidden;
+      transition: all 0.3s ease;
     }
     .cell-arrow {
       position: absolute;
@@ -517,8 +521,8 @@
       .cell-title { font-size: 14px; }
       .cell-label { font-size: 8px; }
       .cell-sub { font-size: 10px; }
-      .cell-desc { display: none; } /* Skjul lang tekst på mobil for "nice small box" effekt */
-      .bento-cell:hover .cell-arrow { opacity: 1; }
+      .bento-cell .cell-arrow { transition: transform 0.3s; opacity: 1; }
+      .bento-cell.expanded .cell-arrow { transform: rotate(90deg); }
 
       /* SCROLLABLE RECOMMENDATIONS */
       .rec-container {
@@ -647,6 +651,11 @@
     </div>
   </section>
 
+  <!-- BENTO GRID -->
+  <div class="bento" id="bentoGrid">
+    <!-- Rendered dynamically -->
+  </div>
+
   <!-- BENTO DETAIL PANEL -->
   <div class="detail-panel" id="detailPanel">
     <div class="detail-inner">
@@ -661,11 +670,6 @@
       </div>
       <div class="detail-meta" id="dMeta"></div>
     </div>
-  </div>
-
-  <!-- BENTO GRID -->
-  <div class="bento" id="bentoGrid">
-    <!-- Rendered dynamically -->
   </div>
 
   <!-- PROJEKTER -->
@@ -860,10 +864,13 @@
       const bGrid = document.getElementById('bentoGrid');
       if (bGrid && data.bento) {
         bGrid.innerHTML = data.bento.map((b, i) => `
-          <div class="bento-cell fade-up" tabindex="0" onclick="openDetail('${i}')">
+          <div class="bento-cell fade-up" tabindex="0" 
+               onclick="window.innerWidth <= 768 ? toggleBentoExpand(this) : openDetail('${i}')"
+               onkeydown="if(event.key==='Enter'||event.key===' ') { event.preventDefault(); window.innerWidth <= 768 ? toggleBentoExpand(this) : openDetail('${i}'); }">
             <div class="cell-label">${esc(b.label)}</div>
             <div class="cell-title">${esc(b.value)}</div>
             <div class="cell-sub">${esc(b.sub)}</div>
+            <div class="cell-desc">${esc(b.desc)}</div>
             <span class="cell-arrow">${esc(b.cta || 'Mere →')}</span>
           </div>
         `).join('');
@@ -1078,13 +1085,22 @@
       
       const panel = document.getElementById('detailPanel');
       panel.classList.add('active');
-      document.querySelectorAll('.bento-cell').forEach(c => c.classList.remove('selected'));
-      // Note: event might be undefined if not called from onclick, but here it's always from onclick
-      if (window.event) window.event.currentTarget.classList.add('selected');
-      panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      document.querySelectorAll('.bento-cell').forEach(c => c.classList.remove('selected', 'expanded'));
+      
+      if (window.event && window.event.currentTarget) {
+        window.event.currentTarget.classList.add('selected');
+      }
       
       document.getElementById('dBtn').style.display = 'none';
       document.getElementById('dMeta').innerHTML = `<div class="detail-row"><span class="detail-key">Info</span><span class="detail-val">${d.sub}</span></div>`;
+    }
+
+    function toggleBentoExpand(el) {
+      const isExpanded = el.classList.contains('expanded');
+      document.querySelectorAll('.bento-cell').forEach(c => c.classList.remove('expanded', 'selected'));
+      if (!isExpanded) {
+        el.classList.add('expanded');
+      }
     }
 
     function closeDetail() {
