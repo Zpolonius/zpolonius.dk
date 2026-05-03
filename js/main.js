@@ -54,7 +54,81 @@ document.addEventListener('DOMContentLoaded', () => {
   initContactOverlay();
   initParallax();
   initPageTransitions();
+  initCookieConsent();
 });
+
+/* ---- COOKIE CONSENT SYSTEM ---- */
+function initCookieConsent() {
+  const consent = localStorage.getItem('zp-cookie-consent');
+  
+  if (!consent) {
+    showCookieBanner();
+  } else if (consent === 'accepted') {
+    loadDeferredContent();
+  } else {
+    showDeferredPlaceholders();
+  }
+}
+
+function showCookieBanner() {
+  const banner = document.createElement('div');
+  banner.className = 'cookie-banner';
+  banner.innerHTML = `
+    <div class="cookie-content">
+      <div class="cookie-title">Cookies & Privatliv 🍪</div>
+      <div class="cookie-text">
+        Jeg bruger cookies til at forbedre din oplevelse, herunder indlejret indhold fra Spotify. 
+        Ved at klikke "Acceptér", giver du samtykke til dette.
+      </div>
+    </div>
+    <div class="cookie-actions">
+      <button class="btn-cookie-decline" onclick="handleConsent('declined')">Kun nødvendige</button>
+      <button class="btn-primary" onclick="handleConsent('accepted')">Acceptér alle</button>
+    </div>
+  `;
+  document.body.appendChild(banner);
+  setTimeout(() => banner.classList.add('show'), 1000);
+}
+
+window.handleConsent = function(status) {
+  localStorage.setItem('zp-cookie-consent', status);
+  const banner = document.querySelector('.cookie-banner');
+  if (banner) {
+    banner.classList.remove('show');
+    setTimeout(() => banner.remove(), 600);
+  }
+  
+  if (status === 'accepted') {
+    loadDeferredContent();
+  } else {
+    showDeferredPlaceholders();
+  }
+};
+
+function loadDeferredContent() {
+  document.querySelectorAll('.deferred-content').forEach(container => {
+    const type = container.getAttribute('data-type');
+    const src = container.getAttribute('data-src');
+    const title = container.getAttribute('data-title');
+    
+    if (type === 'spotify') {
+      container.innerHTML = `
+        <iframe title="${esc(title)}" style="border-radius:12px" src="${src}" width="100%" height="152" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+      `;
+    }
+  });
+}
+
+function showDeferredPlaceholders() {
+  document.querySelectorAll('.deferred-content').forEach(container => {
+    container.innerHTML = `
+      <div class="deferred-content-placeholder">
+        <div class="deferred-text">Indhold fra Spotify er blokeret pga. dine cookie-indstillinger.</div>
+        <button class="btn-enable-content" onclick="handleConsent('accepted')">Tillad cookies og vis indhold</button>
+      </div>
+    `;
+  });
+}
 
 function initPageTransitions() {
   document.addEventListener('click', e => {

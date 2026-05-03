@@ -924,3 +924,82 @@ textarea.input { resize: none; height: 100px; line-height: 1.6; }
 .fade-in-ready {
   animation: pageFadeIn 0.5s ease forwards;
 }
+
+/* ---- COOKIE BANNER ---- */
+.cookie-banner {
+  position: fixed;
+  bottom: 24px;
+  left: 24px;
+  right: 24px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-md);
+  border-radius: var(--radius-lg);
+  padding: 24px 32px;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+  transform: translateY(150%);
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  max-width: 1000px;
+  margin: 0 auto;
+}
+.cookie-banner.show { transform: translateY(0); }
+.cookie-content { flex: 1; }
+.cookie-title { font-size: 16px; font-weight: 600; color: var(--text); margin-bottom: 4px; }
+.cookie-text { font-size: 13px; color: var(--text-muted); line-height: 1.5; }
+.cookie-actions { display: flex; gap: 12px; flex-shrink: 0; }
+.btn-cookie-decline { 
+  background: transparent; 
+  color: var(--text-faint); 
+  border: 1px solid var(--border); 
+  padding: 10px 20px; 
+  font-size: 13px; 
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.btn-cookie-decline:hover { border-color: var(--text-faint); color: var(--text); }
+
+@media (max-width: 768px) {
+  .cookie-banner {
+    flex-direction: column;
+    bottom: 80px; /* Over bottom nav */
+    padding: 20px;
+    text-align: center;
+    left: 16px; right: 16px;
+  }
+  .cookie-actions { width: 100%; }
+  .cookie-actions button { flex: 1; }
+}
+
+/* ---- DEFERRED CONTENT (Spotify Placeholder) ---- */
+.deferred-content-placeholder {
+  width: 100%;
+  height: 152px;
+  background: var(--bg-deep);
+  border: 1px solid var(--border-md);
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  text-align: center;
+  padding: 20px;
+}
+.deferred-text { font-size: 13px; color: var(--text-muted); }
+.btn-enable-content {
+  background: var(--blue);
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  font-size: 12px;
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+.btn-enable-content:hover { opacity: 0.9; }
+
