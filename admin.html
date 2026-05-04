@@ -1291,6 +1291,7 @@ function editBento(i) {
     <div class="field"><label class="field-label">Label (lille tekst over)</label><input class="f-input" id="fb-label" value="${box.label||''}"></div>
     <div class="field"><label class="field-label">Værdi (stor tekst)</label><input class="f-input" id="fb-value" value="${box.value||''}"></div>
     <div class="field"><label class="field-label">Undertekst</label><input class="f-input" id="fb-sub" value="${box.sub||''}"></div>
+    <div class="field"><label class="field-label">Info-label (vises i popup, f.eks. 'Info' eller 'Fokus')</label><input class="f-input" id="fb-key" value="${box.key||''}" placeholder="Info"></div>
     <div class="field"><label class="field-label">Beskrivelse (vises i popup)</label><textarea class="f-textarea" id="fb-desc" style="height:100px;">${box.desc||''}</textarea></div>
     <div class="field"><label class="field-label">Call to Action (Knap-tekst)</label><input class="f-input" id="fb-cta" value="${box.cta||''}" placeholder="f.eks. Se værdien her →"></div>
     <div class="field"><label class="field-label">Accent-farve</label>
@@ -1304,6 +1305,7 @@ function editBento(i) {
     data.bento[i].label  = document.getElementById('fb-label').value;
     data.bento[i].value  = document.getElementById('fb-value').value;
     data.bento[i].sub    = document.getElementById('fb-sub').value;
+    data.bento[i].key    = document.getElementById('fb-key').value;
     data.bento[i].desc   = document.getElementById('fb-desc').value;
     data.bento[i].cta    = document.getElementById('fb-cta').value;
     data.bento[i].accent = document.getElementById('fb-accent').value;

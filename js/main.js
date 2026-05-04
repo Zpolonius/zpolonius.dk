@@ -293,8 +293,8 @@ function initSharedLayout() {
           <div class="modal-header">
             <div>
               <div class="modal-label">Kontakt</div>
-              <div class="modal-title">Lad os tage<br>en snak</div>
-              <div class="modal-sub">Jeg vender tilbage inden for 24 timer.</div>
+              <div class="modal-title">En god kop kaffe<br>og et ærligt blik på din checkout</div>
+              <div class="modal-sub">Jeg svarer når kaffen er klar.</div>
             </div>
             <button class="modal-close" onclick="closeContact()">✕</button>
           </div>
@@ -310,11 +310,11 @@ function initSharedLayout() {
             <div class="field">
               <label class="field-label">Emne</label>
               <div class="pills" style="margin-top:4px;">
-                <button class="pill">Jobmulighed</button>
-                <button class="pill">Samarbejde</button>
-                <button class="pill">AI-projekt</button>
-                <button class="pill">Checkout review</button>
-                <button class="pill">Andet</button>
+                <button class="pill">Checkout analyse</button>
+                <button class="pill">Teknisk rådgivning </button>
+                <button class="pill">AI & automation</button>
+                <button class="pill">Foredrag</button>
+                <button class="pill">Rekruttering</button>
               </div>
             </div>
             <div class="field" style="margin-top:18px;">
@@ -380,8 +380,7 @@ function initSharedLayout() {
 
   const floatingCtaHtml = `
     <button class="floating-cta" data-contact data-track="contact-open-floating">
-      <span class="icon">✉</span>
-      Kontakt
+      Book en ærlig snak →
     </button>
   `;
 
@@ -504,7 +503,7 @@ window.openDetail = function(index) {
   }
   
   const meta = document.getElementById('dMeta');
-  if (meta) meta.innerHTML = `<div class="detail-row"><span class="detail-key">Info</span><span class="detail-val">${d.sub}</span></div>`;
+  if (meta) meta.innerHTML = `<div class="detail-row"><span class="detail-key">${esc(d.key || 'Info')}</span><span class="detail-val">${esc(d.sub)}</span></div>`;
 };
 
 window.closeDetail = function() {
