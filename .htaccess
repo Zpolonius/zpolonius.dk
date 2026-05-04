@@ -5,7 +5,7 @@
 Options -Indexes
 
 # Custom 404 side
-ErrorDocument 404 /404.html
+ErrorDocument 404 /404
 
 # --- SIKKERHEDS HEADERS (Google & Trust Anbefalinger) ---
 <IfModule mod_headers.c>
@@ -38,6 +38,9 @@ ErrorDocument 404 /404.html
 RewriteEngine On
 RewriteCond %{HTTPS} off
 RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+# Redirect index.html to root
+RewriteRule ^index\.html$ / [R=301,L]
 
 # Skjul .html fil-endelser
 RewriteCond %{THE_REQUEST} ^[A-Z]{3,9}\ /([^\ ]+)\.html

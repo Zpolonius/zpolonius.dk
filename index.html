@@ -676,7 +676,7 @@
   <div id="projectsSection">
     <div class="section-header">
       <span class="section-title">Business Cases & ROI</span>
-      <a href="projects" class="section-link">Se alle →</a>
+      <a href="projects" class="section-link">Se alle projekter →</a>
     </div>
     <div class="proj-grid" id="featuredProjects">
       <!-- Rendered dynamically -->
@@ -747,21 +747,21 @@
       </div>
     </div>
     <div class="section-footer">
-      <a href="recommendations.html" class="btn-outline">Se alle anbefalinger</a>
+      <a href="recommendations" class="section-link">Læs alle anbefalinger →</a>
     </div>
-  </div>
+  </section>
 
   <!-- UDDANNELSE -->
   <div id="eduSection" style="display:none;">
     <div class="section-header">
       <span class="section-title">Uddannelse</span>
-      <a href="cv#uddannelse" class="section-link">Se alle →</a>
+      <a href="cv" class="section-link">Se alle →</a>
     </div>
     <div class="cv-strip" id="featuredEducation">
       <!-- Rendered dynamically -->
     </div>
     <div class="section-footer">
-      <a href="cv#uddannelse" class="btn-outline">Se alle uddannelser</a>
+      <a href="cv" class="btn-outline">Se alle uddannelser</a>
     </div>
   </div>
 
@@ -769,18 +769,15 @@
   <div id="volSection" style="display:none;">
     <div class="section-header">
       <span class="section-title">Frivilligt arbejde</span>
-      <a href="projects?filter=volunteer" class="section-link">Se alle →</a>
+      <a href="projects" class="section-link">Se alle →</a>
     </div>
     <div class="cv-strip" id="featuredVolunteer">
       <!-- Rendered dynamically -->
     </div>
     <div class="section-footer">
-      <a href="projects?filter=volunteer" class="btn-outline">Se alt frivilligt arbejde</a>
+      <a href="projects" class="btn-outline">Se alt frivilligt arbejde</a>
     </div>
   </div>
-  </main>
-
-  <!-- FOOTER -->
   </main>
 
   <!-- CENTRAL CTA BAR -->
@@ -788,11 +785,6 @@
 
   <!-- SHARED FOOTER -->
   <footer id="global-footer" class="footer"></footer>
-
-  <!-- SHARED WIDGETS (Injected by main.js) -->
-  <div id="global-contact"></div>
-  <nav id="global-bottom-nav"></nav>
-  <div id="global-floating-cta"></div>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.0/vanilla-tilt.min.js"></script>
   <script src="js/main.js?v=1.0.2"></script>
@@ -804,196 +796,132 @@
       div.textContent = str;
       return div.innerHTML;
     }
-    
-    function stripHtml(html) {
-      if (!html) return '';
-      const div = document.createElement('div');
-      div.innerHTML = html;
-      return div.textContent || div.innerText || "";
-    }
 
-    let contentData = {};
-
+    // Load dynamic content
     loadContentData().then(data => {
       if (!data) return;
-      contentData = data;
-      renderHome(data);
-    });
 
-    function renderHome(data) {
       // Hero
-      const h = data.hero || {};
-      const s = data.site || {};
-      const hName = document.getElementById('heroName');
-      if (hName && s.name) hName.innerHTML = s.name.replace(' ', '<br>');
-      
-      const hLabel = document.querySelector('.hero-label');
-      if (hLabel && h.role) {
-        if (window.initTypewriter && h.role.includes('|')) {
-          const words = h.role.split('|').map(s=>s.trim());
-          window.initTypewriter(hLabel, words);
-        } else {
-          hLabel.textContent = h.role;
-        }
-      }
-      
-      const hTagline = document.querySelector('.hero-tagline');
-      if (hTagline && h.intro) hTagline.textContent = h.intro;
-      
-      const sPill = document.querySelector('.status-pill');
-      if (sPill && h.status) sPill.innerHTML = `<span class="status-dot"></span> ${h.status}`;
-      
-      const hImg = document.querySelector('.hero-img');
-      if (hImg && h.cover) {
-        hImg.src = h.cover;
-        if (h.cover_pos) hImg.style.objectPosition = h.cover_pos;
-      }
-      
-      // Footer & Links
-      const fLeft = document.querySelector('.footer-left');
-      if (fLeft && s.email && s.phone) fLeft.textContent = `${s.email} · ${s.phone}`;
-      
-      if (s.social) {
-        const li = document.querySelector('a[href*="linkedin"]');
-        const ig = document.querySelector('a[href*="instagram"]');
-        const fb = document.querySelector('a[href*="facebook"]');
-        if (li && s.social.linkedin) li.href = s.social.linkedin;
-        if (ig && s.social.instagram) ig.href = s.social.instagram;
-        if (fb && s.social.facebook) fb.href = s.social.facebook;
+      if (data.hero) {
+        document.getElementById('heroName').innerHTML = data.hero.name.replace(' ', '<br>') || 'Zacharias<br>Polonius';
       }
 
-      // Bento
-      const bGrid = document.getElementById('bentoGrid');
-      if (bGrid && data.bento) {
-        bGrid.innerHTML = data.bento.map((b, i) => `
-          <div class="bento-cell fade-up" tabindex="0" 
-               onclick="window.innerWidth <= 768 ? toggleBentoExpand(this) : openDetail('${i}')"
-               onkeydown="if(event.key==='Enter'||event.key===' ') { event.preventDefault(); window.innerWidth <= 768 ? toggleBentoExpand(this) : openDetail('${i}'); }">
-            <div class="cell-label">${esc(b.label)}</div>
-            <div class="cell-title">${esc(b.value)}</div>
-            <div class="cell-sub">${esc(b.sub)}</div>
-            <div class="cell-desc">${esc(b.desc)}</div>
-            <span class="cell-arrow">${esc(b.cta || 'Mere →')}</span>
+      // Bento Grid
+      const bentoGrid = document.getElementById('bentoGrid');
+      if (bentoGrid) {
+        const items = data.specialer || [];
+        bentoGrid.innerHTML = items.map((s, idx) => `
+          <div class="bento-cell fade-up fade-up-${idx+1}" onclick="openDetail('${s.id}')" tabindex="0">
+            <div class="cell-label">${esc(s.tag || 'Speciale')}</div>
+            <div class="cell-title">${esc(s.label)}</div>
+            <div class="cell-sub">${esc(s.sub || '')}</div>
+            <div class="cell-arrow">↗</div>
           </div>
         `).join('');
-        
-        // Initialize VanillaTilt on Bento Cells
-        if (typeof VanillaTilt !== 'undefined') {
-          VanillaTilt.init(document.querySelectorAll(".bento-cell"), {
-            max: 5,
-            speed: 400,
-            glare: true,
-            "max-glare": 0.08,
-            scale: 1.02
-          });
-        }
       }
 
-      // Featured Projects (latest 3)
+      // Projects
       const projGrid = document.getElementById('featuredProjects');
       if (projGrid) {
         const latestProj = (data.projects || []).filter(p => p.visible !== false).slice(0, 3);
         projGrid.innerHTML = latestProj.map(p => `
-          <a href="detail.html?id=${p.id}" class="proj-card">
+          <a href="detail?id=${p.id}" class="proj-card">
             ${p.cover ? `
               <div class="proj-card-img-wrap">
                 <img src="${p.cover}" alt="${esc(p.cover_alt||p.title)}" class="proj-card-img" style="object-position: ${p.cover_pos || 'center center'}" loading="lazy" onerror="this.parentElement.style.display='none'">
               </div>
             ` : ''}
             <div class="proj-card-body">
-              <div class="tag ${p.category==='ai'?'tag-ai':p.category==='work'?'tag-work':'tag-vol'} proj-tag">${esc(p.tag||p.category)}</div>
+              <div class="proj-tag label">${esc(p.tag || p.category || 'Case')}</div>
               <div class="proj-title">${esc(p.title)}</div>
-              <div class="proj-desc">${esc(p.desc||'')}</div>
-              <span class="proj-arrow">Læs mere →</span>
+              <p class="proj-desc">${esc(p.excerpt || '')}</p>
+              <span class="proj-arrow">Se case →</span>
             </div>
           </a>
         `).join('');
       }
 
-      // Artikler (Blog)
+      // Blog/Insights
       const blogSec = document.getElementById('blogSection');
       const blogGridEl = document.getElementById('blogGrid');
-      if (blogSec && blogGridEl) {
-        const arts = (data.articles || []).filter(a => a.visible !== false).reverse().slice(0, 3);
+      if (blogGridEl) {
+        const arts = (data.articles || []).filter(a => a.visible !== false).slice(0, 3);
         if (arts.length > 0) {
           blogSec.style.display = 'block';
           blogGridEl.innerHTML = arts.map(a => `
-            <a href="detail.html?id=${a.id}" class="proj-card">
+            <a href="detail?id=${a.id}" class="proj-card">
               ${a.cover ? `
                 <div class="proj-card-img-wrap">
                   <img src="${a.cover}" alt="${esc(a.title)}" class="proj-card-img" style="object-position: ${a.cover_pos || 'center center'}" loading="lazy" onerror="this.parentElement.style.display='none'">
                 </div>
               ` : ''}
               <div class="proj-card-body">
-                <div class="tag tag-ai proj-tag">
-                  ${esc(a.date || 'Artikel')} 
-                  ${a.reading_time ? `· ${a.reading_time} min.` : (a.body ? `· ${window.getReadingTime(a.body)} min.` : '')}
-                </div>
-                <div class="proj-title" style="font-size:18px;">${esc(a.title)}</div>
-                <div class="proj-desc" style="display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;">${esc(a.excerpt || '')}</div>
+                <div class="proj-tag label">${esc(a.date || 'Indsigt')}</div>
+                <div class="proj-title">${esc(a.title)}</div>
+                <p class="proj-desc">${esc(a.excerpt || '')}</p>
                 <span class="proj-arrow">Læs artikel →</span>
               </div>
+            </a>
+          `).join('');
+        } else {
+          blogSec.style.display = 'none';
+        }
+      }
+
+      // CV Experience
+      const expGrid = document.getElementById('featuredExperience');
+      if (expGrid) {
+        const latestJobs = (data.cv?.jobs || []).filter(j => j.visible !== false && j.category !== 'volunteer').slice(0, 3);
+        expGrid.innerHTML = latestJobs.map(j => `
+          <a href="detail?id=${j.id}" class="cv-item">
+            <div class="cv-year">${esc(j.period)}</div>
+            <div class="cv-role">${esc(j.role)}</div>
+            <div class="cv-company">${esc(j.company)}</div>
+            <p class="cv-desc">${esc(j.desc || '')}</p>
+          </a>
+        `).join('');
+      }
+
+      // Education
+      const eduSec = document.getElementById('eduSection');
+      const eduGrid = document.getElementById('featuredEducation');
+      if (eduGrid) {
+        const latestEdu = (data.cv?.education || []).filter(e => e.visible !== false).slice(0, 3);
+        if (latestEdu.length > 0) {
+          eduSec.style.display = 'block';
+          eduGrid.innerHTML = latestEdu.map(e => `
+            <a href="detail?id=${e.id}" class="cv-item">
+              <div class="cv-year">${esc(e.period)}</div>
+              <div class="cv-role">${esc(e.title)}</div>
+              <div class="cv-company">${esc(e.institution)}</div>
             </a>
           `).join('');
         }
       }
 
-      // Experience (latest 3)
-      const expGrid = document.getElementById('featuredExperience');
-      if (expGrid) {
-        const latestJobs = (data.cv?.jobs || []).filter(j => j.visible !== false && j.category !== 'volunteer').slice(0, 3);
-        expGrid.innerHTML = latestJobs.map(j => `
-          <a href="detail.html?id=${j.id}" class="cv-item">
-            <div class="cv-year">${esc(j.period)}</div>
-            <div class="cv-role">${esc(j.role)}</div>
-            <div class="cv-company">${esc(j.company)}</div>
-            <div class="cv-desc">${esc(j.desc||'')}</div>
-          </a>
-        `).join('');
-      }
-
-      // Education (latest 3)
-      const eduGrid = document.getElementById('featuredEducation');
-      if (eduGrid) {
-        const latestEdu = (data.cv?.education || []).filter(e => e.visible !== false).slice(0, 3);
-        eduGrid.innerHTML = latestEdu.map(e => `
-          <a href="detail.html?id=${e.id}" class="cv-item">
-            <div class="cv-year">${esc(e.period)}</div>
-            <div class="cv-role">${esc(e.title)}</div>
-            <div class="cv-company">${esc(e.institution)}</div>
-            <div class="cv-desc">${esc(e.desc||'')}</div>
-          </a>
-        `).join('');
-      }
-
-      // Volunteer (latest 3)
+      // Volunteer
+      const volSec = document.getElementById('volSection');
       const volGrid = document.getElementById('featuredVolunteer');
       if (volGrid) {
         const latestVol = (data.projects || []).filter(p => p.category === 'volunteer' && p.visible !== false).slice(0, 3);
-        volGrid.innerHTML = latestVol.map(v => `
-          <a href="detail.html?id=${v.id}" class="cv-item">
-            <div class="cv-year">${esc(v.period || '')}</div>
-            <div class="cv-role">${esc(v.title)}</div>
-            <div class="cv-company">${esc(v.tag || 'Frivillig')}</div>
-            <div class="cv-desc">${esc(v.desc||'')}</div>
-          </a>
-        `).join('');
+        if (latestVol.length > 0) {
+          volSec.style.display = 'block';
+          volGrid.innerHTML = latestVol.map(v => `
+            <a href="detail?id=${v.id}" class="cv-item">
+              <div class="cv-year">${esc(v.period || '')}</div>
+              <div class="cv-role">${esc(v.title)}</div>
+              <div class="cv-company">${esc(v.tag || 'Frivillig')}</div>
+            </a>
+          `).join('');
+        }
       }
 
-      // Recommendations Carousel
+      // Recommendations
       const recGrid = document.getElementById('featuredRecommendations');
-      const recNav = document.getElementById('carouselNav');
       if (recGrid) {
-        const latestRecs = (data.cv?.recommendations || []).filter(r => r.visible !== false).slice(0, 5);
-        
-        if (latestRecs.length === 0) {
-          const recSec = document.getElementById('recSection');
-          if (recSec) recSec.style.display = 'none';
-          return;
-        }
-
-        recGrid.innerHTML = latestRecs.map(r => {
-          const raw = r.intro || stripHtml(r.text || '');
+        const recs = (data.cv?.recommendations || []).filter(r => r.visible !== false);
+        recGrid.innerHTML = recs.map(r => {
+          const raw = r.intro || (r.text || '');
           const words = raw.trim().split(/\s+/);
           const truncated = words.length > 150 ? words.slice(0, 150).join(' ') + '...' : raw;
           return `
@@ -1001,115 +929,92 @@
               <div class="quote-inner">
                 <div class="quote-mark">"</div>
                 <p class="quote-text">${esc(truncated)}</p>
-                <div class="rec-author-wrap" style="justify-content: center;">
-                  ${r.photo ? `<img src="${r.photo}" alt="${esc(r.photo_alt||r.name)}" class="rec-avatar" style="object-position: ${r.photo_pos || 'center center'}" loading="lazy" onerror="this.src='data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2240%22%20height%3D%2240%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%23555%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M20%2021v-2a4%204%200%200%200-4-4H8a4%204%200%200%200-4%204v2%22%3E%3C%2Fpath%3E%3Ccircle%20cx%3D%2212%22%20cy%3D%227%22%20r%3D%224%22%3E%3C%2Fcircle%3E%3C%2Fsvg%3E'">` : ''}
-                  <div class="rec-meta">
+                <div class="rec-author-wrap" style="justify-content:center;">
+                  ${r.photo ? `<img src="${r.photo}" alt="${esc(r.photo_alt||r.name)}" class="rec-avatar" style="object-position: ${r.photo_pos || 'center center'}">` : ''}
+                  <div class="rec-meta" style="text-align:left;">
                     <div class="rec-name">${esc(r.name)}</div>
                     <div class="rec-role">${esc(r.role)}</div>
                   </div>
                 </div>
-                <a href="detail.html?id=${r.id}" class="section-link" style="margin-top:24px; display:inline-block; font-size:11px;">Læs hele udtalelsen →</a>
+                <a href="detail?id=${r.id}" class="section-link" style="margin-top:24px; display:inline-block; font-size:11px;">Læs hele udtalelsen →</a>
               </div>
             </div>`;
         }).join('');
+        initCarousel();
+      }
+    });
 
-        // Carousel dots
-        if (recNav) {
-          recNav.innerHTML = latestRecs.map((_, i) => `
-            <div class="carousel-dot ${i===0?'active':''}" onclick="goToSlide(${i})"></div>
-          `).join('');
-        }
-
-        // Carousel logic
-        let currentSlide = 0;
-        const totalSlides = latestRecs.length;
-        let carouselInterval;
-
-        window.goToSlide = function(index) {
-          currentSlide = index;
-          const container = document.getElementById('recSection')?.querySelector('.rec-container');
-          if (window.innerWidth <= 768 && container) {
-            container.scrollTo({
-              left: index * container.offsetWidth,
-              behavior: 'smooth'
-            });
-          } else if (recGrid) {
-            recGrid.style.transform = `translateX(-${index * 100}%)`;
-          }
-          document.querySelectorAll('.carousel-dot').forEach((dot, i) => {
-            dot.classList.toggle('active', i === index);
+    // Bento Detail Logic
+    function openDetail(id) {
+      loadContentData().then(data => {
+        const item = data.specialer.find(s => s.id === id);
+        if (!item) return;
+        
+        document.getElementById('dTag').textContent = item.tag || 'Speciale';
+        document.getElementById('dTitle').textContent = item.label;
+        document.getElementById('dDesc').textContent = item.desc || '';
+        document.getElementById('dBtn').href = item.link || 'projects';
+        document.getElementById('dBtn').textContent = item.link_label || 'Se projekter →';
+        
+        const meta = document.getElementById('dMeta');
+        meta.innerHTML = '';
+        if (item.features) {
+          item.features.forEach(f => {
+            const row = document.createElement('div');
+            row.className = 'detail-row';
+            row.innerHTML = `<span class="detail-key">${esc(f.key)}</span><span class="detail-val">${esc(f.val)}</span>`;
+            meta.appendChild(row);
           });
-          resetInterval();
-        };
-
-        // Sync dots on scroll (mobile)
-        const container = document.getElementById('recSection')?.querySelector('.rec-container');
-        if (container) {
-          container.addEventListener('scroll', () => {
-            if (window.innerWidth <= 768) {
-              const index = Math.round(container.scrollLeft / container.offsetWidth);
-              if (index !== currentSlide) {
-                currentSlide = index;
-                document.querySelectorAll('.carousel-dot').forEach((dot, i) => {
-                  dot.classList.toggle('active', i === index);
-                });
-              }
-            }
-          }, { passive: true });
         }
-
-        window.prevSlide = function() {
-          currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
-          goToSlide(currentSlide);
-        };
-
-        window.nextSlide = function() {
-          currentSlide = (currentSlide + 1) % totalSlides;
-          goToSlide(currentSlide);
-        };
-
-        function resetInterval() {
-          clearInterval(carouselInterval);
-          carouselInterval = setInterval(window.nextSlide, 5000);
-        }
-
-        if (totalSlides > 1) resetInterval();
-        else if (recNav) recNav.style.display = 'none';
-      }
-    }
-
-    function openDetail(index) {
-      const d = contentData.bento[index];
-      if (!d) return;
-      document.getElementById('dTag').textContent = d.label;
-      document.getElementById('dTitle').textContent = d.value;
-      document.getElementById('dDesc').textContent = d.desc;
-      
-      const panel = document.getElementById('detailPanel');
-      panel.classList.add('active');
-      document.querySelectorAll('.bento-cell').forEach(c => c.classList.remove('selected', 'expanded'));
-      
-      if (window.event && window.event.currentTarget) {
-        window.event.currentTarget.classList.add('selected');
-      }
-      
-      document.getElementById('dBtn').style.display = 'none';
-      document.getElementById('dMeta').innerHTML = `<div class="detail-row"><span class="detail-key">Info</span><span class="detail-val">${d.sub}</span></div>`;
-    }
-
-    function toggleBentoExpand(el) {
-      const isExpanded = el.classList.contains('expanded');
-      document.querySelectorAll('.bento-cell').forEach(c => c.classList.remove('expanded', 'selected'));
-      if (!isExpanded) {
-        el.classList.add('expanded');
-      }
+        
+        document.getElementById('detailPanel').classList.add('active');
+        document.getElementById('detailPanel').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        
+        document.querySelectorAll('.bento-cell').forEach(c => c.classList.remove('selected'));
+        event.currentTarget.classList.add('selected');
+      });
     }
 
     function closeDetail() {
       document.getElementById('detailPanel').classList.remove('active');
       document.querySelectorAll('.bento-cell').forEach(c => c.classList.remove('selected'));
     }
-  </script>
 
+    // Carousel Logic
+    let currentIdx = 0;
+    function initCarousel() {
+      const dots = document.getElementById('carouselNav');
+      const slides = document.querySelectorAll('.quote-card');
+      dots.innerHTML = '';
+      slides.forEach((_, i) => {
+        const dot = document.createElement('div');
+        dot.className = 'carousel-dot' + (i === 0 ? ' active' : '');
+        dot.onclick = () => goToSlide(i);
+        dots.appendChild(dot);
+      });
+    }
+
+    function goToSlide(idx) {
+      const carousel = document.getElementById('featuredRecommendations');
+      const dots = document.querySelectorAll('.carousel-dot');
+      currentIdx = idx;
+      carousel.style.transform = `translateX(-${idx * 100}%)`;
+      dots.forEach((d, i) => d.classList.toggle('active', i === idx));
+    }
+
+    function nextSlide() {
+      const slides = document.querySelectorAll('.quote-card');
+      let next = currentIdx + 1;
+      if (next >= slides.length) next = 0;
+      goToSlide(next);
+    }
+
+    function prevSlide() {
+      const slides = document.querySelectorAll('.quote-card');
+      let prev = currentIdx - 1;
+      if (prev < 0) prev = slides.length - 1;
+      goToSlide(prev);
+    }
+  </script>
 </body>
 </html>

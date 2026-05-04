@@ -9,13 +9,13 @@
   
   <!-- Open Graph -->
   <meta property="og:type" content="website">
-  <meta property="og:url" content="https://zpolonius.dk/cv.html">
+  <meta property="og:url" content="https://zpolonius.dk/cv">
   <meta property="og:description" content="Teknisk profil med kommercielt fokus. Se erhvervserfaring og resultater.">
   <meta property="og:image" content="https://zpolonius.dk/assets/og-cv.jpg">
 
   <!-- Twitter -->
   <meta property="twitter:card" content="summary_large_image">
-  <meta property="twitter:url" content="https://zpolonius.dk/cv.html">
+  <meta property="twitter:url" content="https://zpolonius.dk/cv">
   <meta property="twitter:title" content="CV — Zacharias Polonius | Erfaring">
   <meta property="twitter:description" content="Teknisk profil med kommercielt fokus. Se erhvervserfaring og resultater.">
   <meta property="twitter:image" content="https://zpolonius.dk/assets/og-cv.jpg">
@@ -535,7 +535,7 @@
 
   <div class="download-bar">
     <span class="download-bar-text">Behov for en print-version?</span>
-    <a href="cv-print.html" class="download-btn" target="_blank" data-track="cv-download">Se PDF-version →</a>
+    <a href="cv-print" class="download-btn" target="_blank" data-track="cv-download">Se PDF-version →</a>
   </div>
 
   <!-- ANSÆTTELSER -->
@@ -557,7 +557,7 @@
   <!-- ANBEFALINGER -->
   <div class="section-header" id="anbefalinger">
     <span class="section-title">Udvalgte Anbefalinger</span>
-    <a href="recommendations.html" class="section-link">Se alle →</a>
+    <a href="recommendations" class="section-link">Se alle →</a>
   </div>
   <div class="rec-grid" id="recGrid">
     <!-- Rendered by JS -->
@@ -615,7 +615,7 @@
               <div class="timeline-year-val">${esc(j.period)}</div>
               <div class="timeline-year-dot"></div>
             </div>
-            <a class="timeline-content" href="detail.html?id=${j.id}">
+            <a class="timeline-content" href="detail?id=${j.id}">
               <div class="timeline-role">${esc(j.role)}</div>
               <div class="timeline-company">${esc(j.company)}</div>
               <div class="timeline-desc">${esc(j.desc || '')}</div>
@@ -656,7 +656,7 @@
                   <div class="rec-role">${esc(r.role)}</div>
                 </div>
               </div>
-              <a href="detail.html?id=${r.id}" class="section-link" style="margin-top:24px; display:inline-block; font-size:12px;">Læs hele udtalelsen →</a>
+              <a href="detail?id=${r.id}" class="section-link" style="margin-top:24px; display:inline-block; font-size:12px;">Læs hele udtalelsen →</a>
             </div>`;
         });
 
@@ -665,7 +665,7 @@
         (cv.education || []).forEach(e => {
           if (e.visible === false) return;
           eg.innerHTML += `
-            <a class="edu-card" href="detail.html?id=${e.id}">
+            <a class="edu-card" href="detail?id=${e.id}">
               <div class="edu-period">${esc(e.period)}</div>
               <div class="edu-title">${esc(e.title)}</div>
               <div class="edu-inst">${esc(e.institution)}</div>
@@ -684,7 +684,7 @@
                 <div class="timeline-year-val">${esc(j.period)}</div>
                 <div class="timeline-year-dot" style="background: var(--text-ghost); box-shadow: none;"></div>
               </div>
-              <a class="timeline-content" href="detail.html?id=${j.id}" style="opacity: 0.8;">
+              <a class="timeline-content" href="detail?id=${j.id}" style="opacity: 0.8;">
                 <div class="timeline-role">${esc(j.role)}</div>
                 <div class="timeline-company">${esc(j.company || 'Frivilligt arbejde')}</div>
                 <div class="timeline-desc">${esc(j.desc || '')}</div>

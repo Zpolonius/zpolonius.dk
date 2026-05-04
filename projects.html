@@ -8,14 +8,14 @@
   
   <!-- Open Graph -->
   <meta property="og:type" content="website">
-  <meta property="og:url" content="https://zpolonius.dk/projects.html">
+  <meta property="og:url" content="https://zpolonius.dk/projects">
   <meta property="og:title" content="Business Cases & Projekter — Zacharias Polonius">
   <meta property="og:description" content="Se hvordan jeg skaber forretningsværdi gennem teknologi.">
   <meta property="og:image" content="https://zpolonius.dk/assets/og-projects.jpg">
 
   <!-- Twitter -->
   <meta property="twitter:card" content="summary_large_image">
-  <meta property="twitter:url" content="https://zpolonius.dk/projects.html">
+  <meta property="twitter:url" content="https://zpolonius.dk/projects">
   <meta property="twitter:title" content="Business Cases & Projekter — Zacharias Polonius">
   <meta property="twitter:description" content="Se hvordan jeg skaber forretningsværdi gennem teknologi.">
   <meta property="twitter:image" content="https://zpolonius.dk/assets/og-projects.jpg">
@@ -387,7 +387,7 @@
         visibleProjects.forEach(p => {
           const card = document.createElement('a');
           card.className = 'proj-card';
-          card.href = `detail.html?id=${p.id}`;
+          card.href = `detail?id=${p.id}`;
           card.dataset.cat = p.category;
           card.innerHTML = `
             ${p.cover ? `

@@ -8,14 +8,14 @@
   
   <!-- Open Graph / Facebook -->
   <meta property="og:type" content="website">
-  <meta property="og:url" content="https://zpolonius.dk/insights.html">
+  <meta property="og:url" content="https://zpolonius.dk/insights">
   <meta property="og:title" content="Indsigter & Artikler — Zacharias Polonius">
   <meta property="og:description" content="Praksisnære perspektiver på teknologi og forretning.">
   <meta property="og:image" content="https://zpolonius.dk/assets/og-insights.jpg">
 
   <!-- Twitter -->
   <meta property="twitter:card" content="summary_large_image">
-  <meta property="twitter:url" content="https://zpolonius.dk/insights.html">
+  <meta property="twitter:url" content="https://zpolonius.dk/insights">
   <meta property="twitter:title" content="Indsigter & Artikler — Zacharias Polonius">
   <meta property="twitter:description" content="Praksisnære perspektiver på teknologi og forretning.">
   <meta property="twitter:image" content="https://zpolonius.dk/assets/og-insights.jpg">
@@ -218,7 +218,7 @@
         articles.forEach(a => {
           const card = document.createElement('a');
           card.className = 'article-card fade-up';
-          card.href = `detail.html?id=${a.id}`;
+          card.href = `detail?id=${a.id}`;
           card.innerHTML = `
             ${a.cover ? `
               <div class="article-img-wrap">

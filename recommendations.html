@@ -8,7 +8,7 @@
   
   <!-- Open Graph -->
   <meta property="og:type" content="website">
-  <meta property="og:url" content="https://zpolonius.dk/recommendations.html">
+  <meta property="og:url" content="https://zpolonius.dk/recommendations">
   <meta property="og:title" content="Anbefalinger — Zacharias Polonius">
   <meta property="og:description" content="Læs anbefalinger fra mine professionelle relationer.">
   <meta property="og:image" content="https://zpolonius.dk/assets/cover.webp">
@@ -168,7 +168,7 @@
                   <div class="rec-role">${esc(r.role)}</div>
                 </div>
               </div>
-              <a href="detail.html?id=${r.id}" class="section-link" style="margin-top:20px; display:inline-block; font-size:12px;">Læs hele udtalelsen →</a>
+              <a href="detail?id=${r.id}" class="section-link" style="margin-top:20px; display:inline-block; font-size:12px;">Læs hele udtalelsen →</a>
               ${(r.skills||[]).length ? `<div class="rec-skills">${r.skills.map(s=>`<span class="rec-skill">${esc(s)}</span>`).join('')}</div>` : ''}
             </div>`;
         });

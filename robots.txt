@@ -4,8 +4,8 @@ Allow: /
 # Ekskluder følsomme mapper og admin
 Disallow: /api/
 Disallow: /data/
-Disallow: /admin.html
-Disallow: /login.html
+Disallow: /admin
+Disallow: /login
 
 # Sitemap lokation
 Sitemap: https://zpolonius.dk/sitemap.php

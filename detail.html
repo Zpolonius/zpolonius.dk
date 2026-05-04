@@ -252,7 +252,7 @@
   <main>
   <!-- BREADCRUMB -->
   <div class="breadcrumb">
-    <a href="index.html">Hjem</a>
+    <a href="/">Hjem</a>
     <span class="breadcrumb-sep">/</span>
     <a href="#" id="bcParent">—</a>
     <span class="breadcrumb-sep">/</span>
@@ -312,7 +312,7 @@
   <div class="not-found" id="notFound">
     <h2>Siden blev ikke fundet</h2>
     <p>Det ser ud til, at denne case eller artikel ikke eksisterer længere.</p>
-    <a href="index.html" class="btn-primary" style="margin-top:24px; display:inline-block;">Gå til forsiden</a>
+    <a href="/" class="btn-primary" style="margin-top:24px; display:inline-block;">Gå til forsiden</a>
   </div>
 
   </main>
@@ -510,7 +510,7 @@
       
       if (idx > 0) {
         const prev = currentCatItems[idx - 1];
-        navHtml += `<a href="detail.html?id=${prev.id}" class="entry-nav-item">
+        navHtml += `<a href="detail?id=${prev.id}" class="entry-nav-item">
           <div class="entry-nav-dir">← Forrige</div>
           <div class="entry-nav-title">${esc(prev.title || prev.name)}</div>
         </a>`;
@@ -518,7 +518,7 @@
 
       if (idx < currentCatItems.length - 1) {
         const next = currentCatItems[idx + 1];
-        navHtml += `<a href="detail.html?id=${next.id}" class="entry-nav-item" style="text-align:right;">
+        navHtml += `<a href="detail?id=${next.id}" class="entry-nav-item" style="text-align:right;">
           <div class="entry-nav-dir">Næste →</div>
           <div class="entry-nav-title">${esc(next.title || next.name)}</div>
         </a>`;
