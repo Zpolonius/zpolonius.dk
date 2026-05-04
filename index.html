@@ -797,6 +797,13 @@
       return div.innerHTML;
     }
 
+    function stripHtml(html) {
+      if (!html) return '';
+      const div = document.createElement('div');
+      div.innerHTML = html;
+      return div.textContent || div.innerText || "";
+    }
+
     // Load dynamic content
     loadContentData().then(data => {
       if (!data) return;
@@ -852,6 +859,9 @@
       const projGrid = document.getElementById('featuredProjects');
       if (projGrid) {
         const latestProj = (data.projects || []).filter(p => p.visible !== false).slice(0, 3);
+        const catLabels = { ai:'AI', checkout:'Checkout', konvertering:'Konvertering', work:'Arbejde', volunteer:'Frivillig' };
+        const catClass  = { ai:'tag-ai', checkout:'tag-ai', konvertering:'tag-ai', work:'tag-work', volunteer:'tag-vol' };
+
         projGrid.innerHTML = latestProj.map(p => `
           <a href="detail?id=${p.id}" class="proj-card">
             ${p.cover ? `
@@ -860,9 +870,9 @@
               </div>
             ` : ''}
             <div class="proj-card-body">
-              <div class="proj-tag label">${esc(p.tag || p.category || 'Case')}</div>
+              <div class="tag ${catClass[p.category]||''} proj-tag">${esc(catLabels[p.category]||p.tag||p.category)}</div>
               <div class="proj-title">${esc(p.title)}</div>
-              <p class="proj-desc">${esc(p.excerpt || '')}</p>
+              <p class="proj-desc">${esc(stripHtml(p.desc || '').slice(0, 100))}${p.desc && stripHtml(p.desc).length > 100 ? '...' : ''}</p>
               <span class="proj-arrow">Se case →</span>
             </div>
           </a>
@@ -884,7 +894,10 @@
                 </div>
               ` : ''}
               <div class="proj-card-body">
-                <div class="proj-tag label">${esc(a.date || 'Indsigt')}</div>
+                <div class="proj-tag label" style="color:var(--blue); border-color:var(--border-blue)">
+                  ${esc(a.tag || a.category || 'Indsigt')}
+                  ${a.reading_time ? ` · ${a.reading_time} min.` : (a.body ? ` · ${getReadingTime(a.body)} min.` : '')}
+                </div>
                 <div class="proj-title">${esc(a.title)}</div>
                 <p class="proj-desc">${esc(a.excerpt || '')}</p>
                 <span class="proj-arrow">Læs artikel →</span>
