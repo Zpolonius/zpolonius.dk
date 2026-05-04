@@ -16,12 +16,12 @@ echo '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' . PHP_EOL;
 // 1. STATISKE SIDER
 $staticPages = [
     "" => 1.0,
-    "about.html" => 0.8,
-    "projects.html" => 0.9,
-    "insights.html" => 0.9,
-    "cv.html" => 0.8,
-    "recommendations.html" => 0.7,
-    "contact.html" => 0.6
+    "about" => 0.8,
+    "projects" => 0.9,
+    "insights" => 0.9,
+    "cv" => 0.8,
+    "recommendations" => 0.7,
+    "contact" => 0.6
 ];
 
 foreach ($staticPages as $page => $priority) {
@@ -39,7 +39,7 @@ if (!empty($data['projects'])) {
         $id = $p['id'] ?? '';
         if (!$id) continue;
         echo "  <url>" . PHP_EOL;
-        echo "    <loc>{$baseUrl}detail.html?id=" . htmlspecialchars($id) . "</loc>" . PHP_EOL;
+        echo "    <loc>{$baseUrl}detail?id=" . htmlspecialchars($id) . "</loc>" . PHP_EOL;
         echo "    <changefreq>monthly</changefreq>" . PHP_EOL;
         echo "    <priority>0.8</priority>" . PHP_EOL;
         echo "  </url>" . PHP_EOL;
@@ -53,7 +53,7 @@ if (!empty($data['articles'])) {
         $id = $a['id'] ?? '';
         if (!$id) continue;
         echo "  <url>" . PHP_EOL;
-        echo "    <loc>{$baseUrl}detail.html?id=" . htmlspecialchars($id) . "</loc>" . PHP_EOL;
+        echo "    <loc>{$baseUrl}detail?id=" . htmlspecialchars($id) . "</loc>" . PHP_EOL;
         echo "    <changefreq>monthly</changefreq>" . PHP_EOL;
         echo "    <priority>0.8</priority>" . PHP_EOL;
         echo "  </url>" . PHP_EOL;
@@ -67,7 +67,7 @@ if (!empty($data['cv']['jobs'])) {
         $id = $j['id'] ?? '';
         if (!$id) continue;
         echo "  <url>" . PHP_EOL;
-        echo "    <loc>{$baseUrl}detail.html?id=" . htmlspecialchars($id) . "</loc>" . PHP_EOL;
+        echo "    <loc>{$baseUrl}detail?id=" . htmlspecialchars($id) . "</loc>" . PHP_EOL;
         echo "    <changefreq>monthly</changefreq>" . PHP_EOL;
         echo "    <priority>0.6</priority>" . PHP_EOL;
         echo "  </url>" . PHP_EOL;

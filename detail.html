@@ -356,12 +356,12 @@
 
     function renderDetail(item, allItems) {
       const parentHref = { 
-        article:'insights.html', 
-        ai:'projects.html', 
-        work:'cv.html', 
-        volunteer:'cv.html', 
-        education:'cv.html', 
-        recommendation:'recommendations.html' 
+        article:'insights', 
+        ai:'projects', 
+        work:'cv', 
+        volunteer:'cv', 
+        education:'cv', 
+        recommendation:'recommendations' 
       };
       const parentName = {
         article:'Indsigter',
@@ -374,7 +374,7 @@
 
       // Breadcrumb
       const cat = item.category || 'ai';
-      document.getElementById('bcParent').href = parentHref[cat] || 'projects.html';
+      document.getElementById('bcParent').href = parentHref[cat] || 'projects';
       document.getElementById('bcParent').textContent = parentName[cat] || 'Projekter';
       document.getElementById('bcCurrent').textContent = item.title || item.name;
 

@@ -198,14 +198,14 @@ function initSharedLayout() {
 
   const navHtml = `
     <nav class="nav">
-      <a href="index.html" class="nav-logo">Z<span>.</span>Polonius</a>
+      <a href="/" class="nav-logo">Z<span>.</span>Polonius</a>
       <ul class="nav-links desktop-only">
-        <li><a href="index.html">Hjem</a></li>
-        <li><a href="projects.html">Projekter</a></li>
-        <li><a href="insights.html">Indsigter</a></li>
-        <li><a href="about.html">Om mig</a></li>
-        <li><a href="cv.html">CV & Erfaring</a></li>
-        <li><a href="recommendations.html">Anbefalinger</a></li>
+        <li><a href="/">Hjem</a></li>
+        <li><a href="projects">Projekter</a></li>
+        <li><a href="insights">Indsigter</a></li>
+        <li><a href="about">Om mig</a></li>
+        <li><a href="cv">CV & Erfaring</a></li>
+        <li><a href="recommendations">Anbefalinger</a></li>
         <li><a href="#" data-contact data-track="contact-open-header">Kontakt</a></li>
       </ul>
       <div class="nav-right">
@@ -224,19 +224,19 @@ function initSharedLayout() {
       <li class="burger-close-row">
         <button class="burger-close-btn" id="burgerCloseBtn" aria-label="Luk menu">✕ Luk</button>
       </li>
-      <li class="mobile-only"><a href="index.html">Hjem</a></li>
-      <li class="mobile-only"><a href="projects.html">Projekter</a></li>
-      <li class="mobile-only"><a href="insights.html">Indsigter</a></li>
-      <li><a href="about.html">Om mig</a></li>
-      <li><a href="cv.html">CV & Erfaring</a></li>
-      <li><a href="recommendations.html">Anbefalinger</a></li>
+      <li class="mobile-only"><a href="/">Hjem</a></li>
+      <li class="mobile-only"><a href="projects">Projekter</a></li>
+      <li class="mobile-only"><a href="insights">Indsigter</a></li>
+      <li><a href="about">Om mig</a></li>
+      <li><a href="cv">CV & Erfaring</a></li>
+      <li><a href="recommendations">Anbefalinger</a></li>
       <li class="mobile-only"><a href="#" data-contact data-track="contact-open-mobile">Kontakt</a></li>
     </ul>
   `;
 
   const footerHtml = `
     <div class="footer-col footer-brand">
-      <a href="index.html" class="nav-logo">Z<span>.</span>Polonius</a>
+      <a href="/" class="nav-logo">Z<span>.</span>Polonius</a>
       <p class="footer-tagline">Bygger bro mellem kompleks teknologi og målbar forretningsværdi.</p>
       <div class="footer-left" style="margin-top: 24px;">
         Bjæverskov, Danmark<br>
@@ -247,12 +247,12 @@ function initSharedLayout() {
     <div class="footer-col">
       <div class="footer-col-title">Sider</div>
       <ul class="footer-nav">
-        <li><a href="index.html">Hjem</a></li>
-        <li><a href="about.html">Om mig</a></li>
-        <li><a href="projects.html">Business Cases</a></li>
-        <li><a href="insights.html">Indsigter</a></li>
-        <li><a href="cv.html">CV & Erfaring</a></li>
-        <li><a href="recommendations.html">Anbefalinger</a></li>
+        <li><a href="/">Hjem</a></li>
+        <li><a href="about">Om mig</a></li>
+        <li><a href="projects">Business Cases</a></li>
+        <li><a href="insights">Indsigter</a></li>
+        <li><a href="cv">CV & Erfaring</a></li>
+        <li><a href="recommendations">Anbefalinger</a></li>
       </ul>
     </div>
 
@@ -351,17 +351,17 @@ function initSharedLayout() {
 
   const bottomNavHtml = `
     <nav class="bottom-nav" id="bottomNav">
-      <a class="bottom-nav-item" href="index.html" data-page="hjem">
+      <a class="bottom-nav-item" href="/" data-page="hjem">
         <span class="bottom-nav-icon">⌂</span>
         <span class="bottom-nav-label">Hjem</span>
       </a>
       <div class="bottom-nav-divider"></div>
-      <a class="bottom-nav-item" href="projects.html" data-page="projekter">
+      <a class="bottom-nav-item" href="projects" data-page="projekter">
         <span class="bottom-nav-icon">◈</span>
         <span class="bottom-nav-label">Projekter</span>
       </a>
       <div class="bottom-nav-divider"></div>
-      <a class="bottom-nav-item" href="insights.html" data-page="indsigter">
+      <a class="bottom-nav-item" href="insights" data-page="indsigter">
         <span class="bottom-nav-icon">📝</span>
         <span class="bottom-nav-label">Indsigter</span>
       </a>
@@ -597,9 +597,14 @@ function updateThemeIcon() {
 
 /* ---- ACTIVE NAV ---- */
 function initActiveNav() {
-  const page = location.pathname.split('/').pop() || 'index.html';
+  let page = location.pathname.split('/').pop() || '/';
+  if (page === '') page = '/';
+  
   document.querySelectorAll('.nav-links a, .nav-burger-links a').forEach(a => {
-    if (a.getAttribute('href') === page) a.classList.add('active');
+    const href = a.getAttribute('href');
+    if (href === page || (page === '/' && href === '/') || href === page + '.html') {
+      a.classList.add('active');
+    }
   });
 }
 
@@ -652,15 +657,23 @@ function initBottomNav() {
   const nav = document.getElementById('bottomNav');
   if (!nav) return;
 
-  const page = location.pathname.split('/').pop() || 'index.html';
+  const page = location.pathname.split('/').pop() || '';
   const map = {
     'index.html':           'hjem',
     '':                     'hjem',
+    'index':                'hjem',
     'projects.html':        'projekter',
+    'projects':             'projekter',
     'cv.html':              'cv',
+    'cv':                   'cv',
     'recommendations.html': 'anbefalinger',
+    'recommendations':      'anbefalinger',
     'about.html':           'om',
+    'about':                'om',
     'contact.html':         'kontakt',
+    'contact':              'kontakt',
+    'insights':             'indsigter',
+    'insights.html':        'indsigter',
   };
   const activeKey = map[page];
   if (activeKey) {
