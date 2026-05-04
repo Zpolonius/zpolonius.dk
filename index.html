@@ -787,7 +787,7 @@
   <footer id="global-footer" class="footer"></footer>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.0/vanilla-tilt.min.js"></script>
-  <script src="js/main.js?v=1.0.2"></script>
+  <script src="js/main.js?v=1.0.6"></script>
   <script>
     // Sikkerheds-funktioner
     function esc(str) {
@@ -803,19 +803,47 @@
 
       // Hero
       if (data.hero) {
-        document.getElementById('heroName').innerHTML = data.hero.name.replace(' ', '<br>') || 'Zacharias<br>Polonius';
+        const h = data.hero;
+        const name = h.name || data.site.name || 'Zacharias Polonius';
+        document.getElementById('heroName').innerHTML = name.replace(' ', '<br>');
+        
+        // Typewriter effect for roles
+        const label = document.querySelector('.hero-label');
+        if (label && h.role) {
+          const roles = h.role.split('|').map(r => r.trim());
+          if (roles.length > 1) {
+            initTypewriter(label, roles);
+          } else {
+            label.textContent = h.role;
+          }
+        }
+        
+        const tagline = document.querySelector('.hero-tagline');
+        if (tagline) tagline.textContent = h.intro || '';
+        
+        const status = document.querySelector('.status-pill');
+        if (status && h.status) {
+          status.innerHTML = `<span class="status-dot"></span>${esc(h.status)}`;
+        }
+        
+        const heroImg = document.querySelector('.hero-img');
+        if (heroImg && h.cover) {
+          heroImg.src = h.cover;
+          if (h.cover_pos) heroImg.style.objectPosition = h.cover_pos;
+        }
       }
 
       // Bento Grid
       const bentoGrid = document.getElementById('bentoGrid');
       if (bentoGrid) {
-        const items = data.specialer || [];
-        bentoGrid.innerHTML = items.map((s, idx) => `
-          <div class="bento-cell fade-up fade-up-${idx+1}" onclick="openDetail('${s.id}')" tabindex="0">
-            <div class="cell-label">${esc(s.tag || 'Speciale')}</div>
-            <div class="cell-title">${esc(s.label)}</div>
-            <div class="cell-sub">${esc(s.sub || '')}</div>
-            <div class="cell-arrow">↗</div>
+        const items = data.bento || [];
+        bentoGrid.innerHTML = items.map((b, idx) => `
+          <div class="bento-cell fade-up fade-up-${idx+1}" onclick="openDetail(${idx})" tabindex="0">
+            <div class="cell-label">${esc(b.label)}</div>
+            <h3 class="cell-title">${esc(b.value)}</h3>
+            <div class="cell-sub">${esc(b.sub)}</div>
+            <div class="cell-desc">${esc(b.desc)}</div>
+            <span class="cell-arrow">${esc(b.cta || 'Mere →')}</span>
           </div>
         `).join('');
       }
@@ -845,7 +873,7 @@
       const blogSec = document.getElementById('blogSection');
       const blogGridEl = document.getElementById('blogGrid');
       if (blogGridEl) {
-        const arts = (data.articles || []).filter(a => a.visible !== false).slice(0, 3);
+        const arts = (data.articles || []).filter(a => a.visible !== false).reverse().slice(0, 3);
         if (arts.length > 0) {
           blogSec.style.display = 'block';
           blogGridEl.innerHTML = arts.map(a => `
@@ -945,33 +973,27 @@
     });
 
     // Bento Detail Logic
-    function openDetail(id) {
+    function openDetail(idx) {
       loadContentData().then(data => {
-        const item = data.specialer.find(s => s.id === id);
+        const item = data.bento[idx];
         if (!item) return;
         
-        document.getElementById('dTag').textContent = item.tag || 'Speciale';
-        document.getElementById('dTitle').textContent = item.label;
+        document.getElementById('dTag').textContent = item.label || 'Speciale';
+        document.getElementById('dTitle').textContent = item.value;
         document.getElementById('dDesc').textContent = item.desc || '';
-        document.getElementById('dBtn').href = item.link || 'projects';
-        document.getElementById('dBtn').textContent = item.link_label || 'Se projekter →';
+        document.getElementById('dBtn').href = item.url || 'projects';
+        document.getElementById('dBtn').textContent = item.cta || 'Se projekter →';
         
         const meta = document.getElementById('dMeta');
-        meta.innerHTML = '';
-        if (item.features) {
-          item.features.forEach(f => {
-            const row = document.createElement('div');
-            row.className = 'detail-row';
-            row.innerHTML = `<span class="detail-key">${esc(f.key)}</span><span class="detail-val">${esc(f.val)}</span>`;
-            meta.appendChild(row);
-          });
-        }
+        meta.innerHTML = `<div class="detail-row"><span class="detail-key">Info</span><span class="detail-val">${esc(item.sub)}</span></div>`;
         
         document.getElementById('detailPanel').classList.add('active');
         document.getElementById('detailPanel').scrollIntoView({ behavior: 'smooth', block: 'start' });
         
         document.querySelectorAll('.bento-cell').forEach(c => c.classList.remove('selected'));
-        event.currentTarget.classList.add('selected');
+        if (event && event.currentTarget && event.currentTarget.classList.contains('bento-cell')) {
+          event.currentTarget.classList.add('selected');
+        }
       });
     }
 
