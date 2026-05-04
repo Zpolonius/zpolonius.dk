@@ -36,7 +36,9 @@ if (!isset($data[$date])) {
     $data[$date] = [
         'unique_visitors' => [],
         'page_views' => [],
-        'locations' => []
+        'locations' => [],
+        'referrers' => [],
+        'devices' => []
     ];
 }
 
@@ -44,7 +46,7 @@ if (!isset($data[$date])) {
 if (!in_array($visitorHash, $data[$date]['unique_visitors'])) {
     $data[$date]['unique_visitors'][] = $visitorHash;
 
-    // Hent lokation (kun for nye unikke besøgende for at spare på API kald)
+    // 1. Hent lokation (kun for nye unikke besøgende)
     if ($ip !== '127.0.0.1' && $ip !== '::1' && $ip !== '0.0.0.0') {
         try {
             $locRaw = @file_get_contents("http://ip-api.com/json/{$ip}?fields=status,country,city");
@@ -58,10 +60,38 @@ if (!in_array($visitorHash, $data[$date]['unique_visitors'])) {
                     $data[$date]['locations'][$locKey]++;
                 }
             }
-        } catch (Exception $e) {
-            // Ignorer fejl i lokations-opslag for ikke at blokere trackeren
+        } catch (Exception $e) {}
+    }
+
+    // 2. Hent Referrer (Hvor kommer de fra?)
+    $ref = $_SERVER['HTTP_REFERER'] ?? 'Direkte / Ukendt';
+    if ($ref !== 'Direkte / Ukendt') {
+        $refHost = parse_url($ref, PHP_URL_HOST);
+        if ($refHost) {
+            // Fjern 'www.' for at gruppere dem
+            $ref = str_replace('www.', '', $refHost);
+            // Hvis det er dit eget domæne, tæl det som interne links eller 'Direkte'
+            if (isset($_SERVER['HTTP_HOST']) && strpos($ref, $_SERVER['HTTP_HOST']) !== false) {
+                $ref = 'Intern navigation';
+            }
         }
     }
+    if (!isset($data[$date]['referrers'][$ref])) {
+        $data[$date]['referrers'][$ref] = 0;
+    }
+    $data[$date]['referrers'][$ref]++;
+
+    // 3. Hent Enhedstype
+    $device = 'Desktop';
+    if (preg_match('/(tablet|ipad|playbook|silk)|(android(?!.*mobi))/i', $ua)) {
+        $device = 'Tablet';
+    } else if (preg_match('/Mobile|Android|iP(hone|od)|IEMobile|BlackBerry|Kindle|Silk-Accelerated|(hpw|web)OS|Opera M(obi|ini)/i', $ua)) {
+        $device = 'Mobil';
+    }
+    if (!isset($data[$date]['devices'][$device])) {
+        $data[$date]['devices'][$device] = 0;
+    }
+    $data[$date]['devices'][$device]++;
 }
 
 // Tæl sidevisning
