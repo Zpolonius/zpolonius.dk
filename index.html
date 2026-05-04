@@ -998,7 +998,7 @@
         document.getElementById('dBtn').textContent = item.cta || 'Se projekter →';
         
         const meta = document.getElementById('dMeta');
-        meta.innerHTML = `<div class="detail-row"><span class="detail-key">${esc(item.key || 'Info')}</span><span class="detail-val">${esc(item.sub)}</span></div>`;
+        meta.innerHTML = `<div class="detail-row"><span class="detail-key">Info</span><span class="detail-val">${esc(item.info_val || item.sub)}</span></div>`;
         
         document.getElementById('detailPanel').classList.add('active');
         document.getElementById('detailPanel').scrollIntoView({ behavior: 'smooth', block: 'start' });

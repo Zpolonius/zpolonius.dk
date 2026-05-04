@@ -503,7 +503,7 @@ window.openDetail = function(index) {
   }
   
   const meta = document.getElementById('dMeta');
-  if (meta) meta.innerHTML = `<div class="detail-row"><span class="detail-key">${esc(d.key || 'Info')}</span><span class="detail-val">${esc(d.sub)}</span></div>`;
+  if (meta) meta.innerHTML = `<div class="detail-row"><span class="detail-key">Info</span><span class="detail-val">${esc(d.info_val || d.sub)}</span></div>`;
 };
 
 window.closeDetail = function() {
