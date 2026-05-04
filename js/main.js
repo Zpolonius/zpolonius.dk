@@ -214,7 +214,7 @@ function initSharedLayout() {
           <svg class="icon-close" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
         </button>
         <button class="theme-switch" onclick="toggleTheme()" title="Skift tema">☀</button>
-        <button class="nav-btn desktop-only" data-contact data-track="contact-open-header-cta">Book et review →</button>
+        <button class="nav-btn desktop-only" data-contact data-track="contact-open-header-cta">Få et gratis checkout-tjek →</button>
       </div>
     </nav>
   `;
@@ -391,7 +391,7 @@ function initSharedLayout() {
         <p class="cta-bar-title">Klar til at optimere jeres digitale setup?</p>
         <p class="cta-bar-sub">Lad os tage en uforpligtende snak om jeres forretningsmål.</p>
       </div>
-      <button class="btn-primary" data-contact data-track="contact-open-cta-bar">Book et review →</button>
+      <button class="btn-primary" data-contact data-track="contact-open-cta-bar">Få et gratis checkout-tjek →</button>
     </div>
   `;
 

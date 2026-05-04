@@ -894,11 +894,11 @@
                 </div>
               ` : ''}
               <div class="proj-card-body">
-                <div class="proj-tag label" style="color:var(--blue); border-color:var(--border-blue)">
+                <div class="proj-title" style="font-size: 16px; margin-bottom: 8px;">${esc(a.title)}</div>
+                <div class="proj-tag label" style="color:var(--blue); border-color:var(--border-blue); margin-bottom: 12px; display: inline-block;">
                   ${esc(a.tag || a.category || 'Indsigt')}
                   ${a.reading_time ? ` · ${a.reading_time} min.` : (a.body ? ` · ${getReadingTime(a.body)} min.` : '')}
                 </div>
-                <div class="proj-title">${esc(a.title)}</div>
                 <p class="proj-desc">${esc(a.excerpt || '')}</p>
                 <span class="proj-arrow">Læs artikel →</span>
               </div>
