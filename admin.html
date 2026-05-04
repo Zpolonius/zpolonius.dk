@@ -58,6 +58,23 @@
     .login-btn:hover { opacity:0.85; }
     .login-error { font-size:12px; color:var(--red); margin-top:10px; display:none; }
 
+    /* ---- ANALYTICS GRID RESPONSIVENESS ---- */
+    .analytics-grid {
+      display: grid;
+      grid-template-columns: 1fr 380px;
+      gap: 24px;
+      align-items: start;
+    }
+    @media (max-width: 1000px) {
+      .analytics-grid {
+        grid-template-columns: 1fr;
+      }
+      .analytics-history-col {
+        max-height: none !important;
+        overflow-y: visible !important;
+      }
+    }
+
     /* ---- LAYOUT ---- */
     #adminApp { display:none; height:100%; flex-direction:row; }
     #adminApp.show { display:flex; }
@@ -1013,7 +1030,8 @@ async function renderAnalytics(area) {
     // Beregn Konverteringsrate (Sidste 30 dage)
     let totalUnique = 0;
     let totalConversions = 0;
-    const convKeywords = ['cv', 'contact', 'email', 'phone', 'linkedin', 'github'];
+    // Vi tæller KUN reelle handlinger (bottom-of-funnel), ikke bare at åbne en menu/modal
+    const convKeywords = ['cv-download', 'contact-submit', 'contact-email', 'contact-phone', 'linkedin', 'instagram', 'facebook'];
     
     dates.forEach(d => {
       totalUnique += stats[d].unique_visitors || 0;
@@ -1027,7 +1045,7 @@ async function renderAnalytics(area) {
     const convRate = totalUnique > 0 ? ((totalConversions / totalUnique) * 100).toFixed(1) : 0;
 
     let html = `
-      <div style="max-width:1000px;">
+      <div style="max-width:1200px;">
         <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:16px; margin-bottom:24px;">
           <div class="settings-card">
             <div class="settings-card-title">Unikke besøgende (i dag)</div>
@@ -1042,87 +1060,95 @@ async function renderAnalytics(area) {
           <div class="settings-card">
             <div class="settings-card-title">Konverteringsrate (Total)</div>
             <div style="font-size:32px; font-weight:700; color:var(--amber);">${convRate}%</div>
-            <div style="font-size:10px; color:var(--faint); margin-top:4px;">Klik på CV, kontakt eller sociale links</div>
+            <div style="font-size:10px; color:var(--faint); margin-top:4px;">Sendt besked, CV download eller udgående links</div>
           </div>
         </div>
 
-        <div class="settings-card" style="margin-bottom:32px; padding:24px;">
-          <div class="settings-card-title" style="margin-bottom:20px;">Trafikudvikling (Sidste 30 dage)</div>
-          <div style="height:300px; width:100%;">
-            <canvas id="trafficChart"></canvas>
-          </div>
-        </div>
-
-        <div style="font-size:11px; letter-spacing:0.12em; text-transform:uppercase; color:var(--faint); margin-bottom:12px;">Historik & Detaljer</div>
-        <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(320px, 1fr)); gap:16px;">
-          ${reverseDates.map(date => {
-            const day = stats[date];
-            const totalViews = Object.values(day.page_views).reduce((a,b) => a+b, 0);
-            return `
-              <div class="entry-card" style="padding:16px 20px;">
-                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; padding-bottom:10px; border-bottom:0.5px solid var(--border);">
-                  <div style="font-weight:600; font-size:13px;">${date}</div>
-                  <div style="display:flex; gap:12px;">
-                    <div style="font-size:10px; color:var(--muted);"><span style="color:var(--blue); font-weight:600;">${day.unique_visitors}</span> besøg</div>
-                    <div style="font-size:10px; color:var(--muted);"><span style="color:var(--green); font-weight:600;">${totalViews}</span> visninger</div>
-                  </div>
-                </div>
-
-                <div style="margin-bottom:12px;">
-                   <div style="font-size:9px; text-transform:uppercase; color:var(--faint); margin-bottom:6px; letter-spacing:0.05em;">Hændelser & Konverteringer</div>
-                   ${Object.entries(day.events || {}).sort((a,b) => b[1] - a[1]).map(([ev, count]) => {
-                     const isConv = convKeywords.some(k => ev.toLowerCase().includes(k));
-                     return `
-                       <div style="display:flex; justify-content:space-between; font-size:10px; margin-bottom:4px;">
-                         <span style="color:${isConv?'var(--amber)':'var(--muted)'};">${isConv?'✨ ':''}${ev}</span>
-                         <span style="color:var(--blue); font-weight:600;">${count}</span>
-                       </div>
-                     `;
-                   }).join('') || '<div style="font-size:10px; color:var(--faint);">Ingen hændelser</div>'}
-                </div>
-
-                <div style="margin-bottom:12px;">
-                   <div style="font-size:9px; text-transform:uppercase; color:var(--faint); margin-bottom:6px; letter-spacing:0.05em;">Trafikkilder</div>
-                   ${Object.entries(day.referrers || {}).sort((a,b) => b[1] - a[1]).map(([ref, count]) => `
-                     <div style="display:flex; justify-content:space-between; font-size:10px; margin-bottom:4px;">
-                       <span style="color:var(--muted); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width:80%;">${ref}</span>
-                       <span style="color:var(--blue); font-weight:600;">${count}</span>
-                     </div>
-                   `).join('') || '<div style="font-size:10px; color:var(--faint);">Ingen data</div>'}
-                </div>
-
-                <div style="margin-bottom:12px;">
-                   <div style="font-size:9px; text-transform:uppercase; color:var(--faint); margin-bottom:6px; letter-spacing:0.05em;">Enheder</div>
-                   ${Object.entries(day.devices || {}).sort((a,b) => b[1] - a[1]).map(([dev, count]) => `
-                     <div style="display:flex; justify-content:space-between; font-size:10px; margin-bottom:4px;">
-                       <span style="color:var(--muted);">${dev}</span>
-                       <span style="color:var(--amber); font-weight:600;">${count}</span>
-                     </div>
-                   `).join('') || '<div style="font-size:10px; color:var(--faint);">Ingen data</div>'}
-                </div>
-
-                <div style="margin-bottom:12px;">
-                   <div style="font-size:9px; text-transform:uppercase; color:var(--faint); margin-bottom:6px; letter-spacing:0.05em;">Lokationer</div>
-                   ${Object.entries(day.locations || {}).sort((a,b) => b[1] - a[1]).map(([loc, count]) => `
-                     <div style="display:flex; justify-content:space-between; font-size:10px; margin-bottom:4px;">
-                       <span style="color:var(--muted);">${loc}</span>
-                       <span style="color:var(--text); font-weight:600; opacity:0.8;">${count}</span>
-                     </div>
-                   `).join('') || '<div style="font-size:10px; color:var(--faint);">Ingen data</div>'}
-                </div>
-
-                <div style="margin-top:10px; border-top: 0.5px solid var(--border); padding-top:8px;">
-                   <div style="font-size:9px; text-transform:uppercase; color:var(--faint); margin-bottom:6px; letter-spacing:0.05em;">Sidevisninger</div>
-                   ${Object.entries(day.page_views).sort((a,b) => b[1] - a[1]).map(([path, count]) => `
-                     <div style="display:flex; justify-content:space-between; font-size:10px; margin-bottom:4px;">
-                       <span style="color:var(--faint); font-family:monospace; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width:85%;">${path}</span>
-                       <span style="color:var(--green); font-weight:600;">${count}</span>
-                     </div>
-                   `).join('')}
-                </div>
+        <div class="analytics-grid">
+          <!-- VENSTRE KOLONNE: GRAF -->
+          <div>
+            <div class="settings-card" style="margin-bottom:32px; padding:24px;">
+              <div class="settings-card-title" style="margin-bottom:20px;">Trafikudvikling (Sidste 30 dage)</div>
+              <div style="height:400px; width:100%;">
+                <canvas id="trafficChart"></canvas>
               </div>
-            `;
-          }).join('')}
+            </div>
+          </div>
+
+          <!-- HØJRE KOLONNE: HISTORIK -->
+          <div class="analytics-history-col" style="max-height: 85vh; overflow-y: auto; padding-right: 10px;">
+            <div style="font-size:11px; letter-spacing:0.12em; text-transform:uppercase; color:var(--faint); margin-bottom:12px;">Historik & Detaljer</div>
+            <div style="display:flex; flex-direction:column; gap:16px;">
+              ${reverseDates.map(date => {
+                const day = stats[date];
+                const totalViews = Object.values(day.page_views).reduce((a,b) => a+b, 0);
+                return `
+                  <div class="entry-card" style="padding:16px 20px;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; padding-bottom:10px; border-bottom:0.5px solid var(--border);">
+                      <div style="font-weight:600; font-size:13px;">${date}</div>
+                      <div style="display:flex; gap:12px;">
+                        <div style="font-size:10px; color:var(--muted);"><span style="color:var(--blue); font-weight:600;">${day.unique_visitors}</span> besøg</div>
+                        <div style="font-size:10px; color:var(--muted);"><span style="color:var(--green); font-weight:600;">${totalViews}</span> visninger</div>
+                      </div>
+                    </div>
+
+                    <div style="margin-bottom:12px;">
+                       <div style="font-size:9px; text-transform:uppercase; color:var(--faint); margin-bottom:6px; letter-spacing:0.05em;">Hændelser & Konverteringer</div>
+                       ${Object.entries(day.events || {}).sort((a,b) => b[1] - a[1]).map(([ev, count]) => {
+                         const isConv = convKeywords.some(k => ev.toLowerCase().includes(k));
+                         return `
+                           <div style="display:flex; justify-content:space-between; font-size:10px; margin-bottom:4px;">
+                             <span style="color:${isConv?'var(--amber)':'var(--muted)'};">${isConv?'✨ ':''}${ev}</span>
+                             <span style="color:var(--blue); font-weight:600;">${count}</span>
+                           </div>
+                         `;
+                       }).join('') || '<div style="font-size:10px; color:var(--faint);">Ingen hændelser</div>'}
+                    </div>
+
+                    <div style="margin-bottom:12px;">
+                       <div style="font-size:9px; text-transform:uppercase; color:var(--faint); margin-bottom:6px; letter-spacing:0.05em;">Trafikkilder</div>
+                       ${Object.entries(day.referrers || {}).sort((a,b) => b[1] - a[1]).map(([ref, count]) => `
+                         <div style="display:flex; justify-content:space-between; font-size:10px; margin-bottom:4px;">
+                           <span style="color:var(--muted); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width:80%;">${ref}</span>
+                           <span style="color:var(--blue); font-weight:600;">${count}</span>
+                         </div>
+                       `).join('') || '<div style="font-size:10px; color:var(--faint);">Ingen data</div>'}
+                    </div>
+
+                    <div style="margin-bottom:12px;">
+                       <div style="font-size:9px; text-transform:uppercase; color:var(--faint); margin-bottom:6px; letter-spacing:0.05em;">Enheder</div>
+                       ${Object.entries(day.devices || {}).sort((a,b) => b[1] - a[1]).map(([dev, count]) => `
+                         <div style="display:flex; justify-content:space-between; font-size:10px; margin-bottom:4px;">
+                           <span style="color:var(--muted);">${dev}</span>
+                           <span style="color:var(--amber); font-weight:600;">${count}</span>
+                         </div>
+                       `).join('') || '<div style="font-size:10px; color:var(--faint);">Ingen data</div>'}
+                    </div>
+
+                    <div style="margin-bottom:12px;">
+                       <div style="font-size:9px; text-transform:uppercase; color:var(--faint); margin-bottom:6px; letter-spacing:0.05em;">Lokationer</div>
+                       ${Object.entries(day.locations || {}).sort((a,b) => b[1] - a[1]).map(([loc, count]) => `
+                         <div style="display:flex; justify-content:space-between; font-size:10px; margin-bottom:4px;">
+                           <span style="color:var(--muted);">${loc}</span>
+                           <span style="color:var(--text); font-weight:600; opacity:0.8;">${count}</span>
+                         </div>
+                       `).join('') || '<div style="font-size:10px; color:var(--faint);">Ingen data</div>'}
+                    </div>
+
+                    <div style="margin-top:10px; border-top: 0.5px solid var(--border); padding-top:8px;">
+                       <div style="font-size:9px; text-transform:uppercase; color:var(--faint); margin-bottom:6px; letter-spacing:0.05em;">Sidevisninger</div>
+                       ${Object.entries(day.page_views).sort((a,b) => b[1] - a[1]).map(([path, count]) => `
+                         <div style="display:flex; justify-content:space-between; font-size:10px; margin-bottom:4px;">
+                           <span style="color:var(--faint); font-family:monospace; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width:85%;">${path}</span>
+                           <span style="color:var(--green); font-weight:600;">${count}</span>
+                         </div>
+                       `).join('')}
+                    </div>
+                  </div>
+                `;
+              }).join('')}
+            </div>
+          </div>
         </div>
       </div>
     `;
