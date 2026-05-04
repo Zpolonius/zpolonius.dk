@@ -2370,6 +2370,28 @@ function openArticleForm(isEdit, idx, item={}) {
   initQuill('#quillEditor', item.body || '');
 }
 
+/* ---- INITIALIZATION ---- */
+window.addEventListener('DOMContentLoaded', () => {
+  // Tjek om vi allerede er logget ind (silent check)
+  fetch('api/load.php?t=' + Date.now(), { credentials: 'same-origin' })
+    .then(r => {
+      if (r.ok) return r.json();
+      throw new Error('Not logged in');
+    })
+    .then(d => {
+      // Succes! Gem data og hop direkte til dashboard
+      data = d;
+      document.getElementById('loginScreen').style.display = 'none';
+      document.getElementById('adminApp').classList.add('show');
+      updateBadges();
+      renderSection('forside');
+    })
+    .catch(() => {
+      // Ikke logget ind eller session udløbet. Bliv på login-skærmen.
+      console.log('Ingen aktiv session fundet.');
+    });
+});
+
 </script>
 </body>
 </html>
