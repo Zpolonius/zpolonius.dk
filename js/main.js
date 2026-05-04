@@ -56,6 +56,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initPageTransitions();
   initCookieConsent();
   initAnalytics();
+  initEventTracking();
 });
 
 /* ---- ANALYTICS SYSTEM ---- */
@@ -69,6 +70,24 @@ function initAnalytics() {
       body: JSON.stringify({ page: page })
     }).catch(err => console.warn('Analytics error:', err));
   }, 1000);
+}
+
+function initEventTracking() {
+  document.addEventListener('click', (e) => {
+    const target = e.target.closest('[data-track]');
+    if (target) {
+      const eventName = target.getAttribute('data-track');
+      trackEvent(eventName);
+    }
+  });
+}
+
+function trackEvent(name) {
+  fetch('api/track.php', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ event: name })
+  }).catch(err => console.warn('Event tracking error:', err));
 }
 
 /* ---- COOKIE CONSENT SYSTEM ---- */

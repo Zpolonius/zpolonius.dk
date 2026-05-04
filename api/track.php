@@ -10,10 +10,12 @@ $analyticsFile = __DIR__ . '/../data/analytics.json';
 // Hent input data
 $raw = file_get_contents('php://input');
 $input = json_decode($raw, true);
-$page = $input['page'] ?? 'unknown';
+$page  = $input['page'] ?? null;
+$event = $input['event'] ?? null;
 
-// Rens page string for sikkerhed
-$page = filter_var($page, FILTER_SANITIZE_URL);
+// Rens strings for sikkerhed
+if ($page)  $page  = filter_var($page, FILTER_SANITIZE_URL);
+if ($event) $event = filter_var($event, FILTER_SANITIZE_STRING);
 
 // Hent besøgendes data til hashing (anonymisering)
 $ip = $_SERVER['REMOTE_ADDR'] ?? '0.0.0.0';
@@ -38,7 +40,8 @@ if (!isset($data[$date])) {
         'page_views' => [],
         'locations' => [],
         'referrers' => [],
-        'devices' => []
+        'devices' => [],
+        'events' => []
     ];
 }
 
@@ -94,11 +97,21 @@ if (!in_array($visitorHash, $data[$date]['unique_visitors'])) {
     $data[$date]['devices'][$device]++;
 }
 
-// Tæl sidevisning
-if (!isset($data[$date]['page_views'][$page])) {
-    $data[$date]['page_views'][$page] = 0;
+// Tæl sidevisning (hvis det er en page ping)
+if ($page) {
+    if (!isset($data[$date]['page_views'][$page])) {
+        $data[$date]['page_views'][$page] = 0;
+    }
+    $data[$date]['page_views'][$page]++;
 }
-$data[$date]['page_views'][$page]++;
+
+// Tæl event (hvis det er en event ping)
+if ($event) {
+    if (!isset($data[$date]['events'][$event])) {
+        $data[$date]['events'][$event] = 0;
+    }
+    $data[$date]['events'][$event]++;
+}
 
 // Gem data (kun de sidste 30 dage for at holde filen lille)
 ksort($data);

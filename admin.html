@@ -1010,9 +1010,25 @@ async function renderAnalytics(area) {
       return;
     }
 
+    // Beregn Konverteringsrate (Sidste 30 dage)
+    let totalUnique = 0;
+    let totalConversions = 0;
+    const convKeywords = ['cv', 'contact', 'email', 'phone', 'linkedin', 'github'];
+    
+    dates.forEach(d => {
+      totalUnique += stats[d].unique_visitors || 0;
+      const dayEvents = stats[d].events || {};
+      Object.entries(dayEvents).forEach(([name, count]) => {
+        if (convKeywords.some(k => name.toLowerCase().includes(k))) {
+          totalConversions += count;
+        }
+      });
+    });
+    const convRate = totalUnique > 0 ? ((totalConversions / totalUnique) * 100).toFixed(1) : 0;
+
     let html = `
       <div style="max-width:1000px;">
-        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:16px; margin-bottom:24px;">
+        <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:16px; margin-bottom:24px;">
           <div class="settings-card">
             <div class="settings-card-title">Unikke besøgende (i dag)</div>
             <div style="font-size:32px; font-weight:700; color:var(--blue);">${stats[reverseDates[0]]?.unique_visitors || 0}</div>
@@ -1022,6 +1038,11 @@ async function renderAnalytics(area) {
             <div style="font-size:32px; font-weight:700; color:var(--green);">
               ${Object.values(stats[reverseDates[0]]?.page_views || {}).reduce((a, b) => a + b, 0)}
             </div>
+          </div>
+          <div class="settings-card">
+            <div class="settings-card-title">Konverteringsrate (Total)</div>
+            <div style="font-size:32px; font-weight:700; color:var(--amber);">${convRate}%</div>
+            <div style="font-size:10px; color:var(--faint); margin-top:4px;">Klik på CV, kontakt eller sociale links</div>
           </div>
         </div>
 
@@ -1045,6 +1066,19 @@ async function renderAnalytics(area) {
                     <div style="font-size:10px; color:var(--muted);"><span style="color:var(--blue); font-weight:600;">${day.unique_visitors}</span> besøg</div>
                     <div style="font-size:10px; color:var(--muted);"><span style="color:var(--green); font-weight:600;">${totalViews}</span> visninger</div>
                   </div>
+                </div>
+
+                <div style="margin-bottom:12px;">
+                   <div style="font-size:9px; text-transform:uppercase; color:var(--faint); margin-bottom:6px; letter-spacing:0.05em;">Hændelser & Konverteringer</div>
+                   ${Object.entries(day.events || {}).sort((a,b) => b[1] - a[1]).map(([ev, count]) => {
+                     const isConv = convKeywords.some(k => ev.toLowerCase().includes(k));
+                     return `
+                       <div style="display:flex; justify-content:space-between; font-size:10px; margin-bottom:4px;">
+                         <span style="color:${isConv?'var(--amber)':'var(--muted)'};">${isConv?'✨ ':''}${ev}</span>
+                         <span style="color:var(--blue); font-weight:600;">${count}</span>
+                       </div>
+                     `;
+                   }).join('') || '<div style="font-size:10px; color:var(--faint);">Ingen hændelser</div>'}
                 </div>
 
                 <div style="margin-bottom:12px;">
