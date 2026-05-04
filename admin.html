@@ -527,6 +527,9 @@
       <button class="sidebar-item" onclick="showSection('site')">
         <span class="icon">⚙️</span> Site-indstillinger
       </button>
+      <button class="sidebar-item" onclick="showSection('analytics')">
+        <span class="icon">📊</span> Statistik
+      </button>
     </div>
     <div class="sidebar-footer">
       <button class="sidebar-view-btn" onclick="window.open('index.html','_blank')">Se side →</button>
@@ -956,6 +959,7 @@ const sectionMeta = {
   kontakt:       { title:'Kontakt & Sociale medier', sub:'Email, telefon og sociale profiler',   add:false, save:true  },
   site:          { title:'Site-indstillinger', sub:'Sitenavn, farver og generelle indstillinger', add:false, save:true  },
   artikler:      { title:'Indsigter (Blog)', sub:'Tilføj og rediger dine artikler',               add:true, save:true  },
+  analytics:     { title:'Statistik',       sub:'Besøgstal og sidevisninger for de sidste 30 dage', add:false, save:false },
 };
 
 function renderSection(key) {
@@ -977,8 +981,80 @@ function renderSection(key) {
     om:           renderOm,
     kontakt:      renderKontakt,
     site:         renderSite,
+    analytics:    renderAnalytics,
   };
   (renderers[key] || (() => area.innerHTML = '<div class="empty"><p>Sektion ikke fundet</p></div>'))(area);
+}
+
+/* ---- ANALYTICS ---- */
+async function renderAnalytics(area) {
+  area.innerHTML = `<div class="empty"><div class="empty-icon">📊</div><h3>Indlæser statistik...</h3></div>`;
+  
+  try {
+    const response = await fetch('api/analytics.php', { credentials: 'same-origin' });
+    const res = await response.json();
+    
+    if (!res.ok) {
+      area.innerHTML = `<div class="empty"><h3 style="color:var(--red);">Fejl</h3><p>${res.error || 'Kunne ikke hente statistik'}</p></div>`;
+      return;
+    }
+
+    const stats = res.data;
+    const dates = Object.keys(stats).sort().reverse();
+    
+    if (dates.length === 0) {
+      area.innerHTML = emptyState('📊', 'Ingen data endnu', 'Trackeren er lige blevet sat op. Vent på de første besøgende.');
+      return;
+    }
+
+    let html = `
+      <div style="max-width:800px;">
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:16px; margin-bottom:24px;">
+          <div class="settings-card">
+            <div class="settings-card-title">Unikke besøgende (i dag)</div>
+            <div style="font-size:32px; font-weight:700; color:var(--blue);">${stats[dates[0]]?.unique_visitors || 0}</div>
+          </div>
+          <div class="settings-card">
+            <div class="settings-card-title">Sidevisninger (i dag)</div>
+            <div style="font-size:32px; font-weight:700; color:var(--green);">
+              ${Object.values(stats[dates[0]]?.page_views || {}).reduce((a, b) => a + b, 0)}
+            </div>
+          </div>
+        </div>
+
+        <div style="font-size:11px; letter-spacing:0.12em; text-transform:uppercase; color:var(--faint); margin-bottom:12px;">Historik (Sidste 30 dage)</div>
+        <div class="bento-list">
+          ${dates.map(date => {
+            const day = stats[date];
+            const totalViews = Object.values(day.page_views).reduce((a,b) => a+b, 0);
+            return `
+              <div class="entry-card" style="margin-bottom:8px; padding:12px 20px;">
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                  <div style="font-weight:600; font-size:13px;">${date}</div>
+                  <div style="display:flex; gap:20px;">
+                    <div style="font-size:11px; color:var(--muted);"><span style="color:var(--blue); font-weight:600;">${day.unique_visitors}</span> besøgende</div>
+                    <div style="font-size:11px; color:var(--muted);"><span style="color:var(--green); font-weight:600;">${totalViews}</span> visninger</div>
+                  </div>
+                </div>
+                <div style="margin-top:10px; border-top: 0.5px solid var(--border); padding-top:8px;">
+                   ${Object.entries(day.page_views).sort((a,b) => b[1] - a[1]).map(([path, count]) => `
+                     <div style="display:flex; justify-content:space-between; font-size:10px; margin-bottom:4px;">
+                       <span style="color:var(--faint); font-family:monospace; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width:80%;">${path}</span>
+                       <span style="color:var(--muted); font-weight:600;">${count}</span>
+                     </div>
+                   `).join('')}
+                </div>
+              </div>
+            `;
+          }).join('')}
+        </div>
+      </div>
+    `;
+    area.innerHTML = html;
+
+  } catch (err) {
+    area.innerHTML = `<div class="empty"><h3 style="color:var(--red);">Fejl</h3><p>Der opstod en netværksfejl.</p></div>`;
+  }
 }
 
 /* ---- FORSIDE ---- */

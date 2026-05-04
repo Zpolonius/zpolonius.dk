@@ -55,7 +55,21 @@ document.addEventListener('DOMContentLoaded', () => {
   initParallax();
   initPageTransitions();
   initCookieConsent();
+  initAnalytics();
 });
+
+/* ---- ANALYTICS SYSTEM ---- */
+function initAnalytics() {
+  const page = window.location.pathname;
+  // Vi venter lige et sekund for ikke at blokere for vigtigere indlæsning
+  setTimeout(() => {
+    fetch('api/track.php', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ page: page })
+    }).catch(err => console.warn('Analytics error:', err));
+  }, 1000);
+}
 
 /* ---- COOKIE CONSENT SYSTEM ---- */
 function initCookieConsent() {
