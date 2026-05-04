@@ -1037,6 +1037,16 @@ async function renderAnalytics(area) {
                   </div>
                 </div>
                 <div style="margin-top:10px; border-top: 0.5px solid var(--border); padding-top:8px;">
+                   <div style="font-size:9px; text-transform:uppercase; color:var(--faint); margin-bottom:6px;">Lokationer</div>
+                   ${Object.entries(day.locations || {}).sort((a,b) => b[1] - a[1]).map(([loc, count]) => `
+                     <div style="display:flex; justify-content:space-between; font-size:10px; margin-bottom:2px;">
+                       <span style="color:var(--muted);">${loc}</span>
+                       <span style="color:var(--blue); font-weight:600;">${count}</span>
+                     </div>
+                   `).join('') || '<div style="font-size:10px; color:var(--faint);">Ingen data</div>'}
+                </div>
+                <div style="margin-top:10px; border-top: 0.5px solid var(--border); padding-top:8px;">
+                   <div style="font-size:9px; text-transform:uppercase; color:var(--faint); margin-bottom:6px;">Sidevisninger</div>
                    ${Object.entries(day.page_views).sort((a,b) => b[1] - a[1]).map(([path, count]) => `
                      <div style="display:flex; justify-content:space-between; font-size:10px; margin-bottom:4px;">
                        <span style="color:var(--faint); font-family:monospace; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width:80%;">${path}</span>

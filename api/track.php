@@ -35,13 +35,33 @@ if (file_exists($analyticsFile)) {
 if (!isset($data[$date])) {
     $data[$date] = [
         'unique_visitors' => [],
-        'page_views' => []
+        'page_views' => [],
+        'locations' => []
     ];
 }
 
 // Registrer unik besøgende hvis ikke set før i dag
 if (!in_array($visitorHash, $data[$date]['unique_visitors'])) {
     $data[$date]['unique_visitors'][] = $visitorHash;
+
+    // Hent lokation (kun for nye unikke besøgende for at spare på API kald)
+    if ($ip !== '127.0.0.1' && $ip !== '::1' && $ip !== '0.0.0.0') {
+        try {
+            $locRaw = @file_get_contents("http://ip-api.com/json/{$ip}?fields=status,country,city");
+            if ($locRaw) {
+                $locData = json_decode($locRaw, true);
+                if (($locData['status'] ?? '') === 'success') {
+                    $locKey = $locData['country'] . ($locData['city'] ? ' (' . $locData['city'] . ')' : '');
+                    if (!isset($data[$date]['locations'][$locKey])) {
+                        $data[$date]['locations'][$locKey] = 0;
+                    }
+                    $data[$date]['locations'][$locKey]++;
+                }
+            }
+        } catch (Exception $e) {
+            // Ignorer fejl i lokations-opslag for ikke at blokere trackeren
+        }
+    }
 }
 
 // Tæl sidevisning

@@ -23,7 +23,8 @@ $report = [];
 foreach ($data as $date => $stats) {
     $report[$date] = [
         'unique_visitors' => count($stats['unique_visitors']),
-        'page_views' => $stats['page_views']
+        'page_views' => $stats['page_views'],
+        'locations' => $stats['locations'] ?? []
     ];
 }
 
