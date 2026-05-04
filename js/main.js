@@ -206,7 +206,7 @@ function initSharedLayout() {
         <li><a href="about.html">Om mig</a></li>
         <li><a href="cv.html">CV & Erfaring</a></li>
         <li><a href="recommendations.html">Anbefalinger</a></li>
-        <li><a href="#" data-contact>Kontakt</a></li>
+        <li><a href="#" data-contact data-track="contact-open-header">Kontakt</a></li>
       </ul>
       <div class="nav-right">
         <button class="nav-hamburger mobile-only" id="hamburgerBtn" aria-label="Menu" aria-expanded="false">
@@ -214,7 +214,7 @@ function initSharedLayout() {
           <svg class="icon-close" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
         </button>
         <button class="theme-switch" onclick="toggleTheme()" title="Skift tema">☀</button>
-        <button class="nav-btn desktop-only" data-contact>Book et review →</button>
+        <button class="nav-btn desktop-only" data-contact data-track="contact-open-header-cta">Book et review →</button>
       </div>
     </nav>
   `;
@@ -230,7 +230,7 @@ function initSharedLayout() {
       <li><a href="about.html">Om mig</a></li>
       <li><a href="cv.html">CV & Erfaring</a></li>
       <li><a href="recommendations.html">Anbefalinger</a></li>
-      <li class="mobile-only"><a href="#" data-contact>Kontakt</a></li>
+      <li class="mobile-only"><a href="#" data-contact data-track="contact-open-mobile">Kontakt</a></li>
     </ul>
   `;
 
@@ -272,13 +272,13 @@ function initSharedLayout() {
     <div class="footer-col">
       <div class="footer-col-title">Social</div>
       <div class="footer-social">
-        <a href="https://www.linkedin.com/in/zpolonius/" target="_blank" class="social-icon" title="LinkedIn">
+        <a href="https://www.linkedin.com/in/zpolonius/" target="_blank" class="social-icon" title="LinkedIn" data-track="linkedin-footer">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>
         </a>
-        <a href="https://www.instagram.com/zackp91/" target="_blank" class="social-icon" title="Instagram">
+        <a href="https://www.instagram.com/zackp91/" target="_blank" class="social-icon" title="Instagram" data-track="instagram-footer">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
         </a>
-        <a href="https://www.facebook.com/zpolonius" target="_blank" class="social-icon" title="Facebook">
+        <a href="https://www.facebook.com/zpolonius" target="_blank" class="social-icon" title="Facebook" data-track="facebook-footer">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>
         </a>
       </div>
@@ -323,18 +323,18 @@ function initSharedLayout() {
             </div>
             <div class="modal-footer">
               <div class="modal-contact-info">
-                <span>zacharias@polonius.dk</span>
-                <span>3068 7041</span>
+                <span data-track="contact-email-copy">zacharias@polonius.dk</span>
+                <span data-track="contact-phone-copy">3068 7041</span>
               </div>
-              <button class="btn-primary" id="contactSubmit">Send besked →</button>
+              <button class="btn-primary" id="contactSubmit" data-track="contact-submit">Send besked →</button>
             </div>
           </div>
           <div class="modal-social">
-            <a href="https://www.linkedin.com/in/zpolonius/" target="_blank">LinkedIn</a>
+            <a href="https://www.linkedin.com/in/zpolonius/" target="_blank" data-track="linkedin-modal">LinkedIn</a>
             <span class="modal-social-sep">·</span>
-            <a href="https://www.instagram.com/zackp91/" target="_blank">Instagram</a>
+            <a href="https://www.instagram.com/zackp91/" target="_blank" data-track="instagram-modal">Instagram</a>
             <span class="modal-social-sep">·</span>
-            <a href="https://www.facebook.com/zpolonius" target="_blank">Facebook</a>
+            <a href="https://www.facebook.com/zpolonius" target="_blank" data-track="facebook-modal">Facebook</a>
           </div>
         </div>
         <div class="success-view" id="contactSuccessView">
@@ -366,7 +366,7 @@ function initSharedLayout() {
         <span class="bottom-nav-label">Indsigter</span>
       </a>
       <div class="bottom-nav-divider"></div>
-      <button class="bottom-nav-contact" data-contact-mobile>
+      <button class="bottom-nav-contact" data-contact-mobile data-track="contact-open-bottom-nav">
         <span class="bottom-nav-icon">✉</span>
         <span class="bottom-nav-label">Kontakt</span>
       </button>
@@ -379,7 +379,7 @@ function initSharedLayout() {
   `;
 
   const floatingCtaHtml = `
-    <button class="floating-cta" data-contact>
+    <button class="floating-cta" data-contact data-track="contact-open-floating">
       <span class="icon">✉</span>
       Kontakt
     </button>
@@ -391,7 +391,7 @@ function initSharedLayout() {
         <p class="cta-bar-title">Klar til at optimere jeres digitale setup?</p>
         <p class="cta-bar-sub">Lad os tage en uforpligtende snak om jeres forretningsmål.</p>
       </div>
-      <button class="btn-primary" data-contact>Book et review →</button>
+      <button class="btn-primary" data-contact data-track="contact-open-cta-bar">Book et review →</button>
     </div>
   `;
 
