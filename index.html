@@ -163,80 +163,7 @@
     }
 
     /* ---- BENTO ---- */
-    .bento {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 20px;
-      padding: 20px 40px;
-    }
-    .bento-cell {
-      padding: 24px 28px;
-      background: var(--bg-card);
-      backdrop-filter: blur(10px);
-      border: 0.5px solid var(--border-md);
-      border-radius: 20px;
-      cursor: pointer;
-      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-      position: relative;
-    }
-    .bento-cell:hover { 
-      transform: translateY(-5px);
-      background: rgba(255,255,255,0.05); 
-      box-shadow: 0 15px 40px rgba(0,0,0,0.2), 0 0 20px rgba(65, 143, 255, 0.1);
-      border-color: var(--blue);
-      z-index: 10;
-    }
-    .bento-cell:focus-visible {
-      outline: 2px solid var(--blue);
-      outline-offset: -2px;
-      background: rgba(65,143,255,0.08);
-      border-color: var(--blue);
-      z-index: 10;
-    }
-    .bento-cell:hover .cell-arrow { opacity: 1; }
-    .bento-cell.selected {
-      background: rgba(65,143,255,0.08);
-      border-color: var(--blue);
-    }
-    .cell-label {
-      font-size: 9px;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      color: var(--text-faint);
-      margin-bottom: 8px;
-    }
-    .cell-title {
-      font-size: 16px;
-      font-weight: 600;
-      letter-spacing: -0.02em;
-      color: var(--text);
-      margin-bottom: 5px;
-      line-height: 1.2;
-    }
-    .cell-sub {
-      font-size: 12px;
-      color: var(--text-muted);
-      margin-bottom: 8px;
-    }
-    .cell-desc {
-      font-size: 11px;
-      color: var(--text-faint);
-      line-height: 1.6;
-      max-height: 0;
-      opacity: 0;
-      overflow: hidden;
-      transition: all 0.3s ease;
-    }
-    .cell-arrow {
-      position: absolute;
-      bottom: 14px; right: 16px;
-      font-size: 11px;
-      color: var(--blue);
-      opacity: 0;
-      transition: opacity 0.2s;
-    }
-    .accent-blue { color: var(--blue); }
-    .accent-green { color: var(--green); }
+    /* CSS flyttet til style.css for konsistens */
 
     /* ---- BENTO DETAIL HERO ---- */
     .detail-panel {
@@ -359,22 +286,22 @@
     }
     .proj-tag { margin-bottom: 12px; }
     .proj-title {
-      font-size: 14px;
+      font-size: 24px;
       font-weight: 600;
       color: var(--text);
       letter-spacing: -0.02em;
-      margin-bottom: 6px;
+      margin-bottom: 8px;
       line-height: 1.3;
     }
     .proj-desc {
-      font-size: 12px;
+      font-size: 16px;
       color: var(--text-muted);
-      line-height: 1.6;
+      line-height: 1.65;
     }
     .proj-arrow {
       position: absolute;
-      bottom: 14px; right: 16px;
-      font-size: 11px;
+      bottom: 16px; right: 20px;
+      font-size: 14px;
       color: var(--blue);
     }
 
@@ -382,26 +309,26 @@
     .cv-strip {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 20px;
+      gap: 24px;
       padding: 20px 40px;
     }
     .cv-item {
-      padding: 22px 28px;
+      padding: 32px 32px;
       border: 0.5px solid var(--border-md);
-      border-radius: 20px;
+      border-radius: 16px;
       background: var(--bg-card);
       display: block;
       transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
     }
     .cv-item:hover {
-      transform: translateY(-5px);
+      transform: translateY(-4px);
       box-shadow: 0 15px 40px rgba(0,0,0,0.2);
       background: rgba(255,255,255,0.05);
     }
-    .cv-year { font-size: 10px; color: var(--blue); letter-spacing: 0.1em; margin-bottom: 4px; }
-    .cv-role { font-size: 13px; font-weight: 600; color: var(--text); letter-spacing: -0.01em; margin-bottom: 3px; }
-    .cv-company { font-size: 11px; color: var(--text-faint); margin-bottom: 6px; }
-    .cv-desc { font-size: 11px; color: var(--text-ghost); line-height: 1.5; }
+    .cv-year { font-size: 12px; color: var(--blue); letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 8px; }
+    .cv-role { font-size: 20px; font-weight: 600; color: var(--text); letter-spacing: -0.02em; margin-bottom: 6px; line-height: 1.3; }
+    .cv-company { font-size: 15px; color: var(--text-muted); margin-bottom: 8px; }
+    .cv-desc { font-size: 16px; color: var(--text-faint); line-height: 1.65; }
 
     /* ---- QUOTES CAROUSEL ---- */
     .rec-container {
@@ -433,8 +360,8 @@
       box-shadow: 0 30px 60px rgba(0,0,0,0.12);
       position: relative;
     }
-    .quote-mark { font-size: 40px; color: var(--blue); font-weight: 700; margin-bottom: 20px; line-height: 1; opacity: 0.4; }
-    .quote-text { font-size: 18px; color: var(--text); line-height: 1.8; margin-bottom: 24px; font-style: italic; }
+    .quote-mark { font-size: 64px; color: var(--blue); font-weight: 700; margin-bottom: 16px; line-height: 1; opacity: 0.4; }
+    .quote-text { font-size: 24px; color: var(--text); line-height: 1.6; margin-bottom: 32px; font-style: italic; font-weight: 500; letter-spacing: -0.01em; }
 
     .carousel-nav {
       position: absolute;
@@ -504,25 +431,7 @@
       .quote-card { padding: 32px 24px 60px; }
       .carousel-nav { right: 50%; transform: translateX(50%); bottom: 20px; }
       
-      /* BENTO - 2-COLUMN GRID ON MOBILE */
-      .bento {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 12px;
-        padding: 16px 20px;
-        border-bottom: none;
-      }
-      .bento-cell {
-        padding: 14px 16px;
-        min-width: 0;
-        border-radius: 14px;
-        border: 0.5px solid var(--border-md);
-      }
-      .cell-title { font-size: 14px; }
-      .cell-label { font-size: 8px; }
-      .cell-sub { font-size: 10px; }
-      .bento-cell .cell-arrow { transition: transform 0.3s; opacity: 1; }
-      .bento-cell.expanded .cell-arrow { transform: rotate(90deg); }
+
 
       /* SCROLLABLE RECOMMENDATIONS */
       .rec-container {
@@ -652,25 +561,11 @@
   </section>
 
   <!-- BENTO GRID -->
-  <div class="bento" id="bentoGrid">
+  <div class="bento-grid" id="bentoGrid">
     <!-- Rendered dynamically -->
   </div>
 
-  <!-- BENTO DETAIL PANEL -->
-  <div class="detail-panel" id="detailPanel">
-    <div class="detail-inner">
-      <div>
-        <div class="detail-tag" id="dTag"></div>
-        <h2 class="detail-title" id="dTitle"></h2>
-        <p class="detail-desc" id="dDesc"></p>
-        <div class="detail-actions">
-          <a href="#" class="detail-btn" id="dBtn"></a>
-          <button class="detail-close" onclick="closeDetail()">Luk ✕</button>
-        </div>
-      </div>
-      <div class="detail-meta" id="dMeta"></div>
-    </div>
-  </div>
+
 
   <!-- PROJEKTER -->
   <div id="projectsSection">
@@ -845,14 +740,25 @@
       if (bentoGrid) {
         const items = data.bento || [];
         bentoGrid.innerHTML = items.map((b, idx) => `
-          <div class="bento-cell fade-up fade-up-${idx+1}" onclick="openDetail(${idx})" tabindex="0">
+          <div class="bento-cell fade-up fade-up-${idx+1} ${b.accent && b.accent !== 'none' ? 'accent-' + b.accent : ''}" tabindex="0" role="button" aria-expanded="false">
             <div class="cell-label">${esc(b.label)}</div>
             <h3 class="cell-title">${esc(b.value)}</h3>
             <div class="cell-sub">${esc(b.sub)}</div>
             <div class="cell-desc">${esc(b.desc)}</div>
-            <span class="cell-arrow">${esc(b.cta || 'Mere →')}</span>
+            <span class="cell-arrow">${esc(b.cta || 'Læs mere →')}</span>
           </div>
         `).join('');
+        
+        bentoGrid.querySelectorAll('.bento-cell').forEach(el => {
+          const toggle = () => {
+            const open = el.classList.toggle('expanded');
+            el.setAttribute('aria-expanded', open ? 'true' : 'false');
+          };
+          el.addEventListener('click', toggle);
+          el.addEventListener('keydown', e => {
+            if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(); }
+          });
+        });
       }
 
       // Projects
@@ -894,11 +800,11 @@
                 </div>
               ` : ''}
               <div class="proj-card-body">
-                <div class="proj-title" style="font-size: 16px; margin-bottom: 8px;">${esc(a.title)}</div>
-                <div class="proj-tag label" style="color:var(--blue); border-color:var(--border-blue); margin-bottom: 12px; display: inline-block;">
+                <div class="tag tag-ai proj-tag" style="margin-bottom: 12px;">
                   ${esc(a.tag || a.category || 'Indsigt')}
                   ${a.reading_time ? ` · ${a.reading_time} min.` : (a.body ? ` · ${getReadingTime(a.body)} min.` : '')}
                 </div>
+                <div class="proj-title">${esc(a.title)}</div>
                 <p class="proj-desc">${esc(a.excerpt || '')}</p>
                 <span class="proj-arrow">Læs artikel →</span>
               </div>
@@ -985,35 +891,7 @@
       }
     });
 
-    // Bento Detail Logic
-    function openDetail(idx) {
-      loadContentData().then(data => {
-        const item = data.bento[idx];
-        if (!item) return;
-        
-        document.getElementById('dTag').textContent = item.label || 'Speciale';
-        document.getElementById('dTitle').textContent = item.value;
-        document.getElementById('dDesc').textContent = item.desc || '';
-        document.getElementById('dBtn').href = item.url || 'projects';
-        document.getElementById('dBtn').textContent = item.cta || 'Se projekter →';
-        
-        const meta = document.getElementById('dMeta');
-        meta.innerHTML = `<div class="detail-row"><span class="detail-key">Info</span><span class="detail-val">${esc(item.info_val || item.sub)}</span></div>`;
-        
-        document.getElementById('detailPanel').classList.add('active');
-        document.getElementById('detailPanel').scrollIntoView({ behavior: 'smooth', block: 'start' });
-        
-        document.querySelectorAll('.bento-cell').forEach(c => c.classList.remove('selected'));
-        if (event && event.currentTarget && event.currentTarget.classList.contains('bento-cell')) {
-          event.currentTarget.classList.add('selected');
-        }
-      });
-    }
 
-    function closeDetail() {
-      document.getElementById('detailPanel').classList.remove('active');
-      document.querySelectorAll('.bento-cell').forEach(c => c.classList.remove('selected'));
-    }
 
     // Carousel Logic
     let currentIdx = 0;

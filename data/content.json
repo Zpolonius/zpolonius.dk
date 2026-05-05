@@ -18,7 +18,7 @@
         "role": "Checkout Arkitekt | Bygger bro mellem kompleks teknologi og målbar forretningsværdi | Hjulpet +100 webshops med konvertering | AI Entusiast | Digital Brobygger | Optimererer checkout-flows og bygger AI-løsninger",
         "cover": "assets\/cover.webp",
         "status": "Checkout Arkitekt & Digital nytænker",
-        "intro": "Jeg taler både API og EBITDA — Fra forladte kurve til loyale kunder. Jeg bygger bro mellem kompleks teknologi og målbar forretningsværdi.",
+        "intro": "Jeg taler både API og EBITDA - Fra forladte kurve til loyale kunder - Fordi de rigtige tekniske valg ikke bare løser problemer, de skaber omsætning.",
         "cover_pos": "50% 50%"
     },
     "specialer": [
@@ -26,7 +26,7 @@
             "id": "checkout",
             "label": "Checkout-optimering",
             "desc": "<p>Optimering af checkout-flow og konverteringsrate for e-commerce kunder.<\/p>",
-            "icon": "",
+            "icon": "◆",
             "color": "blue",
             "skills": [],
             "cover": "",
@@ -103,59 +103,67 @@
     ],
     "bento": [
         {
-            "label": "Min kernekompetence",
-            "value": "The Bridge",
+            "label": "Profil",
+            "value": "Mellem kode og krone",
+            "unit": "år",
             "sub": "Brobyggeren",
-            "desc": "Oversætter tekniske svagheder til finansielle risici og forretningsværdi.",
+            "desc": "De fleste er enten tekniske eller kommercielle. Jeg vil være i midten og det er præcis der hvor de bedste løsninger opstår.",
             "accent": "blue",
             "detail": "erfaring",
-            "cta": "Hvad det betyder for din forretning →"
+            "cta": "",
+            "key": "10+ års erfaring",
+            "info_val": "10+ års erfaring"
         },
         {
-            "label": "Rolle",
-            "value": "Strategic Partner",
-            "sub": "Strategisk rådgivning",
-            "desc": "C-level sparring omkring tech-stack og ROI.",
-            "accent": "none",
-            "detail": "rolle",
-            "cta": "Se hvordan jeg rådgiver →"
-        },
-        {
-            "label": "Fokus",
-            "value": "Performance Audit",
-            "sub": "Checkout & CRO",
-            "desc": "Adfærdsdesign og UX-principper der barberer sekunder af købsrejsen og øger bundlinjen.",
+            "label": "Tilgang",
+            "value": "Jeg siger det ingen andre tør",
+            "sub": "Ærlig sparring",
+            "desc": "Jeg er ikke interesseret i at sælge dig en løsning du ikke har brug for. Jeg er interesseret i at finde det der faktisk virker.",
             "accent": "green",
-            "detail": "pspo",
-            "cta": "Se værdien af en audit →"
-        },
-        {
-            "label": "Uddannelse",
-            "value": "Serviceøkonom",
-            "sub": "+ Eventkoordinator",
-            "desc": "Speciale i service management og kommunikation.",
-            "accent": "none",
-            "detail": "uddannelse",
-            "cta": "Se min faglige ballast →"
+            "detail": "rolle",
+            "cta": "",
+            "info_val": "Altid klar på en god kop kaffe"
         },
         {
             "label": "Speciale",
-            "value": "Checkout & AI",
-            "sub": "Konvertering og vibe coding",
-            "desc": "Optimerer checkout-flows og bygger AI-drevne løsninger.",
-            "accent": "blue",
-            "detail": "ai",
-            "cta": "Se mine specialer →"
+            "value": "Din checkout fortæller en historie",
+            "sub": "Checkout & CRO",
+            "desc": "Tallene lyver ikke. Men de fortæller dig heller ikke hvorfor kunden forlod kurven. \nJeg hjælper jer med at fortælle den rigtige historie og øge jeres konverteringsrate.",
+            "accent": "green",
+            "detail": "pspo",
+            "cta": "",
+            "info_val": "Checkout & CRO"
         },
         {
-            "label": "Om mig",
-            "value": "Zacharias, 35",
+            "label": "Fundament",
+            "value": "Mennesket før løsningen",
+            "sub": "Altid",
+            "desc": "Uanset om det er et checkout-flow, et AI-system eller et stykke software, spørger jeg altid først: hvem skal bruge det, og hvad har de egentlig brug for?\nFordi de bedste løsninger bygges til mennesker. ",
+            "accent": "green",
+            "detail": "uddannelse",
+            "cta": "",
+            "info_val": "Altid"
+        },
+        {
+            "label": "Speciale",
+            "value": "AI er ikke fremtiden",
+            "sub": " Det er i dag",
+            "desc": "Det er ikke svaret på alt, men brugt rigtigt er det det skarpeste værktøj til at optimere, bygge og effektivisere. \nAltid med mennesket i fokus.",
+            "accent": "blue",
+            "detail": "ai",
+            "cta": "",
+            "info_val": "AI & Automation"
+        },
+        {
+            "label": "Mennesket",
+            "value": "Familiefar fra Bjæverskov",
             "sub": "Bjæverskov · Gift · To sønner",
-            "desc": "Nysgerrig og altid på udkig efter den smarte løsning.",
+            "desc": "Jeg bor i Bjæverskov med min kone og to sønner. Når jeg ikke optimerer checkout-flows eller bygger apps, nyder jeg tiden med familien. Det er den samme nysgerrighed der driver begge dele.",
             "accent": "none",
             "detail": "om",
-            "cta": "Lær mig bedre at kende →",
-            "url": ""
+            "url": "",
+            "cta": "",
+            "info_val": "Gift med min smukke kone"
         }
     ],
     "om": {
@@ -173,10 +181,26 @@
             "Frivilligt arbejde"
         ],
         "facts": [
-            { "label": "Bopæl", "val": "Bjæverskov", "sub": "Danmark" },
-            { "label": "Familie", "val": "Gift", "sub": "To sønner" },
-            { "label": "Rolle", "val": "Checkout Arkitekt", "sub": "Bring · 2023 — nu" },
-            { "label": "Erfaring", "val": "10+ år", "sub": "E-commerce & AI" }
+            {
+                "label": "Bopæl",
+                "val": "Bjæverskov",
+                "sub": "Danmark"
+            },
+            {
+                "label": "Familie",
+                "val": "Gift",
+                "sub": "To sønner"
+            },
+            {
+                "label": "Rolle",
+                "val": "Technical account manager",
+                "sub": "Bring · 2023 — nu"
+            },
+            {
+                "label": "Erfaring",
+                "val": "10+ år",
+                "sub": "E-commerce & AI"
+            }
         ],
         "kompetencer": [
             {
@@ -232,7 +256,7 @@
             "period": "2023 — 2025",
             "desc": "Opbygning af Brings dedikerede checkout-rådgivning samt plugin-optimering for Shopify, WooCommerce og DanDomain.",
             "intro": "Opbygning af Brings dedikerede checkout-rådgivning samt plugin-optimering for Shopify, WooCommerce og DanDomain.",
-            "body": "<h2>1. Den Kommercielle Vinkel<\/h2><p>Bring stod over for en strategisk udfordring: De ønskede at transformere deres rolle fra at være en traditionel logistikleverandør til at blive en uundværlig strategisk partner for e-commerce virksomheder. På et stærkt konkurrencepræget nordisk marked var behovet at hjælpe webshops med at gøre kompleks logistik til en gnidningsfri og konverteringsoptimeret købsoplevelse for slutbrugeren, samtidig med at man skulle styrke båndene til centrale platformspartnere.<\/p><h2>2. Den Tekniske Vinkel<\/h2><p>For at imødekomme behovet udviklede og optimerede jeg Brings rådgivning omkring checkout-design og tekniske integrationer. Kerneelementet i løsningen var udviklingen af vores officielle plugins til platforme som Shopify og WooCommerce, suppleret med tætte tekniske partnerskaber med lokale løsninger som DanDomain.<\/p><p><strong>Fokus for implementeringen har været:<\/strong><\/p><ul><li>At gøre det nemt og enkelt for webshops at integrere deres systemer med Bring via vores plugins.<\/li><li>At sikre, at Brings leveringsmuligheder fremstår bedst muligt i kundernes checkout.<\/li><li>At fjerne teknisk friktion gennem stabile og brugervenlige integrationer, der kræver minimal opsætning for webshopejeren.<\/li><\/ul><h2>3. Broen (Forretningsværdien)<\/h2><p>Denne indsats har skabt et stærkere teknisk økosystem, der direkte påvirker bundlinjen hos vores kunder. Ved at tilbyde en enkel og sømløs integration, har vi hjulpet hundredevis af webshops med at optimere deres checkout-flow, hvilket har reduceret antallet af afbrudte køb og øget konverteringsraterne markant.<\/p><p>Resultatet er en positionering af Bring som en <em>trusted advisor<\/em>, hvor den tekniske brugervenlighed og den forbedrede købsoplevelse har løftet den langsigtede kundeloyalitet og cementeret vores position som den foretrukne logistikpartner i Norden.<\/p>",
+            "body": "<h2>1. Den Kommercielle Vinkel<\/h2><p>\"Bring ville ikke <strong>bare <\/strong>levere pakker, de ville blive den partner webshops ikke kunne undvære. <\/p><p>På et hårdt konkurrencepræget nordisk marked skulle logistik føles som en fordel i checkout, ikke en forhindring.<\/p><p>Udfordringen er reel: <\/p><p>Mange webshops oplevede at kompleks logistik-opsætning kostede dem kunder i checkout. <\/p><p>For meget friktion, for mange valg, for lidt tillid. Bring så en mulighed for at vende det til et konkurrencefortrin, hvis den tekniske oplevelse var god nok.<\/p><h2>2. Den Tekniske Vinkel<\/h2><p>Som en del af det team der stod bag Brings officielle plugins til Shopify og WooCommerce havde jeg ansvaret for at designe løsningen og styre udviklingen. <\/p><p>For DanDomain-integrationen var jeg ansvarlig for samarbejdet med den eksterne leverandør der udviklede løsningen for os.<\/p><p>På tværs af alle platforme stod jeg for QA og sikrede at det vi leverede faktisk virkede i den virkelige verden, ikke bare i et testmiljø. <\/p><p>Men en god løsning er ingenting hvis ingen bruger den.<\/p><p>Så en stor del af arbejdet handlede om at sikre adoption at hjælpe hundredevis af webshops med at forstå værdien og komme godt i gang.\"<\/p><h2>3. Broen (Forretningsværdien)<\/h2><p>Resultatet taler for sig selv. Kunder der integrerede via vores plugins oplevede 20-50% øget volumen. <\/p><p>Vi har rådgivet over 100 webshops og endte med en CSAT score på 4,8.<\/p><p>Men det vigtigste resultat er ikke i tallene, det er i den måde Bring blev opfattet på. <\/p><p>Fra logistikleverandør til strategisk partner. <\/p><p>Fra vendor til trusted advisor. <\/p><p>Det skift sker ikke ved at have det bedste produkt. <\/p><p>Det sker når den tekniske oplevelse er så god at kunderne føler sig forstået.<\/p>",
             "skills": [
                 "Checkout Rådgivning",
                 "Shopify",
@@ -240,11 +264,35 @@
                 "DanDomain",
                 "Partnernetværk"
             ],
-            "cover": "assets/projects/bring_checkout.webp",
-            "cover_pos": "36% 43%",
+            "cover": "assets\/projects\/bring_checkout.webp",
+            "cover_pos": "37% 42%",
             "cover_alt": "Bring Checkout E-commerce økosystem",
             "file": "",
-            "visible": true
+            "url": "https:\/\/www.bring.dk\/radgivning\/integration\/optimal-kasselosning\/shopify-plugin",
+            "visible": true,
+            "bento": [
+                {
+                    "label": "Onboarding",
+                    "value": "15 min",
+                    "sub": "Fra installation til optimeret checkout",
+                    "desc": "De fleste integrationer tager dage og kræver en udvikler. \nMed vores plugin er det bare nemt Du installerer og er i gang på et kvarter med en checkout der allerede er optimeret til konvertering fra første ordre.",
+                    "accent": "blue"
+                },
+                {
+                    "label": "Vækst",
+                    "value": "20-50%",
+                    "sub": "Øget volumen hos kunder",
+                    "desc": "Det er gennemsnittet baseret på reelle webshops der integrerede Brings checkout-løsning via vores plugins. Forskellen ligger i at leveringsmuligheder præsenteres rigtigt i checkout. Det rette valg på det rette tidspunkt reducerer afbrudte køb og øger den samlede ordreværdi.\"",
+                    "accent": "none"
+                },
+                {
+                    "label": "Tilfredshed",
+                    "value": "4,8 \/ 5",
+                    "sub": "CSAT score +100 rådgivede kunder",
+                    "desc": "Over 100 webshops rådgivet. Ikke med en standardpakke eller et generisk oplæg — men med en ærlig gennemgang af deres specifikke checkout-udfordringer. 4,8 i CSAT er ikke et tal vi jagede. Det er resultatet af at sætte kundens behov før vores egen løsning.",
+                    "accent": "none"
+                }
+            ]
         },
         {
             "id": "vibe-coding-cms",
@@ -253,8 +301,8 @@
             "tag": "AI",
             "period": "2026",
             "desc": "Udvikling af et skræddersyet, lynhurtigt CMS og konverteringsoptimeret portefølje bygget fra bunden ved hjælp af Vibe Coding og AI-agenter.",
-            "intro": "Udvikling af et skræddersyet, lynhurtigt CMS og konverteringsoptimeret portefølje bygget fra bunden ved hjælp af Vibe Coding og AI-agenter.",
-            "body": "<h2>1. Den Kommercielle Vinkel<\/h2><p><strong>Udfordring:<\/strong> Behovet var en digital platform, der ikke blot fungerede som et statisk CV, men som en skarp 'Sales Page'. Platformen skulle være ultra-hurtig, nem at vedligeholde og udstråle premium autoritet for at konvertere B2B leads. Standardløsninger som WordPress var for tunge, langsomme og ufleksible.<\/p><h2>2. Den Tekniske Vinkel<\/h2><p><strong>Løsning (Vibe Coding):<\/strong> I stedet for at bruge ugevis på manuel kodning eller træk-og-slip skabeloner, anvendte jeg 'Vibe Coding' – agil udvikling orkestreret i tæt samarbejde med avancerede AI-agenter. Jeg designede arkitekturen som et afkoblet 'flat-file' CMS: Et vanilla JavaScript frontend for lynhurtig performance, og et letvægts PHP-backend til at administrere en JSON-database. Hele platformen, inklusiv et skræddersyet Admin Panel med indbygget AI-tekstoptimering, blev bygget via AI.<\/p><h2>3. Broen (Forretningsværdien)<\/h2><p><strong>Resultat:<\/strong> Resultatet er en robust platform, der loader på under et sekund og rangerer i toppen af Lighthouse-tests. Ved at benytte Vibe Coding blev udviklingstiden og dermed 'Time-to-Market' reduceret massivt. Dette projekt er det levende bevis på, hvordan AI kan bruges som en reel løftestang til at bygge enterprise-grade skræddersyet teknologi til en brøkdel af normale udviklingsomkostninger.<\/p>",
+            "intro": "De fleste porteføljesider ligner hinanden. Denne gør ikke. Den er bygget fra bunden med AI som primært udviklingsværktøj . \nHurtigere, billigere og skarpere end traditionel udvikling.",
+            "body": "<h2>1. Den Kommercielle Vinkel<\/h2><p><strong>Udfordring:<\/strong> Et statisk CV konverterer ikke. <\/p><p>Jeg havde brug for en platform der fungerede som en ægte sales page, med premium udtryk, lynhurtig performance og et indhold jeg selv kunne opdatere uden at involvere en udvikler hver gang.<\/p><p>Standardløsninger som WordPress var for tunge og for generiske. Jeg ville have noget der var bygget præcis til formålet, uden kompromis. <\/p><p>Udfordringen var at gøre det uden et stort udviklingsbudget og uden at bruge måneder på det.<\/p><h2>2. Den Tekniske Vinkel<\/h2><p><strong>Løsning (Vibe Coding):<\/strong> I stedet for måneder med manuel kodning brugte jeg Vibe Coding, agil udvikling i tæt samarbejde med AI-agenter som Claude, Gemini CLI og Antigravity. <\/p><p>Designet blev til i Google Stitch.<\/p><p>Arkitekturen er bevidst enkel: <\/p><p>et hurtigt JavaScript frontend koblet til et letvægts backend der styrer indholdet via en JSON-fil. <\/p><p>Resultatet er et skræddersyet CMS med et fuldt admin panel, inklusiv indbygget AI-tekstoptimering, som jeg selv styrer helt uden ekstern hjælp.<\/p><p>Det der normalt ville kræve et udviklerteam og flere måneder blev løst af én person med de rigtige AI-værktøjer.<\/p><h2>3. Broen (Forretningsværdien)<\/h2><p><strong>Resultat:<\/strong> Siden loader på under et sekund og scorer i toppen af Googles Lighthouse-tests. Men det vigtigste resultat er ikke teknisk, det er kommercielt.<\/p><p>Dette projekt er det levende bevis på hvad Vibe Coding kan. Ikke som et buzzword, men som en reel metode til at bygge skræddersyet teknologi til en brøkdel af normale omkostninger. <\/p><p>Du kigger på resultatet lige nu.<\/p>",
             "skills": [
                 "Vibe Coding",
                 "AI-Agenter",
@@ -262,33 +310,79 @@
                 "PHP CMS",
                 "Systemarkitektur"
             ],
-            "cover": "assets/projects/vibe_coding_cover.webp",
+            "cover": "assets\/projects\/vibe_coding_cover.webp",
             "cover_pos": "50% 50%",
             "cover_alt": "Dark mode IDE screen with AI matrix code bridge",
             "file": "",
-            "url": "https:\/\/checkoutchecker.ai\/",
-            "visible": true
+            "url": "zpolonius.dk",
+            "visible": true,
+            "bento": [
+                {
+                    "label": "Performance",
+                    "value": "Under 1 sek",
+                    "sub": "Loadtid fra første byte",
+                    "desc": "Hastighed er ikke bare et teknisk mål, det er et kommercielt parameter. \nEn side der loader langsomt mister besøgende før de overhovedet har set dit budskab. Dette CMS er bygget fra bunden med performance som første prioritet, ikke en eftertanke. Under et sekund fra første klik til fuldt indlæst side.",
+                    "accent": "none"
+                },
+                {
+                    "label": "Metode",
+                    "value": "Vibe Coding",
+                    "sub": "AI-agenter som primært udviklingsværktøj",
+                    "desc": "Vibe Coding er ikke et buzzword, det er en reel udviklingsmetode hvor AI-agenter som Claude, Gemini CLI og Antigravity fungerer som dit udviklingshold. \nDu orkestrerer, AI eksekverer. \nDesignet blev til i Google Stitch. Resultatet er en platform der normalt ville kræve et helt team og flere måneder, bygget af én person med de rigtige værktøjer.",
+                    "accent": "none"
+                },
+                {
+                    "label": "Superevne",
+                    "value": "Idé til virkelighed",
+                    "sub": "Barrieren mellem idé og virkelighed",
+                    "desc": "Vibe Coding fjerner barrieren mellem idé og virkelighed. Det der før krævede et helt udviklerteam kan én person med de rigtige AI-værktøjer bygge på uger. Ikke fordi det er nemmere at tænke — men fordi AI tager sig af det tunge løft mens du fokuserer på retningen.",
+                    "accent": "none"
+                }
+            ]
         },
         {
             "id": "review-manager",
-            "title": "CheckourChecker ",
+            "title": "CheckoutChecker ",
             "category": "ai",
             "tag": "AI",
             "period": "2025",
-            "desc": "Checkoutchecker er et internt værktøj der skaber den perfekte synergi mellem kunstig intelligens og menneskelig faglighed for at generere leads.\n",
+            "desc": "Checkoutchecker er et internt værktøj der skaber den perfekte synergi mellem kunstig intelligens og menneskelig faglighed for at generere leads.",
             "intro": "Checkoutchecker er et internt værktøj der skaber den perfekte synergi mellem kunstig intelligens og menneskelig faglighed for at generere leads.\n",
-            "body": "<h2>1. Den Kommercielle Vinkel<\/h2><p><strong>Udfordring:<\/strong> Som Technical Account Manager hos Bring har jeg haft fokus på at demokratisere adgangen til vores ekspertise. Målet var klart: At skabe et værktøj, der gør komplekse checkout-analyser både simple og lynhurtige – særligt til brug i et hektisk miljø på messer og events, hvor hvert sekund tæller for at fange potentielle kunders interesse og generere leads.<\/p><h2>2. Den Tekniske Vinkel<\/h2><p><strong>Løsning:<\/strong> Med afsæt i min passion for teknologi brugte jeg AI som min \"pair programmer\" til at udvikle CheckoutChecker fra bunden. Løsningen er bygget som en skalerbar letvægts-webapplikation med et centralt JSON-fundament, så vi lynhurtigt kan skifte mellem dansk, svensk og norsk. Motoren bygger på et intuitivt <em>\"Human-in-the-loop\"<\/em> design: Når vi gennemgår en checkout, gør AI'en det tunge løft baseret på Brings Best Practice og genererer øjeblikkeligt et udkast. Herefter validerer og kvalitetssikrer jeg altid rapporten som ekspert.<\/p><h2>3. Broen (Forretningsværdien)<\/h2><p><strong>Resultat:<\/strong> CheckoutChecker skaber den perfekte synergi mellem kunstig intelligens og menneskelig faglighed. Det giver det bedste fra to verdener: AI'ens effektivitet og menneskets kritiske sans. Projektet er beviset på, hvordan AI kan accelerere udviklingen af værktøjer, der skaber reel værdi i kundedialogen – og det har direkte resulteret i over 200 kvalificerede B2B leads, uden vi er gået på kompromis med den faglige kvalitet.<\/p>",
+            "body": "<h2>1. Den Kommercielle Vinkel<\/h2><p><strong>Udfordring:<\/strong> Vi skulle bruge et værktøj, som kunne tages med på vores messer og lave mange tjek af checkout og give kunderne noget med hjem.<\/p><p>Målet var klart: At skabe et værktøj, der gør komplekse checkout-analyser både simple og lynhurtige, særligt til brug i et hektisk miljø på messer og events, hvor hvert sekund tæller for at fange potentielle kunders interesse og generere leads.<\/p><h2>2. Den Tekniske Vinkel<\/h2><p><strong>Løsning:<\/strong> Med afsæt i min passion for teknologi brugte jeg AI som min \"pair programmer\" til at udvikle CheckoutChecker fra bunden.<\/p><p>Løsningen er bygget som en skalerbar letvægts-webapplikation med et centralt JSON-fundament, så vi lynhurtigt kan skifte mellem dansk, svensk og norsk. Motoren bygger på et intuitivt <em>\"Human-in-the-loop\"<\/em> design:<\/p><p>Når vi gennemgår en checkout, gør AI'en det tunge løft baseret på Brings Best Practice og genererer øjeblikkeligt et udkast.<\/p><p>Herefter validerer og kvalitetssikrer vi altid rapporten som ekspert.<\/p><h2>3. Broen (Forretningsværdien)<\/h2><p><strong>Resultat:<\/strong> CheckoutChecker skaber den perfekte synergi mellem kunstig intelligens og menneskelig faglighed.<\/p><p>Det giver det bedste fra to verdener: AI'ens effektivitet og menneskets kritiske sans. Projektet er beviset på, hvordan AI kan accelerere udviklingen af værktøjer, der skaber reel værdi i kundedialogen, brugt på 4 messer, tjekket mere end 100 checkouts, uden vi er gået på kompromis med den faglige kvalitet.<\/p><p><br><\/p><h3><a href=\"https:\/\/checkoutchecker.ai\/\" target=\"_blank\">Prøv den her:<\/a><\/h3><p><a href=\"https:\/\/checkoutchecker.ai\/\" target=\"_blank\">https:\/\/checkoutchecker.ai\/ <\/a><\/p><h2><br><\/h2>",
             "skills": [
                 "AI",
                 "Vibe Coding",
                 "Lead generation"
             ],
-            "cover": "assets/projects/gemini_generated_image_9mdrea9mdrea9mdr.webp",
-            "cover_pos": "36% 27%",
+            "cover": "assets\/projects\/gemini_generated_image_9mdrea9mdrea9mdr-1.webp",
+            "cover_pos": "39% 36%",
             "cover_alt": "Animeret billede af en person der sidder foran en skærm ved et skrivebord",
             "file": "",
             "url": "https:\/\/checkoutchecker.ai\/",
-            "visible": true
+            "visible": true,
+            "bento": [
+                {
+                    "label": "Lynhurtig",
+                    "value": "2 - 3 minutter",
+                    "sub": "Tjek af checkout",
+                    "desc": "For en person tager det timer at tjekke en checkout, lave powerpoint og holde møde med kunden, med checkoutchecker.ai kan vi gøre det på 2 minutter, med AI.",
+                    "accent": "none"
+                },
+                {
+                    "label": "Messer",
+                    "value": "Fra Nethandelsprisen til D-congres",
+                    "sub": "Med på messer over hele Norden",
+                    "desc": "Kunder over hele Norden har efter stiftet bekendtskab med CheckoutChecker.ai\nOg basseret på deres feedback har vi konstant tunet den, så den giver mest mulig værdi for vores kunder.",
+                    "accent": "none"
+                },
+                {
+                    "label": "Vibe code",
+                    "value": "Bygget på 1 måned",
+                    "sub": "1 Mand og 1 AI Agent",
+                    "desc": "Hvad der havde taget en udviklingsafdeling måneder, lå klar efter 1 måneds effektivt arbejde med AI til at kode løsningen, efter jeg havde opsat de tekniske krav.",
+                    "accent": "none"
+                }
+            ]
         },
         {
             "id": "ai-support-specialist",
@@ -296,7 +390,7 @@
             "category": "ai",
             "tag": "AI",
             "period": "2025",
-            "desc": "Som AI Support Specialist hos MyBizz AI var jeg ansvarlig for at etablere og optimere virksomhedens supportfunktion, vidensbase og helpdesk. ",
+            "desc": "Som AI Support Specialist hos MyBizz AI var jeg ansvarlig for at etablere og optimere virksomhedens supportfunktion, vidensbase og helpdesk.",
             "intro": "Som AI Support Specialist hos MyBizz AI var jeg ansvarlig for at etablere og optimere virksomhedens supportfunktion, vidensbase og helpdesk. ",
             "body": "<h2>1. Den Kommercielle Vinkel<\/h2><p>I takt med at AI-løsninger vinder indpas, opstår der et kritisk behov for at gøre kompleks teknologi tilgængelig og værdiskabende for slutbrugeren. Som AI Support Specialist hos <strong>MyBizz AI<\/strong> (i dag kendt som <strong>GetBOB<\/strong>) var den primære udfordring at transformere en teknisk platform til en brugervenlig løsning. Virksomheden havde brug for at etablere en professionel supportstruktur og en effektiv onboarding-proces for at sikre kundetilfredshed, mindske churn og øge det forretningsmæssige udbytte for brugerne.<\/p><h2>2. Den Tekniske Vinkel<\/h2><p>Løsningen krævede en kombination af teknisk implementering og strategisk vidensdeling. Jeg fokuserede på at opbygge et fundament, der kunne skalere i takt med teknologien:<\/p><ul><li><strong>Etablering af Helpdesk og Vidensbase:<\/strong> Jeg opbyggede og vedligeholdt en omfattende vidensbase, der fungerede som det primære træningsgrundlag for virksomhedens egen AI-chatbot. Dette sikrede, at AI-modellen leverede præcise og kontekstuelle svar.<\/li><li><strong>Teknisk Fejlfinding og QA:<\/strong> Som bindeled mellem kunderne og udviklingsteamet arbejdede jeg med eskalering af komplekse fejltyper og løbende kvalitetssikring af platformens stabilitet.<\/li><li><strong>Udvikling af Træningsmateriale:<\/strong> Jeg udarbejdede detaljerede brugervejledninger og teknisk dokumentation, der gjorde det muligt for kunderne at udnytte AI-teknologierne optimalt gennem en struktureret læringsproces.<\/li><\/ul><h2>3. Broen (Forretningsværdien)<\/h2><p>Indsatsen resulterede i en markant professionalisering af virksomhedens kontaktflade og en optimeret brugerrejse. Ved at bygge bro mellem teknisk kompleksitet og brugervenlighed opnåede vi:<\/p><ul><li><strong>Skalerbar Support:<\/strong> Ved at træne AI-chatbotten med en struktureret vidensbase kunne vi tilbyde kunderne præcis hjælp 24\/7, hvilket frigav interne ressourcer og reducerede svartiden.<\/li><li><strong>Forbedret Onboarding:<\/strong> Gennem målrettet træning og vejledninger blev \"time-to-value\" forkortet for nye kunder, hvilket direkte påvirkede retention-raten positivt.<\/li><li><strong>Højere Produktkvalitet:<\/strong> Det tætte samarbejde med udviklingsteamet sikrede, at brugerfeedback blev omsat til tekniske forbedringer, hvilket skabte en mere stabil og konkurrencedygtig platform.<\/li><\/ul><p>Mit arbejde hos MyBizz AI var fundamentalt for at gøre avanceret AI-teknologi til et tilgængeligt og professionelt værktøj for erhvervslivet.<\/p>",
             "skills": [
@@ -310,7 +404,30 @@
             "cover_alt": "",
             "file": "",
             "url": "https:\/\/getbob.ai\/",
-            "visible": true
+            "visible": true,
+            "bento": [
+                {
+                    "label": "Tilgængelighed",
+                    "value": "24\/7",
+                    "sub": "Medarbejderen der aldrig sover",
+                    "desc": "Vi bygge en AI Chatbot og den videns bag, skrevet på en måde som både kunde og AI kunne forstå.\nSå vi sikrede at kunden nemt kunne få hjælp, uanset om de bruge vores Chatbot eller helpdesk, når det passer dem.",
+                    "accent": "none"
+                },
+                {
+                    "label": "Minimerer",
+                    "value": "Supporthenvendelser",
+                    "sub": "Minimerer antal af supporthenvendelser",
+                    "desc": "I en lille startup vendes hver en øre. Så at vi kunne spare en support medarbejder og bruge AI til at hjælpe vores nye brugere med at blive bekvemme ved vores system og sikre at vi bruger vores ressourcer bedst muligt.",
+                    "accent": "none"
+                },
+                {
+                    "label": "",
+                    "value": "",
+                    "sub": "",
+                    "desc": "",
+                    "accent": "none"
+                }
+            ]
         }
     ],
     "cv": {
@@ -391,17 +508,18 @@
                 "id": "coffee-shop-manager",
                 "role": "Coffee Shop Manager",
                 "company": "Espresso House",
-                "period": "2018 — 2019",
+                "period": "2018 ",
                 "desc": "Jeg var ansat som Coffee Shop Manager, for Espresso House på Roskilde Station og på RO's torv.Her var jeg den daglige leder, på gulvet, der havde ansvaret for at begge kaffebarer fungere optimalt og levere...",
                 "intro": "Jeg var ansat som Coffee Shop Manager, for Espresso House på Roskilde Station og på RO's torv.Her var jeg den daglige leder, på gulvet, der havde ansvaret for at begge kaffebarer fungere optimalt og levere...",
                 "body": "<p>Jeg var ansat som Coffee Shop Manager, for Espresso House på Roskilde Station og på RO's torv. Her var jeg den daglige leder, på gulvet, der havde ansvaret for at begge kaffebarer fungere optimalt og levere op til Espresso Houses vision, værdier og målsætninger. Dette var jeg i perioden fra 1\/4\/18 - 1\/12\/18. Som leder på gulvet, var jeg, i det daglige, med ude i marken og en del af driften. Her var jeg med til at tage imod vores gæster, brygge kaffen og sikre at vi altid leverede den verdens bedste kaffeoplevelse til verdens bedste gæster. En del af min opgaver, var at sikre at administration og lageret kører så optimalt som muligt. Igennem løbende kontrol, lagerstyrring og bestillingen fra leverandører, var jeg ansvarlig for at sikre at vi altid har alt i kaffebaren der skal til for at sikre at vi altid kan tilbyde vores kunder et godt udbud og derved den bedst mulige oplevelse. Jeg havde til ansvar at give økonomisk opdatering videre op i systemet, samt sikre at budgetter og målsætninger, såvel økonomisk og kundens oplevelse, bliver nået. Som Coffee Shop Manager var jeg ansvarlig for at sikre at vi altid havde en velfungerende kaffebar. En kaffebar der stod smukt og hvor gæsterne får en god oplevelse, En kaffebar hvor lageret er fyldt op, administrationen spiller, og det er sjovt og udviklende at komme på arbejde. En kaffebar med et fundament der sikre at vi altid kan tilbyde de bedste kaffeoplevelser for vores gæster. Vil du høre mere er du altid velkommen til at kontakte mig eller kom forbi til en kop kaffe.<\/p>",
                 "skills": [],
-                "cover": "assets\/projects\/coffee-shop-manager.jpg",
-                "cover_pos": "50% 50%",
+                "cover": "assets\/projects\/img_3205.jpg",
+                "cover_pos": "42% 50%",
                 "cover_alt": "",
                 "file": "",
                 "visible": true,
-                "category": "work"
+                "category": "work",
+                "tag": "Arbejde"
             },
             {
                 "id": "projektkoordinator",
@@ -420,18 +538,19 @@
             },
             {
                 "id": "kommunikationsassistent",
-                "title": "Kommunikationsassistent",
-                "period": "2016 — 2017",
-                "desc": "I 2015 var jeg ansat på Rust som kommunikationsassistent. Her var mine ansvarsområder: Assistere i forhold til Sociale medier Facebook Instagram Pleje og Udvikle Rust's indsats på nye sociale medier f.eks. Yelp Snapchat Sikre nye...",
-                "intro": "I 2015 var jeg ansat på Rust som kommunikationsassistent. Her var mine ansvarsområder: Assistere i forhold til Sociale medier Facebook Instagram Pleje og Udvikle Rust's indsats på nye sociale medier f.eks. Yelp Snapchat Sikre nye...",
-                "body": "I 2015 var jeg ansat på Rust som kommunikationsassistent.\r\nHer var mine ansvarsområder:\r\n\r\n ⬢ Assistere i forhold til Sociale medier\r\n\r\n Facebook\n\r\n ⬢ Instagram\n\r\n\r\n\r\n ⬢ Pleje og Udvikle Rust's indsats på nye sociale medier f.eks.\r\n\r\n Yelp\n\r\n ⬢ Snapchat\n\r\n\r\n\r\n ⬢ Sikre nye og vedligeholde samarbejdsaftaler\r\n\r\n Hoteller\n\r\n ⬢ Lokalområdet\n\r\n\r\n\r\n ⬢ Ad-hoc opgaver og assistere ved større produktioner\n\r\n\r\nI min rolle, som kommunikationsassistent, har jeg skulle arbejde,\r\nsom en fast del af kontorteamet, der arbejder i et hektisk miljø,\r\nen fast del af et alsidigt team\r\nog med fokus på at sikre Rusts ry som byens bedste klub.\r\n\r\nLyst til at hører mere om mit arbejde på Rust, se her.\r\nEller lyst til at høre om mig som person? Se her.",
-                "cover": "assets\/projects\/kommunikationsassistent.jpg",
-                "category": "work",
-                "skills": [],
-                "links": [],
                 "role": "Kommunikationsassistent",
                 "company": "Rust",
-                "tag": "Arbejde"
+                "period": "2015",
+                "desc": "I 2015 var jeg ansat på Rust som kommunikationsassistent. Her var mine ansvarsområder: Assistere i forhold til Sociale medier Facebook Instagram Pleje og Udvikle Rust's indsats på nye sociale medier f.eks. ",
+                "intro": "I 2015 var jeg ansat på Rust som kommunikationsassistent. Her var mine ansvarsområder: Assistere i forhold til Sociale medier Facebook Instagram Pleje og Udvikle Rust's indsats på nye sociale medier f.eks. Yelp Snapchat Sikre nye...",
+                "body": "<p>I 2015 var jeg ansat på Rust som kommunikationsassistent. Her var mine ansvarsområder: ⬢ Assistere i forhold til Sociale medier Facebook ⬢ Instagram ⬢ Pleje og Udvikle Rust's indsats på nye sociale medier f.eks. Yelp ⬢ Snapchat ⬢ Sikre nye og vedligeholde samarbejdsaftaler Hoteller ⬢ Lokalområdet ⬢ Ad-hoc opgaver og assistere ved større produktioner I min rolle, som kommunikationsassistent, har jeg skulle arbejde, som en fast del af kontorteamet, der arbejder i et hektisk miljø, en fast del af et alsidigt team og med fokus på at sikre Rusts ry som byens bedste klub. Lyst til at hører mere om mit arbejde på Rust, se her. Eller lyst til at høre om mig&nbsp;som person? Se her.<\/p>",
+                "skills": [],
+                "cover": "assets\/projects\/kommunikationsassistent.jpg",
+                "cover_pos": "50% 50%",
+                "cover_alt": "",
+                "file": "",
+                "visible": true,
+                "category": "work"
             },
             {
                 "id": "farum-kulturhus",
@@ -450,17 +569,19 @@
             },
             {
                 "id": "formand-for-lh",
-                "title": "Formand for LH",
-                "period": "2016 — 2017",
+                "role": "Formand",
+                "company": "LH",
+                "period": "2012 - 2014",
                 "desc": "I april 2012 blive jeg valgt som formand for Landssammenslutningen af Handelsskoleelever(LH), en interesseorganisation for 59.000 handelsskoleelever. Igennem min formands tid, indtil juli 2014, har jeg stået i spidsen for en frivillig drevet organisation, 4...",
                 "intro": "I april 2012 blive jeg valgt som formand for Landssammenslutningen af Handelsskoleelever(LH), en interesseorganisation for 59.000 handelsskoleelever. Igennem min formands tid, indtil juli 2014, har jeg stået i spidsen for en frivillig drevet organisation, 4...",
-                "body": "I april 2012 blive jeg valgt som formand for Landssammenslutningen af Handelsskoleelever(LH), en interesseorganisation for 59.000 handelsskoleelever.\r\n\r\nIgennem min formands tid, indtil juli 2014,\r\nhar jeg stået i spidsen for en frivillig drevet organisation, 4 ansatte og en bestyrelse af handelsskoleelever.\r\n\r\nSom formand har jeg stået i spidsen for organisation, både politisk og organisatorisk,\r\nigennem flere politiske kampagner, læs mere her.\r\nOg skulle repræsentere LH overfor politikere, minister, presse og samarbejdspartner.\r\n\r\nDesuden var jeg, som formand, i fronten for at sikre vision. og strategisk arbejde i organisationen, der stadig bruges den dag i dag, i LH.\r\n\r\nLøbende har jeg været en del af det underviser team, hvor jeg sammen med en række andre dygtige underviser, har planlagte og afholdt flere weekendkurser og kursusforløb, bl.a. i ledelses, præsentationsteknik o.lign.\r\n\r\nI kraft af mit erhverv har jeg været medlem af:\r\n\r\n ⬢ Rådet for Erhvervsrettet Uddannelser (REU)\n\r\n ⬢ Det faglige udvalg for oplevelsesindustrien\n\r\n ⬢ Elevservice\r\n\r\n Fællesorganisation for Ungdomsuddannelserne\n\r\n\r\n\r\n ⬢ Elev- og studenterbevægelsens bestyrelse\n\r\n\r\nVil du læse mere?\r\nkan du her, læse mere om mine mange projekter,\r\nLæs her om de mange LH projekter jeg har været en del af.\r\nEller læs mere om mig her.\r\n\r\n ",
-                "cover": "assets\/projects\/formand-for-lh.jpg",
-                "category": "volunteer",
+                "body": "<p>I april 2012 blive jeg valgt som formand for Landssammenslutningen af Handelsskoleelever(LH), en interesseorganisation for 59.000 handelsskoleelever. Igennem min formands tid, indtil juli 2014, har jeg stået i spidsen for en frivillig drevet organisation, 4 ansatte og en bestyrelse af handelsskoleelever. Som formand har jeg stået i spidsen for organisation, både politisk og organisatorisk, igennem flere politiske kampagner, læs mere her. Og skulle repræsentere LH overfor politikere, minister, presse og samarbejdspartner. Desuden var jeg, som formand, i fronten for at sikre vision. og strategisk arbejde i organisationen, der stadig bruges den dag i dag, i LH. Løbende har jeg været en del af det underviser team, hvor jeg sammen med en række andre dygtige underviser, har planlagte og afholdt flere weekendkurser og kursusforløb, bl.a. i ledelses, præsentationsteknik o.lign. I kraft af mit erhverv har jeg været medlem af: ⬢ Rådet for Erhvervsrettet Uddannelser (REU) ⬢ Det faglige udvalg for oplevelsesindustrien ⬢ Elevservice Fællesorganisation for Ungdomsuddannelserne ⬢ Elev- og studenterbevægelsens bestyrelse Vil du læse mere? kan du her, læse mere om mine mange projekter, Læs her om de mange LH projekter jeg har været en del af. Eller læs mere om mig her.&nbsp;<\/p>",
                 "skills": [],
-                "links": [],
-                "role": "Formand for LH",
-                "company": "Frivillig",
+                "cover": "assets\/projects\/formand-for-lh.jpg",
+                "cover_pos": "50% 50%",
+                "cover_alt": "",
+                "file": "",
+                "visible": true,
+                "category": "volunteer",
                 "tag": "Frivillig"
             },
             {
@@ -477,11 +598,11 @@
                 "cover_alt": "",
                 "file": "",
                 "visible": true,
-                "category": "work"
+                "category": "volunteer"
             },
             {
                 "id": "cfo",
-                "role": "––konomi og adm. ansvarlig",
+                "role": "Økonomi og adm. ansvarlig",
                 "company": "CoffeeCow ",
                 "period": "2011 — 2016",
                 "desc": "Siden 2011 har jeg haft den fornøjelse at være frivillig og ansat hos CoffeeCow AB, på Roskilde Festival. CoffeeCow sælger, mobilt, kaffe på Roskilde Festival på campingområdet, hvor vi kommer til de tørstige og trætte...",
@@ -496,63 +617,53 @@
                 "category": "work"
             },
             {
-                "id": "vi-er-ikke-mindre-vaerd",
-                "title": "Vi er ikke mindre værd!",
-                "period": "2016 — 2017",
-                "desc": "\"Vi er ikke mindre værd!\" var den opfølgende kampagne på \"Er du mindre værd?\" for at sikre en bedre fordeling af midlerne til de danske handelsskoler. Der led af flere års underfinansiering der skabte et...",
-                "intro": "\"Vi er ikke mindre værd!\" var den opfølgende kampagne på \"Er du mindre værd?\" for at sikre en bedre fordeling af midlerne til de danske handelsskoler. Der led af flere års underfinansiering der skabte et...",
-                "body": "\"Vi er ikke mindre værd!\" var den opfølgende kampagne på \"Er du mindre værd?\" for at sikre en bedre fordeling af midlerne til de danske handelsskoler.\r\nDer led af flere års underfinansiering der skabte et millionunderskud og skabte et dårligt undervisningsmiljø på landets handelsskoler.\r\n\r\n\"Vi er ikke mindre værd!\" havde til formål at skabe aktion, aktivitet og politisk lydhørhed, ved hjælp af at bruge det moment og mange nye aktive der var kommet, som resultat af \"Er du mindre værd?\" kampagnen.\r\n\r\nIgennem kampagnen lykkedes det at:\r\n\r\n ⬢ Skabe politisk opmærksomhed på taxametersystemet problematikker\n\r\n ⬢ Skabe overskrifter og flere artikler, samt flere tv og radio interviews.\n\r\n ⬢ Skabe en demonstration, flere aktion landet over samt elevstrejker\n\r\n ⬢ Få 1319 likes på Facebook siden \"Vi er ikke mindre værd\".\n\r\n\r\nVi du læse mere om min tid i LH? Klik her\r\nKlik her hvis du vil læse mit andet frivillige arbejde,\r\neller klik her hvis du vil kontakte mig.",
-                "cover": "assets\/projects\/vi-er-ikke-mindre-vaerd.jpg",
-                "category": "volunteer",
-                "skills": [],
-                "links": [],
-                "role": "Vi er ikke mindre værd!",
-                "company": "Frivillig",
-                "tag": "Frivillig"
-            },
-            {
                 "id": "underviser-lh",
-                "title": "Underviser LH",
+                "role": "Underviser ",
+                "company": "LH",
                 "period": "2016 — 2017",
                 "desc": "I 2014, stod Landssammenslutningen af Handelsskoleelever(LH) ud for den udfordring, at der skete en står udskiftning bland de mange gode underviser der havde undervist på LH's kurser. Som tidligere underviser, gæstelære i LO Nordsjælland, fik...",
                 "intro": "I 2014, stod Landssammenslutningen af Handelsskoleelever(LH) ud for den udfordring, at der skete en står udskiftning bland de mange gode underviser der havde undervist på LH's kurser. Som tidligere underviser, gæstelære i LO Nordsjælland, fik...",
-                "body": "I 2014, stod Landssammenslutningen af Handelsskoleelever(LH) ud for den udfordring, at der skete en står udskiftning bland de mange gode underviser der havde undervist på LH's kurser.\r\n\r\nSom tidligere underviser, gæstelære i LO Nordsjælland, fik jeg muligheden\r\nfor at lede organisationens underviser hold.\r\nSom leder for underviser holdet, stå jeg for både for at undervise og udvikle undervisningsmateriale, samt at oplære nye underviser.",
-                "cover": "assets\/projects\/underviser-lh.jpg",
-                "category": "volunteer",
+                "body": "<p>I 2014, stod Landssammenslutningen af Handelsskoleelever(LH) ud for den udfordring, at der skete en står udskiftning bland de mange gode underviser der havde undervist på LH's kurser. Som tidligere underviser, gæstelære i LO Nordsjælland, fik jeg muligheden for at lede organisationens underviser hold. Som leder for underviser holdet, stå jeg for både for at undervise og udvikle undervisningsmateriale, samt at oplære nye underviser.<\/p>",
                 "skills": [],
-                "links": [],
-                "role": "Underviser LH",
-                "company": "Frivillig",
-                "tag": "Frivillig"
+                "cover": "assets\/projects\/formand-lytter-1777745267.jpg",
+                "cover_pos": "50% 50%",
+                "cover_alt": "",
+                "file": "",
+                "visible": true,
+                "category": "work"
             },
             {
                 "id": "eventkoordinatorelev-fk",
-                "title": "Eventkoordinatorelev FK",
+                "role": "Eventkoordinatorelev FK",
+                "company": "Farum Kulturhus",
                 "period": "2016 — 2017",
                 "desc": "Jeg startede i Farum Kulturhus Januar 2014, først som praktikant, som eventkoordinator elev, derefter som praktikant og nu som studentermedarbejder, se her. Som praktikant og eventkoordinatorelev, fra 01\/14 - 07\/14, har jeg haft følgende arbejdsopgaver:...",
                 "intro": "Jeg startede i Farum Kulturhus Januar 2014, først som praktikant, som eventkoordinator elev, derefter som praktikant og nu som studentermedarbejder, se her. Som praktikant og eventkoordinatorelev, fra 01\/14 - 07\/14, har jeg haft følgende arbejdsopgaver:...",
-                "body": "Jeg startede i Farum Kulturhus Januar 2014,\r\nførst som praktikant, som eventkoordinator elev,\r\nderefter som praktikant og nu som studentermedarbejder, se her.\r\n\r\nSom praktikant og eventkoordinatorelev, fra 01\/14 - 07\/14,\r\nhar jeg haft følgende arbejdsopgaver:\r\n\r\n ⬢ Ansvarlig for Sociale medier - Såsom Facebook og Instagram.\r\n\r\n Uddannelse af medarbejder i Sociale medier\n\r\n\r\n\r\n ⬢ Projektassistent\n\r\n ⬢ Planlægning og afvikling af koncerter og  comedy shows\n\r\n ⬢ Ansvarlig for Caféen og udbud af den\n\r\n\r\nDu kan læse mere om min uddannelse, som eventkoordinator, her.\r\nLæse kulturhusets leder, Zanne Jahns, anbefaling af mig, her.\r\nEller klik her hvis du vil havde fat i mig!",
-                "cover": "assets\/projects\/eventkoordinatorelev-fk.jpeg",
-                "category": "work",
+                "body": "<p>Jeg startede i Farum Kulturhus Januar 2014, først som praktikant, som eventkoordinator elev, derefter som praktikant og nu som studentermedarbejder, se her. Som praktikant og eventkoordinatorelev, fra 01\/14 - 07\/14, har jeg haft følgende arbejdsopgaver: ⬢ Ansvarlig for Sociale medier - Såsom Facebook og Instagram. Uddannelse af medarbejder i Sociale medier ⬢ Projektassistent ⬢ Planlægning og afvikling af koncerter og&nbsp;comedy shows ⬢ Ansvarlig for Caféen og udbud af den Du kan læse mere om min uddannelse, som eventkoordinator, her. Læse kulturhusets leder, Zanne Jahns, anbefaling af mig, her. Eller klik her hvis du vil havde fat i mig!<\/p>",
                 "skills": [],
-                "links": [],
-                "role": "Eventkoordinatorelev FK",
-                "company": "Farum Kulturhus",
+                "cover": "assets\/projects\/amin.jpeg",
+                "cover_pos": "28% 50%",
+                "cover_alt": "",
+                "file": "",
+                "visible": true,
+                "category": "work",
                 "tag": "Arbejde"
             },
             {
                 "id": "jobpatrulje",
-                "title": "Jobpatrulje aktivist",
-                "period": "2016 — 2017",
-                "desc": "I årene fra 2008 til 2012 var jeg frivillig, i 2-3 uger i sommerferien, i jobpatruljen. Som jobpatrulje aktivist, var jeg med til at køre ud og interviewe ungarbejder, unge i alderen 13 - 18...",
-                "intro": "I årene fra 2008 til 2012 var jeg frivillig, i 2-3 uger i sommerferien, i jobpatruljen. Som jobpatrulje aktivist, var jeg med til at køre ud og interviewe ungarbejder, unge i alderen 13 - 18...",
-                "body": "I årene fra 2008 til 2012 var jeg frivillig, i 2-3 uger i sommerferien, i jobpatruljen.\r\n\r\nSom jobpatrulje aktivist, var jeg med til at køre ud og interviewe ungarbejder,\r\nunge i alderen 13 - 18 år, i hele region Hovedstaden, omkring deres arbejde,\r\nsamt at informerer dem, og deres arbejdsgiver, om deres rettigheder\r\nog den gældende lovgivning.\r\n\r\nJobpatruljen besøger årligt mere end 13.000 arbejdspladser hvert år\r\nog er med til at give fagbevægelsen et overblik over hvordan det står til,\r\ni forhold til ungarbejders arbejdsvilkår, samt sikre at flere ungarbejder kender til deres rettigheder, den gældende lovgivning og hvor de kan få hjælp.\r\n\r\nVil du læse mere om mit frivillige arbejde? Klik her.\r\nKlik her, hvis du vil læse mere om andre projekter jeg har været med i.\r\nEller vil du bare gerne have fat i mig? klik her.",
-                "cover": "assets\/projects\/jobpatrulje.jpeg",
-                "category": "volunteer",
-                "skills": [],
-                "links": [],
                 "role": "Jobpatrulje aktivist",
                 "company": "Frivillig",
+                "period": "2008 - 2012",
+                "desc": "I årene fra 2008 til 2012 var jeg frivillig, i 2-3 uger i sommerferien, i jobpatruljen. Som jobpatrulje aktivist, var jeg med til at køre ud og interviewe ungarbejder, unge i alderen 13 - 18...",
+                "intro": "I årene fra 2008 til 2012 var jeg frivillig, i 2-3 uger i sommerferien, i jobpatruljen. Som jobpatrulje aktivist, var jeg med til at køre ud og interviewe ungarbejder, unge i alderen 13 - 18...",
+                "body": "<p>I årene fra 2008 til 2012 var jeg frivillig, i 2-3 uger i sommerferien, i jobpatruljen. Som jobpatrulje aktivist, var jeg med til at køre ud og interviewe ungarbejder, unge i alderen 13 - 18 år, i hele region Hovedstaden, omkring deres arbejde, samt at informerer dem, og deres arbejdsgiver, om deres rettigheder og den gældende lovgivning. Jobpatruljen besøger årligt mere end 13.000 arbejdspladser hvert år og er med til at give fagbevægelsen et overblik over hvordan det står til, i forhold til ungarbejders arbejdsvilkår, samt sikre at flere ungarbejder kender til deres rettigheder, den gældende lovgivning og hvor de kan få hjælp. Vil du læse mere om mit frivillige arbejde? Klik her. Klik her, hvis du vil læse mere om andre projekter jeg har været med i. Eller vil du bare gerne have fat i mig? klik her.<\/p>",
+                "skills": [],
+                "cover": "assets\/projects\/jp2010-ashx_.jpeg",
+                "cover_pos": "50% 50%",
+                "cover_alt": "",
+                "file": "",
+                "visible": true,
+                "category": "volunteer",
                 "tag": "Frivillig"
             },
             {
@@ -587,44 +698,31 @@
             },
             {
                 "id": "landsudvalgsmedlem",
-                "title": "Landsudvalgsmedlem",
-                "period": "2016 — 2017",
-                "desc": "Efter at havde været aktiv i DSU og LO Nordsjælland, blev jeg aktiv i HK, hvor jeg i 2009 blev valgt som suppleant til HK Ungdoms Landsudvalg og i 2011 blev jeg valgt som landsudvalgsmedlem....",
-                "intro": "Efter at havde været aktiv i DSU og LO Nordsjælland, blev jeg aktiv i HK, hvor jeg i 2009 blev valgt som suppleant til HK Ungdoms Landsudvalg og i 2011 blev jeg valgt som landsudvalgsmedlem....",
-                "body": "Efter at havde været aktiv i DSU og LO Nordsjælland, blev jeg aktiv i HK, hvor jeg i 2009 blev valgt som suppleant til HK Ungdoms Landsudvalg\r\nog i 2011 blev jeg valgt som landsudvalgsmedlem.\r\n\r\nSom Landsudvalgsmedlem var jeg medlem af HK Ungdoms øverste organ,\r\nhvor jeg var med til at skabe kampagne som, \"Lars Løkke uægte barn\"\r\nog sætte visionen og strategien for HK ungdom.\r\nDerudover var jeg repræsentant for HK Hovedstaden\r\nog skulle sikre at afdelingen og dens medlemmer, blev hørt.\r\n\r\nEt led i at være Landsudvalgsmedlem, var at være med til at køre kampagnerne\r\nog planlægge og afvikle netværkskonference, undervise og afholde kurser\r\nog planlægge, afvikle og rekrutterer til HK Ungdoms kongres,\r\nmed unge deltager fra hele landet.\r\n\r\nHvis du vil læse mere om min tid i HK, klik her.\r\nKlik her for at læse mere om min frivillige erfaring.\r\nEller klik her for at få mine kontakt oplysninger.",
-                "cover": "assets\/projects\/landsudvalgsmedlem.jpg",
-                "category": "volunteer",
-                "skills": [],
-                "links": [],
                 "role": "Landsudvalgsmedlem",
                 "company": "DSU",
+                "period": "2009 - 2011",
+                "desc": "Efter at havde været aktiv i DSU og LO Nordsjælland, blev jeg aktiv i HK, hvor jeg i 2009 blev valgt som suppleant til HK Ungdoms Landsudvalg og i 2011 blev jeg valgt som landsudvalgsmedlem....",
+                "intro": "Efter at havde været aktiv i DSU og LO Nordsjælland, blev jeg aktiv i HK, hvor jeg i 2009 blev valgt som suppleant til HK Ungdoms Landsudvalg og i 2011 blev jeg valgt som landsudvalgsmedlem....",
+                "body": "<p>Efter at havde været aktiv i DSU og LO Nordsjælland, blev jeg aktiv i HK, hvor jeg i 2009 blev valgt som suppleant til HK Ungdoms Landsudvalg og i 2011 blev jeg valgt som landsudvalgsmedlem. Som Landsudvalgsmedlem var jeg medlem af HK Ungdoms øverste organ, hvor jeg var med til at skabe kampagne som, \"Lars Løkke uægte barn\" og sætte visionen og strategien for HK ungdom. Derudover var jeg repræsentant for HK Hovedstaden og skulle sikre at afdelingen og dens medlemmer, blev hørt. Et led i at være Landsudvalgsmedlem, var at være med til at køre kampagnerne og planlægge og afvikle netværkskonference, undervise og afholde kurser og planlægge, afvikle og rekrutterer til HK Ungdoms kongres, med unge deltager fra hele landet. Hvis du vil læse mere om min tid i HK, klik her. Klik her for at læse mere om min frivillige erfaring. Eller klik her for at få mine kontakt oplysninger.<\/p>",
+                "skills": [],
+                "cover": "assets\/projects\/hk.jpg",
+                "cover_pos": "50% 50%",
+                "cover_alt": "",
+                "file": "",
+                "visible": true,
+                "category": "volunteer",
                 "tag": "Frivillig"
             },
             {
                 "id": "gaestelaere",
-                "title": "Gæstelære",
-                "period": "2016 — 2017",
-                "desc": "I forbindelse med mit engagement i LO Nordsjælland, blev jeg i februar 2009 ansat som gæstelære. Som gæstelære arbejdede jeg med følgende: Undervisning af udskolingsbørn indenfor: Arbejdsmarkedet Det at være ungarbejder Fattigdom i Danmark Erhvervsuddannelserne...",
-                "intro": "I forbindelse med mit engagement i LO Nordsjælland, blev jeg i februar 2009 ansat som gæstelære. Som gæstelære arbejdede jeg med følgende: Undervisning af udskolingsbørn indenfor: Arbejdsmarkedet Det at være ungarbejder Fattigdom i Danmark Erhvervsuddannelserne...",
-                "body": "I forbindelse med mit engagement i LO Nordsjælland,\r\nblev jeg i februar 2009 ansat som gæstelære.\r\n\r\nSom gæstelære arbejdede jeg med følgende:\r\n\r\n ⬢ Undervisning af udskolingsbørn\r\n\r\n indenfor:\n\r\n ⬢ Arbejdsmarkedet\n\r\n ⬢ Det at være ungarbejder\n\r\n ⬢ Fattigdom i Danmark\n\r\n ⬢ Erhvervsuddannelserne\n\r\n\r\n\r\n ⬢ Udarbejdelse af undervisningsmateriale\n\r\n\r\nMin tid, som gæstelære, i LO Nordsjælland, gav mig blod på tanden i forhold til at undervise, holde foredrag osv.\r\nHvilket jeg har forsat med siden,\r\nbl.a. i Landssammenslutningen af Handelsskoleelever(LH).\r\n\r\nDu kan læse mere om min tid i LH her.\r\nLæse mere om mine andre ansættelser her.\r\nEller kontakt mig her.",
-                "cover": "assets\/projects\/gaestelaere.jpeg",
-                "category": "work",
-                "skills": [],
-                "links": [],
                 "role": "Gæstelære",
                 "company": "",
-                "tag": "Arbejde"
-            },
-            {
-                "id": "drop-uddannelse",
-                "role": "Drop uddannelse – brug tiden fornuftigt",
-                "company": "Frivillig",
-                "period": "2010",
-                "desc": "Som Næstformand for HK Ungdom Hovedstaden, var jeg med til at udvikle og afvikle. Kampagnen skabte debat, igennem dens skæve tilgang, om det store problem med praktikplads mangel i 2010. Formålet var at råbe politikkerne...",
-                "intro": "Som Næstformand for HK Ungdom Hovedstaden, var jeg med til at udvikle og afvikle. Kampagnen skabte debat, igennem dens skæve tilgang, om det store problem med praktikplads mangel i 2010. Formålet var at råbe politikkerne...",
-                "body": "<p>Som Næstformand for HK Ungdom Hovedstaden, var jeg med til at udvikle og afvikle. Kampagnen skabte debat, igennem dens skæve tilgang, om det store problem med praktikplads mangel i 2010. Formålet var at råbe politikkerne op om problemerne med de 8000 unge der ikke kunne finde en praktikplads. Kampagnen bestod af: ⬢ Outdoor kampagne Leveret af Dansk kommunikation ⬢ Bus og busstops reklamer ⬢ Bilboard ⬢ Youtube film Se her ⬢ 1. maj kampagne 20 aktivister ⬢ 6 aktiviteter Uddannelses tombola ⬢ T-shirt tryk ⬢ Dialog ambasadørrer Vil du læse mere om min tid i HK? klik her&nbsp;. Eller lyder jeg som manden for jer? kontakt mig her. [contact-form][contact-field label='Navn' type='name' required='1'\/][contact-field label='Email' type='email' required='1'\/][contact-field label='Nummer' type='text' required='1'\/][contact-field label='Kommentar' type='textarea' required='1'\/][\/contact-form]<\/p>",
+                "period": "2009 - 2011",
+                "desc": "I forbindelse med mit engagement i LO Nordsjælland, blev jeg i februar 2009 ansat som gæstelære. Som gæstelære arbejdede jeg med følgende: Undervisning af udskolingsbørn indenfor: Arbejdsmarkedet Det at være ungarbejder Fattigdom i Danmark Erhvervsuddannelserne...",
+                "intro": "I forbindelse med mit engagement i LO Nordsjælland, blev jeg i februar 2009 ansat som gæstelære. Som gæstelære arbejdede jeg med følgende: Undervisning af udskolingsbørn indenfor: Arbejdsmarkedet Det at være ungarbejder Fattigdom i Danmark Erhvervsuddannelserne...",
+                "body": "<p>I forbindelse med mit engagement i LO Nordsjælland, blev jeg i februar 2009 ansat som gæstelære. Som gæstelære arbejdede jeg med følgende: ⬢ Undervisning af udskolingsbørn indenfor: ⬢ Arbejdsmarkedet ⬢ Det at være ungarbejder ⬢ Fattigdom i Danmark ⬢ Erhvervsuddannelserne ⬢ Udarbejdelse af undervisningsmateriale Min tid, som gæstelære, i LO Nordsjælland, gav mig blod på tanden i forhold til at undervise, holde foredrag osv. Hvilket jeg har forsat med siden, bl.a. i Landssammenslutningen af Handelsskoleelever(LH). Du kan læse mere om min tid i LH her. Læse mere om mine andre ansættelser her. Eller kontakt mig her.<\/p>",
                 "skills": [],
-                "cover": "assets\/projects\/drop-uddannelse.jpg",
+                "cover": "assets\/projects\/hk-n-stformand.jpg",
                 "cover_pos": "50% 50%",
                 "cover_alt": "",
                 "file": "",
@@ -644,21 +742,6 @@
                 "links": [],
                 "role": "Næstformand",
                 "company": "Frivillig",
-                "tag": "Frivillig"
-            },
-            {
-                "id": "lars-loekkes-uaegte-boern",
-                "title": "Lars Løkkes uægte børn",
-                "period": "2016 — 2017",
-                "desc": "I forbindelse med min position som landsudvalgsmedlem, i HK ungdom, var jeg med til at udvikle og eksekverer kampagnen, Lars Løkkes uægte børn. Kampagnen byggede på at Lars Løkke, på talerstolen i folketinget, udtalte at...",
-                "intro": "I forbindelse med min position som landsudvalgsmedlem, i HK ungdom, var jeg med til at udvikle og eksekverer kampagnen, Lars Løkkes uægte børn. Kampagnen byggede på at Lars Løkke, på talerstolen i folketinget, udtalte at...",
-                "body": "I forbindelse med min position som landsudvalgsmedlem, i HK ungdom, var jeg med til at udvikle og eksekverer kampagnen, Lars Løkkes uægte børn.\r\n\r\nKampagnen byggede på at Lars Løkke, på talerstolen i folketinget, udtalte at ingen af hans børn ville komme til at opleve ungdomsarbejdsløshed.\r\nSom modsvar til Lars Løkkes udtalelse og får at få opmærksomhed på den stor ungdomsarbejdsløshed og praktikplads mangel,\r\ngik vi på gaden med som \"Lars Løkkes uægte børn\".\r\n\r\nUdover flere gadeaktioner var det især de socialmedier der blev brugt hvor folk kunne omdanne deres profilbillede, til et billede af dem med Lars Løkke, se evt. billede øverst, sammen med en opfordring til Lars Løkke om at blive ens far,\r\nså man aldrig skal opleve arbejdsløshed.",
-                "cover": "assets\/projects\/lars-loekkes-uaegte-boern.jpg",
-                "category": "volunteer",
-                "skills": [],
-                "links": [],
-                "role": "Lars Løkkes uægte børn",
-                "company": "DSU",
                 "tag": "Frivillig"
             },
             {
@@ -704,36 +787,6 @@
                 "links": [],
                 "role": "Redaktør",
                 "company": "DSU",
-                "tag": "Frivillig"
-            },
-            {
-                "id": "sekretariatsfrivillig",
-                "title": "Sekretariatsfrivillig",
-                "period": "2016 — 2017",
-                "desc": "Efter folkeskolen, blev jeg valgt til Danske Skoleelevers bestyrelse. Og valgte at bruge skoleåret 07-08 som sekretariatsfrivillig. Som sekretariatsfrivillig var jeg en af 4 frivillige, der sad fuldtid og arbejdede i forhold til styrke organisationen,...",
-                "intro": "Efter folkeskolen, blev jeg valgt til Danske Skoleelevers bestyrelse. Og valgte at bruge skoleåret 07-08 som sekretariatsfrivillig. Som sekretariatsfrivillig var jeg en af 4 frivillige, der sad fuldtid og arbejdede i forhold til styrke organisationen,...",
-                "body": "Efter folkeskolen, blev jeg valgt til Danske Skoleelevers bestyrelse.\r\nOg valgte at bruge skoleåret 07-08 som sekretariatsfrivillig.\r\n\r\nSom sekretariatsfrivillig var jeg en af 4 frivillige,\r\nder sad fuldtid og arbejdede i forhold til styrke organisationen,\r\npolitisk og organisatorisk.\r\n\r\nI 6 måneder, var jeg sekretariatsfrivillig i –&rhus\r\nog stod for at styrke elevrådene i Jylland, samt at rekrutterer til DSE's stormøder.\r\n\r\nSom sekretariatsfrivillig havde jeg følgende ansvarsområder:\r\n\r\n ⬢ Opdatering af hjemmeside\r\n\r\n samt oplæring af lokale aktive i hjemmesiden\n\r\n\r\n\r\n ⬢ Projektassistent på DSE's stormøde\r\n\r\n havde ca. 350 deltager\n\r\n\r\n\r\n ⬢ Rekruttering og elevrådstræning i Jylland\n\r\n ⬢ Organisatorisk valgkamps arbejde\r\n\r\n Udvikling af materiale\n\r\n ⬢ Aktions planlægning og afvikling\n\r\n\r\n\r\n ⬢ Motivation af frivillig\n\r\n\r\nVil du læse mere om mit frivillige arbejde? Klik her.\r\nEller skal du bare have fat i mig? Klik her.",
-                "cover": "assets\/projects\/sekretariatsfrivillig.jpg",
-                "category": "volunteer",
-                "skills": [],
-                "links": [],
-                "role": "Sekretariatsfrivillig",
-                "company": "Frivillig",
-                "tag": "Frivillig"
-            },
-            {
-                "id": "furesoe-faelles-elevraad",
-                "title": "Furesø Fælles Elevråd",
-                "period": "2016 — 2017",
-                "desc": "I 2006, var jeg som formand for elevrådet, på Stavnsholtskolen, med til at danne Farum Fælles Elevråd, der kort efter, ved kommunesammenlægningen i 2007, blev til Furesø Fælles Elevråd. Som en, af 3 hovedfolk, bag...",
-                "intro": "I 2006, var jeg som formand for elevrådet, på Stavnsholtskolen, med til at danne Farum Fælles Elevråd, der kort efter, ved kommunesammenlægningen i 2007, blev til Furesø Fælles Elevråd. Som en, af 3 hovedfolk, bag...",
-                "body": "I 2006, var jeg som formand for elevrådet, på Stavnsholtskolen,\r\nmed til at danne Farum Fælles Elevråd, der kort efter, ved kommunesammenlægningen i 2007, blev til Furesø Fælles Elevråd.\r\n\r\nSom en, af 3 hovedfolk, bag Furesø Fælles Elevråd, har jeg været med til at bygge en organisation op, der i dag er en stabil organisation i Furesø Kommune,\r\nog rekrutterer unge, medelever, til organisationen.\r\n\r\nFuresø Fælles Elevråd arbejdede, i de første år, på at sikre bedre vilkår for elever i den nye Furesø kommune, hvor især nedskæringer prægede.\r\nDet lykkes Furesø Fælles Elevråd, igennem demonstrationer, strejker og aktioner, at sikre at besparelser på 10 millioner i budget år 2008 blev taget af bordet.\r\n\r\nI Furesø Fælles Elevråd har jeg fået følgende erfaringer:\r\n\r\n ⬢ Det at arbejde med en ny\/ung og frivillig drevet organisation\n\r\n ⬢ Arbejde i en græsrådsorganisation\n\r\n ⬢ Arrangerer demonstrationer og strejker\n\r\n ⬢ Rekruttering til en politisk organisation\n\r\n ⬢ Pressekontakt og pressearbejde generelt\n\r\n\r\nVil du læse mere om mit frivillig arbejde? se her!\r\nEller vil du bare gerne kontakte mig? se her!",
-                "cover": "assets\/projects\/furesoe-faelles-elevraad.jpg",
-                "category": "volunteer",
-                "skills": [],
-                "links": [],
-                "role": "Furesø Fælles Elevråd",
-                "company": "Farum Kulturhus",
                 "tag": "Frivillig"
             }
         ],
@@ -854,7 +907,7 @@
                     "Anbefaling"
                 ],
                 "links": [],
-                "photo": "assets/photo/ronnie.webp",
+                "photo": "assets\/photo\/ronnie.jpg",
                 "photo_pos": "50% 50%",
                 "photo_alt": "Ronnie Nygaard",
                 "cover": "assets\/cover\/skaermbillede-2023-08-21-kl-13-03-07-e1692616230687.png",
@@ -871,7 +924,7 @@
                 "intro": "Foremost – he was our CFO on the festival – setting up routines for the economic procedures and keeping track of the cash flow each day. . Also – Zacharias contributed to the accounting and sum up of the festival.",
                 "text": "Her kan du læse mine anbefalinger fra Johannes Mårlöv,\ndirektør og stifter af CoffeeCow AB.\nDen seneste for mit arbejde som økonomi- og administrativ ansvarlig\npå Roskilde Festival 2015.\nDen anden, for mit frivillige arbejde som manager i 2013.\n\nDu kan downloade den seneste her,\nog den fra 2013 her.\n\n\nStockholm 2016.04.04\n\n\nZacharias Polonius has worked with CoffeeCow AB during Roskilde Festival 27th June til 5th of July 2015 .\n\nHe also played a great part in the preparations during the spring 2015– –  setting up a project plan, ordering necessive equipment from distributors – –  preparing a workshop for teamleaders etc.\n\nAnd foremost – –  he was our CFO on the festival – –  setting up routines for the economic procedures and keeping track of the cash flow each day. . Also – –  Zacharias contributed to the accounting and sum up of the festival.\nCoffeeCows primary task on the festival was to serve coffee to the festival guest through our mobile equipment. In this way we carry the coffee on our backs to serve at the camping and the concert areas. We have high standars on service and our mission is to make a better day for those we meet.\n\n2015 we made our best result ever. The part Zacharias Polonius played in this is huge – –  since the planning and preparations is key to success. During the festival he worked every day to keep good control of the business.\n\nI give him my best recommendations.\n\nJohannes Mårlöv CEO\n\nCoffeeCow AB\nNordenskiöldsgatan 87\n11521 Stockholm",
                 "skills": [],
-                "photo": "assets/photo/johannes-1777061172.webp",
+                "photo": "assets\/photo\/johannes-1777061172.jpg",
                 "photo_alt": "",
                 "cover": "",
                 "cover_alt": "",
@@ -886,7 +939,7 @@
                 "intro": "Som eventkoordinatorelev har Zacharias gentagne gange, vist at han er dygtig, til således at skabe, planlægge, udfører og evaluerer projekter og events, såvel som at skabe en konstruktiv og kreativ proces.\n",
                 "text": "Her kan du læse min anbefaling fra Zanne Jahn, leder af Farum Kulturhus.\nSom du også kan downloade her\n\n14. nov. 2014\nZanne E. Jahn\nLeder, Farum Kulturhus\nStavnsholtvej 3\n3520 Farum\n\nAnbefaling ang. Zacharias Polonius.\nZacharias, har siden januar måned været tilknyttet Farum Kulturhus,( først som praktikant og siden som eventkoordinatorelev.\n\nZacharias har igennem sin tid i Farum Kulturhus, udvist stor omhyggelighed, kreativitet, gode samarbejdsevner, overblik og stærke evner i at tilpasse sig og løse opgaver, både inden og udenfor hans kompetence og vante områder.\n\nSom en del af hans ansættelse, har Zacharias, være ansvarlig for Farum Kulturhus–\" sociale medie profil, hvor han har skabt Kulturhusets profil på de sociale medier, blandt andet, Facebook og Instagram. Zacharias har uddannet det øvrige personale, samt andre interessenter, i brugen af de sociale medier og markedsføring af Kulturhuset igennem disse.\n\nSom eventkoordinatorelev har Zacharias gentagne gange, vist at han er dygtig, til således at skabe, planlægge, udfører og evaluerer projekter og events, såvel som at skabe en konstruktiv og kreativ proces.\n\nJeg giver hermed mine varmeste anbefalinger til Zacharias Polonius.\nVenlig hilsen\nZanne E. Jahn\n\nLeder af Farum Kulturhus\n",
                 "skills": [],
-                "photo": "assets/photo/zanne.webp",
+                "photo": "assets\/photo\/zanne.jpg",
                 "photo_alt": "",
                 "cover": "",
                 "cover_alt": "",
@@ -901,9 +954,9 @@
                 "intro": "Zacharias Polonius was as a manager of the base in charge of a team of 25 people - brewers and sellers. Organizing the basecamp – keeping overview of the staff, equipment and supplies. Solving problems before the occur. Setting an example with good spririt with a motivating approach.\n",
                 "text": "Her kan du læse min anbefaling fra mit arbejde som manager, for CoffeeCow,\npå Roskilde Festival 2013.\n\nDu kan læse mere om mit arbejde på Roskilde Festival, her.\n\nDu kan downloade anbefalingen her.\neller læse min anbefaling fra 2015, her.\n\n\n\n\nStockholm 2013-09-05\n\nRecommendation letter\nZacharias Polonius has been working with CoffeeCow AB as manager on Roskilde festival in Denmark 30 June- 7 July 2013.\n\nCoffeeCows task on Roskilde is to sell coffee to the camping site and to the festival area during the concerts.\nThe fashion in which we do this is to carry coffee on our backs – –  in order to come close to the audience and provide excellent coffee and service.\n\nZacharias Polonius was as a manager of the base in charge of a team of 25 people - brewers and sellers. Organizing the basecamp – –  keeping overview of the staff, equipment and supplies. Solving problems before the occur. Setting an example with good spririt with a motivating approach.\n\nThis work requires stamina, social skills, as well as planning, speed and problem solving skills.\n\nZacharias Polonius performed very well and kept the business running smoothly. I can warmly recommend Zacharias Polonius to other employers.\n\nJohannes Mårlöv\n\nCEO\nCoffeeCow AB\nNordenskiöldsgatan 87\n115 21 Stockholm",
                 "skills": [],
-                "photo": "assets/photo/johannes-1777061594.webp",
+                "photo": "assets\/photo\/johannes-1777061594.jpg",
                 "photo_alt": "",
-                "cover": "assets/photo/johannes-1777061594.webp",
+                "cover": "",
                 "cover_alt": "",
                 "file": "",
                 "visible": true,
@@ -916,7 +969,7 @@
                 "intro": "Zacharias har igennem sit arbejde, for LH, vist stort overskud, fleksibilitet, kreativitet & særdeles gode lederegenskaber.",
                 "text": "Her kan du læse min anbefaling, af Trine Simmel, for min tid, som formand,\ni Landssammenslutningen af Handelsskoleelever.\nDu kan også downloade anbefalingen, som pdf her!\n\n20. November 2014\nTrine Simmel\nFormand\nLandssammenslutningen Af Handelsskoleelever\nVibevej 31, 2.\n2400 København NV\n\nAnbefaling vedr. Zacharias Polonius\nZacharias har i 2 år været valgt som Formand og 1\/2 år som talssperson, (for Landssammenslutningen af Handelsskoleelever.\n\nZacharias har igennem sit arbejde, for LH, vist stort overskud, fleksibilitet, kreativitet & særdeles gode lederegenskaber.\n\nZacharias har stået for udvikling, koordineringen, ledelse & afviklingen af vores 4 årlige nationale kurser, skolestartskampagner, konferencer & politiske kampagner. Samt bestyrelsesarbejde og koordinering af sekretariat og bestyrelsen. Hvilket han har gjort med stort engagement & gejst, som har givet vellykket arrangementer, motiverede medarbejder,  & en tilfreds bestyrelse.\n\nSom formand & talsperson har han repræsenteret organisationen udadtil, i forhold til samarbejdspartner, politikere, medlemmer og presse, (hvilket han har præsteret at gøre ovenud tilfredsstillende.\n\nZacharias har i kraft af sin post som formand, været en del af LH–\"s underviser hold, hvormed han har været med til at udvikle kurser og afholde kurser for medlemmer og bestyrelsen i LH.\n\nIgennem sit arbejde, har Zacharias vist en stor forståelse for hvordan man arbejde med frivillige, ledelse af medarbejde & arbejde med en organisation der hele tiden er i bevægelse.\nSom Formand har han, været den bærende kraft for at arbejde med at styrke LH, som organisation, rekruttering samt medlemsfremgang,\nZacharias er en udadvendt person, der skaber gejst, har været en fantastisk sparringspartner & en værdifuld aktiv for LH.\n\nSom jeg kun giver mine varmeste anbefaling.\n\nVenlig Hilsen\n\nFormand\nTrine Simmel",
                 "skills": [],
-                "photo": "assets/photo/trine.webp",
+                "photo": "assets\/photo\/trine.jpg",
                 "photo_alt": "",
                 "cover": "",
                 "cover_alt": "",
@@ -953,10 +1006,35 @@
             "title": "Fra udgift til vækst: Gør returhåndtering til din største konkurrencefordel i 2026",
             "date": "Januar 2026",
             "excerpt": "Returvarer i januar betragtes ofte som et nødvendigt onde og en direkte omkostning. Men med en strategisk tilgang og de rette værktøjer (som Reversio eller Returnflows) kan du transformere returprocessen fra et dræn på ressourcerne til en motor for Customer Lifetime Value (CLV). Ved at fjerne friktion og automatisere flowet reducerer du pres på kundeservice, optimerer lagerdriften og sikrer, at kunden vælger dig igen næste gang.",
-            "cover": "assets/general/1767857566131.webp",
+            "cover": "assets\/general\/1767857566131.jpg",
             "cover_pos": "50% 50%",
             "cover_alt": "",
+            "meta_desc": "Lær hvordan du transformerer returvarer fra en logistisk byrde til en strategisk vækstmotor. Optimer dit flow, øg loyaliteten og beskyt din omsætning i 2026.",
             "body": "<h2>Returvarer: Januars største trussel eller din genvej til loyalitet?<\/h2><p>Januar er traditionelt set måneden, hvor de danske webshops mærker \"tømmermændene\" efter et massivt julesalg. Pakkerne strømmer retur, og for mange virksomheder føles det som en ren erosion af den indtjening, man lige har kæmpet for at hente hjem.<\/p><p>Men som Senior Content Strateg og ekspert i e-commerce, ser jeg et helt andet billede. I 2026 er returoplevelsen ikke bare logistik; det er en central del af din brand-oplevelse og din overordnede konverteringsoptimering (CRO).<\/p><p>Spørgsmålet er ikke, <em>om<\/em> du får returvarer, men hvordan du håndterer dem. Ser du det som en udgift, eller ser du det som din næste store vækststrategi?<\/p><h2>Den skjulte pris ved friktion: 28% af dine kunder kigger med<\/h2><p>Data lyver sjældent. Vi ved, at op mod <strong>28% af online shoppere falder fra i købsrejsen<\/strong>, hvis de ikke kan finde eller gennemskue returvilkårene. Det er næsten hver fjerde kunde, du mister, før ordren overhovedet er lagt, blot fordi din returpolitik skaber usikkerhed.<\/p><p>For en C-level leder bør dette tal vække opsigt. Det handler ikke kun om de varer, der kommer tilbage; det handler om den omsætning, der aldrig lander i kurven, fordi barrieren for at returnere føles for høj.<\/p><p>En dårlig returoplevelse efter købet er desuden den hurtigste vej til at ødelægge din <em>Retention Rate<\/em>. Hvis kunden skal kæmpe med print-selv labels, mangelfuld kommunikation og lange ventetider på tilbagebetaling, er sandsynligheden for et genkøb minimal. Du har brugt marketingkroner på at vinde kunden – hvorfor miste dem på en dårlig afslutning?<\/p><h2>Strategisk optimering: Fra manuel håndtering til automatiseret overskud<\/h2><p>Når vi taler om at \"top-tune\" processen, handler det om to ting: <strong>Kundeoplevelse<\/strong> og <strong>Operationel Effektivitet<\/strong>.<\/p><p>Mange mindre shops starter med basisløsninger, som f.eks. de gratis værktøjer fra Bring. Det er et fremragende udgangspunkt for at komme i gang. Men når din webshop skalerer, bliver de manuelle processer i kundeservice og på lageret en flaskehals, der koster dyrt på bundlinjen.<\/p><h3>Investering i specialiserede retursystemer<\/h3><p>Værktøjer som <strong>Reversio<\/strong> eller <strong>Returnflows<\/strong> er ikke blot en teknisk opgradering; det er en strategisk investering i din drift. Her er hvorfor:<\/p><ul><li><strong>Beskyttelse af omsætningen:<\/strong> Ved at integrere smarte returportaler kan du tilbyde kunden nemme ombytninger eller \"store credit\" i stedet for en refundering. Det holder pengene i din forretning.<\/li><li><strong>Reduktion af kundeservice-tickets:<\/strong> En automatiseret returportal lader kunden klare sig selv 24\/7. Det fjerner de utallige \"Hvor er min tilbagebetaling?\"-mails, der dræner dit supportteam.<\/li><li><strong>Lageroptimering:<\/strong> Når lageret ved præcis, hvad der er på vej retur, før pakken lander, kan de planlægge bemanding og hurtigere få varerne gjort salgsklare igen. Det øger din lageromsætningshastighed.<\/li><\/ul><h2>Strategiske takeaways for 2026<\/h2><p>For at vinde markedet i 2026 skal du fjerne enhver form for friktion – også når varen skal retur. Her er de tre områder, du som leder bør fokusere på nu:<\/p><ol><li><strong>Gør returpolitikken til en USP:<\/strong> Placer dine returvilkår synligt. Vis kunden, at det er risikofrit at handle hos dig. Det øger din konverteringsrate med det samme.<\/li><li><strong>Automatiser eller dø:<\/strong> Manuelle returprocesser er for dyre i længden. Evaluer om din nuværende løsning understøtter jeres vækstmål, eller om I spilder timer på lageret og i supporten.<\/li><li><strong>Mål på din 'Return-to-Loyalty' rate:<\/strong> Begynd at kigge på, hvor mange kunder der returnerer en vare, men som kommer tilbage og køber igen inden for 90 dage. Det er her, den sande værdi af en god proces ligger.<\/li><\/ol><p><strong>Konklusion:<\/strong> Januar behøver ikke være en hovedpine. Ved at investere i et lækkert flow og de rette systemer, skaber du ambassadører, som intet marketingbudget kan købe. Gør 2026 til året, hvor du mestrer \"det sidste klik\" i kunderejsen – også når det klik betyder, at varen skal retur.<\/p><p><em>Er du klar til at fjerne friktionen i din webshop? Lad os tage en dialog om, hvordan dit retur-flow kan gå fra at være en omkostningspost til en loyalitetsmaskine.<\/em><\/p>",
+            "visible": true
+        },
+        {
+            "id": "den-usynlige-barriere-i-din-checkout",
+            "title": "Kit Kat eller Kvikk Lunsj? Nøglen til at vinde det norske marked.",
+            "date": "02 maj. 2026",
+            "excerpt": "I det nordiske e-commerce landskab er \"one size fits all\" en kostbar fejlstrategi. Selvom tekniske setups ofte strømlines på tværs af landegrænser, er forbrugerpsykologien dybt lokal. I Norge er brand-loyaliteten til Posten så stærk, at fraværet af deres logo i checkout-flowet skaber direkte friktion og øget cart abandonment. For ledelsen betyder det, at valget af fragtbrand ikke blot er en logistikbeslutning, men en strategisk CRO-beslutning, der direkte påvirker din ROI og Customer Acquisition Cost (CAC).",
+            "cover": "assets\/general\/kvivk-lunsj.webp",
+            "cover_pos": "26% 79%",
+            "cover_alt": "",
+            "meta_desc": "Optimér din norske checkout: Lær hvorfor brand-genkendelse og lokale fragthelte som Posten er afgørende for din konverteringsrate og bundlinje i Norge.",
+            "body": "<h2>Den usynlige barriere i din checkout<\/h2><p>Når en dansk webshop ekspanderer til Norge, er fokus ofte på oversættelse af produkttekster, valutakonvertering og Google Ads-budgetter.<\/p><p>Men i det mest kritiske øjeblik, hvor kunden skal overdrage sine penge og have tillid til, at varen når frem, opstår der ofte en usynlig barriere.<\/p><h3>Vi kan kalde det \"Kvikk Lunsj-effekten\"<\/h3><p>I Norge er Kvikk Lunsj ikke bare en chokolade, det er en national institution.<\/p><p>Kit Kat er den globale markedsleder, men i den Norge er Kit Kat en fremmed. Det samme gør sig gældende i logistikken.<\/p><p>Selvom Bring er en nordisk sværvægter inden for logistikløsninger, ejer <strong>Posten<\/strong> den emotionelle infrastruktur i de norske hjem.<\/p><h2>Hvorfor \"Lokale Helte\" slår globale brands på bundlinjen<\/h2><p>For en Dansk webshopejer kan det virke trivielt, hvilket logo der figurerer under fragtmulighederne, så længe pakken bliver leveret til tiden.<\/p><p>Men set gennem linsen af <strong>Conversion Rate Optimization (CRO)<\/strong>, er logoet fundamentalt.<\/p><h3>1. Eliminering af friktion<\/h3><p>Hver gang en kunde skal tage stilling til en ukendt faktor i checkout flowet, øges den kognitive belastning. Ser en nordmand et Posten-logo, aktiveres en livslang historik af tryghed og pålidelighed.<\/p><p>Ser de et brand, de ikke har en personlig relation til, opstår der tvivl:<\/p><ul><li><em>“Kender de min adresse? <\/em><\/li><li><em>Kan de finde frem i sneen? <\/em><\/li><li><em>Hvor skal jeg hente min pakke?”<\/em><\/li><\/ul><p>Den mindste tvivl fører til kurvforladelse.<\/p><h3>2. Brand Equity som sikkerhedsnet<\/h3><p>Posten i Norge har en \"Brand Equity\", som få andre logistikvirksomheder kan matche. Ved at eksponere deres logo låner din webshop deres troværdighed. For en mellemstor dansk webshop, der forsøger at vinde fodfæste i Oslo eller Bergen, er denne \"Borrowed Trust\" den hurtigste vej til at reducere din afvisningsprocent.<\/p><h3>3. Logistik som en del af kundeoplevelsen<\/h3><p>Vi ser ofte, at virksomheder betragter logistik som en ren omkostning (cost center).<\/p><p>Men i e-commerce er logistikken det eneste fysiske berøringspunkt, du har med kunden. Ved at vælge den fragtleverandør, kunden foretrækker, optimerer du ikke bare leveringen, du optimerer den samlede kundeoplevelse og dermed din <strong>Customer Lifetime Value (CLV)<\/strong>.<\/p><blockquote>Det handler ikke om, hvem der er billigst at sende med, men hvem der har den højeste konverteringsrate i din checkout. En billigere fragtaftale med en ukendt aktør kan hurtigt blive den dyreste løsning, hvis den koster 5% i tabt konvertering.<\/blockquote><h2>Posten vs. Bring: En strategisk nuance<\/h2><p>Som Technical Account Manager ser jeg ofte denne forvirring. Bring og Posten er teknisk set det samme selskab, men deres markedsføringsmæssige DNA er vidt forskelligt i Norge:<\/p><ul><li><strong>Bring:<\/strong> Er den professionelle, nordiske logistikpartner.<\/li><li>Eksperter i B2B og komplekse løsninger.<\/li><li><strong>Posten:<\/strong> Er folkets brand. Det er dem, der har leveret post og pakker i generationer.<\/li><\/ul><p><br><\/p><p>Når vi taler B2C e-commerce, er Posten-logoet det \"lokale sprog\", du skal tale. At insistere på kun at vise Bring-logoet i Norge svarer til at prøve at sælge Kit Kat på toppen af en norsk gletsjer:<\/p><p>Det kan lade sig gøre, men du kæmper mod strømmen.<\/p><h2>Strategiske Takeaways<\/h2><p>Hvis du vil styrke din position på det norske marked, bør din Content- og E-commerce-strategi indeholde følgende tre punkter:<\/p><ul><li><strong>Tjek din checkout:<\/strong> Gennemgå dine fragtmuligheder på tværs af markeder. Viser du de \"lokale helte\", eller bruger du en standardiseret nordisk model?<\/li><li><strong>A\/B test dine fragtlogoer:<\/strong> Lad data tale. Test om udskiftningen af et generisk logistiklogo med et nationalt anerkendt brand (som Posten i Norge) flytter din konverteringsrate.<\/li><li><strong>Prioritér genkendelighed over ensartethed:<\/strong> Det kan være fristende for IT-afdelingen at have et ensartet setup, men den strategiske gevinst ved lokal tilpasning overstiger langt de tekniske besparelser ved standardisering.<\/li><\/ul><p><br><\/p><p><strong>Konklusionen er klar:<\/strong><\/p><p>Vil du vinde de norske forbrugere, skal du fjerne al tvivl i købsøjeblikket.<\/p><p>Gør som nordmændene gør, når de skal på fjeldet: Vælg det, de kender og stoler på.<\/p><p>Vis Posten-logoet, og se det afspejlet direkte på din bundlinje.<\/p><p><br><\/p><p><strong>Har du styr på de lokale præferencer i dine nordiske markeder, eller gætter du dig frem til din shipping-strategi?<\/strong><\/p>",
+            "visible": true
+        },
+        {
+            "id": "derfor-draeber-1-5-hverdage-din-konvertering-og-hvordan-eta-skaber-vaekst",
+            "title": "Derfor dræber ”1-5 Hverdage” din konvertering.",
+            "date": "05 maj 2026",
+            "excerpt": "I et konkurrencepræget e-commerce-marked er forskellen på succes og fiasko ofte gemt i de mindste detaljer i dit checkout-flow. Mens mange fokuserer på trafik og annonceforbrug, tabes omsætningen på målstregen på grund af \"tøven\". Ved at udskifte vage estimater som \"1-5 hverdage\" med en præcis forventet leveringsdato (ETA), fjerner du den mentale hovedregning hos kunden, reducerer cart abandonment og positionerer dit brand som en troværdig webshop.",
+            "cover": "assets\/general\/1-5-dages-leverings.jpg",
+            "cover_pos": "50% 50%",
+            "cover_alt": "",
+            "meta_desc": "Hvordan specifikke leveringsdatoer (ETA) fjerner købsfriktion, øger konverteringsraten og styrker loyaliteten hos moderne e-commerce-kunder. Læs guiden her.",
+            "body": "<h2>Når ”1-5 hverdage” koster dig ordre<\/h2><p>Vi kender alle scenariet.<\/p><p>Kunden har fundet det rette produkt, lagt det i kurven og er klar til at gennemføre købet.<\/p><p>Men i det afgørende sekund præsenteres de for en usikkerhed: <em>\"Levering: 1-5 hverdage\"<\/em>.<\/p><p>For en E-commerce manager kan dette virke som en harmløs standardtekst. Men for kunden starter det en kompleks mental proces også aka <strong>friktion<\/strong>.<\/p><p>Kunden begynder at regne:<\/p><ul><li>\"Hvis jeg bestiller nu (onsdag eftermiddag), betyder 5 hverdage så næste onsdag?\"<\/li><li>\"Tæller lageret weekender med i deres ekspeditionstid?\"<\/li><li>\"Når pakken frem inden min præsentation på mandag?\"<\/li><\/ul><p>Når kunden bliver tvunget til at udføre logistisk hovedregning, aktiveres den kritiske del af hjernen.<\/p><p>Usikkerheden skaber en pause i købsflowet, og i den pause vinder tvivlen ofte over behovet.<\/p><p>Resultatet? Kunden forlader kurven for at søge efter en konkurrent, der kan give et klart svar.<\/p><h2>Fra \"For en sikkerhedsskyld\" til digital værdiskabelse<\/h2><p><span style=\"color: rgb(232, 232, 232);\">At implementere en præcis leveringsdato handler ikke kun om bedre service.<\/span><\/p><p><span style=\"color: rgb(232, 232, 232);\">Det er et strategisk værktøj til at øge din <\/span><strong>konverteringsrate (CRO)<\/strong><span style=\"color: rgb(232, 232, 232);\">, <\/span><strong>Customer Lifetime Value (CLV)<\/strong><span style=\"color: rgb(232, 232, 232);\"> og optimere din <\/span><strong>Return on Ad Spend (ROAS)<\/strong><span style=\"color: rgb(232, 232, 232);\">.<\/span><\/p><h3>1. Eliminering af friktion og øget konvertering<\/h3><p>Hver gang du fjerner et spørgsmålstegn i kundens hoved, øger du sandsynligheden for et køb.<\/p><p>En specifik dato (f.eks. <em>\"Forventet leveret på fredag d. 8. maj\"<\/em>) fungerer som en mental bekræftelse.<\/p><p>Det skaber den nødvendige ro, der skal til for at trykke på ”Køb”.<\/p><p>Data viser konsekvent, at transparens i checkout-fasen er en af de mest effektive drivere for øget konverteringsraten (CRO).<\/p><h3>2. Reduktion af kundeserviceomkostninger<\/h3><p>En betydelig del af henvendelser til kundeservice stammer fra uklarhed i købsøjeblikket.<\/p><p>Ved at sætte en præcis forventning fra start, reducerer du presset på din kundeservice og sparer på dine omkostninger.<\/p><p>Det er en direkte optimering af din bundlinje.<\/p><h3>3. Opbygning af Brand Equity og Loyalitet<\/h3><p>I 2026 er logistik ikke længere blot en praktisk nødvendighed, det er en del af produktoplevelsen.<\/p><p>Virksomheder som Amazon har opdraget forbrugerne til at forvente præcision. Ved at levere på dine løfter opbygger du en tillidskontrakt, der er fundamentet for genkøb.<\/p><h2>Implementering: Hvordan AI og Data muliggør præcision<\/h2><p>For mange webshop-ejere har modstanden mod præcise datoer været frygten for ikke at kunne holde dem.<\/p><p>Men med moderne teknologi er den risiko minimeret.<\/p><ul><li><strong>Lagerstyring i realtid:<\/strong> Integrér din webshop direkte med dit WMS (Warehouse Management System), så kunden ved præcis, hvornår varen forlader rampen.<\/li><li><strong>Predictive Logistics:<\/strong> Ved at bruge AI-modeller, der analyserer historiske data fra dine fragtleverandører, kan du med ekstremt høj præcision forudsige leveringstidspunkter baseret på postnummer og tidspunkt for bestilling, se bl.a. Brings <a href=\"https:\/\/developer.bring.com\/api\/shipping-guide_2\/lead-time\/\" target=\"_blank\">ETA beregner<\/a>, der på baggrund af Machine Learning kan give præcis forventet leveringsdato og tidsrum. Link: <a href=\"https:\/\/developer.bring.com\/api\/shipping-guide_2\/lead-time\/ \" target=\"_blank\">https:\/\/developer.bring.com\/api\/shipping-guide_2\/lead-time\/ <\/a><\/li><li><strong>Dynamiske cut-off tider:<\/strong> Vis kunden en nedtælling: <em>\"Bestil indenfor 2 timer og 14 minutter for levering i morgen\"<\/em>.<\/li><li>Dette skaber en sund følelse af hastighed (urgency), der øger konverteringen.<\/li><\/ul><h2>Den økonomiske virkelighed i 2026<\/h2><p>Vi befinder os i en tid, hvor bekvemmelighed trumfer pris for mange købestærke målgrupper.<\/p><p>Hvis din shop ikke kan kommunikere præcision, signalerer det manglende kontrol af din værdikæde.<\/p><p>For beslutningstagere er budskabet klart: Investering i klar forventet leveringstid er ikke en omkostning til IT, det er en investering i at mindske dit churn og maksimere dit eksisterende flow.<\/p><h3>Strategiske Takeaways til Ledelsesgangen:<\/h3><ul><li><strong>Tjek jeres checkout:<\/strong> Er jeres leveringsestimater baseret på \"hverdage\" eller faktiske datoer?<\/li><li><strong>Mål effekten:<\/strong> Lav et A\/B-split på jeres leveringstekst og mål den direkte effekt på <u>abandonment <\/u><em>rate<\/em>.<\/li><li><strong>Integrér værdikæden:<\/strong> Sørg for, at marketing, logistik og IT arbejder sammen om at udstille de data, kunden har brug for.<\/li><\/ul><p><br><\/p><p><strong>Konklusion:<\/strong> Tryghed er den valuta, vi handler med i 2026.<\/p><p>Hvis du vil vinde i e-commerce, skal du stoppe med at gætte og begynde at love.<\/p><p>En præcis forventet leveringsdato er ikke bare en serviceoplysning, det er dit vigtigste konkurrenceparameter.<\/p><p><br><\/p><p><strong>Har du brug for hjælp til at identificere de næste friktionspunkter i din webshops vækstrejse?<\/strong><\/p><p>Lad os tage en dialog om, hvordan vi optimerer din forretning gennem kundefokus og datadrevet indhold.<\/p>",
             "visible": true
         }
     ]
