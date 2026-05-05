@@ -240,6 +240,74 @@
     .not-found { padding: 80px 40px; text-align: center; display: none; }
     .not-found.show { display: block; }
     .not-found h2 { font-size: 24px; color: var(--text); margin-bottom: 12px; }
+
+    /* ---- CASE BENTO (genbrugt fra forsiden) ---- */
+    .case-bento { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin: 24px 0 32px; }
+    .case-bento .bento-cell {
+      padding: 20px 22px;
+      background: var(--bg-card);
+      backdrop-filter: blur(10px);
+      border: 0.5px solid var(--border-md);
+      border-radius: 16px;
+      cursor: pointer;
+      position: relative;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .case-bento .bento-cell:hover {
+      transform: translateY(-4px);
+      border-color: var(--blue);
+      box-shadow: 0 12px 30px rgba(0,0,0,0.18), 0 0 16px rgba(65, 143, 255, 0.08);
+    }
+    .case-bento .bento-cell:hover .cell-arrow { opacity: 1; }
+    .case-bento .bento-cell:focus-visible {
+      outline: 2px solid var(--blue);
+      outline-offset: -2px;
+      background: rgba(65,143,255,0.08);
+      border-color: var(--blue);
+    }
+    .case-bento .bento-cell.expanded {
+      background: rgba(65,143,255,0.08);
+      border-color: var(--blue);
+    }
+    .case-bento .bento-cell.expanded .cell-desc { max-height: 300px; opacity: 1; margin-top: 10px; }
+    .case-bento .cell-label {
+      font-size: 9px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--text-faint);
+      margin-bottom: 8px;
+    }
+    .case-bento .cell-title {
+      font-size: 15px;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      color: var(--text);
+      margin-bottom: 4px;
+      line-height: 1.25;
+    }
+    .case-bento .cell-sub { font-size: 12px; color: var(--text-muted); margin-bottom: 4px; }
+    .case-bento .cell-desc {
+      font-size: 11px;
+      color: var(--text-faint);
+      line-height: 1.6;
+      max-height: 0;
+      opacity: 0;
+      overflow: hidden;
+      transition: all 0.3s ease;
+    }
+    .case-bento .cell-arrow {
+      position: absolute;
+      bottom: 12px;
+      right: 14px;
+      font-size: 11px;
+      color: var(--blue);
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+    .case-bento .accent-blue .cell-title { color: var(--blue); }
+    .case-bento .accent-green .cell-title { color: var(--green); }
+    @media (max-width: 768px) { .case-bento { grid-template-columns: 1fr 1fr; gap: 12px; } }
+    @media (max-width: 480px) { .case-bento { grid-template-columns: 1fr; } }
   </style>
 </head>
 <body>
@@ -287,7 +355,9 @@
         <div id="introContainer">
           <div class="intro-text" id="introText"></div>
         </div>
-        
+
+        <div class="case-bento" id="caseBentoGrid" hidden></div>
+
         <div class="content-main" id="contentMain"></div>
         
         <div class="sidebar" id="contentSidebar"></div>
@@ -453,6 +523,31 @@
         }
       }
       setTimeout(typeTitle, 300);
+
+      // Case Bento
+      const bentoEl = document.getElementById('caseBentoGrid');
+      const cells = (item.bento || []).filter(c => c && (c.label || c.value || c.sub || c.desc));
+      if (cells.length > 0) {
+        bentoEl.innerHTML = cells.map((c, i) => `
+          <div class="bento-cell ${c.accent && c.accent !== 'none' ? 'accent-' + c.accent : ''}" data-i="${i}" tabindex="0" role="button" aria-expanded="false">
+            <div class="cell-label">${esc(c.label)}</div>
+            <h3 class="cell-title">${esc(c.value)}</h3>
+            <div class="cell-sub">${esc(c.sub)}</div>
+            <div class="cell-desc">${esc(c.desc)}</div>
+            <span class="cell-arrow">Læs mere →</span>
+          </div>`).join('');
+        bentoEl.hidden = false;
+        bentoEl.querySelectorAll('.bento-cell').forEach(el => {
+          const toggle = () => {
+            const open = el.classList.toggle('expanded');
+            el.setAttribute('aria-expanded', open ? 'true' : 'false');
+          };
+          el.addEventListener('click', toggle);
+          el.addEventListener('keydown', e => {
+            if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(); }
+          });
+        });
+      }
 
       // Meta
       let metaHtml = '';
