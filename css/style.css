@@ -472,7 +472,7 @@ textarea.input { resize: none; height: 100px; line-height: 1.6; }
   margin-bottom: 12px;
 }
 .bento-grid .cell-title {
-  font-size: 20px;
+  font-size: 16px;
   font-weight: 600;
   letter-spacing: -0.02em;
   color: var(--text);
@@ -480,12 +480,12 @@ textarea.input { resize: none; height: 100px; line-height: 1.6; }
   line-height: 1.3;
 }
 .bento-grid .cell-sub { 
-  font-size: 16px; 
+  font-size: 14px; 
   color: var(--text-muted); 
   margin-bottom: 6px; 
 }
 .bento-grid .cell-desc {
-  font-size: 18px;
+  font-size: 14px;
   color: var(--text-faint);
   line-height: 1.65;
   max-height: 0;
@@ -512,9 +512,9 @@ textarea.input { resize: none; height: 100px; line-height: 1.6; }
 @media (max-width: 768px) { 
   .bento-grid { grid-template-columns: 1fr 1fr; gap: 16px; padding: 0 20px; margin: 24px 0; } 
   .bento-grid .bento-cell { padding: 24px 24px 48px; }
-  .bento-grid .cell-title { font-size: 18px; }
-  .bento-grid .cell-desc { font-size: 15px; }
-  .bento-grid .cell-arrow { bottom: 16px; right: 16px; font-size: 13px; }
+  .bento-grid .cell-title { font-size: 16px; }
+  .bento-grid .cell-desc { font-size: 14px; }
+  .bento-grid .cell-arrow { bottom: 16px; right: 16px; font-size: 12px; }
 }
 @media (max-width: 480px) { 
   .bento-grid { grid-template-columns: 1fr; } 
