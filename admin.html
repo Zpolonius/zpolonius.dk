@@ -1457,6 +1457,32 @@ function openProjectForm(isEdit, idx, item={}) {
           </div>
           <div id="quillEditor" style="height:300px;"></div>
         </div>
+        <div class="field">
+          <label class="field-label">Bento highlights (op til 3 celler — tomme celler skjules)</label>
+          <div class="bento-list">
+            ${[0,1,2].map(i => {
+              const c = (item.bento && item.bento[i]) || {};
+              return `
+              <div class="bento-row" style="display:grid; grid-template-columns: 1fr; gap:8px; padding:12px; border:0.5px solid var(--border-md); border-radius:12px;">
+                <div class="bento-label-txt">Celle ${i + 1}</div>
+                <div class="field-row">
+                  <div class="field"><label class="field-label">Label</label><input class="f-input" id="pj-bento-${i}-label" value="${(c.label||'').replace(/"/g,'&quot;')}" placeholder="f.eks. Den Kommercielle Vinkel"></div>
+                  <div class="field"><label class="field-label">Accent</label>
+                    <select class="f-select" id="pj-bento-${i}-accent">
+                      <option value="none"  ${c.accent==='none'||!c.accent?'selected':''}>Ingen</option>
+                      <option value="blue"  ${c.accent==='blue'?'selected':''}>Blå</option>
+                      <option value="green" ${c.accent==='green'?'selected':''}>Grøn</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="field"><label class="field-label">Titel (stor tekst)</label><input class="f-input" id="pj-bento-${i}-value" value="${(c.value||'').replace(/"/g,'&quot;')}"></div>
+                <div class="field"><label class="field-label">Undertitel</label><input class="f-input" id="pj-bento-${i}-sub" value="${(c.sub||'').replace(/"/g,'&quot;')}"></div>
+                <div class="field"><label class="field-label">Beskrivelse (vises ved klik)</label><textarea class="f-textarea" style="height:60px;" id="pj-bento-${i}-desc">${c.desc||''}</textarea></div>
+              </div>`;
+            }).join('')}
+          </div>
+          <div class="field-hint">Udfyld 1–3 celler. Hvis alle er tomme, vises sektionen ikke på casen.</div>
+        </div>
       </div>
       <div class="form-sidebar">
         <div class="field"><label class="field-label">Status</label>
@@ -1477,23 +1503,33 @@ function openProjectForm(isEdit, idx, item={}) {
     const bodyContent = getEditorContent();
     const cleanDesc = document.getElementById('pj-desc').value.replace(/<\/?[^>]+(>|$)/g, "").trim();
     const cleanSkills = document.getElementById('pj-skills').value.split(',').map(s=>s.replace(/<\/?[^>]+(>|$)/g, "").trim()).filter(Boolean);
-    
-    const obj = { 
-      id: item.id || slug(document.getElementById('pj-title').value), 
-      title: document.getElementById('pj-title').value, 
-      category: document.getElementById('pj-cat').value, 
-      tag: { ai:'AI', checkout:'Checkout', work:'Arbejde', volunteer:'Frivillig' }[document.getElementById('pj-cat').value], 
-      period: document.getElementById('pj-period').value, 
-      desc: cleanDesc, 
-      intro: document.getElementById('pj-intro').value, 
-      body: bodyContent, 
-      skills: cleanSkills, 
-      cover: getUploadPath('pj-cover', item.cover), 
-      cover_pos: document.getElementById('pj-cover-pos').value, 
-      cover_alt: document.getElementById('pj-cover-alt').value, 
-      file: getUploadPath('pj-file', item.file), 
-      url: document.getElementById('pj-url').value || undefined, 
-      visible: document.getElementById('pj-vis').value === "1" 
+
+    const bentoCells = [0,1,2].map(i => ({
+      label:  document.getElementById(`pj-bento-${i}-label`).value.trim(),
+      value:  document.getElementById(`pj-bento-${i}-value`).value.trim(),
+      sub:    document.getElementById(`pj-bento-${i}-sub`).value.trim(),
+      desc:   document.getElementById(`pj-bento-${i}-desc`).value.trim(),
+      accent: document.getElementById(`pj-bento-${i}-accent`).value
+    }));
+    const hasBento = bentoCells.some(c => c.label || c.value || c.sub || c.desc);
+
+    const obj = {
+      id: item.id || slug(document.getElementById('pj-title').value),
+      title: document.getElementById('pj-title').value,
+      category: document.getElementById('pj-cat').value,
+      tag: { ai:'AI', checkout:'Checkout', work:'Arbejde', volunteer:'Frivillig' }[document.getElementById('pj-cat').value],
+      period: document.getElementById('pj-period').value,
+      desc: cleanDesc,
+      intro: document.getElementById('pj-intro').value,
+      body: bodyContent,
+      skills: cleanSkills,
+      cover: getUploadPath('pj-cover', item.cover),
+      cover_pos: document.getElementById('pj-cover-pos').value,
+      cover_alt: document.getElementById('pj-cover-alt').value,
+      file: getUploadPath('pj-file', item.file),
+      url: document.getElementById('pj-url').value || undefined,
+      visible: document.getElementById('pj-vis').value === "1",
+      bento: hasBento ? bentoCells : undefined
     };
     if (isEdit) data.projects[idx] = obj;
     else data.projects.push(obj);
