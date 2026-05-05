@@ -394,7 +394,7 @@ function initSharedLayout() {
     </div>
   `;
 
-  const bentoHtml = `<div class="bento" id="bentoGrid"></div>`;
+  const bentoHtml = `<div class="bento-grid" id="bentoGrid"></div>`;
   
   const detailPanelHtml = `
     <div class="detail-panel" id="detailPanel">
@@ -441,11 +441,11 @@ window.initGlobalBento = function() {
 
   const render = (data) => {
     bGrid.innerHTML = data.bento.map((b, i) => `
-      <div class="bento-cell" tabindex="0" 
+      <div class="bento-cell ${b.accent && b.accent !== 'none' ? 'accent-' + b.accent : ''}" tabindex="0" 
            onclick="window.innerWidth <= 768 ? toggleBentoExpand(this) : openDetail('${i}')" 
            onkeydown="if(event.key==='Enter'||event.key===' ') { event.preventDefault(); window.innerWidth <= 768 ? toggleBentoExpand(this) : openDetail('${i}'); }">
         <div class="cell-label">${esc(b.label)}</div>
-        <div class="cell-title">${esc(b.value)}</div>
+        <h3 class="cell-title">${esc(b.value)}</h3>
         <div class="cell-sub">${esc(b.sub)}</div>
         <div class="cell-desc">${esc(b.desc)}</div>
         <span class="cell-arrow">${esc(b.cta || 'Mere →')}</span>

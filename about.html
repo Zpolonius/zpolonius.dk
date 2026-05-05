@@ -104,71 +104,7 @@
     .skill-tags { display: flex; flex-wrap: wrap; gap: 5px; }
 
     /* ---- BENTO GRID ---- */
-    .bento {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 20px;
-      padding: 20px 40px;
-    }
-    .bento-cell {
-      padding: 24px 28px;
-      background: var(--bg-card);
-      backdrop-filter: blur(10px);
-      border: 0.5px solid var(--border-md);
-      border-radius: 20px;
-      cursor: pointer;
-      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-      position: relative;
-    }
-    .bento-cell:hover { 
-      transform: translateY(-5px);
-      background: rgba(255,255,255,0.05); 
-      box-shadow: 0 15px 40px rgba(0,0,0,0.2), 0 0 20px rgba(65, 143, 255, 0.1);
-      border-color: var(--blue);
-      z-index: 10;
-    }
-    .bento-cell.selected {
-      background: rgba(65,143,255,0.08);
-      border-color: var(--blue);
-    }
-    .cell-label {
-      font-size: 9px;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      color: var(--text-faint);
-      margin-bottom: 8px;
-    }
-    .cell-title {
-      font-size: 16px;
-      font-weight: 600;
-      letter-spacing: -0.02em;
-      color: var(--text);
-      margin-bottom: 5px;
-      line-height: 1.2;
-    }
-    .cell-sub {
-      font-size: 12px;
-      color: var(--text-muted);
-      margin-bottom: 8px;
-    }
-    .cell-desc {
-      font-size: 11px;
-      color: var(--text-faint);
-      line-height: 1.6;
-      max-height: 0;
-      opacity: 0;
-      overflow: hidden;
-      transition: all 0.3s ease;
-    }
-    .cell-arrow {
-      position: absolute;
-      bottom: 14px; right: 16px;
-      font-size: 11px;
-      color: var(--blue);
-      opacity: 0;
-      transition: opacity 0.2s;
-    }
-    .bento-cell:hover .cell-arrow { opacity: 1; }
+    /* CSS flyttet til style.css for konsistens */
 
     /* ---- BENTO DETAIL ---- */
     .detail-panel { display: none; border-bottom: 0.5px solid var(--border); background: var(--bg-card); }
@@ -222,26 +158,6 @@
       .skill-group:nth-child(2n) { border-right: none; }
       .skill-group:nth-child(n+3) { border-top: 0.5px solid var(--border); }
       .skill-group { padding: 16px 20px; }
-
-      /* BENTO - 2-COLUMN GRID ON MOBILE */
-      .bento {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 12px;
-        padding: 16px 20px;
-        border-bottom: none;
-      }
-      .bento-cell {
-        padding: 14px 16px;
-        min-width: 0;
-        border-radius: 14px;
-        border: 0.5px solid var(--border-md);
-      }
-      .cell-title { font-size: 14px; }
-      .cell-label { font-size: 8px; }
-      .cell-sub { font-size: 10px; }
-      .bento-cell .cell-arrow { transition: transform 0.3s; opacity: 1; }
-      .bento-cell.expanded .cell-arrow { transform: rotate(90deg); }
     }
   </style>
 </head>
