@@ -1,5 +1,4 @@
 # Zacharias Polonius — zpolonius.dk
-# VIGTIGT: Denne fil SKAL hedde præcis ".htaccess" på serveren.
 
 # Forhindr mappe-visning (sikkerhed)
 Options -Indexes
@@ -52,10 +51,10 @@ RewriteCond %{REQUEST_FILENAME}.html -f
 RewriteRule ^(.*)$ $1.html [L]
 
 # Rene URL'er til detail-sider (SEO + socialt deling)
-RewriteRule ^projekter/([^/]+)/?$ detail.html?id=$1 [L,QSA]
-RewriteRule ^artikler/([^/]+)/?$ detail.html?id=$1 [L,QSA]
+RewriteRule ^projects/([^/]+)/?$ detail.html?id=$1 [L,QSA]
+RewriteRule ^insights/([^/]+)/?$ detail.html?id=$1 [L,QSA]
 RewriteRule ^cv/([^/]+)/?$ detail.html?id=$1 [L,QSA]
-RewriteRule ^anbefalinger/([^/]+)/?$ detail.html?id=$1 [L,QSA]
+RewriteRule ^recommendations/([^/]+)/?$ detail.html?id=$1 [L,QSA]
 
 # Dynamisk Sitemap Rewrite (xml -> php)
 RewriteRule ^sitemap\.xml$ sitemap.php [L]
