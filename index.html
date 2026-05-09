@@ -508,71 +508,97 @@
     }
 
 
-    /* ---- SOCIAL PROOF STRIP ---- */
-    .proof-strip-wrap {
+    /* ---- KOMPAKT KARUSSEL ---- */
+    .compact-rec-wrap {
       border-top: 0.5px solid var(--border);
       border-bottom: 0.5px solid var(--border);
-      padding: 20px 40px;
-      overflow-x: auto;
-      scrollbar-width: none;
+      overflow: hidden;
     }
-    .proof-strip-wrap::-webkit-scrollbar { display: none; }
-    .proof-strip {
+    .compact-rec-track {
       display: flex;
-      gap: 12px;
-      align-items: stretch;
-      min-width: max-content;
+      transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+      will-change: transform;
     }
-    .proof-card {
+    .compact-rec-slide {
+      min-width: 100%;
+      padding: 28px 40px;
       display: flex;
       align-items: center;
-      gap: 12px;
-      padding: 12px 18px;
-      border: 0.5px solid var(--border-md);
-      border-radius: 100px;
-      background: var(--bg-card);
-      text-decoration: none;
-      transition: border-color 0.2s, background 0.2s;
-      white-space: nowrap;
+      gap: 20px;
+      box-sizing: border-box;
     }
-    .proof-card:hover {
-      border-color: var(--blue);
-      background: rgba(65,143,255,0.05);
-    }
-    .proof-avatar {
-      width: 32px; height: 32px;
+    .compact-rec-avatar {
+      width: 48px; height: 48px;
       border-radius: 50%;
       object-fit: cover;
       flex-shrink: 0;
       border: 1.5px solid var(--border-md);
     }
-    .proof-avatar-fallback {
-      width: 32px; height: 32px;
+    .compact-rec-avatar-fallback {
+      width: 48px; height: 48px;
       border-radius: 50%;
-      background: var(--bg);
+      background: var(--bg-card);
       border: 1.5px solid var(--border-md);
       display: flex; align-items: center; justify-content: center;
-      font-size: 12px; font-weight: 600; color: var(--text-muted);
+      font-size: 14px; font-weight: 600; color: var(--text-muted);
       flex-shrink: 0;
     }
-    .proof-text { display: flex; flex-direction: column; gap: 1px; }
-    .proof-name { font-size: 12px; font-weight: 600; color: var(--text); }
-    .proof-role { font-size: 11px; color: var(--text-faint); }
-    .proof-quote { font-size: 12px; color: var(--text-muted); font-style: italic; }
-    .proof-strip-cta {
+    .compact-rec-body { flex: 1; min-width: 0; }
+    .compact-rec-meta {
+      font-size: 12px;
+      color: var(--text-faint);
+      margin-bottom: 6px;
+    }
+    .compact-rec-meta strong { color: var(--text-muted); font-weight: 600; }
+    .compact-rec-quote {
+      font-size: 15px;
+      color: var(--text);
+      font-style: italic;
+      line-height: 1.5;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .compact-rec-nav {
       display: flex;
       align-items: center;
-      padding: 12px 18px;
+      gap: 10px;
+      padding: 12px 40px;
+      border-top: 0.5px solid var(--border);
+    }
+    .compact-arrow {
+      width: 28px; height: 28px;
+      border-radius: 50%;
+      border: 0.5px solid var(--border-md);
+      background: var(--bg-card);
+      color: var(--text-muted);
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s;
+      flex-shrink: 0;
+    }
+    .compact-arrow:hover { border-color: var(--blue); color: var(--blue); }
+    .compact-dots { display: flex; gap: 6px; align-items: center; }
+    .compact-dot {
+      width: 5px; height: 5px;
+      border-radius: 50%;
+      background: var(--text-ghost);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .compact-dot.active { background: var(--blue); transform: scale(1.4); }
+    .compact-rec-link {
+      margin-left: auto;
       font-size: 12px;
       color: var(--blue);
       text-decoration: none;
-      white-space: nowrap;
       transition: opacity 0.2s;
-      flex-shrink: 0;
     }
-    .proof-strip-cta:hover { opacity: 0.7; }
+    .compact-rec-link:hover { opacity: 0.7; }
     @media (max-width: 768px) {
-      .proof-strip-wrap { padding: 16px 20px; }
+      .compact-rec-slide { padding: 24px 20px; }
+      .compact-rec-nav { padding: 12px 20px; }
     }
 
     /* ---- CTA ---- */    .cta-bar {
@@ -632,10 +658,20 @@
     <!-- Rendered dynamically -->
   </div>
 
-  <!-- SOCIAL PROOF STRIP -->
-  <div id="recSection" class="proof-strip-wrap">
-    <div class="proof-strip" id="proofStrip">
+  <!-- ANBEFALINGER (kompakt karussel) -->
+  <div id="recSection" class="compact-rec-wrap">
+    <div class="compact-rec-track" id="compactRecTrack">
       <!-- Rendered dynamically -->
+    </div>
+    <div class="compact-rec-nav">
+      <button class="compact-arrow" id="compactPrev" aria-label="Forrige">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+      </button>
+      <div class="compact-dots" id="compactDots"></div>
+      <button class="compact-arrow" id="compactNext" aria-label="Næste">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+      </button>
+      <a href="recommendations" class="compact-rec-link">Se alle →</a>
     </div>
   </div>
 
@@ -910,27 +946,46 @@
         }
       }
 
-      // Social proof strip (kompakt — viser 4 anbefalinger som pills)
-      const proofStrip = document.getElementById('proofStrip');
-      if (proofStrip) {
-        const recs = (data.cv?.recommendations || []).filter(r => r.visible !== false).slice(0, 4);
-        proofStrip.innerHTML = recs.map(r => {
-          const raw = r.intro || r.text || '';
-          const snippet = raw.replace(/<[^>]+>/g, '').trim().split(/\s+/).slice(0, 8).join(' ') + '…';
+      // Kompakt karussel
+      const recTrack = document.getElementById('compactRecTrack');
+      const recDots = document.getElementById('compactDots');
+      if (recTrack) {
+        const recs = (data.cv?.recommendations || []).filter(r => r.visible !== false);
+        let compactIdx = 0;
+
+        recTrack.innerHTML = recs.map(r => {
+          const raw = (r.intro || r.text || '').replace(/<[^>]+>/g, '').trim();
           const initials = (r.name || '?').split(' ').map(w => w[0]).slice(0, 2).join('');
+          const avatar = r.photo
+            ? `<img src="${esc(r.photo)}" alt="${esc(r.name)}" class="compact-rec-avatar" style="object-position:${r.photo_pos||'center center'}" onerror="this.outerHTML='<div class=compact-rec-avatar-fallback>${esc(initials)}</div>'">`
+            : `<div class="compact-rec-avatar-fallback">${esc(initials)}</div>`;
           return `
-            <a href="anbefalinger/${r.id}" class="proof-card">
-              ${r.photo
-                ? `<img src="${esc(r.photo)}" alt="${esc(r.name)}" class="proof-avatar" style="object-position:${r.photo_pos||'center center'}" onerror="this.outerHTML='<div class=proof-avatar-fallback>${esc(initials)}</div>'">`
-                : `<div class="proof-avatar-fallback">${esc(initials)}</div>`}
-              <div class="proof-text">
-                <span class="proof-name">${esc(r.name)}</span>
-                <span class="proof-role">${esc(r.role)}</span>
-                <span class="proof-quote">"${esc(snippet)}"</span>
+            <a href="anbefalinger/${esc(r.id)}" class="compact-rec-slide">
+              ${avatar}
+              <div class="compact-rec-body">
+                <div class="compact-rec-meta"><strong>${esc(r.name)}</strong> · ${esc(r.role)}</div>
+                <div class="compact-rec-quote">"${esc(raw)}"</div>
               </div>
             </a>`;
         }).join('');
-        proofStrip.insertAdjacentHTML('beforeend', `<a href="recommendations" class="proof-strip-cta">Se alle anbefalinger →</a>`);
+
+        // Dots
+        recDots.innerHTML = recs.map((_, i) =>
+          `<div class="compact-dot${i === 0 ? ' active' : ''}" data-i="${i}"></div>`
+        ).join('');
+
+        const goTo = idx => {
+          compactIdx = (idx + recs.length) % recs.length;
+          recTrack.style.transform = `translateX(-${compactIdx * 100}%)`;
+          recDots.querySelectorAll('.compact-dot').forEach((d, i) => d.classList.toggle('active', i === compactIdx));
+        };
+
+        recDots.addEventListener('click', e => {
+          const dot = e.target.closest('.compact-dot');
+          if (dot) goTo(+dot.dataset.i);
+        });
+        document.getElementById('compactPrev').onclick = () => goTo(compactIdx - 1);
+        document.getElementById('compactNext').onclick = () => goTo(compactIdx + 1);
       }
     });
 
