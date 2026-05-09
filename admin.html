@@ -2309,8 +2309,8 @@ function createLinkEditor(links = []) {
       <div id="linkList" class="link-editor-list">
         ${list.map((l, i) => `
           <div class="link-row" style="display:flex; gap:8px; margin-bottom:8px;">
-            <input type="text" class="f-input" placeholder="Label (f.eks. Se live)" value="${_esc(l.label)}" style="flex:1;">
-            <input type="text" class="f-input" placeholder="URL (https://...)" value="${_esc(l.url)}" style="flex:2;">
+            <input type="text" class="f-input" placeholder="Label (f.eks. Se live)" value="${esc(l.label)}" style="flex:1;">
+            <input type="text" class="f-input" placeholder="URL (https://...)" value="${esc(l.url)}" style="flex:2;">
             <button class="btn-del" onclick="this.parentElement.remove()" style="padding:0 10px;">✕</button>
           </div>
         `).join('')}
