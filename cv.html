@@ -302,6 +302,11 @@
       .edu-grid { grid-template-columns: 1fr; }
     }
 
+    .rec-company-logo {
+      height: 24px; width: auto; max-width: 90px;
+      object-fit: contain; opacity: 0.45; filter: grayscale(1);
+      margin-bottom: 20px; display: block;
+    }
     .rec-card {
       padding: 48px 40px;
       border-right: 0.5px solid var(--border);
@@ -572,6 +577,7 @@
             <div class="rec-card">
               <div class="rec-mark">"</div>
               <p class="rec-text">${esc(r.intro || (r.text ? r.text.substring(0, 150) + '...' : ''))}</p>
+              ${r.logo ? `<img src="${esc(r.logo)}" alt="" class="rec-company-logo" aria-hidden="true">` : ''}
               <div class="rec-author-wrap">
                 ${r.photo ? `<img src="${r.photo}" alt="${esc(r.name)}" class="rec-avatar" style="object-position: ${r.photo_pos || 'center center'}">` : ''}
                 <div class="rec-meta">

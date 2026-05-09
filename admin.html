@@ -1761,6 +1761,7 @@ function openRecForm(isEdit, idx, item={}) {
         <div class="field"><label class="field-label">Profilbillede (Avatar)</label>${createUploadZone('rc-photo','photo',item.photo||'')}</div>
         ${createPositionSelector('rc-photo-pos', item.photo_pos, item.photo)}
         <div class="field"><label class="field-label">Profilbillede Alt-tekst</label><input class="f-input" id="rc-photo-alt" value="${item.photo_alt||''}"></div>
+        <div class="field"><label class="field-label">Virksomhedslogo</label>${createUploadZone('rc-logo','logo',item.logo||'')}</div>
         <div class="field"><label class="field-label">Cover-billede</label>${createUploadZone('rc-cover','cover',item.cover||'')}</div>
         ${createPositionSelector('rc-cover-pos', item.cover_pos, item.cover)}        <div class="field"><label class="field-label">Cover Alt-tekst</label><input class="f-input" id="rc-cover-alt" value="${item.cover_alt||''}"></div>
         <div class="field"><label class="field-label">Vedhæftet fil (PDF)</label>${createFileZone('rc-file', item.file||'')}</div>
@@ -1780,6 +1781,7 @@ function openRecForm(isEdit, idx, item={}) {
       photo:     getUploadPath('rc-photo', item.photo),
       photo_pos: document.getElementById('rc-photo-pos').value,
       photo_alt: document.getElementById('rc-photo-alt').value,
+      logo:      getUploadPath('rc-logo', item.logo),
       cover:     getUploadPath('rc-cover', item.cover),
       cover_pos: document.getElementById('rc-cover-pos').value,
       cover_alt: document.getElementById('rc-cover-alt').value,

@@ -596,9 +596,21 @@
       transition: opacity 0.2s;
     }
     .compact-rec-link:hover { opacity: 0.7; }
+    .compact-rec-logo {
+      height: 28px;
+      width: auto;
+      max-width: 80px;
+      object-fit: contain;
+      opacity: 0.5;
+      flex-shrink: 0;
+      filter: grayscale(1);
+      transition: opacity 0.2s;
+    }
+    .compact-rec-slide:hover .compact-rec-logo { opacity: 0.8; }
     @media (max-width: 768px) {
       .compact-rec-slide { padding: 24px 20px; }
       .compact-rec-nav { padding: 12px 20px; }
+      .compact-rec-logo { display: none; }
     }
 
     /* ---- CTA ---- */    .cta-bar {
@@ -959,6 +971,9 @@
           const avatar = r.photo
             ? `<img src="${esc(r.photo)}" alt="${esc(r.name)}" class="compact-rec-avatar" style="object-position:${r.photo_pos||'center center'}" onerror="this.outerHTML='<div class=compact-rec-avatar-fallback>${esc(initials)}</div>'">`
             : `<div class="compact-rec-avatar-fallback">${esc(initials)}</div>`;
+          const logo = r.logo
+            ? `<img src="${esc(r.logo)}" alt="" class="compact-rec-logo" aria-hidden="true">`
+            : '';
           return `
             <a href="anbefalinger/${esc(r.id)}" class="compact-rec-slide">
               ${avatar}
@@ -966,6 +981,7 @@
                 <div class="compact-rec-meta"><strong>${esc(r.name)}</strong> · ${esc(r.role)}</div>
                 <div class="compact-rec-quote">"${esc(raw)}"</div>
               </div>
+              ${logo}
             </a>`;
         }).join('');
 
