@@ -508,6 +508,73 @@
     }
 
 
+    /* ---- SOCIAL PROOF STRIP ---- */
+    .proof-strip-wrap {
+      border-top: 0.5px solid var(--border);
+      border-bottom: 0.5px solid var(--border);
+      padding: 20px 40px;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .proof-strip-wrap::-webkit-scrollbar { display: none; }
+    .proof-strip {
+      display: flex;
+      gap: 12px;
+      align-items: stretch;
+      min-width: max-content;
+    }
+    .proof-card {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 18px;
+      border: 0.5px solid var(--border-md);
+      border-radius: 100px;
+      background: var(--bg-card);
+      text-decoration: none;
+      transition: border-color 0.2s, background 0.2s;
+      white-space: nowrap;
+    }
+    .proof-card:hover {
+      border-color: var(--blue);
+      background: rgba(65,143,255,0.05);
+    }
+    .proof-avatar {
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      object-fit: cover;
+      flex-shrink: 0;
+      border: 1.5px solid var(--border-md);
+    }
+    .proof-avatar-fallback {
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      background: var(--bg);
+      border: 1.5px solid var(--border-md);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 12px; font-weight: 600; color: var(--text-muted);
+      flex-shrink: 0;
+    }
+    .proof-text { display: flex; flex-direction: column; gap: 1px; }
+    .proof-name { font-size: 12px; font-weight: 600; color: var(--text); }
+    .proof-role { font-size: 11px; color: var(--text-faint); }
+    .proof-quote { font-size: 12px; color: var(--text-muted); font-style: italic; }
+    .proof-strip-cta {
+      display: flex;
+      align-items: center;
+      padding: 12px 18px;
+      font-size: 12px;
+      color: var(--blue);
+      text-decoration: none;
+      white-space: nowrap;
+      transition: opacity 0.2s;
+      flex-shrink: 0;
+    }
+    .proof-strip-cta:hover { opacity: 0.7; }
+    @media (max-width: 768px) {
+      .proof-strip-wrap { padding: 16px 20px; }
+    }
+
     /* ---- CTA ---- */    .cta-bar {
       display: flex;
       align-items: center;
@@ -565,30 +632,12 @@
     <!-- Rendered dynamically -->
   </div>
 
-  <!-- ANBEFALINGER (mini-carousel — social proof direkte efter kompetencer) -->
-  <section class="section" id="recSection" style="position: relative;">
-    <div class="section-header">
-      <span class="section-title">Anbefalinger</span>
-      <a href="recommendations" class="section-link">Se alle →</a>
+  <!-- SOCIAL PROOF STRIP -->
+  <div id="recSection" class="proof-strip-wrap">
+    <div class="proof-strip" id="proofStrip">
+      <!-- Rendered dynamically -->
     </div>
-    <div class="rec-container">
-      <button class="carousel-arrow prev-btn" onclick="prevSlide()" aria-label="Forrige">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
-      </button>
-      <button class="carousel-arrow next-btn" onclick="nextSlide()" aria-label="Næste">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
-      </button>
-      <div class="quote-carousel" id="featuredRecommendations">
-        <!-- Rendered dynamically -->
-      </div>
-      <div class="carousel-nav" id="carouselNav">
-        <!-- Dots rendered by JS -->
-      </div>
-    </div>
-    <div class="section-footer">
-      <a href="recommendations" class="section-link">Læs alle anbefalinger →</a>
-    </div>
-  </section>
+  </div>
 
   <!-- PROJEKTER -->
   <div id="projectsSection">
@@ -861,71 +910,32 @@
         }
       }
 
-      // Recommendations
-      const recGrid = document.getElementById('featuredRecommendations');
-      if (recGrid) {
-        const recs = (data.cv?.recommendations || []).filter(r => r.visible !== false);
-        recGrid.innerHTML = recs.map(r => {
-          const raw = r.intro || (r.text || '');
-          const words = raw.trim().split(/\s+/);
-          const truncated = words.length > 150 ? words.slice(0, 150).join(' ') + '...' : raw;
+      // Social proof strip (kompakt — viser 4 anbefalinger som pills)
+      const proofStrip = document.getElementById('proofStrip');
+      if (proofStrip) {
+        const recs = (data.cv?.recommendations || []).filter(r => r.visible !== false).slice(0, 4);
+        proofStrip.innerHTML = recs.map(r => {
+          const raw = r.intro || r.text || '';
+          const snippet = raw.replace(/<[^>]+>/g, '').trim().split(/\s+/).slice(0, 8).join(' ') + '…';
+          const initials = (r.name || '?').split(' ').map(w => w[0]).slice(0, 2).join('');
           return `
-            <div class="quote-card">
-              <div class="quote-inner">
-                <div class="quote-mark">"</div>
-                <p class="quote-text">${esc(truncated)}</p>
-                <div class="rec-author-wrap" style="justify-content:center;">
-                  ${r.photo ? `<img src="${r.photo}" alt="${esc(r.photo_alt||r.name)}" class="rec-avatar" style="object-position: ${r.photo_pos || 'center center'}">` : ''}
-                  <div class="rec-meta" style="text-align:left;">
-                    <div class="rec-name">${esc(r.name)}</div>
-                    <div class="rec-role">${esc(r.role)}</div>
-                  </div>
-                </div>
-                <a href="anbefalinger/${r.id}" class="section-link" style="margin-top:24px; display:inline-block; font-size:11px;">Læs hele udtalelsen →</a>
+            <a href="anbefalinger/${r.id}" class="proof-card">
+              ${r.photo
+                ? `<img src="${esc(r.photo)}" alt="${esc(r.name)}" class="proof-avatar" style="object-position:${r.photo_pos||'center center'}" onerror="this.outerHTML='<div class=proof-avatar-fallback>${esc(initials)}</div>'">`
+                : `<div class="proof-avatar-fallback">${esc(initials)}</div>`}
+              <div class="proof-text">
+                <span class="proof-name">${esc(r.name)}</span>
+                <span class="proof-role">${esc(r.role)}</span>
+                <span class="proof-quote">"${esc(snippet)}"</span>
               </div>
-            </div>`;
+            </a>`;
         }).join('');
-        initCarousel();
+        proofStrip.insertAdjacentHTML('beforeend', `<a href="recommendations" class="proof-strip-cta">Se alle anbefalinger →</a>`);
       }
     });
 
 
 
-    // Carousel Logic
-    let currentIdx = 0;
-    function initCarousel() {
-      const dots = document.getElementById('carouselNav');
-      const slides = document.querySelectorAll('.quote-card');
-      dots.innerHTML = '';
-      slides.forEach((_, i) => {
-        const dot = document.createElement('div');
-        dot.className = 'carousel-dot' + (i === 0 ? ' active' : '');
-        dot.onclick = () => goToSlide(i);
-        dots.appendChild(dot);
-      });
-    }
-
-    function goToSlide(idx) {
-      const carousel = document.getElementById('featuredRecommendations');
-      const dots = document.querySelectorAll('.carousel-dot');
-      currentIdx = idx;
-      carousel.style.transform = `translateX(-${idx * 100}%)`;
-      dots.forEach((d, i) => d.classList.toggle('active', i === idx));
-    }
-
-    function nextSlide() {
-      const slides = document.querySelectorAll('.quote-card');
-      let next = currentIdx + 1;
-      if (next >= slides.length) next = 0;
-      goToSlide(next);
-    }
-
-    function prevSlide() {
-      const slides = document.querySelectorAll('.quote-card');
-      let prev = currentIdx - 1;
-      if (prev < 0) prev = slides.length - 1;
-      goToSlide(prev);
-    }
   </script>
 </body>
 </html>
