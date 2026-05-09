@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <base href="/">
   <title>Detail — Zacharias Polonius</title>
   <link rel="stylesheet" href="css/style.css">
   <style>
@@ -355,11 +356,10 @@
 
     function getDetailUrl(item) {
       const cat = item.category || '';
-      if (cat === 'article') return `artikler/${item.id}`;
-      if (cat === 'work' || cat === 'education') return `cv/${item.id}`;
-      if (cat === 'volunteer') return `cv/${item.id}`;
-      if (cat === 'recommendation') return `anbefalinger/${item.id}`;
-      return `projekter/${item.id}`;
+      if (cat === 'article') return `insights/${item.id}`;
+      if (cat === 'work' || cat === 'education' || cat === 'volunteer') return `cv/${item.id}`;
+      if (cat === 'recommendation') return `recommendations/${item.id}`;
+      return `projects/${item.id}`;
     }
 
     function show404() {
