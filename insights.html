@@ -218,7 +218,7 @@
         articles.forEach(a => {
           const card = document.createElement('a');
           card.className = 'article-card fade-up';
-          card.href = `detail?id=${a.id}`;
+          card.href = `artikler/${a.id}`;
           card.innerHTML = `
             ${a.cover ? `
               <div class="article-img-wrap">

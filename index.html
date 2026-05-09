@@ -565,63 +565,7 @@
     <!-- Rendered dynamically -->
   </div>
 
-
-
-  <!-- PROJEKTER -->
-  <div id="projectsSection">
-    <div class="section-header">
-      <span class="section-title">Business Cases & ROI</span>
-      <a href="projects" class="section-link">Se alle projekter →</a>
-    </div>
-    <div class="proj-grid" id="featuredProjects">
-      <!-- Rendered dynamically -->
-    </div>
-    <div class="section-footer">
-      <a href="projects" class="btn-outline">Se alle cases</a>
-    </div>
-  </div>
-
-  <!-- CV STRIP -->
-  <div id="cvSection">
-    <div class="section-header">
-      <span class="section-title">Kommerciel Erfaring</span>
-      <a href="cv" class="section-link">Se fuldt CV →</a>
-      </div>
-      <div class="cv-strip" id="featuredExperience">
-      <!-- Rendered dynamically -->
-      </div>
-      <div class="section-footer">
-      <a href="cv" class="btn-outline">Se fuldt CV</a>
-    </div>
-  </div>
-
-  <!-- PODCAST / INDSIGTER -->
-  <div id="mediaSection" class="fade-up">
-    <div class="section-header">
-      <span class="section-title">Podcast: "Hvorfor levering ødelægger konverteringen"</span>
-    </div>
-    <div class="media-container" style="background: var(--bg-card); border: 0.5px solid var(--border-md); padding: 16px; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); margin: 0 20px 40px 20px; transition: border-color 0.3s; min-height: 184px;">
-      <div class="deferred-content" data-type="spotify" data-src="https://open.spotify.com/embed/episode/1IMoB5xodoIzsVIgDosrv0?utm_source=generator&theme=0" data-title="Spotify Podcast Episode: Vibe Coding & AI">
-        <!-- Injected by JS -->
-      </div>
-    </div>
-  </div>
-
-  <!-- INDSIGTER (BLOG) -->
-  <div id="blogSection" class="fade-up">
-    <div class="section-header">
-      <span class="section-title">Indsigter & Perspektiver</span>
-      <a href="insights" class="section-link">Se alle indsigter →</a>
-    </div>
-    <div class="proj-grid" id="blogGrid">
-      <!-- Udfyldes af JS -->
-    </div>
-    <div class="section-footer">
-      <a href="insights" class="btn-outline">Se alle indsigter</a>
-    </div>
-  </div>
-
-  <!-- ANBEFALINGER -->
+  <!-- ANBEFALINGER (mini-carousel — social proof direkte efter kompetencer) -->
   <section class="section" id="recSection" style="position: relative;">
     <div class="section-header">
       <span class="section-title">Anbefalinger</span>
@@ -645,6 +589,60 @@
       <a href="recommendations" class="section-link">Læs alle anbefalinger →</a>
     </div>
   </section>
+
+  <!-- PROJEKTER -->
+  <div id="projectsSection">
+    <div class="section-header">
+      <span class="section-title">Business Cases & ROI</span>
+      <a href="projects" class="section-link">Se alle projekter →</a>
+    </div>
+    <div class="proj-grid" id="featuredProjects">
+      <!-- Rendered dynamically -->
+    </div>
+    <div class="section-footer">
+      <a href="projects" class="btn-outline">Se alle cases</a>
+    </div>
+  </div>
+
+  <!-- INDSIGTER (BLOG) -->
+  <div id="blogSection" class="fade-up">
+    <div class="section-header">
+      <span class="section-title">Indsigter & Perspektiver</span>
+      <a href="insights" class="section-link">Se alle indsigter →</a>
+    </div>
+    <div class="proj-grid" id="blogGrid">
+      <!-- Udfyldes af JS -->
+    </div>
+    <div class="section-footer">
+      <a href="insights" class="btn-outline">Se alle indsigter</a>
+    </div>
+  </div>
+
+  <!-- PODCAST / INDSIGTER -->
+  <div id="mediaSection" class="fade-up">
+    <div class="section-header">
+      <span class="section-title">Podcast: "Hvorfor levering ødelægger konverteringen"</span>
+    </div>
+    <div class="media-container" style="background: var(--bg-card); border: 0.5px solid var(--border-md); padding: 16px; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); margin: 0 20px 40px 20px; transition: border-color 0.3s; min-height: 184px;">
+      <div class="deferred-content" data-type="spotify" data-src="https://open.spotify.com/embed/episode/1IMoB5xodoIzsVIgDosrv0?utm_source=generator&theme=0" data-title="Spotify Podcast Episode: Vibe Coding & AI">
+        <!-- Injected by JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- CV STRIP -->
+  <div id="cvSection">
+    <div class="section-header">
+      <span class="section-title">Kommerciel Erfaring</span>
+      <a href="cv" class="section-link">Se fuldt CV →</a>
+      </div>
+      <div class="cv-strip" id="featuredExperience">
+      <!-- Rendered dynamically -->
+      </div>
+      <div class="section-footer">
+      <a href="cv" class="btn-outline">Se fuldt CV</a>
+    </div>
+  </div>
 
   <!-- UDDANNELSE -->
   <div id="eduSection" style="display:none;">
@@ -769,7 +767,7 @@
         const catClass  = { ai:'tag-ai', checkout:'tag-ai', konvertering:'tag-ai', work:'tag-work', volunteer:'tag-vol' };
 
         projGrid.innerHTML = latestProj.map(p => `
-          <a href="detail?id=${p.id}" class="proj-card">
+          <a href="projekter/${p.id}" class="proj-card">
             ${p.cover ? `
               <div class="proj-card-img-wrap">
                 <img src="${p.cover}" alt="${esc(p.cover_alt||p.title)}" class="proj-card-img" style="object-position: ${p.cover_pos || 'center center'}" loading="lazy" onerror="this.parentElement.style.display='none'">
@@ -793,7 +791,7 @@
         if (arts.length > 0) {
           blogSec.style.display = 'block';
           blogGridEl.innerHTML = arts.map(a => `
-            <a href="detail?id=${a.id}" class="proj-card">
+            <a href="artikler/${a.id}" class="proj-card">
               ${a.cover ? `
                 <div class="proj-card-img-wrap">
                   <img src="${a.cover}" alt="${esc(a.title)}" class="proj-card-img" style="object-position: ${a.cover_pos || 'center center'}" loading="lazy" onerror="this.parentElement.style.display='none'">
@@ -820,7 +818,7 @@
       if (expGrid) {
         const latestJobs = (data.cv?.jobs || []).filter(j => j.visible !== false && j.category !== 'volunteer').slice(0, 3);
         expGrid.innerHTML = latestJobs.map(j => `
-          <a href="detail?id=${j.id}" class="cv-item">
+          <a href="cv/${j.id}" class="cv-item">
             <div class="cv-year">${esc(j.period)}</div>
             <div class="cv-role">${esc(j.role)}</div>
             <div class="cv-company">${esc(j.company)}</div>
@@ -837,7 +835,7 @@
         if (latestEdu.length > 0) {
           eduSec.style.display = 'block';
           eduGrid.innerHTML = latestEdu.map(e => `
-            <a href="detail?id=${e.id}" class="cv-item">
+            <a href="cv/${e.id}" class="cv-item">
               <div class="cv-year">${esc(e.period)}</div>
               <div class="cv-role">${esc(e.title)}</div>
               <div class="cv-company">${esc(e.institution)}</div>
@@ -854,7 +852,7 @@
         if (latestVol.length > 0) {
           volSec.style.display = 'block';
           volGrid.innerHTML = latestVol.map(v => `
-            <a href="detail?id=${v.id}" class="cv-item">
+            <a href="projekter/${v.id}" class="cv-item">
               <div class="cv-year">${esc(v.period || '')}</div>
               <div class="cv-role">${esc(v.title)}</div>
               <div class="cv-company">${esc(v.tag || 'Frivillig')}</div>
@@ -883,7 +881,7 @@
                     <div class="rec-role">${esc(r.role)}</div>
                   </div>
                 </div>
-                <a href="detail?id=${r.id}" class="section-link" style="margin-top:24px; display:inline-block; font-size:11px;">Læs hele udtalelsen →</a>
+                <a href="anbefalinger/${r.id}" class="section-link" style="margin-top:24px; display:inline-block; font-size:11px;">Læs hele udtalelsen →</a>
               </div>
             </div>`;
         }).join('');

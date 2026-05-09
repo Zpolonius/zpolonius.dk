@@ -538,7 +538,7 @@
               <div class="timeline-year-val">${esc(j.period)}</div>
               <div class="timeline-year-dot"></div>
             </div>
-            <a class="timeline-content" href="detail?id=${j.id}">
+            <a class="timeline-content" href="cv/${j.id}">
               <div class="timeline-role">${esc(j.role)}</div>
               <div class="timeline-company">${esc(j.company)}</div>
               <div class="timeline-desc">${esc(j.desc || '')}</div>
@@ -579,7 +579,7 @@
                   <div class="rec-role">${esc(r.role)}</div>
                 </div>
               </div>
-              <a href="detail?id=${r.id}" class="section-link" style="margin-top:24px; display:inline-block; font-size:12px;">Læs hele udtalelsen →</a>
+              <a href="anbefalinger/${r.id}" class="section-link" style="margin-top:24px; display:inline-block; font-size:12px;">Læs hele udtalelsen →</a>
             </div>`;
         });
 
@@ -588,7 +588,7 @@
         (cv.education || []).forEach(e => {
           if (e.visible === false) return;
           eg.innerHTML += `
-            <a class="edu-card" href="detail?id=${e.id}">
+            <a class="edu-card" href="cv/${e.id}">
               <div class="edu-period">${esc(e.period)}</div>
               <div class="edu-title">${esc(e.title)}</div>
               <div class="edu-inst">${esc(e.institution)}</div>
@@ -607,7 +607,7 @@
                 <div class="timeline-year-val">${esc(j.period)}</div>
                 <div class="timeline-year-dot" style="background: var(--text-ghost); box-shadow: none;"></div>
               </div>
-              <a class="timeline-content" href="detail?id=${j.id}" style="opacity: 0.8;">
+              <a class="timeline-content" href="cv/${j.id}" style="opacity: 0.8;">
                 <div class="timeline-role">${esc(j.role)}</div>
                 <div class="timeline-company">${esc(j.company || 'Frivilligt arbejde')}</div>
                 <div class="timeline-desc">${esc(j.desc || '')}</div>
