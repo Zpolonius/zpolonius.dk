@@ -327,7 +327,13 @@
   <script src="js/main.js?v=1.0.6"></script>
   <script>
     const urlParams = new URLSearchParams(window.location.search);
-    const itemId = urlParams.get('id');
+    let itemId = urlParams.get('id');
+
+    // Understøt rene URL'er: /projekter/slug, /artikler/slug, /cv/slug, /anbefalinger/slug
+    if (!itemId) {
+      const pathParts = window.location.pathname.replace(/\/$/, '').split('/').filter(Boolean);
+      if (pathParts.length >= 2) itemId = pathParts[pathParts.length - 1];
+    }
 
     if (!itemId) {
       show404();
@@ -345,6 +351,15 @@
         if (!item) { show404(); return; }
         renderDetail(item, allItems);
       });
+    }
+
+    function getDetailUrl(item) {
+      const cat = item.category || '';
+      if (cat === 'article') return `artikler/${item.id}`;
+      if (cat === 'work' || cat === 'education') return `cv/${item.id}`;
+      if (cat === 'volunteer') return `cv/${item.id}`;
+      if (cat === 'recommendation') return `anbefalinger/${item.id}`;
+      return `projekter/${item.id}`;
     }
 
     function show404() {
@@ -399,6 +414,54 @@
           document.head.appendChild(metaTag);
         }
         metaTag.content = metaDesc.substring(0, 160);
+      }
+
+      // Dynamisk JSON-LD schema (Fix 4)
+      const existingLd = document.getElementById('dynamic-ld-json');
+      if (existingLd) existingLd.remove();
+      const ldScript = document.createElement('script');
+      ldScript.id = 'dynamic-ld-json';
+      ldScript.type = 'application/ld+json';
+      const baseUrl = 'https://zpolonius.dk';
+      const cat = item.category || '';
+      let ldData = null;
+
+      if (cat === 'article') {
+        ldData = {
+          "@context": "https://schema.org",
+          "@type": "BlogPosting",
+          "headline": item.title,
+          "description": metaDesc.substring(0, 160) || undefined,
+          "image": item.cover ? baseUrl + '/' + item.cover : undefined,
+          "author": { "@type": "Person", "name": "Zacharias Polonius", "url": baseUrl },
+          "publisher": { "@type": "Person", "name": "Zacharias Polonius" },
+          "url": baseUrl + '/artikler/' + item.id,
+          "mainEntityOfPage": { "@type": "WebPage", "@id": baseUrl + '/artikler/' + item.id }
+        };
+      } else if (cat === 'recommendation') {
+        ldData = {
+          "@context": "https://schema.org",
+          "@type": "Review",
+          "reviewBody": item.intro || item.text,
+          "author": { "@type": "Person", "name": item.name },
+          "itemReviewed": { "@type": "Person", "name": "Zacharias Polonius", "url": baseUrl }
+        };
+      } else {
+        // Projekter og cases: BreadcrumbList
+        const breadcrumbName = { ai:'Projekter', checkout:'Projekter', konvertering:'Projekter', work:'CV', volunteer:'CV', education:'CV' };
+        ldData = {
+          "@context": "https://schema.org",
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            { "@type": "ListItem", "position": 1, "name": "Hjem", "item": baseUrl },
+            { "@type": "ListItem", "position": 2, "name": breadcrumbName[cat] || 'Projekter', "item": baseUrl + '/' + (parentHref[cat] || 'projects') },
+            { "@type": "ListItem", "position": 3, "name": item.title || item.name, "item": window.location.href }
+          ]
+        };
+      }
+      if (ldData) {
+        ldScript.textContent = JSON.stringify(ldData);
+        document.head.appendChild(ldScript);
       }
       
       const img = document.getElementById('coverImg');
@@ -540,7 +603,7 @@
       
       if (idx > 0) {
         const prev = currentCatItems[idx - 1];
-        navHtml += `<a href="detail?id=${prev.id}" class="entry-nav-item">
+        navHtml += `<a href="${getDetailUrl(prev)}" class="entry-nav-item">
           <div class="entry-nav-dir">← Forrige</div>
           <div class="entry-nav-title">${esc(prev.title || prev.name)}</div>
         </a>`;
@@ -548,7 +611,7 @@
 
       if (idx < currentCatItems.length - 1) {
         const next = currentCatItems[idx + 1];
-        navHtml += `<a href="detail?id=${next.id}" class="entry-nav-item" style="text-align:right;">
+        navHtml += `<a href="${getDetailUrl(next)}" class="entry-nav-item" style="text-align:right;">
           <div class="entry-nav-dir">Næste →</div>
           <div class="entry-nav-title">${esc(next.title || next.name)}</div>
         </a>`;

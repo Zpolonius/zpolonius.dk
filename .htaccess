@@ -51,6 +51,12 @@ RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME}.html -f
 RewriteRule ^(.*)$ $1.html [L]
 
+# Rene URL'er til detail-sider (SEO + socialt deling)
+RewriteRule ^projekter/([^/]+)/?$ detail.html?id=$1 [L,QSA]
+RewriteRule ^artikler/([^/]+)/?$ detail.html?id=$1 [L,QSA]
+RewriteRule ^cv/([^/]+)/?$ detail.html?id=$1 [L,QSA]
+RewriteRule ^anbefalinger/([^/]+)/?$ detail.html?id=$1 [L,QSA]
+
 # Dynamisk Sitemap Rewrite (xml -> php)
 RewriteRule ^sitemap\.xml$ sitemap.php [L]
 

@@ -303,7 +303,7 @@
         visibleProjects.forEach(p => {
           const card = document.createElement('a');
           card.className = 'proj-card';
-          card.href = `detail?id=${p.id}`;
+          card.href = `projekter/${p.id}`;
           card.dataset.cat = p.category;
           card.innerHTML = `
             ${p.cover ? `
