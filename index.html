@@ -864,7 +864,7 @@
         const catClass  = { ai:'tag-ai', checkout:'tag-ai', konvertering:'tag-ai', work:'tag-work', volunteer:'tag-vol' };
 
         projGrid.innerHTML = latestProj.map(p => `
-          <a href="projekter/${p.id}" class="proj-card">
+          <a href="projects/${p.id}" class="proj-card">
             ${p.cover ? `
               <div class="proj-card-img-wrap">
                 <img src="${p.cover}" alt="${esc(p.cover_alt||p.title)}" class="proj-card-img" style="object-position: ${p.cover_pos || 'center center'}" loading="lazy" onerror="this.parentElement.style.display='none'">
@@ -888,7 +888,7 @@
         if (arts.length > 0) {
           blogSec.style.display = 'block';
           blogGridEl.innerHTML = arts.map(a => `
-            <a href="artikler/${a.id}" class="proj-card">
+            <a href="insights/${a.id}" class="proj-card">
               ${a.cover ? `
                 <div class="proj-card-img-wrap">
                   <img src="${a.cover}" alt="${esc(a.title)}" class="proj-card-img" style="object-position: ${a.cover_pos || 'center center'}" loading="lazy" onerror="this.parentElement.style.display='none'">
@@ -949,7 +949,7 @@
         if (latestVol.length > 0) {
           volSec.style.display = 'block';
           volGrid.innerHTML = latestVol.map(v => `
-            <a href="projekter/${v.id}" class="cv-item">
+            <a href="projects/${v.id}" class="cv-item">
               <div class="cv-year">${esc(v.period || '')}</div>
               <div class="cv-role">${esc(v.title)}</div>
               <div class="cv-company">${esc(v.tag || 'Frivillig')}</div>
@@ -975,7 +975,7 @@
             ? `<img src="${esc(r.logo)}" alt="" class="compact-rec-logo" aria-hidden="true">`
             : '';
           return `
-            <a href="anbefalinger/${esc(r.id)}" class="compact-rec-slide">
+            <a href="recommendations/${esc(r.id)}" class="compact-rec-slide">
               ${avatar}
               <div class="compact-rec-body">
                 <div class="compact-rec-meta"><strong>${esc(r.name)}</strong> · ${esc(r.role)}</div>

@@ -1,62 +1,49 @@
 # Zacharias Polonius — zpolonius.dk
 
-# Forhindr mappe-visning (sikkerhed)
-Options -Indexes
+# Forhindr mappe-visning og MultiViews
+Options -Indexes -MultiViews
 
 # Custom 404 side
 ErrorDocument 404 /404
 
-# --- SIKKERHEDS HEADERS (Google & Trust Anbefalinger) ---
+# --- SIKKERHEDS HEADERS ---
 <IfModule mod_headers.c>
-    # Beskyt mod Clickjacking
     Header set X-Frame-Options "SAMEORIGIN"
-    
-    # Beskyt mod MIME-sniffing
     Header set X-Content-Type-Options "nosniff"
-    
-    # Referrer Policy
     Header set Referrer-Policy "strict-origin-when-cross-origin"
-    
-    # Browser features (XSS beskyttelse og privatliv)
     Header set Permissions-Policy "geolocation=(), camera=(), microphone=()"
-
-    # Content Security Policy (CSP)
-    # Tillader scripts fra eget domæne, Quill CDN, Cloudflare CDN (Vanilla Tilt), og Spotify
-    Header set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' cdn.quilljs.com cdn.jsdelivr.net cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' fonts.googleapis.com cdn.quilljs.com cdn.jsdelivr.net; font-src 'self' fonts.gstatic.com; img-src 'self' data:; connect-src 'self' generativelanguage.googleapis.com cdn.jsdelivr.net; frame-src 'self' open.spotify.com;"
-
-    # Force HTTPS (HSTS) - Gælder i 1 år
-    Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
 </IfModule>
 
-# Redirect www til non-www (valgfrit — kommenter ud hvis ikke ønsket)
-# RewriteEngine On
-# RewriteCond %{HTTP_HOST} ^www\.(.*)$ [NC]
-# RewriteRule ^(.*)$ https://%1/$1 [R=301,L]
-
-# Sørg for HTTPS
 RewriteEngine On
+RewriteBase /
+
+# 1. Tving HTTPS
 RewriteCond %{HTTPS} off
 RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 
-# Redirect index.html to root
+# 2. Redirect index.html til root
 RewriteRule ^index\.html$ / [R=301,L]
 
-# Skjul .html fil-endelser
+# 3. Rene URL'er til detail-sider (Før extension hiding)
+RewriteRule ^projects/([^/]+)/?$ detail.html?id=$1 [L,QSA]
+RewriteRule ^projekter/([^/]+)/?$ detail.html?id=$1 [L,QSA]
+RewriteRule ^insights/([^/]+)/?$ detail.html?id=$1 [L,QSA]
+RewriteRule ^artikler/([^/]+)/?$ detail.html?id=$1 [L,QSA]
+RewriteRule ^cv/([^/]+)/?$ detail.html?id=$1 [L,QSA]
+RewriteRule ^recommendations/([^/]+)/?$ detail.html?id=$1 [L,QSA]
+RewriteRule ^anbefalinger/([^/]+)/?$ detail.html?id=$1 [L,QSA]
+
+# 4. Skjul .html fil-endelser (External redirect)
 RewriteCond %{THE_REQUEST} ^[A-Z]{3,9}\ /([^\ ]+)\.html
 RewriteRule ^/?(.*)\.html$ /$1 [L,R=301]
 
+# 5. Intern rewrite til .html filer
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME}.html -f
 RewriteRule ^(.*)$ $1.html [L]
 
-# Rene URL'er til detail-sider (SEO + socialt deling)
-RewriteRule ^(projects|projekter)/([^/]+)/?$ detail.html?id=$2 [L,QSA]
-RewriteRule ^(insights|artikler)/([^/]+)/?$ detail.html?id=$2 [L,QSA]
-RewriteRule ^cv/([^/]+)/?$ detail.html?id=$1 [L,QSA]
-RewriteRule ^(recommendations|anbefalinger)/([^/]+)/?$ detail.html?id=$2 [L,QSA]
-
-# Dynamisk Sitemap Rewrite (xml -> php)
+# 6. Dynamisk Sitemap
 RewriteRule ^sitemap\.xml$ sitemap.php [L]
 
 # Blokér adgang til følsomme filer
@@ -65,24 +52,21 @@ RewriteRule ^sitemap\.xml$ sitemap.php [L]
     Deny from all
 </FilesMatch>
 
-# --- CACHING (Browser Cache Optimization) ---
+# --- CACHING ---
 <IfModule mod_expires.c>
     ExpiresActive On
-    
-    # Standard: 1 måned
     ExpiresDefault "access plus 1 month"
-    
-    # CSS & JS: 1 år (da de har versions-tags eller sjældent ændres)
     ExpiresByType text/css "access plus 1 year"
     ExpiresByType application/javascript "access plus 1 year"
-    
-    # Billeder: 1 år
     ExpiresByType image/webp "access plus 1 year"
     ExpiresByType image/png "access plus 1 year"
     ExpiresByType image/jpeg "access plus 1 year"
     ExpiresByType image/svg+xml "access plus 1 year"
     ExpiresByType image/x-icon "access plus 1 year"
-    
-    # Fonts: 1 år
     ExpiresByType font/woff2 "access plus 1 year"
+</IfModule>
+
+# Content Security Policy
+<IfModule mod_headers.c>
+    Header set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' cdn.quilljs.com cdn.jsdelivr.net cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' fonts.googleapis.com cdn.quilljs.com cdn.jsdelivr.net; font-src 'self' fonts.gstatic.com; img-src 'self' data:; connect-src 'self' generativelanguage.googleapis.com cdn.jsdelivr.net; frame-src 'self' open.spotify.com;"
 </IfModule>
