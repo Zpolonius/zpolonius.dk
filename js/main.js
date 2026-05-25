@@ -380,6 +380,7 @@ function initSharedLayout() {
 
   const floatingCtaHtml = `
     <button class="floating-cta" data-contact data-track="contact-open-floating">
+      <img class="floating-cta-avatar" src="assets/photo/avatar.jpg" alt="Zacharias Polonius" onerror="this.style.display='none'">
       Book en ærlig snak →
     </button>
   `;

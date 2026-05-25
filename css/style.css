@@ -925,7 +925,7 @@ textarea.input { resize: none; height: 100px; line-height: 1.6; }
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 12px 20px;
+  padding: 8px 20px 8px 8px;
   background: var(--blue);
   color: #fff;
   border: none;
@@ -942,8 +942,15 @@ textarea.input { resize: none; height: 100px; line-height: 1.6; }
   box-shadow: 0 15px 35px rgba(65, 143, 255, 0.5);
   background: #2d7ae8;
 }
-.floating-cta .icon {
-  font-size: 18px;
+.floating-cta-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  object-fit: cover;
+  object-position: center top;
+  border: 1.5px solid rgba(255,255,255,0.35);
+  flex-shrink: 0;
+  display: block;
 }
 
 @media (max-width: 768px) {
