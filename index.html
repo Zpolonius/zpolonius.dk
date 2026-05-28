@@ -330,95 +330,6 @@
     .cv-company { font-size: 15px; color: var(--text-muted); margin-bottom: 8px; }
     .cv-desc { font-size: 16px; color: var(--text-faint); line-height: 1.65; }
 
-    /* ---- QUOTES CAROUSEL ---- */
-    .rec-container {
-      position: relative;
-      overflow: hidden;
-      padding: 60px 0;
-    }
-    .quote-carousel {
-      display: flex;
-      transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-      will-change: transform;
-    }
-    .quote-card {
-      min-width: 100%;
-      padding: 60px 40px;
-      box-sizing: border-box;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-    }
-    .quote-inner {
-      max-width: 800px;
-      background: var(--bg-card);
-      backdrop-filter: blur(10px);
-      border: 0.5px solid var(--border-md);
-      border-radius: 40px;
-      padding: 60px 50px;
-      box-shadow: 0 30px 60px rgba(0,0,0,0.12);
-      position: relative;
-    }
-    .quote-mark { font-size: 64px; color: var(--blue); font-weight: 700; margin-bottom: 16px; line-height: 1; opacity: 0.4; }
-    .quote-text { font-size: 24px; color: var(--text); line-height: 1.6; margin-bottom: 32px; font-style: italic; font-weight: 500; letter-spacing: -0.01em; }
-
-    .carousel-nav {
-      position: absolute;
-      bottom: 40px;
-      left: 50%;
-      transform: translateX(-50%);
-      display: flex;
-      gap: 12px;
-      z-index: 5;
-    }
-    .carousel-arrow {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 48px;
-      height: 48px;
-      background: var(--bg-card);
-      backdrop-filter: blur(10px);
-      border: 0.5px solid var(--border-md);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      z-index: 10;
-      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-      color: var(--text);
-      opacity: 0;
-      pointer-events: none;
-    }
-    .rec-container:hover .carousel-arrow {
-      opacity: 1;
-      pointer-events: all;
-    }
-    .carousel-arrow:hover {
-      background: var(--blue);
-      color: #fff;
-      border-color: var(--blue);
-      transform: translateY(-50%) scale(1.1);
-    }
-    .prev-btn { left: 40px; }
-    .next-btn { right: 40px; }
-
-    @media (max-width: 768px) {
-      .carousel-arrow { display: none; }
-    }
-    .carousel-dot {
-      width: 6px; height: 6px;
-      border-radius: 50%;
-      background: var(--text-ghost);
-      cursor: pointer;
-      transition: all 0.3s;
-    }
-    .carousel-dot.active {
-      background: var(--blue);
-      transform: scale(1.4);
-    }
 
     @media (max-width: 768px) {
       html {
@@ -428,33 +339,6 @@
       section, #projectsSection, #cvSection, #recSection, #mediaSection, #blogSection, .footer {
         scroll-snap-align: start;
       }
-      .quote-card { padding: 32px 24px 60px; }
-      .carousel-nav { right: 50%; transform: translateX(50%); bottom: 20px; }
-      
-
-
-      /* SCROLLABLE RECOMMENDATIONS */
-      .rec-container {
-        overflow-x: auto;
-        scroll-snap-type: x mandatory;
-        scrollbar-width: none;
-        -ms-overflow-style: none;
-      }
-      .rec-container::-webkit-scrollbar { display: none; }
-      .quote-carousel {
-        transform: none !important; /* Overstyre JS på mobil */
-      }
-      .quote-card {
-        scroll-snap-align: center;
-        min-width: 100%;
-        border-right: none;
-        padding: 40px 20px;
-      }
-      .quote-inner {
-        padding: 40px 24px;
-        border-radius: 30px;
-      }
-
       .nav-btn { display: none; } /* Skjul kontakt-knap i header på mobil */
       .nav-hamburger { 
         display: flex; 
@@ -980,7 +864,7 @@
           const raw = (r.intro || r.text || '').replace(/<[^>]+>/g, '').trim();
           const initials = (r.name || '?').split(' ').map(w => w[0]).slice(0, 2).join('');
           const avatar = r.photo
-            ? `<img src="${esc(r.photo)}" alt="${esc(r.name)}" class="rec-card-avatar" style="object-position:${r.photo_pos||'center center'}" onerror="this.outerHTML='<div class=rec-card-avatar-fallback>${esc(initials)}</div>'">`
+            ? `<img src="${esc(r.photo)}" alt="${esc(r.name)}" class="rec-card-avatar" style="object-position:${r.photo_pos||'center center'}" onerror="this.outerHTML='<div class=\"rec-card-avatar-fallback\">${esc(initials)}</div>'">`
             : `<div class="rec-card-avatar-fallback">${esc(initials)}</div>`;
           return `
             <a href="recommendations/${esc(r.id)}" class="rec-card">
