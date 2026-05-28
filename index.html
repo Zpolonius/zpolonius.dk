@@ -508,109 +508,88 @@
     }
 
 
-    /* ---- KOMPAKT KARUSSEL ---- */
-    .compact-rec-wrap {
-      border-top: 0.5px solid var(--border);
-      border-bottom: 0.5px solid var(--border);
+    /* ---- ANBEFALINGER GRID ---- */
+    .rec-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 24px;
+      padding: 20px 40px;
+    }
+    .rec-card {
+      background: var(--bg-card);
+      border: 0.5px solid var(--border-md);
+      border-radius: var(--radius-lg);
+      padding: 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      text-decoration: none;
+    }
+    .rec-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+      border-color: var(--border-blue);
+    }
+    .rec-card-mark {
+      font-size: 36px;
+      color: var(--blue);
+      font-weight: 700;
+      line-height: 1;
+      opacity: 0.35;
+      margin-bottom: -8px;
+    }
+    .rec-card-quote {
+      font-size: 15px;
+      color: var(--text-muted);
+      font-style: italic;
+      line-height: 1.7;
+      flex: 1;
+      display: -webkit-box;
+      -webkit-line-clamp: 5;
+      -webkit-box-orient: vertical;
       overflow: hidden;
     }
-    .compact-rec-track {
-      display: flex;
-      transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-      will-change: transform;
-    }
-    .compact-rec-slide {
-      min-width: 100%;
-      padding: 28px 40px;
+    .rec-card-person {
       display: flex;
       align-items: center;
-      gap: 20px;
-      box-sizing: border-box;
+      gap: 12px;
+      padding-top: 16px;
+      border-top: 0.5px solid var(--border);
     }
-    .compact-rec-avatar {
-      width: 48px; height: 48px;
+    .rec-card-avatar {
+      width: 40px; height: 40px;
       border-radius: 50%;
       object-fit: cover;
       flex-shrink: 0;
       border: 1.5px solid var(--border-md);
     }
-    .compact-rec-avatar-fallback {
-      width: 48px; height: 48px;
+    .rec-card-avatar-fallback {
+      width: 40px; height: 40px;
       border-radius: 50%;
-      background: var(--bg-card);
+      background: var(--bg-deep);
       border: 1.5px solid var(--border-md);
       display: flex; align-items: center; justify-content: center;
-      font-size: 14px; font-weight: 600; color: var(--text-muted);
+      font-size: 13px; font-weight: 600; color: var(--text-muted);
       flex-shrink: 0;
     }
-    .compact-rec-body { flex: 1; min-width: 0; }
-    .compact-rec-meta {
+    .rec-card-name {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text);
+      line-height: 1.3;
+    }
+    .rec-card-role {
       font-size: 12px;
       color: var(--text-faint);
-      margin-bottom: 6px;
+      margin-top: 2px;
     }
-    .compact-rec-meta strong { color: var(--text-muted); font-weight: 600; }
-    .compact-rec-quote {
-      font-size: 15px;
-      color: var(--text);
-      font-style: italic;
-      line-height: 1.5;
-      display: -webkit-box;
-      -webkit-line-clamp: 2;
-      -webkit-box-orient: vertical;
-      overflow: hidden;
-    }
-    .compact-rec-nav {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 12px 40px;
-      border-top: 0.5px solid var(--border);
-    }
-    .compact-arrow {
-      width: 28px; height: 28px;
-      border-radius: 50%;
-      border: 0.5px solid var(--border-md);
-      background: var(--bg-card);
-      color: var(--text-muted);
-      display: flex; align-items: center; justify-content: center;
-      cursor: pointer;
-      transition: all 0.2s;
-      flex-shrink: 0;
-    }
-    .compact-arrow:hover { border-color: var(--blue); color: var(--blue); }
-    .compact-dots { display: flex; gap: 6px; align-items: center; }
-    .compact-dot {
-      width: 5px; height: 5px;
-      border-radius: 50%;
-      background: var(--text-ghost);
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-    .compact-dot.active { background: var(--blue); transform: scale(1.4); }
-    .compact-rec-link {
-      margin-left: auto;
-      font-size: 12px;
-      color: var(--blue);
-      text-decoration: none;
-      transition: opacity 0.2s;
-    }
-    .compact-rec-link:hover { opacity: 0.7; }
-    .compact-rec-logo {
-      height: 28px;
-      width: auto;
-      max-width: 80px;
-      object-fit: contain;
-      opacity: 0.5;
-      flex-shrink: 0;
-      filter: grayscale(1);
-      transition: opacity 0.2s;
-    }
-    .compact-rec-slide:hover .compact-rec-logo { opacity: 0.8; }
     @media (max-width: 768px) {
-      .compact-rec-slide { padding: 24px 20px; }
-      .compact-rec-nav { padding: 12px 20px; }
-      .compact-rec-logo { display: none; }
+      .rec-grid {
+        grid-template-columns: 1fr;
+        padding: 20px;
+        gap: 16px;
+      }
     }
 
     /* ---- CTA ---- */    .cta-bar {
@@ -670,20 +649,17 @@
     <!-- Rendered dynamically -->
   </div>
 
-  <!-- ANBEFALINGER (kompakt karussel) -->
-  <div id="recSection" class="compact-rec-wrap">
-    <div class="compact-rec-track" id="compactRecTrack">
+  <!-- ANBEFALINGER -->
+  <div id="recSection">
+    <div class="section-header">
+      <span class="section-title">Hvad folk siger</span>
+      <a href="recommendations" class="section-link">Se alle anbefalinger →</a>
+    </div>
+    <div class="rec-grid" id="recGrid">
       <!-- Rendered dynamically -->
     </div>
-    <div class="compact-rec-nav">
-      <button class="compact-arrow" id="compactPrev" aria-label="Forrige">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
-      </button>
-      <div class="compact-dots" id="compactDots"></div>
-      <button class="compact-arrow" id="compactNext" aria-label="Næste">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
-      </button>
-      <a href="recommendations" class="compact-rec-link">Se alle →</a>
+    <div class="section-footer">
+      <a href="recommendations" class="btn-outline">Se alle anbefalinger</a>
     </div>
   </div>
 
@@ -958,50 +934,29 @@
         }
       }
 
-      // Kompakt karussel
-      const recTrack = document.getElementById('compactRecTrack');
-      const recDots = document.getElementById('compactDots');
-      if (recTrack) {
-        const recs = (data.cv?.recommendations || []).filter(r => r.visible !== false);
-        let compactIdx = 0;
-
-        recTrack.innerHTML = recs.map(r => {
+      // Anbefalinger grid
+      const recGrid = document.getElementById('recGrid');
+      if (recGrid) {
+        const recs = (data.cv?.recommendations || []).filter(r => r.visible !== false).slice(0, 2);
+        recGrid.innerHTML = recs.map(r => {
           const raw = (r.intro || r.text || '').replace(/<[^>]+>/g, '').trim();
           const initials = (r.name || '?').split(' ').map(w => w[0]).slice(0, 2).join('');
           const avatar = r.photo
-            ? `<img src="${esc(r.photo)}" alt="${esc(r.name)}" class="compact-rec-avatar" style="object-position:${r.photo_pos||'center center'}" onerror="this.outerHTML='<div class=compact-rec-avatar-fallback>${esc(initials)}</div>'">`
-            : `<div class="compact-rec-avatar-fallback">${esc(initials)}</div>`;
-          const logo = r.logo
-            ? `<img src="${esc(r.logo)}" alt="" class="compact-rec-logo" aria-hidden="true">`
-            : '';
+            ? `<img src="${esc(r.photo)}" alt="${esc(r.name)}" class="rec-card-avatar" style="object-position:${r.photo_pos||'center center'}" onerror="this.outerHTML='<div class=rec-card-avatar-fallback>${esc(initials)}</div>'">`
+            : `<div class="rec-card-avatar-fallback">${esc(initials)}</div>`;
           return `
-            <a href="recommendations/${esc(r.id)}" class="compact-rec-slide">
-              ${avatar}
-              <div class="compact-rec-body">
-                <div class="compact-rec-meta"><strong>${esc(r.name)}</strong> · ${esc(r.role)}</div>
-                <div class="compact-rec-quote">"${esc(raw)}"</div>
+            <a href="recommendations/${esc(r.id)}" class="rec-card">
+              <div class="rec-card-mark">"</div>
+              <div class="rec-card-quote">${esc(raw)}</div>
+              <div class="rec-card-person">
+                ${avatar}
+                <div>
+                  <div class="rec-card-name">${esc(r.name)}</div>
+                  <div class="rec-card-role">${esc(r.role)}</div>
+                </div>
               </div>
-              ${logo}
             </a>`;
         }).join('');
-
-        // Dots
-        recDots.innerHTML = recs.map((_, i) =>
-          `<div class="compact-dot${i === 0 ? ' active' : ''}" data-i="${i}"></div>`
-        ).join('');
-
-        const goTo = idx => {
-          compactIdx = (idx + recs.length) % recs.length;
-          recTrack.style.transform = `translateX(-${compactIdx * 100}%)`;
-          recDots.querySelectorAll('.compact-dot').forEach((d, i) => d.classList.toggle('active', i === compactIdx));
-        };
-
-        recDots.addEventListener('click', e => {
-          const dot = e.target.closest('.compact-dot');
-          if (dot) goTo(+dot.dataset.i);
-        });
-        document.getElementById('compactPrev').onclick = () => goTo(compactIdx - 1);
-        document.getElementById('compactNext').onclick = () => goTo(compactIdx + 1);
       }
     });
 
