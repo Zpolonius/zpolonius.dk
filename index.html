@@ -864,7 +864,7 @@
           const raw = (r.intro || r.text || '').replace(/<[^>]+>/g, '').trim();
           const initials = (r.name || '?').split(' ').map(w => w[0]).slice(0, 2).join('');
           const avatar = r.photo
-            ? `<img src="${esc(r.photo)}" alt="${esc(r.name)}" class="rec-card-avatar" style="object-position:${r.photo_pos||'center center'}" onerror="this.outerHTML='<div class=\"rec-card-avatar-fallback\">${esc(initials)}</div>'">`
+            ? `<img src="${esc(r.photo)}" alt="${esc(r.name)}" class="rec-card-avatar" style="object-position:${r.photo_pos||'center center'}" onerror="this.outerHTML='<div class=rec-card-avatar-fallback>${esc(initials)}</div>'">`
             : `<div class="rec-card-avatar-fallback">${esc(initials)}</div>`;
           return `
             <a href="recommendations/${esc(r.id)}" class="rec-card">
