@@ -514,7 +514,30 @@
       grid-template-columns: repeat(2, 1fr);
       gap: 24px;
       padding: 20px 40px;
+      transition: opacity 0.25s ease;
     }
+    .rec-nav { display: flex; align-items: center; gap: 10px; }
+    .rec-nav-arrow {
+      width: 28px; height: 28px;
+      border-radius: 50%;
+      border: 0.5px solid var(--border-md);
+      background: var(--bg-card);
+      color: var(--text-muted);
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s;
+      flex-shrink: 0;
+    }
+    .rec-nav-arrow:hover { border-color: var(--blue); color: var(--blue); }
+    .rec-dots { display: flex; gap: 6px; align-items: center; }
+    .rec-dot {
+      width: 5px; height: 5px;
+      border-radius: 50%;
+      background: var(--text-ghost);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .rec-dot.active { background: var(--blue); transform: scale(1.4); }
     .rec-card {
       background: var(--bg-card);
       border: 0.5px solid var(--border-md);
@@ -658,7 +681,16 @@
     <div class="rec-grid" id="recGrid">
       <!-- Rendered dynamically -->
     </div>
-    <div class="section-footer">
+    <div class="section-footer" style="justify-content:space-between; gap:16px;">
+      <div class="rec-nav">
+        <button class="rec-nav-arrow" id="recPrev" aria-label="Forrige">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+        </button>
+        <div class="rec-dots" id="recDots"></div>
+        <button class="rec-nav-arrow" id="recNext" aria-label="Næste">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+        </button>
+      </div>
       <a href="recommendations" class="btn-outline">Se alle anbefalinger</a>
     </div>
   </div>
@@ -934,11 +966,17 @@
         }
       }
 
-      // Anbefalinger grid
+      // Anbefalinger grid med auto-rotation
       const recGrid = document.getElementById('recGrid');
+      const recDotsEl = document.getElementById('recDots');
       if (recGrid) {
-        const recs = (data.cv?.recommendations || []).filter(r => r.visible !== false).slice(0, 2);
-        recGrid.innerHTML = recs.map(r => {
+        const recs = (data.cv?.recommendations || []).filter(r => r.visible !== false);
+        if (recs.length === 0) { document.getElementById('recSection').style.display = 'none'; return; }
+
+        let recIdx = 0;
+        let recTimer;
+
+        const buildCard = r => {
           const raw = (r.intro || r.text || '').replace(/<[^>]+>/g, '').trim();
           const initials = (r.name || '?').split(' ').map(w => w[0]).slice(0, 2).join('');
           const avatar = r.photo
@@ -956,7 +994,42 @@
                 </div>
               </div>
             </a>`;
-        }).join('');
+        };
+
+        const goTo = idx => {
+          recIdx = ((idx % recs.length) + recs.length) % recs.length;
+          recGrid.style.opacity = '0';
+          setTimeout(() => {
+            const a = recs[recIdx];
+            const b = recs[(recIdx + 1) % recs.length];
+            recGrid.innerHTML = buildCard(a) + (recs.length > 1 ? buildCard(b) : '');
+            recGrid.style.opacity = '1';
+          }, 220);
+          recDotsEl?.querySelectorAll('.rec-dot').forEach((d, i) => d.classList.toggle('active', i === recIdx));
+        };
+
+        const startTimer = () => { recTimer = setInterval(() => goTo(recIdx + 1), 5000); };
+        const resetTimer = () => { clearInterval(recTimer); startTimer(); };
+
+        // Dots (een per anbefaling)
+        if (recDotsEl && recs.length > 2) {
+          recDotsEl.innerHTML = recs.map((_, i) =>
+            `<div class="rec-dot${i === 0 ? ' active' : ''}" data-i="${i}"></div>`
+          ).join('');
+          recDotsEl.addEventListener('click', e => {
+            const dot = e.target.closest('.rec-dot');
+            if (dot) { goTo(+dot.dataset.i); resetTimer(); }
+          });
+        }
+
+        document.getElementById('recPrev')?.addEventListener('click', () => { goTo(recIdx - 1); resetTimer(); });
+        document.getElementById('recNext')?.addEventListener('click', () => { goTo(recIdx + 1); resetTimer(); });
+
+        recGrid.addEventListener('mouseenter', () => clearInterval(recTimer));
+        recGrid.addEventListener('mouseleave', startTimer);
+
+        goTo(0);
+        startTimer();
       }
     });
 
