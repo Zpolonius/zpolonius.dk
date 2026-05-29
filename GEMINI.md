@@ -32,7 +32,13 @@ This is a personal portfolio and professional resume website for **Zacharias Pol
 ### Coding Style
 - **Vanilla over Frameworks:** Do not introduce heavy frameworks (React/Vue). Keep logic in clean, functional Vanilla JS.
 - **Responsive First:** Use CSS Grid and Flexbox. Sitemaps must remain readable at 16px on mobile and 15px on desktop.
-- **Midnight Kinetic System:** Adhere to defined CSS variables (e.g., `--blue`, `--bg`, `--border-md`) for consistency.
+- **Semantic Structure:** Always use correct heading hierarchy (H1 -> H2 -> H3) for SEO and accessibility. Section titles must be `<h2>` tags, not spans.
+- **Midnight Kinetic System:** Adhere to defined CSS variables (e.g., `--blue`, `--bg`, `--border-md`) for consistency. Ensure all text meets WCAG AA contrast standards (at least 4.5:1).
+
+### Performance & UX
+- **Minimizing CLS:** Use skeleton loaders/placeholders for dynamic content (Bento Grid, Recommendations) to reserve space and prevent layout shifts.
+- **Optimized Animations:** Use `will-change: transform, opacity` for heavy animations and keep transform offsets small (e.g., 8px) to maintain visual stability.
+- **Embed Facades:** Never load third-party embeds (like Spotify) on initial page load. Use a "Facade" (placeholder with a play button) that only injects the iframe upon user interaction to defer cookies and improve performance.
 
 ### API & Data Handling
 - **Credentials:** Always use `credentials: 'same-origin'` in fetch calls to protected API endpoints.
