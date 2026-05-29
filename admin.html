@@ -163,6 +163,13 @@
       padding:18px 20px; transition:border-color 0.2s;
     }
     .entry-card:hover { border-color:var(--border-md); }
+    .proj-handle { color:var(--faint); cursor:grab; font-size:14px; padding:0 6px 0 0; flex-shrink:0; user-select:none; line-height:1.4; }
+    .proj-handle:active { cursor:grabbing; }
+    .entry-card.drag-dragging { opacity:0.4; border-color:var(--blue); }
+    .entry-card.drag-over { border-color:var(--blue); background:rgba(65,143,255,0.06); }
+    .btn-move { background:transparent; border:0.5px solid var(--border); color:var(--faint); font-size:11px; padding:3px 7px; cursor:pointer; transition:all 0.2s; line-height:1; font-family:inherit; }
+    .btn-move:hover { border-color:var(--blue); color:var(--blue); }
+    .btn-move:disabled { opacity:0.25; cursor:default; }
     .entry-card-header { display:flex; align-items:flex-start; justify-content:space-between; margin-bottom:10px; }
     .entry-card-tag {
       font-size:9px; letter-spacing:0.12em; text-transform:uppercase;
@@ -943,6 +950,11 @@ function saveAll() {
   });
 }
 
+function markUnsaved() {
+  const status = document.getElementById('saveStatus');
+  if (status) { status.textContent = '● Ikke gemt'; status.style.color = 'var(--amber)'; status.style.display = 'inline'; }
+}
+
 function updateBadges() {
   const s = data.specialer || [];
   const p = data.projects || [];
@@ -1419,21 +1431,88 @@ function openSpecialForm(isEdit, idx, item={}) {
 /* ---- PROJEKTER ---- */
 function renderProjekter(area) {
   const list = data.projects || [];
-  area.innerHTML = list.length ? `<div class="entry-grid">${list.map((p,i) => `
-    <div class="entry-card">
-      <div class="entry-card-header">
-        <span class="entry-card-tag ${p.category||''} ${p.visible===false?'draft':''}"> ${p.tag||p.category}</span>
-        ${p.visible===false?'<span class="entry-card-tag draft" style="border-color:var(--amber);color:var(--amber);margin-left:6px;">Udkast</span>':''}
-        <div class="entry-card-actions">
-          <button class="btn-edit" onclick="editProject(${i})">Rediger</button>
-          <button class="btn-del"  onclick="deleteEntry('projekter',${i})">Slet</button>
+  if (!list.length) { area.innerHTML = emptyState('📁','Ingen projekter endnu','Tilføj dine projekter og cases her.'); return; }
+  const last = list.length - 1;
+  area.innerHTML = `<div class="entry-grid">${list.map((p,i) => `
+    <div class="entry-card" draggable="true" data-index="${i}"
+         ondragstart="projDragStart(event,${i})"
+         ondragover="projDragOver(event,${i})"
+         ondragleave="projDragLeave(event)"
+         ondrop="projDrop(event,${i})"
+         ondragend="projDragEnd(event)">
+      <div style="display:flex;align-items:flex-start;">
+        <span class="proj-handle" title="Træk for at sortere">⠿</span>
+        <div style="flex:1;min-width:0;">
+          <div class="entry-card-header">
+            <div style="display:flex;flex-wrap:wrap;gap:4px;align-items:center;">
+              <span class="entry-card-tag ${p.category||''}">${p.tag||p.category}</span>
+              ${p.visible===false?'<span class="entry-card-tag" style="border-color:var(--amber);color:var(--amber);">Udkast</span>':''}
+            </div>
+            <div class="entry-card-actions">
+              <button class="btn-move" onclick="moveProjekt(${i},-1)" ${i===0?'disabled':''} title="Flyt op">↑</button>
+              <button class="btn-move" onclick="moveProjekt(${i},1)" ${i===last?'disabled':''} title="Flyt ned">↓</button>
+              <button class="btn-edit" onclick="editProject(${i})">Rediger</button>
+              <button class="btn-del"  onclick="deleteEntry('projekter',${i})">Slet</button>
+            </div>
+          </div>
+          <div class="entry-card-title">${p.title}</div>
+          <div class="entry-card-sub">${p.period||''}</div>
+          <div class="entry-card-desc">${p.desc||''}</div>
         </div>
       </div>
-      <div class="entry-card-title">${p.title}</div>
-      <div class="entry-card-sub">${p.period||''}</div>
-      <div class="entry-card-desc">${p.desc||''}</div>
-    </div>`).join('')}</div>`
-  : emptyState('📁','Ingen projekter endnu','Tilføj dine projekter og cases her.');
+    </div>`).join('')}</div>`;
+}
+
+/* ---- PROJEKTER DRAG-AND-DROP ---- */
+let _projDragSrc = null;
+
+function projDragStart(event, from) {
+  _projDragSrc = from;
+  event.dataTransfer.effectAllowed = 'move';
+  event.dataTransfer.setData('text/plain', from);
+  setTimeout(() => {
+    const c = document.querySelector(`.entry-card[data-index="${from}"]`);
+    if (c) c.classList.add('drag-dragging');
+  }, 0);
+}
+
+function projDragOver(event, to) {
+  if (_projDragSrc === null || _projDragSrc === to) return;
+  event.preventDefault();
+  event.dataTransfer.dropEffect = 'move';
+  document.querySelectorAll('.entry-card.drag-over').forEach(el => el.classList.remove('drag-over'));
+  const c = document.querySelector(`.entry-card[data-index="${to}"]`);
+  if (c) c.classList.add('drag-over');
+}
+
+function projDragLeave(event) {
+  if (!event.currentTarget.contains(event.relatedTarget))
+    event.currentTarget.classList.remove('drag-over');
+}
+
+function projDrop(event, to) {
+  event.preventDefault();
+  if (_projDragSrc === null || _projDragSrc === to) return;
+  projReorder(_projDragSrc, to);
+}
+
+function projDragEnd(event) {
+  _projDragSrc = null;
+  document.querySelectorAll('.entry-card.drag-dragging, .entry-card.drag-over')
+    .forEach(el => el.classList.remove('drag-dragging', 'drag-over'));
+}
+
+function projReorder(from, to) {
+  const arr = data.projects;
+  arr.splice(to, 0, arr.splice(from, 1)[0]);
+  markUnsaved();
+  renderSection('projekter');
+}
+
+function moveProjekt(index, dir) {
+  const ni = index + dir;
+  if (ni < 0 || ni >= data.projects.length) return;
+  projReorder(index, ni);
 }
 
 function editProject(i) { openProjectForm(true, i, data.projects[i]); }
