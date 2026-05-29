@@ -21,3 +21,6 @@ define('CONTENT_FILE', __DIR__ . '/../data/content.json');
 // Gemini AI API Key (Hentes fra Google AI Studio)
 define('GEMINI_API_KEY', 'INDSÆT_DIN_GEMINI_API_KEY_HER');
 
+// Absolut sti til assets-mappen — bruges til sikkerhedsvalidering i save.php
+define('ASSETS_DIR', realpath(__DIR__ . '/../assets'));
+
