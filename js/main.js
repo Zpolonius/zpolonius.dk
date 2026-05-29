@@ -138,16 +138,30 @@ window.handleConsent = function(status) {
   }
 };
 
+window.activateSpotify = function(btn) {
+  const container = btn.closest('.deferred-content');
+  const src = container.getAttribute('data-src');
+  const title = container.getAttribute('data-title');
+  
+  container.innerHTML = `
+    <iframe title="${esc(title)}" 
+            style="border-radius:12px" 
+            src="${src}${src.includes('?') ? '&' : '?'}autoplay=1" 
+            width="100%" height="152" 
+            frameBorder="0" 
+            allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" 
+            loading="lazy"></iframe>
+  `;
+};
+
 function loadDeferredContent() {
   document.querySelectorAll('.deferred-content').forEach(container => {
     const type = container.getAttribute('data-type');
-    const src = container.getAttribute('data-src');
     const title = container.getAttribute('data-title');
 
     if (type === 'spotify') {
-      // Vis en facade i stedet for iframen med det samme
       container.innerHTML = `
-        <div class="spotify-facade" onclick="this.parentElement.innerHTML='<iframe title=\'${esc(title)}\' style=\'border-radius:12px\' src=\'${src}&autoplay=1\' width=\'100%\' height=\'152\' frameBorder=\'0\' allow=\'autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture\' loading=\'lazy\' sandbox=\'allow-forms allow-popups allow-same-origin allow-scripts allow-storage-access-by-user-activation\'></iframe>'">
+        <div class="spotify-facade" onclick="activateSpotify(this)">
           <div class="facade-content">
             <div class="facade-play-btn">
               <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
