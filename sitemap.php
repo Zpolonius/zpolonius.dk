@@ -39,7 +39,7 @@ if (!empty($data['projects'])) {
         $id = $p['id'] ?? '';
         if (!$id) continue;
         echo "  <url>" . PHP_EOL;
-        echo "    <loc>{$baseUrl}detail?id=" . htmlspecialchars($id) . "</loc>" . PHP_EOL;
+        echo "    <loc>{$baseUrl}projects/" . htmlspecialchars($id) . "</loc>" . PHP_EOL;
         echo "    <changefreq>monthly</changefreq>" . PHP_EOL;
         echo "    <priority>0.8</priority>" . PHP_EOL;
         echo "  </url>" . PHP_EOL;
@@ -53,7 +53,7 @@ if (!empty($data['articles'])) {
         $id = $a['id'] ?? '';
         if (!$id) continue;
         echo "  <url>" . PHP_EOL;
-        echo "    <loc>{$baseUrl}detail?id=" . htmlspecialchars($id) . "</loc>" . PHP_EOL;
+        echo "    <loc>{$baseUrl}insights/" . htmlspecialchars($id) . "</loc>" . PHP_EOL;
         echo "    <changefreq>monthly</changefreq>" . PHP_EOL;
         echo "    <priority>0.8</priority>" . PHP_EOL;
         echo "  </url>" . PHP_EOL;
@@ -67,7 +67,7 @@ if (!empty($data['cv']['jobs'])) {
         $id = $j['id'] ?? '';
         if (!$id) continue;
         echo "  <url>" . PHP_EOL;
-        echo "    <loc>{$baseUrl}detail?id=" . htmlspecialchars($id) . "</loc>" . PHP_EOL;
+        echo "    <loc>{$baseUrl}cv/" . htmlspecialchars($id) . "</loc>" . PHP_EOL;
         echo "    <changefreq>monthly</changefreq>" . PHP_EOL;
         echo "    <priority>0.6</priority>" . PHP_EOL;
         echo "  </url>" . PHP_EOL;

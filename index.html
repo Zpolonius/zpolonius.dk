@@ -385,14 +385,11 @@
       z-index: 10;
     }
     .scroll-hint-line { width: 1px; height: 30px; background: currentColor; }
-    @keyframes bounce {
-      0%, 20%, 50%, 80%, 100% {transform: translateX(-50%) translateY(0);}
-      40% {transform: translateX(-50%) translateY(-10px);}
-      60% {transform: translateX(-50%) translateY(-5px);}
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(8px); }
+      to   { opacity: 1; transform: translateY(0); }
     }
-
-
-    /* ---- ANBEFALINGER GRID ---- */
+    .fade-up   { animation: fadeUp 0.5s ease forwards; will-change: opacity, transform; }
     .rec-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
@@ -553,17 +550,20 @@
 
   <!-- BENTO GRID -->
   <div class="bento-grid" id="bentoGrid">
-    <!-- Rendered dynamically -->
+    <div class="bento-cell" style="height: 180px; background: var(--bg-card); opacity: 0.5;"></div>
+    <div class="bento-cell" style="height: 180px; background: var(--bg-card); opacity: 0.5;"></div>
+    <div class="bento-cell" style="height: 180px; background: var(--bg-card); opacity: 0.5;"></div>
   </div>
 
   <!-- ANBEFALINGER -->
-  <div id="recSection">
+  <div id="recSection" style="min-height: 300px;">
     <div class="section-header">
-      <span class="section-title">Hvad folk siger</span>
+      <h2 class="section-title">Hvad folk siger</h2>
       <a href="recommendations" class="section-link">Se alle anbefalinger →</a>
     </div>
     <div class="rec-grid" id="recGrid">
-      <!-- Rendered dynamically -->
+      <div class="rec-card" style="height: 200px; opacity: 0.3;"></div>
+      <div class="rec-card" style="height: 200px; opacity: 0.3;"></div>
     </div>
     <div class="section-footer" style="justify-content:space-between; gap:16px;">
       <div class="rec-nav">
@@ -582,7 +582,7 @@
   <!-- PROJEKTER -->
   <div id="projectsSection">
     <div class="section-header">
-      <span class="section-title">Business Cases & ROI</span>
+      <h2 class="section-title">Business Cases & ROI</h2>
       <a href="projects" class="section-link">Se alle projekter →</a>
     </div>
     <div class="proj-grid" id="featuredProjects">
@@ -596,7 +596,7 @@
   <!-- INDSIGTER (BLOG) -->
   <div id="blogSection" class="fade-up">
     <div class="section-header">
-      <span class="section-title">Indsigter & Perspektiver</span>
+      <h2 class="section-title">Indsigter & Perspektiver</h2>
       <a href="insights" class="section-link">Se alle indsigter →</a>
     </div>
     <div class="proj-grid" id="blogGrid">
@@ -610,7 +610,7 @@
   <!-- PODCAST / INDSIGTER -->
   <div id="mediaSection" class="fade-up">
     <div class="section-header">
-      <span class="section-title">Podcast: "Hvorfor levering ødelægger konverteringen"</span>
+      <h2 class="section-title">Podcast: "Hvorfor levering ødelægger konverteringen"</h2>
     </div>
     <div class="media-container" style="background: var(--bg-card); border: 0.5px solid var(--border-md); padding: 16px; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); margin: 0 20px 40px 20px; transition: border-color 0.3s; min-height: 184px;">
       <div class="deferred-content" data-type="spotify" data-src="https://open.spotify.com/embed/episode/1IMoB5xodoIzsVIgDosrv0?utm_source=generator&theme=0" data-title="Spotify Podcast Episode: Vibe Coding & AI">
@@ -622,7 +622,7 @@
   <!-- CV STRIP -->
   <div id="cvSection">
     <div class="section-header">
-      <span class="section-title">Kommerciel Erfaring</span>
+      <h2 class="section-title">Kommerciel Erfaring</h2>
       <a href="cv" class="section-link">Se fuldt CV →</a>
       </div>
       <div class="cv-strip" id="featuredExperience">
@@ -636,7 +636,7 @@
   <!-- UDDANNELSE -->
   <div id="eduSection" style="display:none;">
     <div class="section-header">
-      <span class="section-title">Uddannelse</span>
+      <h2 class="section-title">Uddannelse</h2>
       <a href="cv" class="section-link">Se alle →</a>
     </div>
     <div class="cv-strip" id="featuredEducation">
@@ -650,7 +650,7 @@
   <!-- FRIVILLIGT ARBEJDE -->
   <div id="volSection" style="display:none;">
     <div class="section-header">
-      <span class="section-title">Frivilligt arbejde</span>
+      <h2 class="section-title">Frivilligt arbejde</h2>
       <a href="projects" class="section-link">Se alle →</a>
     </div>
     <div class="cv-strip" id="featuredVolunteer">

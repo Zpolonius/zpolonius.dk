@@ -16,9 +16,9 @@
   --border-green: rgba(65,164,71,0.35);
   --text:         #e8e8e8;
   --text-muted:   rgba(255,255,255,0.75);
-  --text-faint:   rgba(255,255,255,0.55);
-  --text-ghost:   rgba(255,255,255,0.18);
-  --blue:         #418FFF;
+  --text-faint:   rgba(255,255,255,0.65);
+  --text-ghost:   rgba(255,255,255,0.55);
+  --blue:         #3b82f6;
   --green:        #41A447;
   --font:         'Inter', system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
   --overlay-bg:   rgba(8,8,8,0.92);
