@@ -642,7 +642,7 @@ function initMagneticCTA() {
   const clamp = v => Math.max(-maxShift, Math.min(maxShift, v));
 
   const targets = document.querySelectorAll(
-    '.hero-btn-primary, .nav-btn, .cta-bar-central .btn-primary'
+    '.hero-btn-primary, .nav-btn, .cta-bar-central .btn-primary, .floating-cta'
   );
 
   targets.forEach(btn => {
