@@ -401,6 +401,38 @@ textarea.input { resize: none; height: 100px; line-height: 1.6; }
 .fade-up-3 { animation-delay: 0.20s; opacity: 0; }
 .fade-up-4 { animation-delay: 0.28s; opacity: 0; }
 
+/* ---- SCROLL REVEAL ----
+   Elementer med [data-reveal] / [data-reveal-stagger] starter skjult og
+   afsløres af IntersectionObserver (initScrollReveal i main.js), når de
+   scroller ind i viewporten. Stagger-børn forskydes via inline transition-delay. */
+@media (prefers-reduced-motion: no-preference) {
+  [data-reveal],
+  [data-reveal-stagger] > * {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: opacity, transform;
+  }
+  [data-reveal].is-visible,
+  [data-reveal-stagger].is-visible > * {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ---- REDUCED MOTION ----
+   Respekter brugerens systemvalg: dæmp parallax, scroll-hint-bounce, reveals
+   og øvrige overgange. (Typewriter er JS-styret og bevares bevidst.) */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
 /* Ensure arrows are visible on touch devices */
 @media (hover: none) {
   .proj-arrow, .article-arrow, .cell-arrow {

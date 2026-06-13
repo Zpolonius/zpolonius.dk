@@ -53,6 +53,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initTheme();
   initContactOverlay();
   initParallax();
+  initMagneticCTA();
   initPageTransitions();
   initCookieConsent();
   initAnalytics();
@@ -575,14 +576,93 @@ window.initTypewriter = function(element, words) {
 function initParallax() {
   const heroImg = document.querySelector('.hero-img');
   if (!heroImg) return;
-  
-  window.addEventListener('scroll', () => {
-    const scrolled = window.pageYOffset;
-    if (scrolled < 800) {
-      heroImg.style.transform = `translateY(${scrolled * 0.4}px) scale(1.05)`;
+  // Respekter brugerens motion-præference
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  let latestScroll = 0;
+  let ticking = false;
+
+  const update = () => {
+    if (latestScroll < 800) {
+      heroImg.style.transform = `translateY(${latestScroll * 0.4}px) scale(1.05)`;
     }
+    ticking = false;
+  };
+
+  window.addEventListener('scroll', () => {
+    latestScroll = window.pageYOffset;
+    if (!ticking) {
+      requestAnimationFrame(update);
+      ticking = true;
+    }
+  }, { passive: true });
+}
+
+/* ---- SCROLL REVEAL ----
+   Afslører [data-reveal] / [data-reveal-stagger] når de scroller ind i view.
+   Stagger-grids forskyder deres børn, så kort lander ét ad gangen.
+   Børnene aflæses ved trigger-tidspunkt, så dynamisk-renderet indhold også fanges. */
+function initScrollReveal() {
+  const items = document.querySelectorAll('[data-reveal], [data-reveal-stagger]');
+  if (!items.length) return;
+
+  const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (prefersReduced || !('IntersectionObserver' in window)) {
+    items.forEach(el => el.classList.add('is-visible'));
+    return;
+  }
+
+  const io = new IntersectionObserver((entries, obs) => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+      const el = entry.target;
+      if (el.hasAttribute('data-reveal-stagger')) {
+        Array.from(el.children).forEach((child, i) => {
+          child.style.transitionDelay = (i * 90) + 'ms';
+        });
+      }
+      el.classList.add('is-visible');
+      obs.unobserve(el);
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
+
+  items.forEach(el => io.observe(el));
+}
+window.initScrollReveal = initScrollReveal;
+
+/* ---- MAGNETISKE CTA-KNAPPER ----
+   Primær-CTA'erne "trækkes" let mod musemarkøren og snapper blødt tilbage.
+   Kun desktop (hover + fin pointer) og kun hvis brugeren tillader bevægelse. */
+function initMagneticCTA() {
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+
+  const strength = 0.4;  // hvor stærkt knappen følger musen
+  const maxShift = 12;   // px-loft, så den aldrig "stikker af"
+  const clamp = v => Math.max(-maxShift, Math.min(maxShift, v));
+
+  const targets = document.querySelectorAll(
+    '.hero-btn-primary, .nav-btn, .cta-bar-central .btn-primary'
+  );
+
+  targets.forEach(btn => {
+    let frame = null;
+    btn.addEventListener('pointermove', e => {
+      const rect = btn.getBoundingClientRect();
+      const x = clamp((e.clientX - (rect.left + rect.width / 2)) * strength);
+      const y = clamp((e.clientY - (rect.top + rect.height / 2)) * strength);
+      if (frame) cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(() => {
+        btn.style.transform = `translate(${x}px, ${y}px)`;
+      });
+    });
+    btn.addEventListener('pointerleave', () => {
+      if (frame) cancelAnimationFrame(frame);
+      btn.style.transform = '';
+    });
   });
 }
+window.initMagneticCTA = initMagneticCTA;
 
 /* ---- THEME ---- */
 function initTheme() {
