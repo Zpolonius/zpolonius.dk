@@ -139,11 +139,20 @@
       transition: all 0.2s;
       box-shadow: 0 4px 14px rgba(65, 143, 255, 0.2);
     }
-    .hero-btn-primary:hover { 
-      background: #2d7ae8; 
+    .hero-btn-primary:hover {
+      background: #2d7ae8;
       transform: translateY(-1px);
       box-shadow: 0 6px 20px rgba(65, 143, 255, 0.4), 0 0 10px rgba(65, 143, 255, 0.2);
     }
+    /* Subtil "breathing" glow der trækker øjet mod den primære handling */
+    @media (prefers-reduced-motion: no-preference) {
+      @keyframes ctaGlow {
+        0%, 100% { box-shadow: 0 4px 14px rgba(65, 143, 255, 0.20); }
+        50%      { box-shadow: 0 4px 22px rgba(65, 143, 255, 0.45); }
+      }
+      .hero-btn-primary { animation: ctaGlow 3.2s ease-in-out infinite; }
+    }
+    .hero-btn-primary:hover { animation: none; } /* hover-glow overtager */
     .hero-btn-secondary {
       background: transparent;
       color: rgba(255,255,255,0.6);
@@ -556,7 +565,7 @@
   </div>
 
   <!-- ANBEFALINGER -->
-  <div id="recSection" style="min-height: 300px;">
+  <div id="recSection" style="min-height: 300px;" data-reveal>
     <div class="section-header">
       <h2 class="section-title">Hvad folk siger</h2>
       <a href="recommendations" class="section-link">Se alle anbefalinger →</a>
@@ -581,11 +590,11 @@
 
   <!-- PROJEKTER -->
   <div id="projectsSection">
-    <div class="section-header">
+    <div class="section-header" data-reveal>
       <h2 class="section-title">Business Cases & ROI</h2>
       <a href="projects" class="section-link">Se alle projekter →</a>
     </div>
-    <div class="proj-grid" id="featuredProjects">
+    <div class="proj-grid" id="featuredProjects" data-reveal-stagger>
       <!-- Rendered dynamically -->
     </div>
     <div class="section-footer">
@@ -594,12 +603,12 @@
   </div>
 
   <!-- INDSIGTER (BLOG) -->
-  <div id="blogSection" class="fade-up">
-    <div class="section-header">
+  <div id="blogSection">
+    <div class="section-header" data-reveal>
       <h2 class="section-title">Indsigter & Perspektiver</h2>
       <a href="insights" class="section-link">Se alle indsigter →</a>
     </div>
-    <div class="proj-grid" id="blogGrid">
+    <div class="proj-grid" id="blogGrid" data-reveal-stagger>
       <!-- Udfyldes af JS -->
     </div>
     <div class="section-footer">
@@ -608,7 +617,7 @@
   </div>
 
   <!-- PODCAST / INDSIGTER -->
-  <div id="mediaSection" class="fade-up">
+  <div id="mediaSection" data-reveal>
     <div class="section-header">
       <h2 class="section-title">Podcast: "Hvorfor levering ødelægger konverteringen"</h2>
     </div>
@@ -625,7 +634,7 @@
       <h2 class="section-title">Kommerciel Erfaring</h2>
       <a href="cv" class="section-link">Se fuldt CV →</a>
       </div>
-      <div class="cv-strip" id="featuredExperience">
+      <div class="cv-strip" id="featuredExperience" data-reveal-stagger>
       <!-- Rendered dynamically -->
       </div>
       <div class="section-footer">
@@ -915,6 +924,11 @@
         goTo(0);
         startTimer();
       }
+    })
+    .finally(() => {
+      // Init scroll-reveal FØRST når det dynamiske indhold er renderet,
+      // så observeren måler korrekte positioner (ikke tomme grids).
+      if (window.initScrollReveal) window.initScrollReveal();
     });
 
 
