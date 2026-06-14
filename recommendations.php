@@ -1,3 +1,12 @@
+<?php
+// Log evt. AI-bot crawl (fejler lydløst)
+@include __DIR__ . '/api/log_ai_bot.php';
+
+$h = function ($s) { return htmlspecialchars($s ?? '', ENT_QUOTES, 'UTF-8'); };
+$plainText = function ($s) { return trim(preg_replace('/\s+/', ' ', strip_tags($s ?? ''))); };
+$data = json_decode(@file_get_contents(__DIR__ . '/data/content.json'), true) ?: [];
+$recs = array_values(array_filter($data['cv']['recommendations'] ?? [], function ($r) { return ($r['visible'] ?? true) !== false; }));
+?>
 <!DOCTYPE html>
 <html lang="da">
 <head>
@@ -28,13 +37,33 @@
     "@type": "Person",
     "name": "Zacharias Polonius",
     "url": "https://zpolonius.dk/",
-    "jobTitle": "Technical Commercial Lead",
+    "jobTitle": "Technical Account Manager",
+    "worksFor": { "@type": "Organization", "name": "Bring", "url": "https://www.bring.dk/" },
     "sameAs": [
-      "https://www.linkedin.com/in/zachariaspolonius/",
-      "https://github.com/zpolonius"
+      "https://www.linkedin.com/in/zpolonius/",
+      "https://github.com/zpolonius",
+      "https://www.instagram.com/zackp91/"
     ]
   }
   </script>
+<?php
+$collection = [
+  '@context' => 'https://schema.org',
+  '@type'    => 'CollectionPage',
+  'name'     => 'Anbefalinger — Zacharias Polonius',
+  'url'      => 'https://zpolonius.dk/recommendations',
+  'mainEntity' => ['@type' => 'ItemList', 'itemListElement' => []],
+];
+$pos = 1;
+foreach ($recs as $r) {
+  $collection['mainEntity']['itemListElement'][] = [
+    '@type' => 'ListItem', 'position' => $pos++,
+    'url'   => 'https://zpolonius.dk/recommendations/' . ($r['id'] ?? ''),
+    'name'  => ($r['name'] ?? '') . (!empty($r['role']) ? ' — ' . $r['role'] : ''),
+  ];
+}
+?>
+  <script type="application/ld+json"><?= json_encode($collection, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) ?></script>
   <link rel="stylesheet" href="css/style.css">
   <style>
     .page-hero {
@@ -121,7 +150,25 @@
 
   <!-- RECOMMENDATIONS GRID -->
   <div class="rec-grid" id="recGrid">
-    <!-- Rendered by JS -->
+<?php foreach ($recs as $r):
+    $raw = ($r['intro'] ?? '') !== '' ? $plainText($r['intro']) : $plainText($r['text'] ?? '');
+    $words = preg_split('/\s+/', trim($raw));
+    $truncated = (count($words) > 150) ? implode(' ', array_slice($words, 0, 150)) . '...' : $raw; ?>
+    <div class="rec-card">
+      <div class="rec-mark">"</div>
+      <p class="rec-text"><?= $h($truncated) ?></p>
+      <?php if (!empty($r['logo'])): ?><img src="<?= $h($r['logo']) ?>" alt="" class="rec-company-logo" aria-hidden="true"><?php endif; ?>
+      <div class="rec-author-wrap">
+        <?php if (!empty($r['photo'])): ?><img src="<?= $h($r['photo']) ?>" alt="<?= $h($r['photo_alt'] ?? $r['name'] ?? '') ?>" class="rec-avatar" style="object-position: <?= $h($r['photo_pos'] ?? 'center center') ?>" loading="lazy"><?php endif; ?>
+        <div class="rec-meta">
+          <div class="rec-name"><?= $h($r['name'] ?? '') ?></div>
+          <div class="rec-role"><?= $h($r['role'] ?? '') ?></div>
+        </div>
+      </div>
+      <a href="recommendations/<?= $h($r['id'] ?? '') ?>" class="section-link" style="margin-top:20px; display:inline-block; font-size:12px;">Læs hele udtalelsen →</a>
+      <?php if (!empty($r['skills'])): ?><div class="rec-skills"><?php foreach ($r['skills'] as $sk): ?><span class="rec-skill"><?= $h($plainText($sk)) ?></span><?php endforeach; ?></div><?php endif; ?>
+    </div>
+<?php endforeach; ?>
   </div>
 
   </main>
@@ -157,8 +204,9 @@
         // Count
         document.getElementById('recCount').textContent = recs.length;
 
-        // Recommendations
+        // Recommendations — ryd server-renderet indhold før hydrering
         const grid = document.getElementById('recGrid');
+        grid.innerHTML = '';
         recs.forEach(r => {
           const raw = r.intro || stripHtml(r.text || '');
           const words = raw.trim().split(/\s+/);

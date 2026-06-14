@@ -1,3 +1,17 @@
+<?php
+// Log evt. AI-bot crawl (fejler lydløst)
+@include __DIR__ . '/api/log_ai_bot.php';
+
+$h = function ($s) { return htmlspecialchars($s ?? '', ENT_QUOTES, 'UTF-8'); };
+$plainText = function ($s) { return trim(preg_replace('/\s+/', ' ', strip_tags($s ?? ''))); };
+$data = json_decode(@file_get_contents(__DIR__ . '/data/content.json'), true) ?: [];
+$cv = $data['cv'] ?? [];
+$jobs = array_filter($cv['jobs'] ?? [], function ($j) { return ($j['visible'] ?? true) !== false; });
+$workJobs = array_filter($jobs, function ($j) { return empty($j['category']) || $j['category'] === 'work'; });
+$volJobs  = array_filter($jobs, function ($j) { return ($j['category'] ?? '') === 'volunteer'; });
+$education = array_filter($cv['education'] ?? [], function ($e) { return ($e['visible'] ?? true) !== false; });
+$recs = array_slice(array_values(array_filter($cv['recommendations'] ?? [], function ($r) { return ($r['visible'] ?? true) !== false; })), 0, 4);
+?>
 <!DOCTYPE html>
 <html lang="da">
 
@@ -29,10 +43,12 @@
     "@type": "Person",
     "name": "Zacharias Polonius",
     "url": "https://zpolonius.dk/",
-    "jobTitle": "Technical Commercial Lead",
+    "jobTitle": "Technical Account Manager",
+    "worksFor": { "@type": "Organization", "name": "Bring", "url": "https://www.bring.dk/" },
     "sameAs": [
-      "https://www.linkedin.com/in/zachariaspolonius/",
-      "https://github.com/zpolonius"
+      "https://www.linkedin.com/in/zpolonius/",
+      "https://github.com/zpolonius",
+      "https://www.instagram.com/zackp91/"
     ]
   }
   </script>
@@ -472,7 +488,18 @@
     <h2 class="section-title">Erhvervserfaring</h2>
   </div>
   <div id="jobTimeline" class="timeline">
-    <!-- Rendered by JS (Work Category) -->
+<?php foreach ($workJobs as $j): ?>
+    <div class="timeline-year">
+      <div class="timeline-year-val"><?= $h($j['period'] ?? '') ?></div>
+      <div class="timeline-year-dot"></div>
+    </div>
+    <a class="timeline-content" href="cv/<?= $h($j['id'] ?? '') ?>">
+      <div class="timeline-role"><?= $h($j['role'] ?? '') ?></div>
+      <div class="timeline-company"><?= $h($j['company'] ?? '') ?></div>
+      <div class="timeline-desc"><?= $h($plainText($j['desc'] ?? '')) ?></div>
+      <span class="timeline-arrow">→</span>
+    </a>
+<?php endforeach; ?>
   </div>
 
   <!-- KOMPETENCER -->
@@ -489,7 +516,22 @@
     <a href="recommendations" class="section-link">Se alle →</a>
   </div>
   <div class="rec-grid" id="recGrid">
-    <!-- Rendered by JS -->
+<?php foreach ($recs as $r):
+    $recText = $r['intro'] ?? (isset($r['text']) ? mb_substr($plainText($r['text']), 0, 150) . '...' : ''); ?>
+    <div class="rec-card">
+      <div class="rec-mark">"</div>
+      <p class="rec-text"><?= $h($plainText($recText)) ?></p>
+      <?php if (!empty($r['logo'])): ?><img src="<?= $h($r['logo']) ?>" alt="" class="rec-company-logo" aria-hidden="true"><?php endif; ?>
+      <div class="rec-author-wrap">
+        <?php if (!empty($r['photo'])): ?><img src="<?= $h($r['photo']) ?>" alt="<?= $h($r['name'] ?? '') ?>" class="rec-avatar" style="object-position: <?= $h($r['photo_pos'] ?? 'center center') ?>"><?php endif; ?>
+        <div class="rec-meta">
+          <div class="rec-name"><?= $h($r['name'] ?? '') ?></div>
+          <div class="rec-role"><?= $h($r['role'] ?? '') ?></div>
+        </div>
+      </div>
+      <a href="recommendations/<?= $h($r['id'] ?? '') ?>" class="section-link" style="margin-top:24px; display:inline-block; font-size:12px;">Læs hele udtalelsen →</a>
+    </div>
+<?php endforeach; ?>
   </div>
 
   <!-- UDDANNELSE -->
@@ -497,7 +539,14 @@
     <h2 class="section-title">Uddannelse & Certificeringer</h2>
   </div>
   <div class="edu-grid" id="eduGrid">
-    <!-- Rendered by JS -->
+<?php foreach ($education as $e): ?>
+    <a class="edu-card" href="cv/<?= $h($e['id'] ?? '') ?>">
+      <div class="edu-period"><?= $h($e['period'] ?? '') ?></div>
+      <div class="edu-title"><?= $h($e['title'] ?? '') ?></div>
+      <div class="edu-inst"><?= $h($e['institution'] ?? '') ?></div>
+      <div class="edu-desc"><?= $h($plainText($e['desc'] ?? '')) ?></div>
+    </a>
+<?php endforeach; ?>
   </div>
 
   <!-- FRIVILLIGT ARBEJDE -->
@@ -505,7 +554,18 @@
     <h2 class="section-title">Anden erfaring & Frivilligt arbejde</h2>
   </div>
   <div class="timeline" id="volTimeline">
-    <!-- Rendered by JS (Volunteer Category) -->
+<?php foreach ($volJobs as $j): ?>
+    <div class="timeline-year">
+      <div class="timeline-year-val"><?= $h($j['period'] ?? '') ?></div>
+      <div class="timeline-year-dot" style="background: var(--text-ghost); box-shadow: none;"></div>
+    </div>
+    <a class="timeline-content" href="cv/<?= $h($j['id'] ?? '') ?>" style="opacity: 0.8;">
+      <div class="timeline-role"><?= $h($j['role'] ?? '') ?></div>
+      <div class="timeline-company"><?= $h($j['company'] ?? 'Frivilligt arbejde') ?></div>
+      <div class="timeline-desc"><?= $h($plainText($j['desc'] ?? '')) ?></div>
+      <span class="timeline-arrow">→</span>
+    </a>
+<?php endforeach; ?>
   </div>
 
   <!-- CENTRAL CTA BAR -->
@@ -536,6 +596,7 @@
 
         // --- 1. JOBS (WORK ONLY) ---
         const tl = document.getElementById('jobTimeline');
+        tl.innerHTML = ''; // ryd server-renderet indhold før hydrering
         const workJobs = (cv.jobs || []).filter(j => j.visible !== false && (j.category === 'work' || !j.category));
 
         workJobs.forEach(j => {
@@ -572,6 +633,7 @@
 
         // --- 3. RECOMMENDATIONS ---
         const rg = document.getElementById('recGrid');
+        rg.innerHTML = ''; // ryd server-renderet indhold før hydrering
         (cv.recommendations || []).slice(0, 4).forEach(r => {
           if (r.visible === false) return;
           rg.innerHTML += `
@@ -592,6 +654,7 @@
 
         // --- 4. EDUCATION ---
         const eg = document.getElementById('eduGrid');
+        eg.innerHTML = ''; // ryd server-renderet indhold før hydrering
         (cv.education || []).forEach(e => {
           if (e.visible === false) return;
           eg.innerHTML += `
@@ -605,6 +668,7 @@
 
         // --- 5. VOLUNTEER ---
         const vt = document.getElementById('volTimeline');
+        vt.innerHTML = ''; // ryd server-renderet indhold før hydrering
         const volJobs = (cv.jobs || []).filter(j => j.visible !== false && j.category === 'volunteer');
 
         if (volJobs.length > 0) {

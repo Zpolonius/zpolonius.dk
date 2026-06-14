@@ -1,3 +1,14 @@
+<?php
+// Log evt. AI-bot crawl (fejler lydløst)
+@include __DIR__ . '/api/log_ai_bot.php';
+
+$h = function ($s) { return htmlspecialchars($s ?? '', ENT_QUOTES, 'UTF-8'); };
+$plainText = function ($s) { return trim(preg_replace('/\s+/', ' ', strip_tags($s ?? ''))); };
+$data = json_decode(@file_get_contents(__DIR__ . '/data/content.json'), true) ?: [];
+$projects = array_values(array_filter($data['projects'] ?? [], function ($p) { return ($p['visible'] ?? true) !== false; }));
+$catLabels = ['ai'=>'AI','checkout'=>'Checkout','konvertering'=>'Konvertering','work'=>'Arbejde','volunteer'=>'Frivillig'];
+$catClass  = ['ai'=>'tag-ai','checkout'=>'tag-ai','konvertering'=>'tag-ai','work'=>'tag-work','volunteer'=>'tag-vol'];
+?>
 <!DOCTYPE html>
 <html lang="da">
 <head>
@@ -29,13 +40,33 @@
     "@type": "Person",
     "name": "Zacharias Polonius",
     "url": "https://zpolonius.dk/",
-    "jobTitle": "Technical Commercial Lead",
+    "jobTitle": "Technical Account Manager",
+    "worksFor": { "@type": "Organization", "name": "Bring", "url": "https://www.bring.dk/" },
     "sameAs": [
-      "https://www.linkedin.com/in/zachariaspolonius/",
-      "https://github.com/zpolonius"
+      "https://www.linkedin.com/in/zpolonius/",
+      "https://github.com/zpolonius",
+      "https://www.instagram.com/zackp91/"
     ]
   }
   </script>
+<?php
+$collection = [
+  '@context' => 'https://schema.org',
+  '@type'    => 'CollectionPage',
+  'name'     => 'Projekter & Cases — Zacharias Polonius',
+  'url'      => 'https://zpolonius.dk/projects',
+  'mainEntity' => ['@type' => 'ItemList', 'itemListElement' => []],
+];
+$pos = 1;
+foreach ($projects as $p) {
+  $collection['mainEntity']['itemListElement'][] = [
+    '@type' => 'ListItem', 'position' => $pos++,
+    'url'   => 'https://zpolonius.dk/projects/' . ($p['id'] ?? ''),
+    'name'  => $p['title'] ?? '',
+  ];
+}
+?>
+  <script type="application/ld+json"><?= json_encode($collection, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) ?></script>
   <link rel="stylesheet" href="css/style.css">
   <style>
     .page-hero {
@@ -223,6 +254,22 @@
   </div>
 
   <div class="proj-grid" id="projGrid">
+<?php foreach ($projects as $p):
+    $cat = $p['category'] ?? '';
+    $cover = $p['cover'] ?? '';
+    $sk = array_slice($p['skills'] ?? [], 0, 4); ?>
+    <a class="proj-card" href="projects/<?= $h($p['id'] ?? '') ?>" data-cat="<?= $h($cat) ?>">
+      <?php if ($cover): ?><div class="proj-card-img-wrap"><img src="<?= $h($cover) ?>" alt="<?= $h($p['cover_alt'] ?? $p['title'] ?? '') ?>" class="proj-card-img" style="object-position: <?= $h($p['cover_pos'] ?? 'center center') ?>" loading="lazy" onerror="this.parentElement.style.display='none'"></div><?php endif; ?>
+      <div class="proj-card-body">
+        <div class="tag <?= $h($catClass[$cat] ?? '') ?> proj-tag"><?= $h($catLabels[$cat] ?? ($p['tag'] ?? $cat)) ?></div>
+        <div class="proj-title"><?= $h($p['title'] ?? '') ?></div>
+        <?php if (!empty($p['period'])): ?><div class="proj-period"><?= $h($p['period']) ?></div><?php endif; ?>
+        <div class="proj-desc"><?= $h($plainText($p['desc'] ?? '')) ?></div>
+        <?php if ($sk): ?><div class="proj-skills"><?php foreach ($sk as $s): ?><span class="proj-skill"><?= $h($plainText($s)) ?></span><?php endforeach; ?></div><?php endif; ?>
+        <span class="proj-arrow">Læs mere →</span>
+      </div>
+    </a>
+<?php endforeach; ?>
     <div class="no-results" id="noResults">Ingen projekter i denne kategori endnu.</div>
   </div>
 
@@ -296,9 +343,13 @@
         // Check URL param for pre-filter
         const urlFilter = new URLSearchParams(location.search).get('filter');
 
-        // Projects
+        // Projects — ryd server-renderet indhold før hydrering (undgår dubletter)
         const grid = document.getElementById('projGrid');
-        const noRes = document.getElementById('noResults');
+        grid.innerHTML = '';
+        const noRes = document.createElement('div');
+        noRes.className = 'no-results';
+        noRes.id = 'noResults';
+        noRes.textContent = 'Ingen projekter i denne kategori endnu.';
         grid.appendChild(noRes);
 
         visibleProjects.forEach(p => {

@@ -1,3 +1,13 @@
+<?php
+// Log evt. AI-bot crawl (fejler lydløst)
+@include __DIR__ . '/api/log_ai_bot.php';
+
+$h = function ($s) { return htmlspecialchars($s ?? '', ENT_QUOTES, 'UTF-8'); };
+$plainText = function ($s) { return trim(preg_replace('/\s+/', ' ', strip_tags($s ?? ''))); };
+$data = json_decode(@file_get_contents(__DIR__ . '/data/content.json'), true) ?: [];
+$articles = array_values(array_filter($data['articles'] ?? [], function ($a) { return ($a['visible'] ?? true) !== false; }));
+$articles = array_reverse($articles); // nyeste først
+?>
 <!DOCTYPE html>
 <html lang="da">
 <head>
@@ -29,13 +39,33 @@
     "@type": "Person",
     "name": "Zacharias Polonius",
     "url": "https://zpolonius.dk/",
-    "jobTitle": "Technical Commercial Lead",
+    "jobTitle": "Technical Account Manager",
+    "worksFor": { "@type": "Organization", "name": "Bring", "url": "https://www.bring.dk/" },
     "sameAs": [
-      "https://www.linkedin.com/in/zachariaspolonius/",
-      "https://github.com/zpolonius"
+      "https://www.linkedin.com/in/zpolonius/",
+      "https://github.com/zpolonius",
+      "https://www.instagram.com/zackp91/"
     ]
   }
   </script>
+<?php
+$collection = [
+  '@context' => 'https://schema.org',
+  '@type'    => 'CollectionPage',
+  'name'     => 'Indsigter — Zacharias Polonius',
+  'url'      => 'https://zpolonius.dk/insights',
+  'mainEntity' => ['@type' => 'ItemList', 'itemListElement' => []],
+];
+$pos = 1;
+foreach ($articles as $a) {
+  $collection['mainEntity']['itemListElement'][] = [
+    '@type' => 'ListItem', 'position' => $pos++,
+    'url'   => 'https://zpolonius.dk/insights/' . ($a['id'] ?? ''),
+    'name'  => $a['title'] ?? '',
+  ];
+}
+?>
+  <script type="application/ld+json"><?= json_encode($collection, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) ?></script>
   <link rel="stylesheet" href="css/style.css">
   <style>
     /* PAGE HERO */
@@ -180,6 +210,22 @@
 
   <!-- ARTICLES LIST -->
   <div class="articles-grid" id="articlesGrid">
+<?php foreach ($articles as $a):
+    $cover = $a['cover'] ?? '';
+    $words = str_word_count($plainText($a['body'] ?? ''));
+    $rt = $words ? max(1, (int) round($words / 200)) : 0; ?>
+    <a class="article-card fade-up" href="insights/<?= $h($a['id'] ?? '') ?>">
+      <?php if ($cover): ?><div class="article-img-wrap"><img src="<?= $h($cover) ?>" alt="<?= $h($a['cover_alt'] ?? $a['title'] ?? '') ?>" class="article-img" style="object-position: <?= $h($a['cover_pos'] ?? 'center center') ?>" loading="lazy" onerror="this.parentElement.style.display='none'"></div><?php endif; ?>
+      <div class="article-body">
+        <div>
+          <div class="article-date"><?= $h($a['date'] ?? 'Indsigt') ?><?= $rt ? ' · ' . $rt . ' min. læsning' : '' ?></div>
+          <div class="article-title"><?= $h($a['title'] ?? '') ?></div>
+          <div class="article-excerpt"><?= $h($a['excerpt'] ?? '') ?></div>
+        </div>
+        <span class="article-arrow">Læs artikel →</span>
+      </div>
+    </a>
+<?php endforeach; ?>
     <div class="no-articles" id="noArticles">Ingen artikler endnu — kom tilbage snart.</div>
   </div>
 
@@ -208,7 +254,11 @@
         document.getElementById('articleCount').textContent = articles.length;
 
         const grid = document.getElementById('articlesGrid');
-        const noArt = document.getElementById('noArticles');
+        grid.innerHTML = ''; // ryd server-renderet indhold før hydrering
+        const noArt = document.createElement('div');
+        noArt.className = 'no-articles';
+        noArt.id = 'noArticles';
+        noArt.textContent = 'Ingen artikler endnu — kom tilbage snart.';
         grid.appendChild(noArt);
 
         if (articles.length === 0) {

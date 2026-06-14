@@ -60,9 +60,10 @@ if (!empty($data['articles'])) {
     }
 }
 
-// 4. DYNAMISKE CV POSTER (JOBS)
-if (!empty($data['cv']['jobs'])) {
-    foreach ($data['cv']['jobs'] as $j) {
+// 4. DYNAMISKE CV POSTER (JOBS + UDDANNELSE)
+foreach (['jobs', 'education'] as $cvKey) {
+    if (empty($data['cv'][$cvKey])) continue;
+    foreach ($data['cv'][$cvKey] as $j) {
         if (isset($j['visible']) && $j['visible'] === false) continue;
         $id = $j['id'] ?? '';
         if (!$id) continue;
@@ -70,6 +71,20 @@ if (!empty($data['cv']['jobs'])) {
         echo "    <loc>{$baseUrl}cv/" . htmlspecialchars($id) . "</loc>" . PHP_EOL;
         echo "    <changefreq>monthly</changefreq>" . PHP_EOL;
         echo "    <priority>0.6</priority>" . PHP_EOL;
+        echo "  </url>" . PHP_EOL;
+    }
+}
+
+// 5. DYNAMISKE ANBEFALINGER
+if (!empty($data['cv']['recommendations'])) {
+    foreach ($data['cv']['recommendations'] as $r) {
+        if (isset($r['visible']) && $r['visible'] === false) continue;
+        $id = $r['id'] ?? '';
+        if (!$id) continue;
+        echo "  <url>" . PHP_EOL;
+        echo "    <loc>{$baseUrl}recommendations/" . htmlspecialchars($id) . "</loc>" . PHP_EOL;
+        echo "    <changefreq>monthly</changefreq>" . PHP_EOL;
+        echo "    <priority>0.5</priority>" . PHP_EOL;
         echo "  </url>" . PHP_EOL;
     }
 }

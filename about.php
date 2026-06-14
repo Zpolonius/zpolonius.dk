@@ -1,3 +1,20 @@
+<?php
+// Log evt. AI-bot crawl (fejler lydløst)
+@include __DIR__ . '/api/log_ai_bot.php';
+
+$h = function ($s) { return htmlspecialchars($s ?? '', ENT_QUOTES, 'UTF-8'); };
+$data = json_decode(@file_get_contents(__DIR__ . '/data/content.json'), true) ?: [];
+$om = $data['om'] ?? [];
+$site = $data['site'] ?? [];
+$bio = $om['bio'] ?? '';
+$bioParas = array_values(array_filter(array_map('trim', preg_split('/\n\n+/', $bio))));
+$firstPara = $bioParas[0] ?? '';
+$facts = $om['facts'] ?? [];
+$komp = $om['kompetencer'] ?? [];
+$sprog = $om['sprog'] ?? [];
+$interesser = $om['interesser'] ?? [];
+$social = $site['social'] ?? [];
+?>
 <!DOCTYPE html>
 <html lang="da">
 <head>
@@ -5,7 +22,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <base href="/">
   <title>Om Mig — Zacharias Polonius</title>
-  <meta name="description" content="Lær mere om min baggrund som Technical Commercial Lead, min filosofi og min passion for at bygge bro mellem teknik og forretning.">
+  <meta name="description" content="Lær mere om Zacharias Polonius — Technical Account Manager hos Bring — min baggrund, min filosofi og min passion for at bygge bro mellem teknik og forretning.">
   
   <!-- Open Graph -->
   <meta property="og:type" content="website">
@@ -30,10 +47,13 @@
     "url": "https://zpolonius.dk/",
     "email": "zacharias@polonius.dk",
     "telephone": "+4530687041",
-    "jobTitle": "Technical Commercial Lead",
+    "jobTitle": "Technical Account Manager",
+    "worksFor": { "@type": "Organization", "name": "Bring", "url": "https://www.bring.dk/" },
+    "knowsAbout": ["Checkout-optimering", "Konverteringsoptimering (CRO)", "E-commerce", "AI-drevet kundesucces"],
     "sameAs": [
-      "https://www.linkedin.com/in/zachariaspolonius/",
-      "https://github.com/zpolonius"
+      "https://www.linkedin.com/in/zpolonius/",
+      "https://github.com/zpolonius",
+      "https://www.instagram.com/zackp91/"
     ]
   }
   </script>
@@ -178,7 +198,7 @@
         <div class="about-hero-label">Om mig</div>
         <h1 class="about-hero-name" id="heroName">Zacharias<br>Polonius</h1>
         <div id="statusPillContainer"></div>
-        <p class="about-hero-bio" id="heroBio">Indlæser...</p>
+        <p class="about-hero-bio" id="heroBio"><?= $h($firstPara) ?: 'Indlæser...' ?></p>
         <div class="about-hero-actions">
           <button class="about-hero-btn-p" data-contact>Tag kontakt →</button>
           <a href="cv" class="about-hero-btn-s">Se CV →</a>
@@ -196,7 +216,12 @@
 
   <!-- INFO STRIP -->
   <div class="info-grid" id="infoGrid">
-    <!-- Rendered dynamically by JS -->
+<?php foreach ($facts as $c): ?>
+    <div class="info-cell">
+      <div class="info-cell-label"><?= $h($c['label'] ?? '') ?></div>
+      <div class="info-cell-val"><strong><?= $h($c['val'] ?? '') ?></strong><?= $h($c['sub'] ?? '') ?></div>
+    </div>
+<?php endforeach; ?>
   </div>
 
   <!-- BIO + SIDEBAR -->
@@ -204,21 +229,23 @@
     <div class="bio-main">
       <div class="section-lbl" style="font-size:9px;letter-spacing:0.15em;text-transform:uppercase;color:var(--text-faint);padding-bottom:14px;border-bottom:0.5px solid var(--border);margin-bottom:22px;">Biografi</div>
       <div id="bioContent">
-        <!-- Rendered by JS -->
+<?php foreach ($bioParas as $p): ?>
+        <p class="bio-para"><?= $h($p) ?></p>
+<?php endforeach; ?>
       </div>
     </div>
     <div class="bio-sidebar">
       <div class="bio-sidebar-block">
         <div class="bio-sidebar-label">Sprog</div>
-        <div id="sprogList"><!-- JS --></div>
+        <div id="sprogList"><?php foreach ($sprog as $s): ?><div class="bio-sidebar-item"><?= $h($s) ?></div><?php endforeach; ?></div>
       </div>
       <div class="bio-sidebar-block">
         <div class="bio-sidebar-label">Interesser</div>
-        <div id="interesserList"><!-- JS --></div>
+        <div id="interesserList"><?php foreach ($interesser as $i): ?><div class="bio-sidebar-item"><?= $h($i) ?></div><?php endforeach; ?></div>
       </div>
       <div class="bio-sidebar-block">
         <div class="bio-sidebar-label">Sociale medier</div>
-        <div id="socialList"><!-- JS --></div>
+        <div id="socialList"><?php if (!empty($social['linkedin'])): ?><div class="bio-sidebar-item"><a href="<?= $h($social['linkedin']) ?>" target="_blank" style="color:var(--blue);">LinkedIn →</a></div><?php endif; ?><?php if (!empty($social['instagram'])): ?><div class="bio-sidebar-item"><a href="<?= $h($social['instagram']) ?>" target="_blank" style="color:var(--blue);">Instagram →</a></div><?php endif; ?><?php if (!empty($social['facebook'])): ?><div class="bio-sidebar-item"><a href="<?= $h($social['facebook']) ?>" target="_blank" style="color:var(--blue);">Facebook →</a></div><?php endif; ?></div>
       </div>
     </div>
   </div>

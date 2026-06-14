@@ -24,14 +24,14 @@ RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 # 2. Redirect index.html til root
 RewriteRule ^index\.html$ / [R=301,L]
 
-# 3. Rene URL'er til detail-sider (Før extension hiding)
-RewriteRule ^projects/([^/]+)/?$ detail.html?id=$1 [L,QSA]
-RewriteRule ^projekter/([^/]+)/?$ detail.html?id=$1 [L,QSA]
-RewriteRule ^insights/([^/]+)/?$ detail.html?id=$1 [L,QSA]
-RewriteRule ^artikler/([^/]+)/?$ detail.html?id=$1 [L,QSA]
-RewriteRule ^cv/([^/]+)/?$ detail.html?id=$1 [L,QSA]
-RewriteRule ^recommendations/([^/]+)/?$ detail.html?id=$1 [L,QSA]
-RewriteRule ^anbefalinger/([^/]+)/?$ detail.html?id=$1 [L,QSA]
+# 3. Rene URL'er til detail-sider (server-renderet via detail.php)
+RewriteRule ^projects/([^/]+)/?$ detail.php?id=$1 [L,QSA]
+RewriteRule ^projekter/([^/]+)/?$ detail.php?id=$1 [L,QSA]
+RewriteRule ^insights/([^/]+)/?$ detail.php?id=$1 [L,QSA]
+RewriteRule ^artikler/([^/]+)/?$ detail.php?id=$1 [L,QSA]
+RewriteRule ^cv/([^/]+)/?$ detail.php?id=$1 [L,QSA]
+RewriteRule ^recommendations/([^/]+)/?$ detail.php?id=$1 [L,QSA]
+RewriteRule ^anbefalinger/([^/]+)/?$ detail.php?id=$1 [L,QSA]
 
 # 4. Skjul .html fil-endelser (External redirect)
 RewriteCond %{THE_REQUEST} ^[A-Z]{3,9}\ /([^\ ]+)\.html
@@ -42,6 +42,12 @@ RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME}.html -f
 RewriteRule ^(.*)$ $1.html [L]
+
+# 5b. Intern rewrite til .php filer (server-renderede sider: projects, insights, cv, ...)
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME}.php -f
+RewriteRule ^(.*)$ $1.php [L]
 
 # 6. Dynamisk Sitemap
 RewriteRule ^sitemap\.xml$ sitemap.php [L]

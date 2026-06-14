@@ -1,0 +1,36 @@
+# Zacharias Polonius
+
+> Zacharias Polonius er Technical Account Manager hos Bring og specialist i checkout-optimering og konverteringsoptimering (CRO) for e-commerce. Han bygger bro mellem kompleks teknologi og målbar forretningsværdi og har hjulpet over 100 webshops med at reducere friktion i checkout og øge konverteringen gennem data og AI. Baseret i Bjæverskov, Danmark.
+
+## Om
+
+- **Navn:** Zacharias Polonius
+- **Titel:** Technical Account Manager hos Bring (siden september 2023)
+- **Felt:** Checkout-optimering, konverteringsoptimering (CRO), e-commerce, AI-drevet kundesucess og teknisk support
+- **Lokation:** Bjæverskov, Danmark
+- **Sprog:** Dansk (modersmål), Engelsk (flydende)
+- **Uddannelse:** Serviceøkonom og Eventkoordinator fra Cphbusiness (Copenhagen Business Academy)
+- **Kontakt:** zacharias@polonius.dk · +45 30 68 70 41
+
+## Hvad Zacharias hjælper med
+
+- Optimering af checkout-flow og købsrejse for webshops
+- Konverteringsoptimering baseret på data frem for mavefornemmelser
+- Implementering af AI-løsninger til teknisk support og kundesucces
+- Oversættelse mellem teknik og forretning ("API og EBITDA")
+- Rådgivning af e-commerce virksomheder om levering og logistik via Bring
+
+## Sider
+
+- [Forside](https://zpolonius.dk/): Profil og overblik
+- [Om](https://zpolonius.dk/about): Baggrund, filosofi og fagligt fundament
+- [Business cases & ROI](https://zpolonius.dk/projects): Dokumenterede projekter og resultater
+- [Indsigter](https://zpolonius.dk/insights): Artikler og perspektiver på e-commerce, checkout og AI
+- [CV](https://zpolonius.dk/cv): Erhvervserfaring og uddannelse
+- [Anbefalinger](https://zpolonius.dk/recommendations): Udtalelser fra samarbejdspartnere
+- [Kontakt](https://zpolonius.dk/contact): Book et uforpligtende checkout-review
+
+## Profiler
+
+- LinkedIn: https://www.linkedin.com/in/zpolonius/
+- GitHub: https://github.com/zpolonius
