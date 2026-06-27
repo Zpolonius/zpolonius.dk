@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+  <base href="/">
+  <title>Ferie-autosvar generator — Zacharias Polonius</title>
+  <meta name="description" content="Lav et sjovt, velformuleret out-of-office autosvar på sekunder. Skriv hvem du er og hvor du skal hen — AI'en skriver resten.">
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://zpolonius.dk/vacation-reply">
+  <meta property="og:title" content="Ferie-autosvar generator">
+  <meta property="og:description" content="Skriv et perfekt out-of-office autosvar på sekunder med AI.">
+  <meta property="og:image" content="https://zpolonius.dk/assets/og-contact.jpg">
+
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:url" content="https://zpolonius.dk/vacation-reply">
+  <meta property="twitter:title" content="Ferie-autosvar generator">
+  <meta property="twitter:description" content="Skriv et perfekt out-of-office autosvar på sekunder med AI.">
+  <meta property="twitter:image" content="https://zpolonius.dk/assets/og-contact.jpg">
+  <link rel="canonical" href="https://zpolonius.dk/vacation-reply">
+
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    /* SPLIT LAYOUT */
+    .vac-wrap {
+      display: grid; grid-template-columns: 1fr 520px;
+      min-height: calc(100vh - 57px);
+    }
+
+    /* LEFT — FORM */
+    .vac-left {
+      padding: 52px 48px; border-right: 0.5px solid var(--border);
+      display: flex; flex-direction: column;
+    }
+    .vac-label { font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--blue); margin-bottom: 14px; }
+    .vac-title { font-size: 40px; font-weight: 700; letter-spacing: -0.04em; color: var(--text); line-height: 1.02; margin-bottom: 16px; }
+    .vac-desc  { font-size: 14px; color: var(--text-muted); line-height: 1.7; max-width: 440px; margin-bottom: 32px; }
+
+    .vac-tone-pills .pill { text-transform: none; }
+
+    .vac-logo-row { display: flex; align-items: center; gap: 14px; margin-top: 4px; }
+    .vac-logo-preview {
+      width: 44px; height: 44px; border-radius: var(--radius-md);
+      border: 0.5px solid var(--border-md); object-fit: cover;
+      display: none; background: var(--bg-deep);
+    }
+    .vac-logo-preview.show { display: block; }
+    .vac-logo-btn {
+      font-size: 12px; color: var(--text-faint); border: 0.5px solid var(--border);
+      padding: 9px 16px; border-radius: var(--radius-sm); cursor: pointer;
+      letter-spacing: 0.03em; transition: all 0.2s; background: transparent;
+      font-family: var(--font);
+    }
+    .vac-logo-btn:hover { border-color: var(--blue); color: var(--blue); }
+    .vac-logo-hint { font-size: 11px; color: var(--text-ghost); margin-top: 8px; }
+
+    .vac-submit {
+      width: 100%; background: var(--blue); color: #fff; border: none;
+      padding: 14px; font-size: 14px; font-weight: 500; cursor: pointer;
+      font-family: var(--font); letter-spacing: 0.02em; transition: opacity 0.2s;
+      border-radius: var(--radius-sm); margin-top: 28px;
+    }
+    .vac-submit:hover { opacity: 0.85; }
+    .vac-submit.sending { opacity: 0.5; pointer-events: none; }
+    .vac-quota { font-size: 11px; color: var(--text-ghost); text-align: center; margin-top: 12px; }
+
+    /* RIGHT — EMAIL MOCKUP */
+    .vac-right {
+      background: var(--bg-card); padding: 44px 40px;
+      display: flex; flex-direction: column; justify-content: center;
+    }
+    .mail-card {
+      border: 0.5px solid var(--border-md); border-radius: var(--radius-lg);
+      background: var(--bg); overflow: hidden; box-shadow: 0 24px 60px rgba(0,0,0,0.25);
+    }
+    .mail-toolbar {
+      display: flex; align-items: center; gap: 7px;
+      padding: 12px 16px; border-bottom: 0.5px solid var(--border);
+      background: var(--bg-deep);
+    }
+    .mail-dot { width: 11px; height: 11px; border-radius: 50%; }
+    .mail-dot.r { background: #ff5f57; } .mail-dot.y { background: #febc2e; } .mail-dot.g { background: #28c840; }
+    .mail-toolbar-label { margin-left: 10px; font-size: 11px; color: var(--text-ghost); letter-spacing: 0.05em; }
+
+    .mail-header { display: flex; align-items: center; gap: 14px; padding: 20px 22px 16px; border-bottom: 0.5px solid var(--border); }
+    .mail-avatar {
+      width: 46px; height: 46px; border-radius: 50%; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      background: var(--blue); color: #fff; font-weight: 600; font-size: 17px;
+      object-fit: cover; overflow: hidden;
+    }
+    .mail-avatar img { width: 100%; height: 100%; object-fit: cover; }
+    .mail-from-name { font-size: 14px; font-weight: 600; color: var(--text); }
+    .mail-from-email { font-size: 12px; color: var(--text-faint); margin-top: 1px; }
+    .mail-subject { padding: 14px 22px 0; font-size: 15px; font-weight: 600; color: var(--text); letter-spacing: -0.01em; }
+    .mail-subject-tag {
+      display: inline-block; font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--green); border: 0.5px solid var(--border-green); border-radius: var(--radius-pill);
+      padding: 3px 9px; margin-bottom: 10px;
+    }
+    .mail-body {
+      padding: 12px 22px 22px; font-size: 13.5px; line-height: 1.75;
+      color: var(--text-muted); white-space: pre-wrap; min-height: 160px;
+    }
+    .mail-body.empty { color: var(--text-ghost); display: flex; align-items: center; justify-content: center; text-align: center; font-style: normal; }
+    .mail-cursor::after { content: '▌'; color: var(--blue); animation: vacblink 1s steps(2) infinite; }
+
+    /* EMPTY STATE — sådan gør du */
+    .mail-empty { width: 100%; }
+    .mail-empty-icon { font-size: 30px; margin-bottom: 10px; }
+    .mail-empty-title { font-size: 14px; font-weight: 600; color: var(--text-muted); margin-bottom: 4px; }
+    .mail-empty-sub { font-size: 12px; color: var(--text-ghost); margin-bottom: 18px; }
+    .mail-steps { list-style: none; text-align: left; max-width: 290px; margin: 0 auto; padding: 0; }
+    .mail-step { display: flex; gap: 12px; align-items: flex-start; padding: 7px 0; font-size: 12.5px; line-height: 1.5; color: var(--text-faint); }
+    .mail-step-num {
+      flex-shrink: 0; width: 22px; height: 22px; border-radius: 50%;
+      background: var(--blue); color: #fff; font-size: 11px; font-weight: 600;
+      display: flex; align-items: center; justify-content: center; margin-top: 1px;
+    }
+
+    /* LOADING STATE */
+    .mail-loading { display: flex; flex-direction: column; align-items: center; gap: 14px; color: var(--text-faint); }
+    .mail-loading-dots { display: flex; gap: 7px; }
+    .mail-loading-dots span { width: 9px; height: 9px; border-radius: 50%; background: var(--blue); animation: vacbounce 1.2s infinite ease-in-out both; }
+    .mail-loading-dots span:nth-child(1) { animation-delay: -0.24s; }
+    .mail-loading-dots span:nth-child(2) { animation-delay: -0.12s; }
+    .mail-loading-text { font-size: 12.5px; }
+    @keyframes vacbounce { 0%, 80%, 100% { transform: scale(0.45); opacity: 0.35; } 40% { transform: scale(1); opacity: 1; } }
+    @keyframes vacblink { 0%,50% { opacity: 1; } 50.01%,100% { opacity: 0; } }
+
+    .mail-actions { display: flex; gap: 10px; padding: 0 22px 22px; }
+    .mail-action-btn {
+      font-size: 12px; color: var(--text-faint); border: 0.5px solid var(--border);
+      padding: 9px 16px; border-radius: var(--radius-sm); cursor: pointer;
+      background: transparent; font-family: var(--font); transition: all 0.2s;
+    }
+    .mail-action-btn:hover { border-color: var(--blue); color: var(--blue); }
+    .mail-action-btn:disabled { opacity: 0.4; pointer-events: none; }
+
+    /* RESPONSIVE */
+    @media (max-width: 900px) {
+      .vac-wrap { grid-template-columns: 1fr; }
+      .vac-left { padding: 36px 24px; border-right: none; border-bottom: 0.5px solid var(--border); }
+      .vac-right { padding: 32px 24px 80px; }
+      .vac-title { font-size: 32px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- SHARED HEADER -->
+  <header id="global-header"></header>
+
+  <div class="vac-wrap">
+    <!-- LEFT — FORM -->
+    <div class="vac-left fade-up fade-up-1">
+      <div class="vac-label">Gimmick 🏖</div>
+      <h1 class="vac-title">Ferie-autosvar<br>generator</h1>
+      <p class="vac-desc">Skal du på ferie og gider ikke selv finde på et out-of-office svar? Skriv hvem du er og hvor du skal hen — så skriver AI'en et færdigt autosvar du bare kan kopiere ind.</p>
+
+      <div class="field-row" style="margin-bottom:16px;">
+        <div class="field" style="margin-bottom:0;">
+          <label class="field-label">Dit navn</label>
+          <input class="input" type="text" id="v-name" placeholder="Fx Mette Hansen" maxlength="100">
+        </div>
+        <div class="field" style="margin-bottom:0;">
+          <label class="field-label">Email (valgfrit)</label>
+          <input class="input" type="email" id="v-email" placeholder="dig@firma.dk" maxlength="150">
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="field-label">Titel / rolle (valgfrit)</label>
+        <input class="input" type="text" id="v-title" placeholder="Fx Marketingchef" maxlength="120">
+      </div>
+
+      <div class="field">
+        <label class="field-label">Hvad skal autosvaret fortælle?</label>
+        <textarea class="input" id="v-desc" style="height:104px;" maxlength="600" placeholder="Fx: Jeg er på ferie i Italien uge 28–30 og tjekker ikke mail. Ved hastesager kontakt min kollega Jens på jens@firma.dk."></textarea>
+      </div>
+
+      <div class="field">
+        <label class="field-label">Anledning / tema</label>
+        <div class="pills vac-occasion-pills" style="margin-top:4px;">
+          <button class="pill selected" data-occasion="sommerferie" data-subject="Jeg holder sommerferie ☀️" data-accent="#f5a623">☀️ Sommerferie</button>
+          <button class="pill" data-occasion="jul" data-subject="Glædelig jul — jeg er på ferie 🎄" data-accent="#c0392b">🎄 Jul &amp; nytår</button>
+          <button class="pill" data-occasion="forretningsrejse" data-subject="På forretningsrejse ✈️" data-accent="#2d6cdf">✈️ Forretningsrejse</button>
+          <button class="pill" data-occasion="efteraarsferie" data-subject="Efterårsferie 🍂" data-accent="#d9822b">🍂 Efterårsferie</button>
+          <button class="pill" data-occasion="barsel" data-subject="Jeg er på barsel 👶" data-accent="#2a9d8f">👶 Barsel</button>
+          <button class="pill" data-occasion="sygemeldt" data-subject="Sygemeldt 🤒" data-accent="#7f8c8d">🤒 Sygemeldt</button>
+          <button class="pill" data-occasion="kursus" data-subject="På kursus 📚" data-accent="#6c5ce7">📚 Kursus</button>
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="field-label">Tone</label>
+        <div class="pills vac-tone-pills" style="margin-top:4px;">
+          <button class="pill selected" data-tone="professionel">Professionel</button>
+          <button class="pill" data-tone="sjov">Sjov</button>
+          <button class="pill" data-tone="kort">Kort &amp; kontant</button>
+          <button class="pill" data-tone="over-the-top">Over-the-top</button>
+        </div>
+      </div>
+
+      <div class="field" style="margin-bottom:0;">
+        <label class="field-label">Logo (valgfrit — vises kun i din browser)</label>
+        <div class="vac-logo-row">
+          <img class="vac-logo-preview" id="v-logo-preview" alt="Logo preview">
+          <button type="button" class="vac-logo-btn" id="v-logo-btn">Vælg billede</button>
+          <input type="file" id="v-logo-input" accept="image/*" style="display:none;">
+        </div>
+        <div class="vac-logo-hint">Dit logo forlader aldrig din browser — det sendes ikke og gemmes ikke.</div>
+      </div>
+
+      <button class="vac-submit" id="v-submit">Generér autosvar →</button>
+      <div class="vac-quota" id="v-quota">Du kan lave op til 3 autosvar i døgnet.</div>
+    </div>
+
+    <!-- RIGHT — EMAIL MOCKUP -->
+    <div class="vac-right fade-up fade-up-2">
+      <div class="mail-card">
+        <div class="mail-toolbar">
+          <span class="mail-dot r"></span><span class="mail-dot y"></span><span class="mail-dot g"></span>
+          <span class="mail-toolbar-label">Automatisk svar</span>
+        </div>
+        <div class="mail-header">
+          <div class="mail-avatar" id="m-avatar">?</div>
+          <div>
+            <div class="mail-from-name" id="m-from-name">Dit navn</div>
+            <div class="mail-from-email" id="m-from-email">dig@firma.dk</div>
+          </div>
+        </div>
+        <div class="mail-subject">
+          <div class="mail-subject-tag">Out of office</div><br>
+          <span id="m-subject">Jeg er ikke på kontoret lige nu</span>
+        </div>
+        <div class="mail-body empty" id="m-body">
+          <div class="mail-empty">
+            <div class="mail-empty-icon">📭</div>
+            <div class="mail-empty-title">Dit autosvar dukker op her</div>
+            <div class="mail-empty-sub">Tre hurtige trin, så er du klar til ferie:</div>
+            <ol class="mail-steps">
+              <li class="mail-step"><span class="mail-step-num">1</span><span>Skriv dit navn og hvad autosvaret skal fortælle.</span></li>
+              <li class="mail-step"><span class="mail-step-num">2</span><span>Vælg en anledning og en tone.</span></li>
+              <li class="mail-step"><span class="mail-step-num">3</span><span>Tryk <strong>Generér autosvar</strong> — så skriver AI’en resten.</span></li>
+            </ol>
+          </div>
+        </div>
+        <div class="mail-actions">
+          <button class="mail-action-btn" id="m-copy" disabled>Kopiér tekst</button>
+          <button class="mail-action-btn" id="m-retry" disabled>Prøv igen</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SHARED FOOTER -->
+  <footer id="global-footer" class="footer"></footer>
+
+  <!-- SHARED WIDGETS -->
+  <div id="global-menu"></div>
+  <div id="global-contact"></div>
+  <nav id="global-bottom-nav"></nav>
+  <div id="global-floating-cta"></div>
+
+  <script src="js/main.js?v=1.0.8"></script>
+  <script>
+  document.addEventListener('DOMContentLoaded', () => {
+    // CSRF
+    let pageCSRFToken = '';
+    fetch('api/csrf.php').then(r => r.json()).then(d => { if (d.ok) pageCSRFToken = d.token; });
+
+    const $ = id => document.getElementById(id);
+    let selectedTone = 'professionel';
+    let selectedOccasion = 'sommerferie';
+    let logoDataUrl = '';
+    let lastBody = '';
+
+    // Tone pills
+    document.querySelectorAll('.vac-tone-pills .pill').forEach(pill => {
+      pill.addEventListener('click', () => {
+        document.querySelectorAll('.vac-tone-pills .pill').forEach(p => p.classList.remove('selected'));
+        pill.classList.add('selected');
+        selectedTone = pill.dataset.tone;
+      });
+    });
+
+    // Occasion / theme pills — also restyle the mockup
+    document.querySelectorAll('.vac-occasion-pills .pill').forEach(pill => {
+      pill.addEventListener('click', () => {
+        document.querySelectorAll('.vac-occasion-pills .pill').forEach(p => p.classList.remove('selected'));
+        pill.classList.add('selected');
+        selectedOccasion = pill.dataset.occasion;
+        $('m-subject').textContent = pill.dataset.subject;
+        const accent = pill.dataset.accent;
+        document.querySelectorAll('.mail-card .mail-subject-tag').forEach(t => { t.style.color = accent; t.style.borderColor = accent; });
+        if (!logoDataUrl) $('m-avatar').style.background = accent;
+      });
+    });
+
+    // Live mockup header sync
+    function initials(name) {
+      const parts = name.trim().split(/\s+/).filter(Boolean);
+      if (!parts.length) return '?';
+      return (parts[0][0] + (parts[1]?.[0] || '')).toUpperCase();
+    }
+    function syncHeader() {
+      const name = $('v-name').value.trim();
+      const email = $('v-email').value.trim();
+      $('m-from-name').textContent = name || 'Dit navn';
+      $('m-from-email').textContent = email || 'dig@firma.dk';
+      if (!logoDataUrl) $('m-avatar').textContent = initials(name);
+    }
+    ['v-name', 'v-email'].forEach(id => $(id).addEventListener('input', syncHeader));
+
+    // Logo preview (local only)
+    $('v-logo-btn').addEventListener('click', () => $('v-logo-input').click());
+    $('v-logo-input').addEventListener('change', e => {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = ev => {
+        logoDataUrl = ev.target.result;
+        const prev = $('v-logo-preview');
+        prev.src = logoDataUrl; prev.classList.add('show');
+        $('m-avatar').innerHTML = '<img src="' + logoDataUrl + '" alt="logo">';
+      };
+      reader.readAsDataURL(file);
+    });
+
+    // Loading state in mockup body
+    function showLoading() {
+      const el = $('m-body');
+      el.classList.add('empty');
+      el.classList.remove('mail-cursor');
+      el.innerHTML = '<div class="mail-loading">'
+        + '<div class="mail-loading-dots"><span></span><span></span><span></span></div>'
+        + '<div class="mail-loading-text">AI’en skriver dit autosvar…</div>'
+        + '</div>';
+    }
+
+    // Typewriter into mockup body
+    function typeBody(text) {
+      const el = $('m-body');
+      el.classList.remove('empty');
+      el.classList.add('mail-cursor');
+      el.textContent = '';
+      let i = 0;
+      (function step() {
+        if (i < text.length) {
+          el.textContent += text.charAt(i++);
+          setTimeout(step, 8);
+        } else {
+          el.classList.remove('mail-cursor');
+        }
+      })();
+    }
+
+    function showError(msg) {
+      const el = $('m-body');
+      el.classList.remove('empty', 'mail-cursor');
+      el.textContent = '⚠ ' + msg;
+    }
+
+    // Generate
+    $('v-submit').addEventListener('click', () => {
+      const name = $('v-name').value.trim();
+      const desc = $('v-desc').value.trim();
+      let valid = true;
+      [['v-name', name], ['v-desc', desc]].forEach(([id, val]) => {
+        const el = $(id);
+        if (!val) { el.classList.add('error'); setTimeout(() => el.classList.remove('error'), 1500); valid = false; }
+      });
+      if (!valid) return;
+
+      const btn = $('v-submit');
+      btn.classList.add('sending');
+      btn.textContent = 'Genererer...';
+      $('m-copy').disabled = true; $('m-retry').disabled = true;
+      showLoading();
+
+      fetch('api/vacation_reply.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'same-origin',
+        body: JSON.stringify({
+          name,
+          email: $('v-email').value.trim(),
+          title: $('v-title').value.trim(),
+          description: desc,
+          tone: selectedTone,
+          occasion: selectedOccasion,
+          csrf_token: pageCSRFToken
+        })
+      })
+      .then(r => r.json())
+      .then(res => {
+        btn.classList.remove('sending');
+        btn.textContent = 'Generér autosvar →';
+        if (res.ok) {
+          lastBody = res.reply;
+          typeBody(res.reply);
+          $('m-copy').disabled = false; $('m-retry').disabled = false;
+          if (typeof res.remaining === 'number') {
+            $('v-quota').textContent = res.remaining > 0
+              ? 'Du har ' + res.remaining + ' autosvar tilbage i dag.'
+              : 'Det var dit sidste autosvar i dag 🏖';
+          }
+        } else {
+          showError(res.error || 'Noget gik galt — prøv igen.');
+          if (res.remaining === 0) $('v-quota').textContent = 'Du har ingen autosvar tilbage i dag.';
+        }
+      })
+      .catch(() => {
+        btn.classList.remove('sending');
+        btn.textContent = 'Generér autosvar →';
+        showError('Netværksfejl — prøv venligst igen.');
+      });
+    });
+
+    // Copy
+    $('m-copy').addEventListener('click', () => {
+      if (!lastBody) return;
+      navigator.clipboard.writeText(lastBody).then(() => {
+        const b = $('m-copy'); const t = b.textContent;
+        b.textContent = 'Kopieret ✓';
+        setTimeout(() => { b.textContent = t; }, 1600);
+      });
+    });
+    // Retry
+    $('m-retry').addEventListener('click', () => $('v-submit').click());
+
+    syncHeader();
+  });
+  </script>
+</body>
+</html>

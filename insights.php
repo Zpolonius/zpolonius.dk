@@ -238,7 +238,7 @@ foreach ($articles as $a) {
   <!-- SHARED FOOTER -->
   <footer id="global-footer" class="footer"></footer>
 
-  <script src="js/main.js?v=1.0.7"></script>
+  <script src="js/main.js?v=1.0.8"></script>
   <script>
     function esc(str) {
       if (!str) return '';
