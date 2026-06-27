@@ -232,6 +232,7 @@ function initSharedLayout() {
         <li><a href="about">Om mig</a></li>
         <li><a href="cv">CV & Erfaring</a></li>
         <li><a href="recommendations">Anbefalinger</a></li>
+        <li><a href="vacation-reply">Ferie-autosvar 🏖</a></li>
         <li><a href="#" data-contact data-track="contact-open-header">Kontakt</a></li>
       </ul>
       <div class="nav-right">
@@ -256,6 +257,7 @@ function initSharedLayout() {
       <li><a href="about">Om mig</a></li>
       <li><a href="cv">CV & Erfaring</a></li>
       <li><a href="recommendations">Anbefalinger</a></li>
+      <li><a href="vacation-reply">Ferie-autosvar 🏖</a></li>
       <li class="mobile-only"><a href="#" data-contact data-track="contact-open-mobile">Kontakt</a></li>
     </ul>
   `;

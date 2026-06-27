@@ -698,7 +698,7 @@
     try {
       // Brug model fra modalen hvis den er åben, ellers site-indstilling
       const modalModel = document.getElementById('modalAIModel').value;
-      const aiModel = modalModel || data.site?.ai_model || 'gemini-1.5-flash';
+      const aiModel = modalModel || data.site?.ai_model || 'gemini-3.5-flash';
 
       const response = await fetch('api/optimize.php', {
         method: 'POST',
@@ -740,7 +740,7 @@
       .then(res => {
         if (res.ok) {
           const sel = document.getElementById('modalAIModel');
-          const current = data.site?.ai_model || 'gemini-1.5-flash';
+          const current = data.site?.ai_model || 'gemini-3.5-flash';
           sel.innerHTML = res.models.map(m => `<option value="${m.id}" ${m.id===current?'selected':''}>${m.name}</option>`).join('');
         }
       });
@@ -1051,6 +1051,8 @@ async function renderAnalytics(area) {
     // Vi tæller KUN reelle handlinger (bottom-of-funnel), ikke bare at åbne en menu/modal
     const convKeywords = ['cv-download', 'contact-submit', 'contact-email', 'contact-phone', 'linkedin', 'instagram', 'facebook'];
     
+    let totalAiReferrals = 0;   // mennesker der kom FRA en AI-assistent
+    let totalAiBots = 0;        // AI-crawlere der har hentet sider
     dates.forEach(d => {
       totalUnique += stats[d].unique_visitors || 0;
       const dayEvents = stats[d].events || {};
@@ -1059,12 +1061,14 @@ async function renderAnalytics(area) {
           totalConversions += count;
         }
       });
+      totalAiReferrals += Object.values(stats[d].ai_referrers || {}).reduce((a, b) => a + b, 0);
+      totalAiBots += Object.values(stats[d].ai_bots || {}).reduce((a, b) => a + b, 0);
     });
     const convRate = totalUnique > 0 ? ((totalConversions / totalUnique) * 100).toFixed(1) : 0;
 
     let html = `
       <div style="max-width:1200px;">
-        <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:16px; margin-bottom:24px;">
+        <div style="display:grid; grid-template-columns: repeat(4, 1fr); gap:16px; margin-bottom:24px;">
           <div class="settings-card">
             <div class="settings-card-title">Unikke besøgende (i dag)</div>
             <div style="font-size:32px; font-weight:700; color:var(--blue);">${stats[reverseDates[0]]?.unique_visitors || 0}</div>
@@ -1079,6 +1083,11 @@ async function renderAnalytics(area) {
             <div class="settings-card-title">Konverteringsrate (Total)</div>
             <div style="font-size:32px; font-weight:700; color:var(--amber);">${convRate}%</div>
             <div style="font-size:10px; color:var(--faint); margin-top:4px;">Sendt besked, CV download eller udgående links</div>
+          </div>
+          <div class="settings-card">
+            <div class="settings-card-title">AI-trafik (30 dage)</div>
+            <div style="font-size:32px; font-weight:700; color:var(--purple, #a855f7);">${totalAiReferrals}</div>
+            <div style="font-size:10px; color:var(--faint); margin-top:4px;">Besøg fra AI-svar · ${totalAiBots} AI-bot crawls</div>
           </div>
         </div>
 
@@ -1132,6 +1141,24 @@ async function renderAnalytics(area) {
                          </div>
                        `).join('') || '<div style="font-size:10px; color:var(--faint);">Ingen data</div>'}
                     </div>
+
+                    ${(Object.keys(day.ai_referrers || {}).length || Object.keys(day.ai_bots || {}).length) ? `
+                    <div style="margin-bottom:12px; background:rgba(168,85,247,0.06); border:0.5px solid rgba(168,85,247,0.25); border-radius:8px; padding:8px 10px;">
+                       <div style="font-size:9px; text-transform:uppercase; color:var(--purple, #a855f7); margin-bottom:6px; letter-spacing:0.05em;">🤖 AI-trafik (LLM)</div>
+                       ${Object.entries(day.ai_referrers || {}).sort((a,b) => b[1] - a[1]).map(([src, count]) => `
+                         <div style="display:flex; justify-content:space-between; font-size:10px; margin-bottom:4px;">
+                           <span style="color:var(--muted);">↳ Besøg fra ${src}</span>
+                           <span style="color:var(--purple, #a855f7); font-weight:600;">${count}</span>
+                         </div>
+                       `).join('')}
+                       ${Object.entries(day.ai_bots || {}).sort((a,b) => b[1] - a[1]).map(([bot, count]) => `
+                         <div style="display:flex; justify-content:space-between; font-size:10px; margin-bottom:4px;">
+                           <span style="color:var(--faint);">⚙ Crawl: ${bot}</span>
+                           <span style="color:var(--faint); font-weight:600;">${count}</span>
+                         </div>
+                       `).join('')}
+                    </div>
+                    ` : ''}
 
                     <div style="margin-bottom:12px;">
                        <div style="font-size:9px; text-transform:uppercase; color:var(--faint); margin-bottom:6px; letter-spacing:0.05em;">Enheder</div>
@@ -2060,7 +2087,7 @@ function renderSite(area) {
         <div class="field">
           <label class="field-label">AI Model</label>
           <select class="f-select" id="st-ai-model">
-            <option value="${s.ai_model || 'gemini-2.0-flash'}">${s.ai_model || 'gemini-2.0-flash'}</option>
+            <option value="${s.ai_model || 'gemini-3.5-flash'}">${s.ai_model || 'gemini-3.5-flash'}</option>
           </select>
           <div class="field-hint">Henter liste fra Google AI Studio...</div>
         </div>
@@ -2077,7 +2104,7 @@ function renderSite(area) {
       if (res.ok) {
         const sel = document.getElementById('st-ai-model');
         if (sel) {
-          sel.innerHTML = res.models.map(m => `<option value="${m.id}" ${m.id===(s.ai_model||'gemini-2.0-flash')?'selected':''}>${m.name} (${m.id})</option>`).join('');
+          sel.innerHTML = res.models.map(m => `<option value="${m.id}" ${m.id===(s.ai_model||'gemini-3.5-flash')?'selected':''}>${m.name} (${m.id})</option>`).join('');
           const hint = sel.nextElementSibling;
           if (hint) hint.textContent = 'Liste over aktive tekst-modeller hentet.';
         }

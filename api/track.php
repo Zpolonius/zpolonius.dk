@@ -40,6 +40,7 @@ if (!isset($data[$date])) {
         'page_views' => [],
         'locations' => [],
         'referrers' => [],
+        'ai_referrers' => [],
         'devices' => [],
         'events' => []
     ];
@@ -72,7 +73,34 @@ if (!in_array($visitorHash, $data[$date]['unique_visitors'])) {
         $refHost = parse_url($ref, PHP_URL_HOST);
         if ($refHost) {
             // Fjern 'www.' for at gruppere dem
-            $ref = str_replace('www.', '', $refHost);
+            $refHost = str_replace('www.', '', $refHost);
+
+            // Er kilden en AI-assistent / LLM? Så labeller vi trafikken særskilt.
+            // (Dette er rigtige mennesker, der klikker et link i et AI-svar.)
+            $aiSources = [
+                'chatgpt.com'           => 'ChatGPT',
+                'chat.openai.com'       => 'ChatGPT',
+                'perplexity.ai'         => 'Perplexity',
+                'gemini.google.com'     => 'Gemini',
+                'claude.ai'             => 'Claude',
+                'copilot.microsoft.com' => 'Microsoft Copilot',
+                'you.com'               => 'You.com',
+                'poe.com'               => 'Poe',
+                'phind.com'             => 'Phind',
+                'grok.com'              => 'Grok',
+                'x.ai'                  => 'Grok',
+            ];
+            foreach ($aiSources as $needle => $label) {
+                if (strpos($refHost, $needle) !== false) {
+                    if (!isset($data[$date]['ai_referrers'][$label])) {
+                        $data[$date]['ai_referrers'][$label] = 0;
+                    }
+                    $data[$date]['ai_referrers'][$label]++;
+                    break;
+                }
+            }
+
+            $ref = $refHost;
             // Hvis det er dit eget domæne, tæl det som interne links eller 'Direkte'
             if (isset($_SERVER['HTTP_HOST']) && strpos($ref, $_SERVER['HTTP_HOST']) !== false) {
                 $ref = 'Intern navigation';

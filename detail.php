@@ -1,10 +1,167 @@
+<?php
+// ============================================================================
+// detail.php — Server-side rendering af detaljesider (cases, CV, indsigter,
+// anbefalinger). Injicerer titel, meta, JSON-LD og hovedindhold i den rå HTML,
+// så AI-crawlere (GPTBot, ClaudeBot, PerplexityBot m.fl.) ser fuldt indhold
+// uden at køre JavaScript. Klienten (js/main.js) hydrerer bagefter og bevarer
+// typewriter-effekten for menneskelige besøgende.
+// ============================================================================
+
+// Log evt. AI-bot crawl (fejler lydløst, påvirker ikke siden)
+@include __DIR__ . '/api/log_ai_bot.php';
+
+$id = isset($_GET['id']) ? preg_replace('/[^a-z0-9\-_]/i', '', $_GET['id']) : '';
+$item = []; // tom = ikke fundet (falsy, men sikker for ?? på offsets)
+
+$jsonFile = __DIR__ . '/data/content.json';
+if ($id && file_exists($jsonFile)) {
+    $data = json_decode(file_get_contents($jsonFile), true) ?: [];
+    $all = [];
+    foreach (($data['projects'] ?? []) as $x)            { $x['_cat'] = $x['category'] ?? 'ai';            $all[] = $x; }
+    foreach (($data['cv']['jobs'] ?? []) as $x)          { $x['_cat'] = $x['category'] ?? 'work';          $all[] = $x; }
+    foreach (($data['cv']['education'] ?? []) as $x)     { $x['_cat'] = $x['category'] ?? 'education';     $all[] = $x; }
+    foreach (($data['cv']['recommendations'] ?? []) as $x){ $x['_cat'] = $x['category'] ?? 'recommendation'; $all[] = $x; }
+    foreach (($data['articles'] ?? []) as $x)            { $x['_cat'] = $x['category'] ?? 'article';       $all[] = $x; }
+
+    foreach ($all as $x) {
+        if (($x['id'] ?? '') === $id && ($x['visible'] ?? true) !== false) { $item = $x; break; }
+    }
+}
+
+if (!$item) { http_response_code(404); }
+
+// ---- Afledte værdier ----
+$baseUrl  = 'https://zpolonius.dk';
+$h        = function ($s) { return htmlspecialchars($s ?? '', ENT_QUOTES, 'UTF-8'); };
+
+$titleRaw = $item['title'] ?? $item['name'] ?? '';
+$cat      = $item['_cat'] ?? 'ai';
+$role     = $item['role'] ?? '';
+// CV-job har hverken title/name — brug rollen som overskrift, så titel/H1 ikke er tomme
+$title    = $titleRaw !== '' ? $titleRaw : $role;
+$intro    = $item['intro'] ?? $item['desc'] ?? '';
+$body     = $item['body'] ?? $item['text'] ?? '';
+$cover    = $item['cover'] ?? $item['photo'] ?? '';
+$coverPos = $item['cover_pos'] ?? $item['photo_pos'] ?? '';
+$coverAlt = $item['cover_alt'] ?? $item['photo_alt'] ?? $title;
+$tag      = $item['tag'] ?? $item['category'] ?? 'Case';
+$company  = $item['company'] ?? $item['institution'] ?? '';
+// Hvis rollen bruges som overskrift (CV-job), vis kun virksomheden på company-linjen
+$companyLine = $titleRaw !== '' ? trim(($role ? $role . ' @ ' : '') . $company) : $company;
+$period   = $item['period'] ?? '';
+$date     = $item['date'] ?? '';
+$skills   = $item['skills'] ?? [];
+$bento    = $item['bento'] ?? [];
+
+$rawDesc  = $item['meta_desc'] ?? $item['excerpt'] ?? $item['desc'] ?? $intro;
+$metaDesc = trim(preg_replace('/\s+/', ' ', strip_tags($rawDesc)));
+if (function_exists('mb_strlen') && mb_strlen($metaDesc) > 160) {
+    $metaDesc = mb_substr($metaDesc, 0, 157) . '…';
+}
+
+$parentHref = ['article'=>'insights','ai'=>'projects','work'=>'cv','volunteer'=>'cv','education'=>'cv','recommendation'=>'recommendations'];
+$parentName = ['article'=>'Indsigter','ai'=>'Projekter','work'=>'CV','volunteer'=>'Frivillig','education'=>'Uddannelse','recommendation'=>'Anbefalinger'];
+$parent      = $parentHref[$cat] ?? 'projects';
+$parentLabel = $parentName[$cat] ?? 'Projekter';
+
+$canonical = $title ? ($baseUrl . '/' . $parent . '/' . $id) : ($baseUrl . '/');
+$coverAbs  = $cover ? ($baseUrl . '/' . ltrim($cover, '/')) : ($baseUrl . '/assets/cover.webp');
+$pageTitle = $title ? ($title . ' — Zacharias Polonius') : 'Siden blev ikke fundet — Zacharias Polonius';
+
+// ---- JSON-LD (server-side) ----
+$schemas = [];
+if ($item) {
+    $person = ['@type' => 'Person', 'name' => 'Zacharias Polonius', 'url' => $baseUrl . '/'];
+
+    if ($cat === 'article') {
+        $schemas[] = array_filter([
+            '@context' => 'https://schema.org',
+            '@type'    => 'BlogPosting',
+            'headline' => $title,
+            'description' => $metaDesc ?: null,
+            'image'    => $cover ? $coverAbs : null,
+            'datePublished' => $date ?: null,
+            'author'   => $person,
+            'publisher'=> $person,
+            'inLanguage' => 'da',
+            'url'      => $canonical,
+            'mainEntityOfPage' => ['@type' => 'WebPage', '@id' => $canonical],
+        ]);
+    } elseif ($cat === 'recommendation') {
+        $schemas[] = array_filter([
+            '@context' => 'https://schema.org',
+            '@type'    => 'Review',
+            'reviewBody' => trim(strip_tags($intro ?: $body)),
+            'author'   => ['@type' => 'Person', 'name' => $item['name'] ?? ''],
+            'itemReviewed' => ['@type' => 'Person', 'name' => 'Zacharias Polonius', 'url' => $baseUrl . '/'],
+        ]);
+    } else {
+        // Cases, job, uddannelse, frivilligt: CreativeWork forfattet af Zacharias
+        $schemas[] = array_filter([
+            '@context' => 'https://schema.org',
+            '@type'    => 'CreativeWork',
+            'name'     => $title,
+            'headline' => $title,
+            'description' => $metaDesc ?: null,
+            'image'    => $cover ? $coverAbs : null,
+            'keywords' => $skills ? implode(', ', $skills) : null,
+            'author'   => $person,
+            'inLanguage' => 'da',
+            'url'      => $canonical,
+        ]);
+    }
+
+    // BreadcrumbList for alle typer
+    $schemas[] = [
+        '@context' => 'https://schema.org',
+        '@type'    => 'BreadcrumbList',
+        'itemListElement' => [
+            ['@type' => 'ListItem', 'position' => 1, 'name' => 'Hjem', 'item' => $baseUrl . '/'],
+            ['@type' => 'ListItem', 'position' => 2, 'name' => $parentLabel, 'item' => $baseUrl . '/' . $parent],
+            ['@type' => 'ListItem', 'position' => 3, 'name' => $title, 'item' => $canonical],
+        ],
+    ];
+}
+?>
 <!DOCTYPE html>
 <html lang="da">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <base href="/">
-  <title>Detail — Zacharias Polonius</title>
+  <title><?= $h($pageTitle) ?></title>
+<?php if ($item): ?>
+  <meta name="description" content="<?= $h($metaDesc) ?>">
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+  <link rel="canonical" href="<?= $h($canonical) ?>">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="<?= $cat === 'article' ? 'article' : 'website' ?>">
+  <meta property="og:url" content="<?= $h($canonical) ?>">
+  <meta property="og:title" content="<?= $h($title) ?>">
+  <meta property="og:description" content="<?= $h($metaDesc) ?>">
+  <meta property="og:image" content="<?= $h($coverAbs) ?>">
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="<?= $h($title) ?>">
+  <meta name="twitter:description" content="<?= $h($metaDesc) ?>">
+  <meta name="twitter:image" content="<?= $h($coverAbs) ?>">
+
+<?php foreach ($schemas as $s): ?>
+  <script type="application/ld+json"><?= json_encode($s, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) ?></script>
+<?php endforeach; ?>
+<?php else: ?>
+  <meta name="robots" content="noindex">
+<?php endif; ?>
+
+  <!-- Favicons -->
+  <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="shortcut icon" href="/favicon.ico" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+  <link rel="manifest" href="/site.webmanifest" />
+
   <link rel="stylesheet" href="css/style.css">
   <style>
     /* BREADCRUMB */
@@ -212,7 +369,7 @@
       .cover-content { padding: 32px 20px; }
       .cover-title { font-size: 32px; }
       .cover-right { display: none; }
-      
+
       .detail-grid {
         grid-template-columns: 1fr;
         padding: 40px 20px;
@@ -241,9 +398,6 @@
     .not-found { padding: 80px 40px; text-align: center; display: none; }
     .not-found.show { display: block; }
     .not-found h2 { font-size: 24px; color: var(--text); margin-bottom: 12px; }
-
-    /* ---- CASE BENTO (genbrugt fra forsiden) ---- */
-    /* CSS flyttet til style.css for konsistens */
   </style>
 </head>
 <body>
@@ -258,25 +412,25 @@
   <div class="breadcrumb">
     <a href="/">Hjem</a>
     <span class="breadcrumb-sep">/</span>
-    <a href="#" id="bcParent">—</a>
+    <a href="<?= $h($parent) ?>" id="bcParent"><?= $h($parentLabel) ?></a>
     <span class="breadcrumb-sep">/</span>
-    <span class="breadcrumb-current" id="bcCurrent">Indlæser...</span>
+    <span class="breadcrumb-current" id="bcCurrent"><?= $item ? $h($title) : 'Indlæser…' ?></span>
   </div>
 
-  <div id="mainContent">
+  <div id="mainContent"<?= $item ? '' : ' style="display:none"' ?>>
     <!-- COVER -->
     <div class="cover" id="cover">
-      <img class="cover-img" id="coverImg" src="" alt="" onerror="this.style.display='none'; document.getElementById('coverFallback').classList.add('show');">
-      <div class="cover-fallback" id="coverFallback"><div class="cover-fallback-pattern"></div></div>
+      <img class="cover-img" id="coverImg" src="<?= $h($cover) ?>" alt="<?= $h($coverAlt) ?>"<?= $coverPos ? ' style="object-position:' . $h($coverPos) . '"' : '' ?> onerror="this.style.display='none'; document.getElementById('coverFallback').classList.add('show');">
+      <div class="cover-fallback<?= $cover ? '' : ' show' ?>" id="coverFallback"><div class="cover-fallback-pattern"></div></div>
       <div class="cover-gradient"></div>
       <div class="cover-content">
         <div>
-          <div class="cover-tag" id="coverTag"></div>
-          <h1 class="cover-title" id="coverTitle"></h1>
-          <div class="cover-company" id="coverCompany"></div>
+          <div class="cover-tag" id="coverTag"><?= $h($tag) ?></div>
+          <h1 class="cover-title" id="coverTitle"><?= $h($title) ?></h1>
+          <div class="cover-company" id="coverCompany"><?= $h($companyLine) ?></div>
         </div>
         <div class="cover-right">
-          <div class="cover-period" id="coverPeriod"></div>
+          <div class="cover-period" id="coverPeriod"><?= $h($period) ?></div>
           <div class="cover-photo-credit" id="coverCredit"></div>
         </div>
       </div>
@@ -284,18 +438,18 @@
 
     <div class="detail-grid">
       <!-- LEFT SIDEBAR -->
-      <aside class="meta-sidebar" id="metaCol"></aside>
+      <aside class="meta-sidebar" id="metaCol"><?php if ($skills): ?><div class="meta-item" style="margin-top:16px;"><div class="meta-item-label">Kompetencer</div><div class="skill-pills"><?php foreach ($skills as $s): ?><span class="skill-pill"><?= $h($s) ?></span><?php endforeach; ?></div></div><?php endif; ?></aside>
 
       <!-- MAIN CONTENT -->
       <main class="detail-main">
         <div id="introContainer">
-          <div class="intro-text" id="introText"></div>
+          <div class="intro-text" id="introText"><?= $intro /* betroet CMS-indhold */ ?></div>
         </div>
 
-        <div class="bento-grid" id="caseBentoGrid" hidden></div>
+        <div class="bento-grid" id="caseBentoGrid"<?= $bento ? '' : ' hidden' ?>><?php foreach ($bento as $i => $c): if (!($c['label'] ?? '') && !($c['value'] ?? '') && !($c['sub'] ?? '') && !($c['desc'] ?? '')) continue; ?><div class="bento-cell<?= (!empty($c['accent']) && $c['accent'] !== 'none') ? ' accent-' . $h($c['accent']) : '' ?>" data-i="<?= $i ?>" tabindex="0" role="button" aria-expanded="false"><div class="cell-label"><?= $h($c['label'] ?? '') ?></div><h3 class="cell-title"><?= $h($c['value'] ?? '') ?></h3><div class="cell-sub"><?= $h($c['sub'] ?? '') ?></div><div class="cell-desc"><?= $h($c['desc'] ?? '') ?></div><span class="cell-arrow">Læs mere →</span></div><?php endforeach; ?></div>
 
-        <div class="content-main" id="contentMain"></div>
-        
+        <div class="content-main" id="contentMain"><?= $body ?: '<p>Ingen yderligere beskrivelse tilgængelig.</p>' /* betroet CMS-indhold */ ?></div>
+
         <div class="sidebar" id="contentSidebar"></div>
       </main>
     </div>
@@ -315,7 +469,7 @@
   </div>
 
   <!-- NOT FOUND -->
-  <div class="not-found" id="notFound">
+  <div class="not-found<?= $item ? '' : ' show' ?>" id="notFound">
     <h2>Siden blev ikke fundet</h2>
     <p>Det ser ud til, at denne case eller artikel ikke eksisterer længere.</p>
     <a href="/" class="btn-primary" style="margin-top:24px; display:inline-block;">Gå til forsiden</a>
@@ -325,7 +479,7 @@
   <div id="global-cta-bar"></div>
   <footer id="global-footer" class="footer"></footer>
 
-  <script src="js/main.js?v=1.0.7"></script>
+  <script src="js/main.js?v=1.0.8"></script>
   <script>
     const urlParams = new URLSearchParams(window.location.search);
     let itemId = urlParams.get('id');
@@ -375,13 +529,13 @@
     }
 
     function renderDetail(item, allItems) {
-      const parentHref = { 
-        article:'insights', 
-        ai:'projects', 
-        work:'cv', 
-        volunteer:'cv', 
-        education:'cv', 
-        recommendation:'recommendations' 
+      const parentHref = {
+        article:'insights',
+        ai:'projects',
+        work:'cv',
+        volunteer:'cv',
+        education:'cv',
+        recommendation:'recommendations'
       };
       const parentName = {
         article:'Indsigter',
@@ -396,14 +550,21 @@
       const cat = item.category || 'ai';
       document.getElementById('bcParent').href = parentHref[cat] || 'projects';
       document.getElementById('bcParent').textContent = parentName[cat] || 'Projekter';
-      document.getElementById('bcCurrent').textContent = item.title || item.name;
+      document.getElementById('bcCurrent').textContent = item.title || item.name || item.role || '';
+
+      // CV-job har hverken title/name — brug rollen som overskrift
+      const titleRaw = item.title || item.name || '';
+      const displayTitle = titleRaw || item.role || '';
+      const companyLine = titleRaw
+        ? ((item.role ? item.role + ' @ ' : '') + (item.company || item.institution || ''))
+        : (item.company || item.institution || '');
 
       document.getElementById('coverTag').textContent = item.tag || item.category || 'Case';
-      if (item.company || item.role) document.getElementById('coverCompany').textContent = (item.role ? item.role + ' @ ' : '') + (item.company || item.institution || '');
+      document.getElementById('coverCompany').textContent = companyLine;
       if (item.period) document.getElementById('coverPeriod').textContent = item.period;
-      
+
       // SEO Updates
-      const pageTitle = (item.title || item.name) + " — Zacharias Polonius";
+      const pageTitle = displayTitle + " — Zacharias Polonius";
       document.title = pageTitle;
       const metaDesc = item.meta_desc || item.excerpt || item.desc || "";
       if (metaDesc) {
@@ -416,65 +577,16 @@
         metaTag.content = metaDesc.substring(0, 160);
       }
 
-      // Dynamisk JSON-LD schema (Fix 4)
-      const existingLd = document.getElementById('dynamic-ld-json');
-      if (existingLd) existingLd.remove();
-      const ldScript = document.createElement('script');
-      ldScript.id = 'dynamic-ld-json';
-      ldScript.type = 'application/ld+json';
-      const baseUrl = 'https://zpolonius.dk';
-      let ldData = null;
-
-      if (cat === 'article') {
-        ldData = {
-          "@context": "https://schema.org",
-          "@type": "BlogPosting",
-          "headline": item.title,
-          "description": metaDesc.substring(0, 160) || undefined,
-          "image": item.cover ? baseUrl + '/' + item.cover : undefined,
-          "author": { "@type": "Person", "name": "Zacharias Polonius", "url": baseUrl },
-          "publisher": { "@type": "Person", "name": "Zacharias Polonius" },
-          "url": baseUrl + '/insights/' + item.id,
-          "mainEntityOfPage": { "@type": "WebPage", "@id": baseUrl + '/insights/' + item.id }
-        };
-      } else if (cat === 'recommendation') {
-        ldData = {
-          "@context": "https://schema.org",
-          "@type": "Review",
-          "reviewBody": item.intro || item.text,
-          "author": { "@type": "Person", "name": item.name },
-          "itemReviewed": { "@type": "Person", "name": "Zacharias Polonius", "url": baseUrl }
-        };
-      } else {
-        // Projekter og cases: BreadcrumbList
-        const breadcrumbName = { ai:'Projekter', checkout:'Projekter', konvertering:'Projekter', work:'CV', volunteer:'CV', education:'CV' };
-        ldData = {
-          "@context": "https://schema.org",
-          "@type": "BreadcrumbList",
-          "itemListElement": [
-            { "@type": "ListItem", "position": 1, "name": "Hjem", "item": baseUrl },
-            { "@type": "ListItem", "position": 2, "name": breadcrumbName[cat] || 'Projekter', "item": baseUrl + '/' + (parentHref[cat] || 'projects') },
-            { "@type": "ListItem", "position": 3, "name": item.title || item.name, "item": window.location.href }
-          ]
-        };
-      }
-      if (ldData) {
-        ldScript.textContent = JSON.stringify(ldData);
-        document.head.appendChild(ldScript);
-      }
-      
       const img = document.getElementById('coverImg');
       const fallback = document.getElementById('coverFallback');
-      
+
       if (item.cover || item.photo) {
         const imgPath = item.cover || item.photo;
-        console.log("Loading cover image:", imgPath);
         img.src = imgPath;
-        img.style.display = 'block'; 
-        fallback.classList.remove('show'); 
+        img.style.display = 'block';
+        fallback.classList.remove('show');
         if (item.cover_pos || item.photo_pos) img.style.objectPosition = item.cover_pos || item.photo_pos;
       } else {
-        console.log("No cover image found for this item.");
         img.style.display = 'none';
         fallback.classList.add('show');
       }
@@ -483,7 +595,7 @@
       const introEl = document.getElementById('introText');
       const fullIntro = item.intro || item.desc || "";
       introEl.innerHTML = ""; // Reset
-      
+
       let introIdx = 0;
       function typeIntro() {
         if (introIdx < fullIntro.length) {
@@ -505,9 +617,9 @@
 
       // Title typewriter (allerede implementeret tidligere)
       const titleEl = document.getElementById('coverTitle');
-      const fullTitle = item.title || item.name || "";
-      titleEl.textContent = ""; 
-      
+      const fullTitle = displayTitle;
+      titleEl.textContent = "";
+
       let charIdx = 0;
       function typeTitle() {
         if (charIdx < fullTitle.length) {
@@ -544,6 +656,8 @@
             if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(); }
           });
         });
+      } else {
+        bentoEl.hidden = true;
       }
 
       // Meta
@@ -556,19 +670,19 @@
       if (item.client) metaHtml += `<div class="meta-item"><div class="meta-item-label">Klient</div><div class="meta-item-val">${esc(item.client)}</div></div>`;
       // Links & Files
       let linksHtml = '';
-      
+
       // Check for direct URL (e.g. review-manager)
       if (item.url) {
         linksHtml += `<a href="${item.url}" target="_blank" class="btn-outline" style="font-size:12px; padding:8px 14px; margin-bottom:8px; display:inline-block;">Gå til Projekt ↗</a>`;
       }
-      
+
       // Check for PDF/File
       if (item.file) {
         const isPdf = item.file.toLowerCase().endsWith('.pdf');
         const label = isPdf ? 'Se Dokument (PDF) 📄' : 'Se Ressource ↗';
         linksHtml += `<a href="${item.file}" target="_blank" class="btn-outline" style="font-size:12px; padding:8px 14px; margin-bottom:8px; display:inline-block;">${label}</a>`;
       }
-      
+
       // Check for links array
       if (item.links && item.links.length > 0) {
         item.links.forEach(l => {
@@ -579,14 +693,14 @@
       if (linksHtml) {
         metaHtml += `<div class="meta-item"><div class="meta-item-label">Ressourcer</div><div class="meta-links">${linksHtml}</div></div>`;
       }
-      
+
       // Skills in Sidebar
       if (item.skills && item.skills.length > 0) {
         metaHtml += `<div class="meta-item" style="margin-top:16px;"><div class="meta-item-label">Kompetencer</div><div class="skill-pills">`;
         item.skills.forEach(s => { metaHtml += `<span class="skill-pill">${esc(s)}</span>`; });
         metaHtml += `</div></div>`;
       }
-      
+
       document.getElementById('metaCol').innerHTML = metaHtml;
 
       // Body Content
@@ -599,7 +713,7 @@
       const currentCatItems = allItems.filter(x => x.category === item.category && x.visible !== false);
       const idx = currentCatItems.findIndex(x => x.id === item.id);
       let navHtml = '';
-      
+
       if (idx > 0) {
         const prev = currentCatItems[idx - 1];
         navHtml += `<a href="${getDetailUrl(prev)}" class="entry-nav-item">

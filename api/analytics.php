@@ -26,6 +26,8 @@ foreach ($data as $date => $stats) {
         'page_views' => $stats['page_views'],
         'locations' => $stats['locations'] ?? [],
         'referrers' => $stats['referrers'] ?? [],
+        'ai_referrers' => $stats['ai_referrers'] ?? [],
+        'ai_bots' => $stats['ai_bots'] ?? [],
         'devices' => $stats['devices'] ?? [],
         'events' => $stats['events'] ?? []
     ];
