@@ -12,6 +12,7 @@ $recs = array_values(array_filter($data['cv']['recommendations'] ?? [], function
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
   <base href="/">
   <title>Anbefalinger — Zacharias Polonius</title>
   <meta name="description" content="Læs hvad kolleger og samarbejdspartnere siger om mit arbejde med teknisk support, ledelse og e-commerce optimering.">

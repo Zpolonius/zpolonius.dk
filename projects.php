@@ -14,6 +14,7 @@ $catClass  = ['ai'=>'tag-ai','checkout'=>'tag-ai','konvertering'=>'tag-ai','work
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
   <base href="/">
   <title>Projekter & Cases — Zacharias Polonius</title>
   <meta name="description" content="Se mine udvalgte business cases inden for AI, checkout-optimering og teknisk rådgivning. Resultatorienterede løsninger med fokus på ROI.">

@@ -18,6 +18,7 @@ $recs = array_slice(array_values(array_filter($cv['recommendations'] ?? [], func
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
   <base href="/">
   <title>CV & Erfaring — Zacharias Polonius</title>
   <meta name="description" content="Min professionelle rejse fra teknisk support til Commercial Lead. Se mine kompetencer, uddannelser og anbefalinger.">

@@ -13,6 +13,7 @@ $articles = array_reverse($articles); // nyeste først
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
   <base href="/">
   <title>Indsigter — Zacharias Polonius</title>
   <meta name="description" content="Artikler og indsigter om checkout-optimering, e-commerce, AI og teknisk commercial lead — af Zacharias Polonius.">

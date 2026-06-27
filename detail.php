@@ -132,6 +132,7 @@ if ($item) {
   <title><?= $h($pageTitle) ?></title>
 <?php if ($item): ?>
   <meta name="description" content="<?= $h($metaDesc) ?>">
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
   <link rel="canonical" href="<?= $h($canonical) ?>">
 
   <!-- Open Graph -->

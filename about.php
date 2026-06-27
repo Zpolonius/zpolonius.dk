@@ -14,12 +14,20 @@ $komp = $om['kompetencer'] ?? [];
 $sprog = $om['sprog'] ?? [];
 $interesser = $om['interesser'] ?? [];
 $social = $site['social'] ?? [];
+$faqs = [
+  ['q' => 'Hvem er Zacharias Polonius?', 'a' => 'Zacharias Polonius er Technical Account Manager hos Bring og specialist i checkout-optimering. Han bygger bro mellem kompleks teknologi og målbar forretningsværdi og har hjulpet over 100 webshops med at øge deres konvertering gennem data og AI.'],
+  ['q' => 'Hvad er checkout-optimering?', 'a' => 'Checkout-optimering handler om at fjerne friktion i den sidste og mest kritiske del af købsrejsen, så færre kunder forlader kurven og flere gennemfører købet. Det kombinerer dataanalyse, teknisk indsigt og brugeroplevelse.'],
+  ['q' => 'Hvad laver en Technical Account Manager hos Bring?', 'a' => 'Som Technical Account Manager rådgiver Zacharias Brings kunder, så de får mest muligt ud af samarbejdet — fra teknisk integration og levering til optimering af deres e-commerce- og checkout-flow.'],
+  ['q' => 'Hvordan kan Zacharias hjælpe min webshop?', 'a' => 'Gennem checkout- og konverteringsoptimering, AI-løsninger til teknisk support og kundesucces samt teknisk rådgivning. Du kan booke et uforpligtende checkout-review via kontaktsiden.'],
+  ['q' => 'Hvordan kommer jeg i kontakt med Zacharias?', 'a' => 'Du kan skrive til zacharias@polonius.dk, ringe på +45 30 68 70 41 eller finde ham på LinkedIn: linkedin.com/in/zpolonius/.'],
+];
 ?>
 <!DOCTYPE html>
 <html lang="da">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
   <base href="/">
   <title>Om Mig — Zacharias Polonius</title>
   <meta name="description" content="Lær mere om Zacharias Polonius — Technical Account Manager hos Bring — min baggrund, min filosofi og min passion for at bygge bro mellem teknik og forretning.">
@@ -57,6 +65,13 @@ $social = $site['social'] ?? [];
     ]
   }
   </script>
+<?php
+$faqSchema = ['@context' => 'https://schema.org', '@type' => 'FAQPage', 'mainEntity' => []];
+foreach ($faqs as $f) {
+  $faqSchema['mainEntity'][] = ['@type' => 'Question', 'name' => $f['q'], 'acceptedAnswer' => ['@type' => 'Answer', 'text' => $f['a']]];
+}
+?>
+  <script type="application/ld+json"><?= json_encode($faqSchema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) ?></script>
   <link rel="stylesheet" href="css/style.css">
   <style>
     /* SPLIT HERO */
@@ -294,6 +309,30 @@ $social = $site['social'] ?? [];
         <span class="skill-tag">Detaljer</span>
       </div>
     </div>
+  </div>
+
+  <!-- FAQ -->
+  <style>
+    .faq-section { border-top: 0.5px solid var(--border); }
+    .faq-item { border-bottom: 0.5px solid var(--border); }
+    .faq-q { padding: 22px 40px; font-size: 15px; font-weight: 600; color: var(--text); cursor: pointer; list-style: none; display: flex; justify-content: space-between; align-items: center; gap: 20px; transition: color 0.2s; }
+    .faq-q:hover { color: var(--blue); }
+    .faq-q::-webkit-details-marker { display: none; }
+    .faq-q::after { content: '+'; color: var(--blue); font-size: 22px; font-weight: 400; flex-shrink: 0; }
+    details[open] .faq-q::after { content: '−'; }
+    .faq-a { padding: 0 40px 24px; font-size: 14px; color: var(--text-muted); line-height: 1.8; max-width: 760px; }
+    @media (max-width: 768px) { .faq-q { padding: 18px 20px; } .faq-a { padding: 0 20px 18px; } }
+  </style>
+  <div class="section-header">
+    <h2 class="section-title">Ofte stillede spørgsmål</h2>
+  </div>
+  <div class="faq-section">
+<?php foreach ($faqs as $f): ?>
+    <details class="faq-item">
+      <summary class="faq-q"><?= $h($f['q']) ?></summary>
+      <div class="faq-a"><?= $h($f['a']) ?></div>
+    </details>
+<?php endforeach; ?>
   </div>
 
   <!-- GLOBAL BENTO -->
