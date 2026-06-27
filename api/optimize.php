@@ -18,7 +18,7 @@ $data = json_decode(file_get_contents('php://input'), true);
 $text = $data['text'] ?? '';
 $context = $data['context'] ?? 'generelt';
 $instruction = $data['instruction'] ?? ''; // Brugerens specifikke feedback/kommentar
-$model = $data['model'] ?? 'gemini-3.1-flash'; // Opdateret fallback til nyeste version
+$model = $data['model'] ?? 'gemini-3.5-flash'; // Fallback: nyeste fungerende flash-model (rent 'gemini-3.1-flash' findes ikke / 404)
 
 if (empty($text)) {
     echo json_encode(['ok' => false, 'error' => 'Ingen tekst at optimere']);
@@ -66,6 +66,9 @@ $payload = [
     'generationConfig' => [
         'temperature' => 0.7,
         'maxOutputTokens' => 2048,
+        // gemini-3.5-flash er en "thinking"-model; slå tænkning fra,
+        // ellers kan interne overvejelser lække ind i outputtet (samme mønster som vacation_reply.php).
+        'thinkingConfig' => ['thinkingBudget' => 0],
     ]
 ];
 

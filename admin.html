@@ -698,7 +698,7 @@
     try {
       // Brug model fra modalen hvis den er åben, ellers site-indstilling
       const modalModel = document.getElementById('modalAIModel').value;
-      const aiModel = modalModel || data.site?.ai_model || 'gemini-1.5-flash';
+      const aiModel = modalModel || data.site?.ai_model || 'gemini-3.5-flash';
 
       const response = await fetch('api/optimize.php', {
         method: 'POST',
@@ -740,7 +740,7 @@
       .then(res => {
         if (res.ok) {
           const sel = document.getElementById('modalAIModel');
-          const current = data.site?.ai_model || 'gemini-1.5-flash';
+          const current = data.site?.ai_model || 'gemini-3.5-flash';
           sel.innerHTML = res.models.map(m => `<option value="${m.id}" ${m.id===current?'selected':''}>${m.name}</option>`).join('');
         }
       });
@@ -2087,7 +2087,7 @@ function renderSite(area) {
         <div class="field">
           <label class="field-label">AI Model</label>
           <select class="f-select" id="st-ai-model">
-            <option value="${s.ai_model || 'gemini-2.0-flash'}">${s.ai_model || 'gemini-2.0-flash'}</option>
+            <option value="${s.ai_model || 'gemini-3.5-flash'}">${s.ai_model || 'gemini-3.5-flash'}</option>
           </select>
           <div class="field-hint">Henter liste fra Google AI Studio...</div>
         </div>
@@ -2104,7 +2104,7 @@ function renderSite(area) {
       if (res.ok) {
         const sel = document.getElementById('st-ai-model');
         if (sel) {
-          sel.innerHTML = res.models.map(m => `<option value="${m.id}" ${m.id===(s.ai_model||'gemini-2.0-flash')?'selected':''}>${m.name} (${m.id})</option>`).join('');
+          sel.innerHTML = res.models.map(m => `<option value="${m.id}" ${m.id===(s.ai_model||'gemini-3.5-flash')?'selected':''}>${m.name} (${m.id})</option>`).join('');
           const hint = sel.nextElementSibling;
           if (hint) hint.textContent = 'Liste over aktive tekst-modeller hentet.';
         }
