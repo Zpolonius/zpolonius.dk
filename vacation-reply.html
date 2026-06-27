@@ -69,7 +69,11 @@
     }
     .vac-submit:hover { opacity: 0.85; }
     .vac-submit.sending { opacity: 0.5; pointer-events: none; }
-    .vac-quota { font-size: 11px; color: var(--text-ghost); text-align: center; margin-top: 12px; }
+    .vac-submit:disabled { opacity: 0.45; pointer-events: none; }
+    .vac-quota { font-size: 11px; color: var(--text-ghost); margin-top: 12px; display: flex; align-items: center; justify-content: center; gap: 10px; }
+    .vac-quota-dots { display: inline-flex; gap: 6px; }
+    .vac-quota-dots i { width: 9px; height: 9px; border-radius: 50%; background: var(--blue); transition: background 0.3s, opacity 0.3s; }
+    .vac-quota-dots i.spent { background: var(--border-md); opacity: 0.6; }
 
     /* RIGHT — EMAIL MOCKUP */
     .vac-right {
@@ -217,7 +221,10 @@
       </div>
 
       <button class="vac-submit" id="v-submit">Generér autosvar →</button>
-      <div class="vac-quota" id="v-quota">Du kan lave op til 3 autosvar i døgnet.</div>
+      <div class="vac-quota" id="v-quota">
+        <span class="vac-quota-dots" id="v-quota-dots"><i></i><i></i><i></i></span>
+        <span id="v-quota-text">3 af 3 forsøg tilbage i dag</span>
+      </div>
     </div>
 
     <!-- RIGHT — EMAIL MOCKUP -->
@@ -273,6 +280,28 @@
     // CSRF
     let pageCSRFToken = '';
     fetch('api/csrf.php').then(r => r.json()).then(d => { if (d.ok) pageCSRFToken = d.token; });
+
+    // Forsøgs-tæller (3 per IP per døgn)
+    function updateQuota(remaining, max) {
+      max = max || 3;
+      if (typeof remaining !== 'number') remaining = max;
+      document.querySelectorAll('#v-quota-dots i').forEach((d, i) => d.classList.toggle('spent', i >= remaining));
+      const txt = document.getElementById('v-quota-text');
+      const btn = document.getElementById('v-submit');
+      if (remaining > 0) {
+        txt.textContent = remaining + ' af ' + max + ' forsøg tilbage i dag';
+        btn.disabled = false;
+      } else {
+        txt.textContent = 'Ingen forsøg tilbage i dag — kom igen i morgen 🏖';
+        btn.disabled = true;
+        btn.textContent = 'Brugt op for i dag 🏖';
+      }
+    }
+    // Hent faktisk status fra serveren (uden at bruge et forsøg)
+    fetch('api/vacation_reply.php', { method: 'GET', credentials: 'same-origin' })
+      .then(r => r.json())
+      .then(d => { if (d.ok) updateQuota(d.remaining, d.max); })
+      .catch(() => {});
 
     const $ = id => document.getElementById(id);
     let selectedOccasion = 'sommerferie';
@@ -407,14 +436,10 @@
           lastBody = res.reply;
           typeBody(res.reply);
           $('m-copy').disabled = false; $('m-retry').disabled = false;
-          if (typeof res.remaining === 'number') {
-            $('v-quota').textContent = res.remaining > 0
-              ? 'Du har ' + res.remaining + ' autosvar tilbage i dag.'
-              : 'Det var dit sidste autosvar i dag 🏖';
-          }
+          updateQuota(res.remaining, res.max);
         } else {
           showError(res.error || 'Noget gik galt — prøv igen.');
-          if (res.remaining === 0) $('v-quota').textContent = 'Du har ingen autosvar tilbage i dag.';
+          if (typeof res.remaining === 'number') updateQuota(res.remaining, res.max);
         }
       })
       .catch(() => {

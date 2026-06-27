@@ -23,19 +23,14 @@ if (in_array($origin, $allowed_origins)) {
         exit;
     }
 }
-header('Access-Control-Allow-Methods: POST, OPTIONS');
+header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
 header('Access-Control-Allow-Headers: Content-Type');
 
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     http_response_code(200); exit;
 }
 
-if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    http_response_code(405);
-    echo json_encode(['ok' => false, 'error' => 'Kun POST tilladt']); exit;
-}
-
-// --- RATE LIMITING: 3 per IP per 24 timer ---
+// --- RATE LIMITING: 3 per IP per 24 timer (beregnes for både GET-status og POST) ---
 $ip       = $_SERVER['REMOTE_ADDR'] ?? 'unknown';
 $ip_hash  = md5($ip);
 $rate_dir = sys_get_temp_dir() . '/zp_vacation/';
@@ -52,13 +47,26 @@ if (file_exists($rate_file)) {
 }
 // Fjern forsøg ældre end vinduet
 $attempts = array_filter($attempts, fn($t) => $t > $now - $window);
+$remaining_now = max(0, $max_reqs - count($attempts));
+
+// GET = statustjek: returnér hvor mange forsøg der er tilbage UDEN at bruge ét
+if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+    echo json_encode(['ok' => true, 'remaining' => $remaining_now, 'max' => $max_reqs]);
+    exit;
+}
+
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    http_response_code(405);
+    echo json_encode(['ok' => false, 'error' => 'Kun POST tilladt']); exit;
+}
 
 if (count($attempts) >= $max_reqs) {
     http_response_code(429);
     echo json_encode([
         'ok' => false,
         'error' => 'Du har brugt dine 3 autosvar for i dag. Kom igen i morgen 🏖',
-        'remaining' => 0
+        'remaining' => 0,
+        'max' => $max_reqs
     ]);
     exit;
 }
@@ -213,5 +221,6 @@ echo json_encode([
     'ok' => true,
     'reply' => $reply,
     'remaining' => $remaining,
+    'max' => $max_reqs,
     'model_used' => $model_used
 ]);
