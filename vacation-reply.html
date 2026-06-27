@@ -40,7 +40,10 @@
     .vac-title { font-size: 40px; font-weight: 700; letter-spacing: -0.04em; color: var(--text); line-height: 1.02; margin-bottom: 16px; }
     .vac-desc  { font-size: 14px; color: var(--text-muted); line-height: 1.7; max-width: 440px; margin-bottom: 32px; }
 
-    .vac-tone-pills .pill { text-transform: none; }
+    /* HUMOR SLIDER */
+    .vac-humor-readout { color: var(--blue); font-weight: 600; text-transform: none; letter-spacing: 0; font-size: 12px; }
+    .vac-humor-slider { width: 100%; accent-color: var(--blue); margin: 12px 0 8px; cursor: pointer; height: 6px; }
+    .vac-humor-scale { display: flex; justify-content: space-between; font-size: 11px; color: var(--text-ghost); letter-spacing: 0.02em; }
 
     .vac-logo-row { display: flex; align-items: center; gap: 14px; margin-top: 4px; }
     .vac-logo-preview {
@@ -197,13 +200,10 @@
       </div>
 
       <div class="field">
-        <label class="field-label">Tone</label>
-        <div class="pills vac-tone-pills" style="margin-top:4px;">
-          <button class="pill selected" data-tone="professionel">Professionel</button>
-          <button class="pill" data-tone="sjov">Sjov</button>
-          <button class="pill" data-tone="kort">Kort &amp; kontant</button>
-          <button class="pill" data-tone="over-the-top">Over-the-top</button>
-        </div>
+        <label class="field-label">Hvor sjov skal den være? <span class="vac-humor-readout" id="v-humor-readout">5 · Afslappet</span></label>
+        <input type="range" min="1" max="10" step="1" value="5" class="vac-humor-slider" id="v-humor"
+               aria-label="Humor-niveau fra 1 (corporate) til 10 (verdens sjoveste)">
+        <div class="vac-humor-scale"><span>🧊 1 · Corporate</span><span>Verdens sjoveste · 10 🤡</span></div>
       </div>
 
       <div class="field" style="margin-bottom:0;">
@@ -275,19 +275,21 @@
     fetch('api/csrf.php').then(r => r.json()).then(d => { if (d.ok) pageCSRFToken = d.token; });
 
     const $ = id => document.getElementById(id);
-    let selectedTone = 'professionel';
     let selectedOccasion = 'sommerferie';
     let logoDataUrl = '';
     let lastBody = '';
 
-    // Tone pills
-    document.querySelectorAll('.vac-tone-pills .pill').forEach(pill => {
-      pill.addEventListener('click', () => {
-        document.querySelectorAll('.vac-tone-pills .pill').forEach(p => p.classList.remove('selected'));
-        pill.classList.add('selected');
-        selectedTone = pill.dataset.tone;
-      });
-    });
+    // Humor slider
+    const humorLabels = {
+      1: 'Stiv corporate', 2: 'Meget formel', 3: 'Pæn og professionel', 4: 'Venlig',
+      5: 'Afslappet', 6: 'Lidt skæg', 7: 'Sjov', 8: 'Frækt sjov', 9: 'Fjollet', 10: 'Verdens sjoveste 🤡'
+    };
+    const humorEl = $('v-humor');
+    function syncHumor() {
+      const v = parseInt(humorEl.value, 10);
+      $('v-humor-readout').textContent = v + ' · ' + humorLabels[v];
+    }
+    humorEl.addEventListener('input', syncHumor);
 
     // Occasion / theme pills — also restyle the mockup
     document.querySelectorAll('.vac-occasion-pills .pill').forEach(pill => {
@@ -392,7 +394,7 @@
           email: $('v-email').value.trim(),
           title: $('v-title').value.trim(),
           description: desc,
-          tone: selectedTone,
+          humor: parseInt(humorEl.value, 10),
           occasion: selectedOccasion,
           csrf_token: pageCSRFToken
         })
@@ -435,6 +437,7 @@
     $('m-retry').addEventListener('click', () => $('v-submit').click());
 
     syncHeader();
+    syncHumor();
   });
   </script>
 </body>
