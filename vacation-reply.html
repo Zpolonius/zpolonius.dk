@@ -148,6 +148,31 @@
     .mail-action-btn:hover { border-color: var(--blue); color: var(--blue); }
     .mail-action-btn:disabled { opacity: 0.4; pointer-events: none; }
 
+    /* QUOTA OPBRUGT POPUP */
+    .vac-popup-overlay {
+      position: fixed; inset: 0; z-index: 2000; padding: 24px;
+      background: rgba(0,0,0,0.6); backdrop-filter: blur(4px);
+      display: none; align-items: center; justify-content: center;
+      opacity: 0; transition: opacity 0.25s ease;
+    }
+    .vac-popup-overlay.show { display: flex; opacity: 1; }
+    .vac-popup {
+      background: var(--bg-card); border: 0.5px solid var(--border-md);
+      border-radius: var(--radius-lg); padding: 38px 32px; max-width: 380px;
+      text-align: center; box-shadow: 0 24px 70px rgba(0,0,0,0.45);
+      transform: translateY(10px) scale(0.97); transition: transform 0.25s ease;
+    }
+    .vac-popup-overlay.show .vac-popup { transform: none; }
+    .vac-popup-emoji { font-size: 46px; margin-bottom: 12px; }
+    .vac-popup-title { font-size: 20px; font-weight: 700; color: var(--text); letter-spacing: -0.02em; margin-bottom: 12px; }
+    .vac-popup-text { font-size: 13.5px; color: var(--text-muted); line-height: 1.7; margin-bottom: 26px; }
+    .vac-popup-btn {
+      background: var(--blue); color: #fff; border: none; padding: 12px 28px;
+      border-radius: var(--radius-sm); font-size: 14px; font-weight: 500;
+      cursor: pointer; font-family: var(--font); transition: opacity 0.2s;
+    }
+    .vac-popup-btn:hover { opacity: 0.85; }
+
     /* RESPONSIVE */
     @media (max-width: 900px) {
       .vac-wrap { grid-template-columns: 1fr; }
@@ -188,6 +213,16 @@
       <div class="field">
         <label class="field-label">Hvad skal autosvaret fortælle?</label>
         <textarea class="input" id="v-desc" style="height:104px;" maxlength="600" placeholder="Fx: Jeg er på ferie i Italien uge 28–30 og tjekker ikke mail. Ved hastesager kontakt min kollega Jens på jens@firma.dk."></textarea>
+      </div>
+
+      <div class="field">
+        <label class="field-label">Sprog</label>
+        <div class="pills vac-lang-pills" style="margin-top:4px;">
+          <button class="pill selected" data-lang="da">🇩🇰 Dansk</button>
+          <button class="pill" data-lang="sv">🇸🇪 Svensk</button>
+          <button class="pill" data-lang="no">🇳🇴 Norsk</button>
+          <button class="pill" data-lang="en">🇬🇧 Engelsk</button>
+        </div>
       </div>
 
       <div class="field">
@@ -268,6 +303,16 @@
   <!-- SHARED FOOTER -->
   <footer id="global-footer" class="footer"></footer>
 
+  <!-- QUOTA OPBRUGT POPUP -->
+  <div class="vac-popup-overlay" id="vacPopup" role="dialog" aria-modal="true" aria-labelledby="vacPopupTitle">
+    <div class="vac-popup">
+      <div class="vac-popup-emoji">🏖️</div>
+      <div class="vac-popup-title" id="vacPopupTitle">Feriepolitiet siger stop!</div>
+      <p class="vac-popup-text">Du har brugt alle tre autosvar for i dag. Selv en autosvar-generator har brug for en lille pause i solen. 🌴<br><br>Kom forbi igen i morgen — så står tre friske forsøg klar.</p>
+      <button class="vac-popup-btn" id="vacPopupClose">Helt i orden 👋</button>
+    </div>
+  </div>
+
   <!-- SHARED WIDGETS -->
   <div id="global-menu"></div>
   <div id="global-contact"></div>
@@ -277,9 +322,18 @@
   <script src="js/main.js?v=1.0.8"></script>
   <script>
   document.addEventListener('DOMContentLoaded', () => {
+    const $ = id => document.getElementById(id);
+
     // CSRF
     let pageCSRFToken = '';
     fetch('api/csrf.php').then(r => r.json()).then(d => { if (d.ok) pageCSRFToken = d.token; });
+
+    // Sjov popup når alle forsøg er brugt
+    function showQuotaPopup() { $('vacPopup').classList.add('show'); }
+    function hideQuotaPopup() { $('vacPopup').classList.remove('show'); }
+    $('vacPopupClose').addEventListener('click', hideQuotaPopup);
+    $('vacPopup').addEventListener('click', e => { if (e.target.id === 'vacPopup') hideQuotaPopup(); });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') hideQuotaPopup(); });
 
     // Forsøgs-tæller (3 per IP per døgn)
     function updateQuota(remaining, max) {
@@ -303,10 +357,19 @@
       .then(d => { if (d.ok) updateQuota(d.remaining, d.max); })
       .catch(() => {});
 
-    const $ = id => document.getElementById(id);
     let selectedOccasion = 'sommerferie';
+    let selectedLang = 'da';
     let logoDataUrl = '';
     let lastBody = '';
+
+    // Language pills
+    document.querySelectorAll('.vac-lang-pills .pill').forEach(pill => {
+      pill.addEventListener('click', () => {
+        document.querySelectorAll('.vac-lang-pills .pill').forEach(p => p.classList.remove('selected'));
+        pill.classList.add('selected');
+        selectedLang = pill.dataset.lang;
+      });
+    });
 
     // Humor slider
     const humorLabels = {
@@ -425,6 +488,7 @@
           description: desc,
           humor: parseInt(humorEl.value, 10),
           occasion: selectedOccasion,
+          lang: selectedLang,
           csrf_token: pageCSRFToken
         })
       })
@@ -437,9 +501,11 @@
           typeBody(res.reply);
           $('m-copy').disabled = false; $('m-retry').disabled = false;
           updateQuota(res.remaining, res.max);
+          if (res.remaining === 0) showQuotaPopup();
         } else {
           showError(res.error || 'Noget gik galt — prøv igen.');
           if (typeof res.remaining === 'number') updateQuota(res.remaining, res.max);
+          if (res.remaining === 0) showQuotaPopup();
         }
       })
       .catch(() => {
