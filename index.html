@@ -93,37 +93,131 @@
 
   <link rel="stylesheet" href="css/style.css">
   <style>
-    /* ---- HERO ---- */
+    /* ---- HERO ----
+       Fuldbredde-hero med fritlagt portræt. Tekstsøjlen har sit eget felt til
+       venstre, og figuren fader ud i en maske ved 24% — derfor er der ingen
+       scrim hen over overskriften, og ingen kontrastrisiko i nogen af temaerne.
+       Farverne ligger som lokale tokens, så hero'en følger sidens theme-toggle. */
     .hero {
+      /* Mørkt tema (default) */
+      --hero-ground:  #0c0c0c;
+      --hero-ink:     #ffffff;
+      --hero-body:    rgba(255,255,255,0.84);
+      --hero-muted:   rgba(255,255,255,0.66);
+      --hero-faint:   rgba(255,255,255,0.44);
+      --hero-line:    rgba(255,255,255,0.08);
+      --hero-line-md: rgba(255,255,255,0.14);
+      --hero-chip:    rgba(255,255,255,0.03);
+      --hero-grid:    rgba(255,255,255,0.05);
+      --hero-glow-b:  rgba(59,130,246,0.34);
+      --hero-glow-g:  rgba(65,164,71,0.16);
+      --hero-veil:    rgba(12,12,12,0.55);
+      --hero-figure-filter: none;
+
       position: relative;
-      height: 520px;
+      isolation: isolate;
       overflow: hidden;
-      border-bottom: 0.5px solid var(--border);
-    }
-    .hero-img {
-      position: absolute;
-      inset: 0;
-      width: 100%; height: 100%;
-      object-fit: cover;
-      object-position: center;
-      filter: brightness(0.6) contrast(1.1) saturate(0.9);
-      z-index: 1;
-    }
-    .hero-fallback {
-      position: absolute;
-      inset: 0;
-      background: #161616;
-      z-index: 0;
-    }
-    .hero-content {
-      position: absolute;
-      inset: 0;
+      min-height: 556px;
       display: flex;
       flex-direction: column;
-      justify-content: flex-end;
-      padding: 48px 40px;
-      z-index: 2;
+      justify-content: center;
+      padding: 72px 40px 0;
+      background: var(--hero-ground);
+      border-bottom: 0.5px solid var(--border);
     }
+    [data-theme="light"] .hero {
+      --hero-ground:  #eceae4;
+      --hero-ink:     #0d0d0e;
+      --hero-body:    rgba(0,0,0,0.74);
+      --hero-muted:   rgba(0,0,0,0.62);
+      --hero-faint:   rgba(0,0,0,0.48);
+      --hero-line:    rgba(0,0,0,0.09);
+      --hero-line-md: rgba(0,0,0,0.14);
+      --hero-chip:    rgba(0,0,0,0.02);
+      --hero-grid:    rgba(0,0,0,0.055);
+      --hero-glow-b:  rgba(21,80,192,0.16);
+      --hero-glow-g:  rgba(32,107,41,0.13);
+      --hero-veil:    rgba(236,234,228,0.55);
+      --hero-figure-filter: saturate(1.08) contrast(1.02);
+    }
+    @media (prefers-color-scheme: light) {
+      :root:not([data-theme="dark"]) .hero {
+        --hero-ground:  #eceae4;
+        --hero-ink:     #0d0d0e;
+        --hero-body:    rgba(0,0,0,0.74);
+        --hero-muted:   rgba(0,0,0,0.62);
+        --hero-faint:   rgba(0,0,0,0.48);
+        --hero-line:    rgba(0,0,0,0.09);
+        --hero-line-md: rgba(0,0,0,0.14);
+        --hero-chip:    rgba(0,0,0,0.02);
+        --hero-grid:    rgba(0,0,0,0.055);
+        --hero-glow-b:  rgba(21,80,192,0.16);
+        --hero-glow-g:  rgba(32,107,41,0.13);
+        --hero-veil:    rgba(236,234,228,0.55);
+        --hero-figure-filter: saturate(1.08) contrast(1.02);
+      }
+    }
+
+    /* Baggrund: to gradienter + et maskeret gitter. Laget er højere end
+       hero'en, så parallax-forskydningen aldrig blotter en kant. */
+    .hero-bg {
+      position: absolute;
+      left: 0; right: 0;
+      top: -120px;
+      height: calc(100% + 240px);
+      z-index: 0;
+      pointer-events: none;
+      will-change: transform;
+    }
+    .hero-bg::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(1000px 620px at 2% 11%, var(--hero-glow-b), transparent 60%),
+        radial-gradient(620px 460px at 74% 96%, var(--hero-glow-g), transparent 62%);
+    }
+    .hero-bg::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(var(--hero-grid) 1px, transparent 1px),
+        linear-gradient(90deg, var(--hero-grid) 1px, transparent 1px);
+      background-size: 64px 64px;
+      -webkit-mask-image: radial-gradient(720px 440px at 16% 39%, #000, transparent 74%);
+      mask-image: radial-gradient(720px 440px at 16% 39%, #000, transparent 74%);
+    }
+
+    /* Figuren: maskeret mod venstre, så teksten aldrig rører ansigtet, og
+       blødt opløst mod hero'ens gulv, så busten ikke får en hård underkant. */
+    .hero-figure {
+      position: absolute;
+      right: -2%;
+      bottom: 0;
+      height: 116%;
+      width: auto;
+      z-index: 2;
+      pointer-events: none;
+      user-select: none;
+      filter: var(--hero-figure-filter);
+      -webkit-mask-image:
+        linear-gradient(90deg, transparent 0%, #000 24%),
+        linear-gradient(180deg, #000 0%, #000 74%, transparent 99.5%);
+      mask-image:
+        linear-gradient(90deg, transparent 0%, #000 24%),
+        linear-gradient(180deg, #000 0%, #000 74%, transparent 99.5%);
+      -webkit-mask-composite: source-in;
+      mask-composite: intersect;
+    }
+
+    .hero-copy {
+      position: relative;
+      z-index: 3;
+      max-width: min(54%, 640px);
+      padding-bottom: 96px;
+    }
+
     /* ---- HERO ENTRÉ-SEKVENS ----
        Hvert element lander forskudt for en filmisk åbning. */
     @keyframes heroIn {
@@ -140,85 +234,199 @@
     .hero-stagger > *:nth-child(3) { animation-delay: 0.34s; }
     .hero-stagger > *:nth-child(4) { animation-delay: 0.46s; }
     .hero-stagger > *:nth-child(5) { animation-delay: 0.58s; }
-    .hero-label {
-      font-size: 10px;
-      font-weight: 500;
-      letter-spacing: 0.15em;
-      color: #418FFF;
+
+    /* Eyebrow-pillen er skrivemaskinens plads: grøn prik + de korte roller.
+       min-width holder pillens højre kant i ro mens teksten skrives. */
+    .hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      margin: 0 0 24px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.14em;
       text-transform: uppercase;
-      margin-bottom: 12px;
+      color: var(--hero-muted);
+      border: 1px solid var(--hero-line-md);
+      padding: 7px 15px;
+      border-radius: 100px;
+      background: var(--hero-chip);
     }
-    .status-pill {
-      margin-bottom: 16px;
-      background: rgba(255,255,255,0.1);
-      backdrop-filter: blur(8px);
-      color: #fff;
-      border: 0.5px solid rgba(255,255,255,0.2);
+    .hero-eyebrow-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--green);
+      flex: none;
+      box-shadow: 0 0 0 3px rgba(65,164,71,0.18);
     }
-    [data-theme="light"] .status-pill {
-      background: rgba(255,255,255,0.1);
-      color: #fff;
-      border-color: rgba(255,255,255,0.2);
+    /* min-width svarer til den bredeste af de korte roller, så pillens højre
+       kant står helt i ro mens skrivemaskinen kører. */
+    .hero-roles { display: inline-block; min-width: 152px; }
+
+    .hero .hero-name {
+      font-size: clamp(38px, 6.4vw, 76px);
+      font-weight: 800;
+      letter-spacing: -0.042em;
+      line-height: 0.96;
+      margin: 0 0 22px;
+      color: var(--hero-ink);
+      text-wrap: balance;
     }
-    .hero-name {
-      font-size: 52px;
-      font-weight: 700;
-      letter-spacing: -0.04em;
-      line-height: 1.0;
-      color: #fff;
-      margin-bottom: 14px;
-      text-shadow: 0 2px 10px rgba(0,0,0,0.6);
+    .hero-pitch {
+      font-size: 19px;
+      line-height: 1.55;
+      color: var(--hero-body);
+      margin: 0 0 32px;
+      max-width: 40ch;
+      text-wrap: pretty;
     }
-    .hero-tagline {
-      font-size: 14px;
-      color: rgba(255,255,255,0.85);
-      line-height: 1.6;
-      max-width: 360px;
-      margin-bottom: 28px;
-      text-shadow: 0 1px 8px rgba(0,0,0,0.6);
-    }
-    .hero-actions { display: flex; gap: 12px; }
+    .hero-pitch em { font-style: normal; font-weight: 600; color: var(--hero-ink); }
+
+    .hero-actions { display: flex; align-items: center; gap: 26px; flex-wrap: wrap; }
     .hero-btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
       background: var(--blue);
       color: #fff;
       border: none;
       border-radius: 100px;
-      padding: 12px 24px;
-      font-size: 13px;
-      font-weight: 500;
-      transition: all 0.2s;
-      box-shadow: 0 4px 14px rgba(65, 143, 255, 0.2);
+      padding: 15px 28px;
+      font-size: 15px;
+      font-weight: 600;
+      font-family: var(--font);
+      transition: transform 0.18s ease, background 0.18s ease, box-shadow 0.18s ease;
+      box-shadow: 0 4px 14px rgba(59, 130, 246, 0.20);
     }
     .hero-btn-primary:hover {
-      background: #2d7ae8;
+      background: #1d4ed8;
       transform: translateY(-1px);
-      box-shadow: 0 6px 20px rgba(65, 143, 255, 0.4), 0 0 10px rgba(65, 143, 255, 0.2);
+      box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4), 0 0 10px rgba(59, 130, 246, 0.2);
     }
     /* Subtil "breathing" glow der trækker øjet mod den primære handling */
     @media (prefers-reduced-motion: no-preference) {
       @keyframes ctaGlow {
-        0%, 100% { box-shadow: 0 4px 14px rgba(65, 143, 255, 0.20); }
-        50%      { box-shadow: 0 4px 22px rgba(65, 143, 255, 0.45); }
+        0%, 100% { box-shadow: 0 4px 14px rgba(59, 130, 246, 0.20); }
+        50%      { box-shadow: 0 4px 22px rgba(59, 130, 246, 0.45); }
       }
       .hero-btn-primary { animation: ctaGlow 3.2s ease-in-out infinite; }
     }
     .hero-btn-primary:hover { animation: none; } /* hover-glow overtager */
     .hero-btn-secondary {
       background: transparent;
-      color: rgba(255,255,255,0.6);
-      border: 0.5px solid rgba(255,255,255,0.2);
-      padding: 10px 22px;
-      font-size: 13px;
+      color: var(--hero-muted);
+      border: none;
+      border-bottom: 1px solid var(--hero-line-md);
+      border-radius: 0;
+      padding: 0 0 3px;
+      font-size: 14px;
       font-weight: 500;
-      transition: all 0.2s;
-      border-radius: 100px;
+      transition: color 0.2s, border-color 0.2s;
     }
-    .hero-btn-secondary:hover { border-color: rgba(255,255,255,0.4); color: #fff; }
-    .hero-right {
+    .hero-btn-secondary:hover { color: var(--hero-ink); border-bottom-color: var(--blue); }
+
+    /* Metarækken løber hele vejen ud og figuren står foran den — det giver
+       dybde uden at sætte overskriften på spil. Første felt er skrivemaskinens
+       andet hjem (de lange roller) og får den plads der er tilovers, så de
+       øvrige felter ikke flytter sig mens teksten skrives. */
+    .hero-meta {
+      position: absolute;
+      left: 0; right: 0; bottom: 0;
+      z-index: 1;
       display: flex;
-      flex-direction: column;
-      align-items: flex-end;
-      justify-content: flex-start;
+      align-items: stretch;
+      border-top: 1px solid var(--hero-line);
+      font-size: 12px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      font-weight: 500;
+      color: var(--hero-faint);
+      background: var(--hero-veil);
+      backdrop-filter: blur(3px);
+    }
+    .hero-meta span {
+      flex: none;
+      padding: 16px 26px;
+      border-right: 1px solid var(--hero-line);
+      white-space: nowrap;
+    }
+    .hero-meta span:first-child {
+      padding-left: 40px;
+      color: var(--hero-muted);
+    }
+    .hero-meta span:last-child { border-right: none; }
+
+    .hero .scroll-hint { bottom: 76px; color: var(--hero-faint); opacity: 1; z-index: 4; }
+
+    /* ---- HERO RESPONSIV ----
+       Fire trin: metarækken skæres ned fra højre, tekstsøjlen får hele bredden
+       ved 820px, og figuren lægger sig ud i højre kant som et tonet motiv. */
+    /* Metarækken skæres ned fra højre efterhånden som bredden forsvinder.
+       Det sidste synlige felt får fjernet sin skillelinje, så der ikke står en
+       løs lodret streg tilbage midt i rækken. */
+    @media (max-width: 1000px) {
+      .hero-meta span:nth-child(3) { display: none; }
+      .hero-meta span:nth-child(2) { border-right: none; }
+    }
+    @media (max-width: 560px) {
+      .hero-meta span:nth-child(2) { display: none; }
+      .hero-meta span:first-child { border-right: none; }
+    }
+    @media (max-width: 1000px) {
+      .hero { padding: 60px 32px 0; min-height: 500px; }
+      .hero-copy { max-width: 64%; }
+      .hero-figure { right: -8%; height: 110%; }
+      .hero-meta span:first-child { padding-left: 32px; }
+    }
+    @media (max-width: 820px) {
+      .hero { padding: 52px 24px 0; min-height: 470px; }
+      .hero-copy { max-width: none; padding-bottom: 92px; }
+      .hero-pitch { max-width: none; font-size: 18px; }
+      .hero .hero-name { letter-spacing: -0.035em; }
+      .hero-figure {
+        right: -22%;
+        height: 98%;
+        opacity: 0.32;
+        -webkit-mask-image:
+          linear-gradient(90deg, transparent 2%, #000 46%),
+          linear-gradient(180deg, #000 0%, #000 70%, transparent 99.5%);
+        mask-image:
+          linear-gradient(90deg, transparent 2%, #000 46%),
+          linear-gradient(180deg, #000 0%, #000 70%, transparent 99.5%);
+        -webkit-mask-composite: source-in;
+        mask-composite: intersect;
+      }
+      .hero-meta span:first-child { padding-left: 24px; }
+    }
+    @media (max-width: 560px) {
+      .hero { padding: 40px 20px 0; min-height: 0; }
+      .hero-copy { padding-bottom: 88px; }
+      .hero-eyebrow { font-size: 10px; letter-spacing: 0.11em; padding: 6px 12px; margin-bottom: 20px; }
+      .hero-roles { min-width: 134px; }
+      .hero .hero-name { font-size: clamp(34px, 11vw, 46px); line-height: 1; }
+      .hero-pitch { font-size: 17px; margin-bottom: 26px; }
+      .hero-actions { gap: 18px; }
+      .hero-btn-primary { padding: 14px 22px; font-size: 14px; width: 100%; justify-content: center; }
+      .hero-btn-secondary { font-size: 13px; }
+      /* På telefon er hero'en høj, fordi teksten ombrydes — en højde-baseret
+         figur ville fylde hele bredden og lægge ansigtet bag brødteksten.
+         Her styres den på bredden i stedet og bliver et tonet motiv i kanten. */
+      .hero-figure {
+        right: -16%;
+        width: 78%;
+        height: auto;
+        opacity: 0.22;
+        -webkit-mask-image:
+          linear-gradient(90deg, transparent 10%, #000 72%),
+          linear-gradient(180deg, #000 0%, #000 68%, transparent 99.5%);
+        mask-image:
+          linear-gradient(90deg, transparent 10%, #000 72%),
+          linear-gradient(180deg, #000 0%, #000 68%, transparent 99.5%);
+        -webkit-mask-composite: source-in;
+        mask-composite: intersect;
+      }
+      .hero-meta span { padding: 14px 20px; font-size: 11px; }
+      .hero .scroll-hint { display: none; }
     }
 
     /* ---- BENTO ---- */
@@ -578,32 +786,40 @@
   <!-- HERO -->
   <main>
   <section class="hero">
-    <div class="hero-fallback"></div>
+    <div class="hero-bg" aria-hidden="true"></div>
+    <!-- Figuren er dekorativ: navnet står i <h1> ved siden af, så et alt-tekst
+         her ville få skærmlæsere til at læse det to gange. -->
     <img
-      class="hero-img"
-      src="assets/cover.webp"
-      alt="Zacharias Polonius"
-      width="1920"
-      height="520"
+      class="hero-figure"
+      src="assets/figure.webp"
+      alt=""
+      aria-hidden="true"
+      width="818"
+      height="1150"
       fetchpriority="high"
+      decoding="async"
     />
-    <div class="hero-content">
+    <div class="hero-copy">
       <div class="hero-stagger">
-        <div class="hero-label">Technical Account Manager · Bring</div>
+        <p class="hero-eyebrow">
+          <span class="hero-eyebrow-dot" aria-hidden="true"></span>
+          <span class="hero-roles">Checkout Arkitekt</span>
+        </p>
         <h1 class="hero-name" id="heroName">Zacharias<br>Polonius</h1>
-        <p class="hero-tagline">De små detaljer leder til store forandringer — inden for AI, teknisk support og kundesuccess.</p>
-        <div class="status-pill">
-          <span class="status-dot"></span>
-          Checkout Arkitekt & digital nytænker
+        <p class="hero-pitch">Jeg taler både <em>API</em> og <em>EBITDA</em> — fra forladte kurve til loyale kunder, fordi de rigtige tekniske valg ikke bare løser problemer, de skaber omsætning.</p>
+        <div class="hero-actions">
+          <button class="hero-btn-primary" data-contact>Book et gratis checkout-review →</button>
+          <a href="#projectsSection" class="hero-btn-secondary">Se business cases ↓</a>
         </div>
-          <div class="hero-actions">
-            <button class="hero-btn-primary" data-contact>Book et review →</button>
-            <a href="#projectsSection" class="hero-btn-secondary">Se Business Cases ↓</a>
-          </div>
       </div>
     </div>
-    <div class="scroll-hint">
+    <div class="scroll-hint" aria-hidden="true">
       <div class="scroll-hint-line"></div>
+    </div>
+    <div class="hero-meta">
+      <span>Technical Account Manager hos Bring</span>
+      <span>Checkout · CRO · Levering</span>
+      <span>Bjæverskov, Danmark</span>
     </div>
   </section>
 
@@ -728,7 +944,7 @@
   <footer id="global-footer" class="footer"></footer>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.0/vanilla-tilt.min.js"></script>
-  <script src="js/main.js?v=1.0.8"></script>
+  <script src="js/main.js?v=1.0.9"></script>
   <script>
     // Sikkerheds-funktioner
     function esc(str) {
@@ -755,29 +971,35 @@
         const name = h.name || data.site.name || 'Zacharias Polonius';
         document.getElementById('heroName').innerHTML = name.replace(' ', '<br>');
         
-        // Typewriter effect for roles
-        const label = document.querySelector('.hero-label');
-        if (label && h.role) {
-          const roles = h.role.split('|').map(r => r.trim());
-          if (roles.length > 1) {
-            initTypewriter(label, roles);
-          } else {
-            label.textContent = h.role;
-          }
+        // Skrivemaskinen kører ét sted: eyebrow-pillen. Kun de korte roller
+        // ruller, så pillens bredde ligger fast — lange sætninger ville få den
+        // til at springe fra 150 til 520px ved hvert skift.
+        const roles = (h.role || '').split('|').map(r => r.trim()).filter(Boolean);
+        const pillRoles = roles.filter(r => r.length <= 24);
+
+        const rolePill = document.querySelector('.hero-roles');
+        if (rolePill) {
+          if (pillRoles.length > 1)        initTypewriter(rolePill, pillRoles);
+          else if (pillRoles.length === 1) rolePill.textContent = pillRoles[0];
+          else if (roles.length > 1)       initTypewriter(rolePill, roles);
+          else if (h.status)               rolePill.textContent = h.status;
         }
-        
-        const tagline = document.querySelector('.hero-tagline');
-        if (tagline) tagline.textContent = h.intro || '';
-        
-        const status = document.querySelector('.status-pill');
-        if (status && h.status) {
-          status.innerHTML = `<span class="status-dot"></span>${esc(h.status)}`;
+
+        // API og EBITDA fremhæves — det er selve pointen i sætningen.
+        const pitch = document.querySelector('.hero-pitch');
+        if (pitch && h.intro) {
+          pitch.innerHTML = esc(h.intro).replace(/\b(API|EBITDA)\b/g, '<em>$1</em>');
         }
-        
-        const heroImg = document.querySelector('.hero-img');
-        if (heroImg && h.cover) {
-          heroImg.src = h.cover;
-          if (h.cover_pos) heroImg.style.objectPosition = h.cover_pos;
+
+        // Admin kan pege hero-figuren et andet sted hen, men det gamle brede
+        // coverfoto duer ikke som fritlagt figur — det ignoreres, så en live
+        // content.json fra før denne hero ikke ødelægger billedet. Src sættes
+        // kun hvis den faktisk ændrer sig, ellers blinker figuren væk et øjeblik.
+        const LEGACY_COVER = 'assets/cover.webp';
+        const heroFigure = document.querySelector('.hero-figure');
+        if (heroFigure && h.cover && h.cover !== LEGACY_COVER &&
+            !heroFigure.getAttribute('src').endsWith(h.cover)) {
+          heroFigure.src = h.cover;
         }
       }
 
