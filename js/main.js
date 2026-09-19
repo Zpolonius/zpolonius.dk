@@ -576,8 +576,11 @@ window.initTypewriter = function(element, words) {
 
 /* ---- PARALLAX ---- */
 function initParallax() {
-  const heroImg = document.querySelector('.hero-img');
+  // Forsiden har ingen .hero-img længere — der forskydes baggrundslaget i
+  // stedet, så figuren og dens maske bliver stående. Øvrige sider er uændrede.
+  const heroImg = document.querySelector('.hero-img, .hero-bg');
   if (!heroImg) return;
+  const isBackdrop = heroImg.classList.contains('hero-bg');
   // Respekter brugerens motion-præference
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
@@ -586,7 +589,9 @@ function initParallax() {
 
   const update = () => {
     if (latestScroll < 800) {
-      heroImg.style.transform = `translateY(${latestScroll * 0.4}px) scale(1.05)`;
+      heroImg.style.transform = isBackdrop
+        ? `translateY(${latestScroll * 0.18}px)`
+        : `translateY(${latestScroll * 0.4}px) scale(1.05)`;
     }
     ticking = false;
   };
