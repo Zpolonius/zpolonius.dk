@@ -69,7 +69,14 @@
   noteCta.className = 'origami-note-cta';
   noteCta.textContent = 'Kontakt mig →';
   note.append(noteTitle, noteCta);
-  landing.appendChild(note);
+  // "Tilbage"-knap: vises kun, når man er fløjet herned ved at klikke på fuglen
+  const back = document.createElement('button');
+  back.type = 'button';
+  back.className = 'origami-back';
+  back.hidden = true;
+  back.setAttribute('data-track', 'origami-return');
+  back.textContent = '↑ Tilbage til hvor du var';
+  landing.append(note, back);
   ctaSlot.before(landing);
 
   /* ---- DOM: rute og fugl ---- */
@@ -132,7 +139,7 @@
   const state = {
     samples: [], knots: [], total: 0, start: null, end: null,
     arrive: 0, cur: 0, lastY: window.scrollY, vel: 0, dir: 1, face: 1,
-    frame: null, active: false, flyUntil: 0
+    frame: null, active: false, flyUntil: 0, returnTo: null
   };
 
   // Dokument-position uden transforms (scroll-reveal forskyder sektioner midlertidigt)
@@ -337,8 +344,42 @@
     void bob.offsetWidth; // genstart animationen ved hurtige gentagne klik
     bob.classList.add('is-looping');
     state.flyUntil = performance.now() + 3000;
+    // Husk hvor man var — både til knappen og til browserens tilbage-knap,
+    // ligesom et almindeligt ankerlink. Uden det ville "tilbage" forlade siden.
+    // Positionen opdateres ved hvert klik og gemmes også i historikken, så den
+    // overlever en genindlæsning eller et besøg på en anden side.
+    state.returnTo = window.scrollY;
+    if (!isOrigamiEntry(history.state)) {
+      history.replaceState({ ...(history.state || {}), origamiReturn: state.returnTo }, '');
+      // Browseren ville ellers selv genskabe sin gamle position efter popstate
+      // og overskrive vores (nyere) position. Kun for dette ene historik-punkt:
+      history.scrollRestoration = 'manual';
+      history.pushState({ origami: true }, '');
+      history.scrollRestoration = 'auto';
+    }
+    back.hidden = false;
     flyToNote();
   });
+  const isOrigamiEntry = s => !!(s && s.origami);
+
+  // Tilbage: via knappen går vi baglæns i historikken, så knap og browserens
+  // tilbage-knap altid gør det samme (og historikken ikke vokser).
+  back.addEventListener('click', () => {
+    if (isOrigamiEntry(history.state)) history.back();
+    else returnHome(state.returnTo);
+  });
+  window.addEventListener('popstate', e => {
+    if (isOrigamiEntry(e.state)) return; // "frem" til sedlen: browseren klarer det
+    // Nyeste klik vinder; ellers positionen gemt i historikken (efter reload)
+    const saved = e.state && typeof e.state.origamiReturn === 'number' ? e.state.origamiReturn : null;
+    returnHome(state.returnTo !== null ? state.returnTo : saved);
+  });
+  function returnHome(y) {
+    state.flyUntil = 0;
+    state.returnTo = null;
+    back.hidden = true;
+    if (y !== null && y !== undefined) window.scrollTo({ top: y, behavior: mq.matches ? 'auto' : 'smooth' });
+  }
   // Scroller sedlen så langt op, at fuglen er landet og foldet helt ud
   function flyToNote() {
     const vh = window.innerHeight;

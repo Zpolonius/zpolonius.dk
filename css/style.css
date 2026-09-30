@@ -1258,4 +1258,15 @@ textarea.input { resize: none; height: 100px; line-height: 1.6; }
 .origami-note:hover { box-shadow: 0 22px 48px var(--origami-glow); }
 .origami-note:focus-visible { outline: 2px solid var(--blue); outline-offset: 4px; }
 
+/* Landingspladsen stabler sedlen og "tilbage"-knappen */
+.origami-landing { flex-direction: column; align-items: center; gap: 14px; }
+.origami-back {
+  background: none; border: 0; padding: 10px 14px; min-height: 44px;
+  font-family: var(--font); font-size: 14px; font-weight: 500;
+  color: var(--text-muted); cursor: pointer;
+  text-decoration: underline; text-underline-offset: 4px; text-decoration-color: var(--border-md);
+}
+.origami-back:hover { color: var(--text); text-decoration-color: var(--blue); }
+.origami-back:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
+
 @media print { .origami-route, .origami-bird, .origami-landing { display: none; } }
