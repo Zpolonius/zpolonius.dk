@@ -262,6 +262,10 @@
     /* min-width svarer til den bredeste af de korte roller, så pillens højre
        kant står helt i ro mens skrivemaskinen kører. */
     .hero-roles { display: inline-block; min-width: 152px; }
+    /* Usynligt tegn: holder pillens linjehøjde, når skrivemaskinen har
+       slettet al tekst. Ellers falder pillen sammen, og hele hero'en
+       hopper 7px ved hvert rolleskift. */
+    .hero-roles::after { content: "\200b"; }
 
     .hero .hero-name {
       font-size: clamp(38px, 6.4vw, 76px);

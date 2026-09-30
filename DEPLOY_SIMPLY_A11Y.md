@@ -1,4 +1,4 @@
-# Upload-guide til Simply.com — tilgængelighed (roadmap N1, N2, N4)
+# Upload-guide til Simply.com — tilgængelighed (N1, N2, N4) + origami-tranen
 
 Denne opdatering retter knapkontrast, footeren bag mobilnavigationen og
 tilføjer et skip-link. Den retter også fejl fundet under testen:
@@ -7,6 +7,10 @@ tilføjer et skip-link. Den retter også fejl fundet under testen:
   crashede, så beskeden blev sendt uden sikkerhedstoken og afvist af serveren.
 - 404-siden kunne ikke scrolles på mobil.
 - Ugyldig HTML (to `<main>` i hinanden) på detaljesiderne.
+- Hero'en hoppede 7px op og ned, hver gang skrivemaskinen skiftede rolle.
+
+Den indeholder også **origami-tranen** på forsiden: en papirfugl der følger
+med ned gennem siden og til sidst folder sig ud til en "Kontakt mig"-seddel.
 
 Ingen filer skal slettes. **`data/content.json` skal ikke røres.**
 
@@ -16,6 +20,7 @@ Ingen filer skal slettes. **`data/content.json` skal ikke røres.**
 |---|---|
 | `css/style.css` | mappen `css/` |
 | `js/main.js` | mappen `js/` |
+| `js/origami.js` (**ny fil**) | mappen `js/` |
 | `index.html` | webroden |
 | `contact.html` | webroden |
 | `vacation-reply.html` | webroden |
@@ -29,7 +34,7 @@ Ingen filer skal slettes. **`data/content.json` skal ikke røres.**
 | `recommendations.php` | webroden |
 
 Upload **alle** filerne i samme omgang. Siderne henter nu
-`style.css?v=1.1.0` og `main.js?v=1.1.0` — det tvinger browsere til at hente
+`style.css?v=1.2.0`, `main.js?v=1.2.0` og `origami.js?v=1.0.2` — det tvinger browsere til at hente
 de nye versioner (serveren cacher CSS og JS i et år).
 
 ## ⚠️ Rør ALDRIG disse på serveren
@@ -52,5 +57,8 @@ Lav en hard refresh (**Ctrl+F5**) først.
 4. **Kontaktsiden (vigtigst):** gå til `/contact`, udfyld navn, e-mail,
    emne og besked. Fremdriftsbjælken skal nå helt ud. Send en testbesked til
    dig selv — du skal se "tak"-visningen og modtage **præcis én** mail.
-5. **404:** åbn fx `zpolonius.dk/findes-ikke` på telefonen og scroll ned.
+5. **Tranen:** scroll langsomt ned ad forsiden. Fuglen letter ved
+   "Se business cases", sætter sig ved hver overskrift og folder sig ud til en
+   seddel nederst. Siden skal føles lige så glat som før — ingen hak.
+6. **404:** åbn fx `zpolonius.dk/findes-ikke` på telefonen og scroll ned.
    Knapperne "Om mig / Projekter / CV / Kontakt" skal kunne nås.
