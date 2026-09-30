@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/style.css?v=1.1.0">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -17,7 +17,9 @@
       color: var(--text);
       font-family: var(--font);
       min-height: 100vh;
-      overflow: hidden;
+      /* Kun vandret: klipper de dekorative orbs, men lader siden scrolle
+         lodret. overflow: hidden gjorde bunden uopnåelig på mobil. */
+      overflow-x: hidden;
       display: flex;
       flex-direction: column;
     }
@@ -261,7 +263,7 @@
       animation: fadeDown 0.6s ease 0.65s both;
     }
     .btn-home {
-      background: var(--blue);
+      background: var(--blue-solid);
       color: #fff;
       border: none;
       padding: 11px 28px;
@@ -351,6 +353,10 @@
       .hint:nth-child(3) { border-top: 0.5px solid var(--border); }
       .footer-404 { flex-direction: column; gap: 6px; text-align: center; }
     }
+    /* Samme breakpoint som bundnavigationen i style.css */
+    @media (max-width: 768px) {
+      .footer-404 { padding-bottom: var(--bottom-nav-space); }
+    }
   </style>
 </head>
 <body>
@@ -367,7 +373,7 @@
     <header id="global-header"></header>
 
     <!-- CENTER -->
-    <div class="center">
+    <main class="center">
 
       <div class="status-badge">
         <span class="status-dot-anim"></span>
@@ -436,7 +442,7 @@
         </a>
       </div>
 
-    </div>
+    </main>
 
     <!-- FOOTER -->
     <footer class="footer-404">
@@ -451,7 +457,7 @@
   <nav id="global-bottom-nav"></nav>
   <div id="global-floating-cta"></div>
 
-  <script src="js/main.js"></script>
+  <script src="js/main.js?v=1.1.0"></script>
   <script>
     // Vis den forkerte URL i terminalen
     document.getElementById('badUrl').textContent = window.location.pathname;

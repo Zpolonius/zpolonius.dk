@@ -84,14 +84,14 @@
 
   <!-- Resource Prioritization -->
   <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" as="style">
-  <link rel="preload" href="css/style.css" as="style">
+  <link rel="preload" href="css/style.css?v=1.1.0" as="style">
 
   <!-- Preconnect for faster font loading -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/style.css?v=1.1.0">
   <style>
     /* ---- HERO ----
        Fuldbredde-hero med fritlagt portræt. Tekstsøjlen har sit eget felt til
@@ -287,7 +287,7 @@
       display: inline-flex;
       align-items: center;
       gap: 10px;
-      background: var(--blue);
+      background: var(--blue-solid);
       color: #fff;
       border: none;
       border-radius: 100px;
@@ -299,7 +299,7 @@
       box-shadow: 0 4px 14px rgba(59, 130, 246, 0.20);
     }
     .hero-btn-primary:hover {
-      background: #1d4ed8;
+      background: var(--blue-solid-hover);
       transform: translateY(-1px);
       box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4), 0 0 10px rgba(59, 130, 246, 0.2);
     }
@@ -472,7 +472,7 @@
     }
     .detail-actions { display: flex; gap: 10px; }
     .detail-btn {
-      background: var(--blue);
+      background: var(--blue-solid);
       color: #fff;
       border: none;
       padding: 9px 18px;
@@ -480,7 +480,7 @@
       font-weight: 500;
       transition: background 0.2s;
     }
-    .detail-btn:hover { background: #2d7ae8; }
+    .detail-btn:hover { background: var(--blue-solid-hover); }
     .detail-close {
       background: transparent;
       color: var(--text-muted);
@@ -944,7 +944,7 @@
   <footer id="global-footer" class="footer"></footer>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.0/vanilla-tilt.min.js"></script>
-  <script src="js/main.js?v=1.0.9"></script>
+  <script src="js/main.js?v=1.1.0"></script>
   <script>
     // Sikkerheds-funktioner
     function esc(str) {

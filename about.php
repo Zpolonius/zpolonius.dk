@@ -72,7 +72,7 @@ foreach ($faqs as $f) {
 }
 ?>
   <script type="application/ld+json"><?= json_encode($faqSchema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) ?></script>
-  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/style.css?v=1.1.0">
   <style>
     /* SPLIT HERO */
     .about-hero {
@@ -87,7 +87,7 @@ foreach ($faqs as $f) {
     .about-hero-name  { font-size: 44px; font-weight: 700; letter-spacing: -0.04em; color: var(--text); line-height: 1.0; margin-bottom: 20px; }
     .about-hero-bio   { font-size: 15px; color: var(--text-muted); line-height: 1.8; max-width: 480px; }
     .about-hero-actions { display: flex; gap: 12px; margin-top: 32px; }
-    .about-hero-btn-p { background: var(--blue); color: #fff; border: none; padding: 10px 22px; font-size: 13px; font-weight: 500; cursor: pointer; font-family: var(--font); transition: opacity 0.2s; border-radius: 100px; }
+    .about-hero-btn-p { background: var(--blue-solid); color: #fff; border: none; padding: 10px 22px; font-size: 13px; font-weight: 500; cursor: pointer; font-family: var(--font); transition: opacity 0.2s; border-radius: 100px; }
     .about-hero-btn-p:hover { opacity: 0.85; }
     .about-hero-btn-s { background: transparent; color: var(--text-muted); border: 0.5px solid var(--border-md); padding: 10px 22px; font-size: 13px; font-weight: 500; font-family: var(--font); transition: all 0.2s; display: inline-block; border-radius: 100px; }
     .about-hero-btn-s:hover { color: var(--text); border-color: var(--text-muted); }
@@ -351,7 +351,7 @@ foreach ($faqs as $f) {
   <!-- CONTACT OVERLAY PLACEHOLDER REMOVED - NOW IN MAIN.JS -->
   <!-- BOTTOM NAV PLACEHOLDER REMOVED - NOW IN MAIN.JS -->
   
-  <script src="js/main.js?v=1.0.8"></script>
+  <script src="js/main.js?v=1.1.0"></script>
   <script>
     function esc(str) {
       if (!str) return '';

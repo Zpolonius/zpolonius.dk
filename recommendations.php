@@ -65,7 +65,7 @@ foreach ($recs as $r) {
 }
 ?>
   <script type="application/ld+json"><?= json_encode($collection, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) ?></script>
-  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/style.css?v=1.1.0">
   <style>
     .page-hero {
       padding: 52px 40px 44px;
@@ -181,7 +181,7 @@ foreach ($recs as $r) {
   <footer id="global-footer" class="footer"></footer>
 
 
-  <script src="js/main.js?v=1.0.8"></script>
+  <script src="js/main.js?v=1.1.0"></script>
   <script>
     function esc(str) {
       if (!str) return '';

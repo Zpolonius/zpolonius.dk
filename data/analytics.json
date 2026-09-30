@@ -1,0 +1,19 @@
+{
+    "2026-09-30": {
+        "unique_visitors": [
+            "40e6a7fbf63d37ad35b141cf022ab48d759718344ea8a8c7e8bddf641f4aed3d"
+        ],
+        "page_views": {
+            "\/detail.php": 1
+        },
+        "locations": [],
+        "referrers": {
+            "127.0.0.1": 1
+        },
+        "ai_referrers": [],
+        "devices": {
+            "Desktop": 1
+        },
+        "events": []
+    }
+}

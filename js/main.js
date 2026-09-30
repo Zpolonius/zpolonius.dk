@@ -191,6 +191,8 @@ function showDeferredPlaceholders() {
 
 function initPageTransitions() {
   document.addEventListener('click', e => {
+    // Et andet script har allerede håndteret klikket (fx skip-linket)
+    if (e.defaultPrevented) return;
     const a = e.target.closest('a');
     if (!a) return;
     
@@ -454,6 +456,8 @@ function initSharedLayout() {
   if (bentoGlobal) bentoGlobal.innerHTML = bentoHtml;
   if (detailPanelGlobal) detailPanelGlobal.innerHTML = detailPanelHtml;
 
+  initSkipLink();
+
   // Re-init interactive parts
   initHamburger();
   initBottomNav();
@@ -462,6 +466,28 @@ function initSharedLayout() {
   // Only inject global bento on subpages — index.html manages its own
   const isIndex = window.location.pathname.endsWith('index.html') || window.location.pathname === '/' || window.location.pathname.endsWith('/');
   if (!isIndex) initGlobalBento();
+}
+
+/* ---- SKIP-LINK (WCAG 2.4.1) ----
+   Første Tab på siden viser et link, der springer navigationen over.
+   Fokus flyttes med JS: siderne har <base href="/">, så et rent
+   href="#main-content" ville navigere til forsiden i stedet. */
+function initSkipLink() {
+  const main = document.querySelector('main');
+  if (!main || document.querySelector('.skip-link')) return;
+
+  if (!main.id) main.id = 'main-content';
+  main.setAttribute('tabindex', '-1'); // kan modtage fokus, men er ikke et Tab-stop
+
+  const link = document.createElement('a');
+  link.className = 'skip-link';
+  link.href = location.pathname + location.search + '#' + main.id;
+  link.textContent = 'Spring til hovedindhold';
+  link.addEventListener('click', e => {
+    e.preventDefault();
+    main.focus();
+  });
+  document.body.prepend(link);
 }
 
 window.initGlobalBento = function() {
@@ -793,6 +819,16 @@ function initBottomNav() {
   }
 
   nav.querySelector('[data-contact-mobile]')?.addEventListener('click', openContact);
+
+  // Del navens faktiske højde med CSS, så footeren kan reservere præcis
+  // den plads navigationen dækker (se footer.footer i style.css).
+  // ResizeObserver fanger også skift mellem desktop (skjult) og mobil.
+  if ('ResizeObserver' in window) {
+    new ResizeObserver(() => {
+      const h = nav.offsetHeight;
+      if (h > 0) document.documentElement.style.setProperty('--bottom-nav-h', Math.ceil(h) + 'px');
+    }).observe(nav);
+  }
 }
 
 /* ---- CONTACT OVERLAY ---- */

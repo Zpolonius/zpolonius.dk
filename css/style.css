@@ -19,6 +19,11 @@
   --text-faint:   rgba(255,255,255,0.65);
   --text-ghost:   rgba(255,255,255,0.55);
   --blue:         #3b82f6;
+  /* Fyld bag hvid tekst (knapper). --blue er for lys til det i mørkt tema
+     (3,68:1), men skal blive som den er, fordi den også er tekstfarve på
+     mørk baggrund (5,05:1). Derfor et separat token. WCAG AA: >= 4,5:1. */
+  --blue-solid:       #2563eb; /* hvid tekst: 5,17:1 */
+  --blue-solid-hover: #1d4ed8; /* hvid tekst: 6,70:1 */
   --green:        #41A447;
   --font:         'Inter', system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
   --overlay-bg:   rgba(8,8,8,0.92);
@@ -45,6 +50,8 @@
   --text-faint:   rgba(0,0,0,0.60);
   --text-ghost:   rgba(0,0,0,0.30);
   --blue:         #1550c0;
+  --blue-solid:       #1550c0; /* hvid tekst: 7,14:1 */
+  --blue-solid-hover: #1d4ed8; /* hvid tekst: 6,70:1 */
   --green:        #206b29;
   --overlay-bg:   rgba(20,20,20,0.75);
 }
@@ -65,6 +72,8 @@
     --text-faint:   rgba(0,0,0,0.60);
     --text-ghost:   rgba(0,0,0,0.30);
     --blue:         #1550c0;
+    --blue-solid:       #1550c0;
+    --blue-solid-hover: #1d4ed8;
     --green:        #206b29;
     --overlay-bg:   rgba(20,20,20,0.75);
   }
@@ -82,6 +91,31 @@ body {
   -webkit-font-smoothing: antialiased;
   transition: background 0.3s ease, color 0.3s ease;
 }
+
+/* ---- SKIP-LINK (WCAG 2.4.1) ----
+   Skubbet ud af skærmen (ikke display:none, så det stadig kan fokuseres)
+   og glider ind ved første Tab. Oprettes af initSkipLink() i main.js. */
+.skip-link {
+  position: fixed;
+  top: 12px;
+  left: 12px;
+  z-index: 10000; /* over cookiebanner (9999) og kontaktvindue */
+  padding: 12px 20px;
+  background: var(--blue-solid);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  border-radius: var(--radius-pill);
+  transform: translateY(calc(-100% - 24px));
+  transition: transform 0.15s ease;
+}
+.skip-link:focus {
+  transform: none;
+  outline: 2px solid var(--text);
+  outline-offset: 2px;
+}
+/* Hovedindholdet får fokus programmatisk — ingen ramme om hele siden */
+#main-content:focus { outline: none; }
 
 /* ---- AI BUTTON ---- */
 .btn-ai {
@@ -202,7 +236,7 @@ p, li {
 .theme-switch:hover { border-color: var(--blue); color: var(--blue); }
 
 .nav-btn {
-  background: var(--blue);
+  background: var(--blue-solid);
   color: #fff;
   border: none;
   padding: 8px 18px;
@@ -299,8 +333,8 @@ p, li {
 .footer-left { font-size: 11px; color: var(--text-ghost); letter-spacing: 0.04em; }
 
 /* ---- BUTTONS ---- */
-.btn-primary { background: var(--blue); color: #fff; border: none; border-radius: var(--radius-pill) !important; padding: 12px 32px; font-size: 13px; font-weight: 600; letter-spacing: 0.02em; transition: all 0.2s; display: inline-block; text-align: center; box-shadow: 0 4px 14px rgba(65, 143, 255, 0.2); }
-.btn-primary:hover { background: #2d7ae8; transform: translateY(-1px); box-shadow: 0 6px 20px rgba(65, 143, 255, 0.4), 0 0 10px rgba(65, 143, 255, 0.2); }
+.btn-primary { background: var(--blue-solid); color: #fff; border: none; border-radius: var(--radius-pill) !important; padding: 12px 32px; font-size: 13px; font-weight: 600; letter-spacing: 0.02em; transition: all 0.2s; display: inline-block; text-align: center; box-shadow: 0 4px 14px rgba(65, 143, 255, 0.2); }
+.btn-primary:hover { background: var(--blue-solid-hover); transform: translateY(-1px); box-shadow: 0 6px 20px rgba(65, 143, 255, 0.4), 0 0 10px rgba(65, 143, 255, 0.2); }
 .btn-primary:active { transform: scale(0.98); }
 .btn-primary.sending { pointer-events: none; opacity: 0.5; }
 
@@ -329,7 +363,7 @@ p, li {
   position: fixed;
   bottom: 24px;
   right: 24px;
-  background: var(--blue);
+  background: var(--blue-solid);
   color: #fff;
   border-radius: 50px;
   padding: 14px 24px;
@@ -343,7 +377,7 @@ p, li {
   gap: 8px;
   transition: all 0.2s;
 }
-.floating-cta:hover { background: #2d7ae8; transform: translateY(-2px); box-shadow: 0 10px 30px rgba(65, 143, 255, 0.4); }
+.floating-cta:hover { background: var(--blue-solid-hover); transform: translateY(-2px); box-shadow: 0 10px 30px rgba(65, 143, 255, 0.4); }
 .floating-cta:active { transform: scale(0.96); }
 
 /* ---- CONTACT OVERLAY ---- */
@@ -790,7 +824,8 @@ textarea.input { resize: none; height: 100px; line-height: 1.6; }
   .bottom-nav {
     display: flex;
     position: fixed;
-    bottom: 16px;
+    /* Løft over hjemmeindikatoren på iOS/Android (0px hvor den ikke findes) */
+    bottom: calc(16px + env(safe-area-inset-bottom, 0px));
     left: 16px;
     right: 16px;
     background: rgba(19,19,19,0.88);
@@ -853,7 +888,7 @@ textarea.input { resize: none; height: 100px; line-height: 1.6; }
   }
 
   .bottom-nav-contact {
-    background: var(--blue);
+    background: var(--blue-solid);
     border-radius: var(--radius-md);
     padding: 7px 14px;
     display: flex;
@@ -868,12 +903,24 @@ textarea.input { resize: none; height: 100px; line-height: 1.6; }
   }
   .bottom-nav-contact:hover { opacity: 0.85; }
   .bottom-nav-contact .bottom-nav-icon { font-size: 15px; color: #fff; }
-  .bottom-nav-contact .bottom-nav-label { color: rgba(255,255,255,0.85); }
+  .bottom-nav-contact .bottom-nav-label { color: #fff; }
 
   /* Tilføj padding så indhold ikke gemmes bag nav */
   main, .contact-wrap, .page-hero,
   .about-hero, .hero { margin-bottom: 0; }
-  footer.footer { margin-bottom: 80px; }
+  /* Footeren skal kunne scrolles helt fri af den faste bundnav:
+     navhøjde + navens afstand til bunden + safe area + 24px luft.
+     --bottom-nav-h måles af initBottomNav() i main.js, så pladsen følger
+     med hvis navhøjden ændrer sig (fx ved større systemskrift). 68px er
+     fallback hvis JS ikke har målt endnu. Padding i stedet for margin,
+     så footerens baggrund fortsætter bag navigationen. */
+  :root {
+    --bottom-nav-space: calc(var(--bottom-nav-h, 68px) + 16px + 24px + env(safe-area-inset-bottom, 0px));
+  }
+  footer.footer {
+    margin-bottom: 0;
+    padding-bottom: var(--bottom-nav-space);
+  }
 }
 
 /* ---- NEW AVATARS & CHIPS (added for Admin UI upgrade) ---- */
@@ -959,7 +1006,7 @@ textarea.input { resize: none; height: 100px; line-height: 1.6; }
   align-items: center;
   gap: 10px;
   padding: 8px 20px 8px 8px;
-  background: var(--blue);
+  background: var(--blue-solid);
   color: #fff;
   border: none;
   border-radius: var(--radius-pill);
@@ -973,7 +1020,7 @@ textarea.input { resize: none; height: 100px; line-height: 1.6; }
 .floating-cta:hover {
   transform: translateY(-4px) scale(1.05);
   box-shadow: 0 15px 35px rgba(65, 143, 255, 0.5);
-  background: #2d7ae8;
+  background: var(--blue-solid-hover);
 }
 .floating-cta-avatar {
   width: 36px;
@@ -1087,7 +1134,7 @@ textarea.input { resize: none; height: 100px; line-height: 1.6; }
 }
 .deferred-text { font-size: 13px; color: var(--text-muted); }
 .btn-enable-content {
-  background: var(--blue);
+  background: var(--blue-solid);
   color: white;
   border: none;
   padding: 8px 16px;

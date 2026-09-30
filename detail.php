@@ -162,7 +162,7 @@ if ($item) {
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
   <link rel="manifest" href="/site.webmanifest" />
 
-  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/style.css?v=1.1.0">
   <style>
     /* BREADCRUMB */
     .breadcrumb {
@@ -441,7 +441,7 @@ if ($item) {
       <aside class="meta-sidebar" id="metaCol"><?php if ($skills): ?><div class="meta-item" style="margin-top:16px;"><div class="meta-item-label">Kompetencer</div><div class="skill-pills"><?php foreach ($skills as $s): ?><span class="skill-pill"><?= $h($s) ?></span><?php endforeach; ?></div></div><?php endif; ?></aside>
 
       <!-- MAIN CONTENT -->
-      <main class="detail-main">
+      <article class="detail-main">
         <div id="introContainer">
           <div class="intro-text" id="introText"><?= $intro /* betroet CMS-indhold */ ?></div>
         </div>
@@ -451,7 +451,7 @@ if ($item) {
         <div class="content-main" id="contentMain"><?= $body ?: '<p>Ingen yderligere beskrivelse tilgængelig.</p>' /* betroet CMS-indhold */ ?></div>
 
         <div class="sidebar" id="contentSidebar"></div>
-      </main>
+      </article>
     </div>
 
     <!-- CONVERSION CTA -->
@@ -479,7 +479,7 @@ if ($item) {
   <div id="global-cta-bar"></div>
   <footer id="global-footer" class="footer"></footer>
 
-  <script src="js/main.js?v=1.0.8"></script>
+  <script src="js/main.js?v=1.1.0"></script>
   <script>
     const urlParams = new URLSearchParams(window.location.search);
     let itemId = urlParams.get('id');
