@@ -72,7 +72,7 @@ foreach ($faqs as $f) {
 }
 ?>
   <script type="application/ld+json"><?= json_encode($faqSchema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) ?></script>
-  <link rel="stylesheet" href="css/style.css?v=1.2.0">
+  <link rel="stylesheet" href="css/style.css?v=1.3.0">
   <style>
     /* SPLIT HERO */
     .about-hero {
@@ -83,7 +83,7 @@ foreach ($faqs as $f) {
       padding: 52px 40px; border-right: 0.5px solid var(--border);
       display: flex; flex-direction: column; justify-content: space-between;
     }
-    .about-hero-label { font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--blue); margin-bottom: 14px; }
+    .about-hero-label { font-size: var(--fs-label); letter-spacing: 0.15em; text-transform: uppercase; color: var(--blue); margin-bottom: 14px; }
     .about-hero-name  { font-size: 44px; font-weight: 700; letter-spacing: -0.04em; color: var(--text); line-height: 1.0; margin-bottom: 20px; }
     .about-hero-bio   { font-size: 15px; color: var(--text-muted); line-height: 1.8; max-width: 480px; }
     .about-hero-actions { display: flex; gap: 12px; margin-top: 32px; }
@@ -109,7 +109,7 @@ foreach ($faqs as $f) {
     .info-grid { display: grid; grid-template-columns: repeat(4, 1fr); border-bottom: 0.5px solid var(--border); }
     .info-cell { padding: 22px 28px; border-right: 0.5px solid var(--border); }
     .info-cell:last-child { border-right: none; }
-    .info-cell-label { font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-faint); margin-bottom: 8px; }
+    .info-cell-label { font-size: var(--fs-label); letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-faint); margin-bottom: 8px; }
     .info-cell-val   { font-size: 14px; color: var(--text-muted); line-height: 1.6; }
     .info-cell-val strong { color: var(--text); font-weight: 500; display: block; font-size: 14px; margin-bottom: 2px; }
 
@@ -120,7 +120,7 @@ foreach ($faqs as $f) {
     .bio-para:last-child { margin-bottom: 0; }
     .bio-sidebar { padding: 40px 28px; }
     .bio-sidebar-block { margin-bottom: 24px; }
-    .bio-sidebar-label { font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-faint); margin-bottom: 10px; }
+    .bio-sidebar-label { font-size: var(--fs-label); letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-faint); margin-bottom: 10px; }
     .bio-sidebar-item { font-size: 12px; color: var(--text-muted); padding: 5px 0; border-bottom: 0.5px solid var(--border); }
     .bio-sidebar-item:last-child { border-bottom: none; }
 
@@ -136,7 +136,7 @@ foreach ($faqs as $f) {
     .skills-strip { display: grid; grid-template-columns: repeat(4, 1fr); border-bottom: 0.5px solid var(--border); }
     .skill-group { padding: 22px 28px; border-right: 0.5px solid var(--border); }
     .skill-group:last-child { border-right: none; }
-    .skill-group-title { font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-faint); margin-bottom: 12px; }
+    .skill-group-title { font-size: var(--fs-label); letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-faint); margin-bottom: 12px; }
     .skill-tags { display: flex; flex-wrap: wrap; gap: 5px; }
 
     /* ---- BENTO GRID ---- */
@@ -146,14 +146,14 @@ foreach ($faqs as $f) {
     .detail-panel { display: none; border-bottom: 0.5px solid var(--border); background: var(--bg-card); }
     .detail-panel.active { display: block; }
     .detail-inner { padding: 36px 40px; display: grid; grid-template-columns: 1fr 320px; gap: 40px; }
-    .detail-tag { display: inline-block; font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase; padding: 3px 8px; margin-bottom: 14px; border: 0.5px solid var(--border-blue); color: var(--blue); }
+    .detail-tag { display: inline-block; font-size: var(--fs-label); letter-spacing: 0.15em; text-transform: uppercase; padding: 3px 8px; margin-bottom: 14px; border: 0.5px solid var(--border-blue); color: var(--blue); }
     .detail-title { font-size: 26px; font-weight: 700; color: var(--text); margin-bottom: 12px; line-height: 1.1; }
     .detail-desc { font-size: 13px; color: var(--text-muted); line-height: 1.75; margin-bottom: 22px; }
     .detail-close { background: transparent; color: var(--text-muted); border: 0.5px solid var(--border-md); padding: 9px 18px; font-size: 12px; transition: all 0.2s; border-radius: 4px; cursor: pointer; }
     .detail-close:hover { color: var(--text); border-color: var(--blue); color: var(--blue); }
     .detail-meta { display: flex; flex-direction: column; }
     .detail-row { display: flex; gap: 12px; padding: 12px 0; border-bottom: 0.5px solid var(--border); align-items: baseline; }
-    .detail-key { font-size: 10px; text-transform: uppercase; color: var(--text-faint); min-width: 80px; }
+    .detail-key { font-size: var(--fs-label); text-transform: uppercase; color: var(--text-faint); min-width: 80px; }
     .detail-val { font-size: 13px; color: var(--text-muted); }
 
     @media (max-width: 768px) {
@@ -242,7 +242,7 @@ foreach ($faqs as $f) {
   <!-- BIO + SIDEBAR -->
   <div class="bio-wrap">
     <div class="bio-main">
-      <div class="section-lbl" style="font-size:9px;letter-spacing:0.15em;text-transform:uppercase;color:var(--text-faint);padding-bottom:14px;border-bottom:0.5px solid var(--border);margin-bottom:22px;">Biografi</div>
+      <div class="section-lbl" style="font-size:var(--fs-label);letter-spacing:0.15em;text-transform:uppercase;color:var(--text-faint);padding-bottom:14px;border-bottom:0.5px solid var(--border);margin-bottom:22px;">Biografi</div>
       <div id="bioContent">
 <?php foreach ($bioParas as $p): ?>
         <p class="bio-para"><?= $h($p) ?></p>
@@ -351,7 +351,7 @@ foreach ($faqs as $f) {
   <!-- CONTACT OVERLAY PLACEHOLDER REMOVED - NOW IN MAIN.JS -->
   <!-- BOTTOM NAV PLACEHOLDER REMOVED - NOW IN MAIN.JS -->
   
-  <script src="js/main.js?v=1.2.0"></script>
+  <script src="js/main.js?v=1.3.0"></script>
   <script>
     function esc(str) {
       if (!str) return '';

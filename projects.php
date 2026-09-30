@@ -68,7 +68,7 @@ foreach ($projects as $p) {
 }
 ?>
   <script type="application/ld+json"><?= json_encode($collection, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) ?></script>
-  <link rel="stylesheet" href="css/style.css?v=1.2.0">
+  <link rel="stylesheet" href="css/style.css?v=1.3.0">
   <style>
     .page-hero {
       padding: 52px 40px 44px;
@@ -79,7 +79,7 @@ foreach ($projects as $p) {
       gap: 32px;
     }
     .page-hero-label {
-      font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase;
+      font-size: var(--fs-label); letter-spacing: 0.15em; text-transform: uppercase;
       color: var(--blue); margin-bottom: 14px;
     }
     .page-hero-title {
@@ -91,7 +91,7 @@ foreach ($projects as $p) {
     }
     .page-hero-stat { text-align: right; }
     .page-hero-stat-num { font-size: 36px; font-weight: 700; color: var(--blue); letter-spacing: -0.03em; }
-    .page-hero-stat-lbl { font-size: 11px; color: var(--text-faint); letter-spacing: 0.08em; text-transform: uppercase; margin-top: 2px; }
+    .page-hero-stat-lbl { font-size: var(--fs-label); color: var(--text-faint); letter-spacing: 0.08em; text-transform: uppercase; margin-top: 2px; }
 
     /* FILTER BAR */
     .filter-bar {
@@ -103,7 +103,7 @@ foreach ($projects as $p) {
     }
     .filter-bar::-webkit-scrollbar { display: none; }
     .filter-btn {
-      font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase;
+      font-size: var(--fs-label); letter-spacing: 0.06em; text-transform: uppercase;
       padding: 10px 20px; border: 0.5px solid var(--border);
       color: var(--text-faint); background: transparent; cursor: pointer;
       font-family: var(--font); transition: all 0.2s; white-space: nowrap;
@@ -174,14 +174,14 @@ foreach ($projects as $p) {
     .detail-panel { display: none; border-bottom: 0.5px solid var(--border); background: var(--bg-card); }
     .detail-panel.active { display: block; }
     .detail-inner { padding: 36px 40px; display: grid; grid-template-columns: 1fr 320px; gap: 40px; }
-    .detail-tag { display: inline-block; font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase; padding: 3px 8px; margin-bottom: 14px; border: 0.5px solid var(--border-blue); color: var(--blue); }
+    .detail-tag { display: inline-block; font-size: var(--fs-label); letter-spacing: 0.15em; text-transform: uppercase; padding: 3px 8px; margin-bottom: 14px; border: 0.5px solid var(--border-blue); color: var(--blue); }
     .detail-title { font-size: 26px; font-weight: 700; color: var(--text); margin-bottom: 12px; line-height: 1.1; }
     .detail-desc { font-size: 13px; color: var(--text-muted); line-height: 1.75; margin-bottom: 22px; }
     .detail-close { background: transparent; color: var(--text-muted); border: 0.5px solid var(--border-md); padding: 9px 18px; font-size: 12px; transition: all 0.2s; border-radius: 4px; cursor: pointer; }
     .detail-close:hover { color: var(--text); border-color: var(--blue); color: var(--blue); }
     .detail-meta { display: flex; flex-direction: column; }
     .detail-row { display: flex; gap: 12px; padding: 12px 0; border-bottom: 0.5px solid var(--border); align-items: baseline; }
-    .detail-key { font-size: 10px; text-transform: uppercase; color: var(--text-faint); min-width: 80px; }
+    .detail-key { font-size: var(--fs-label); text-transform: uppercase; color: var(--text-faint); min-width: 80px; }
     .detail-val { font-size: 13px; color: var(--text-muted); }
 
     @media (max-width: 768px) {
@@ -197,7 +197,7 @@ foreach ($projects as $p) {
 
       /* FILTER BAR — scrollable */
       .filter-bar { padding: 12px 20px; gap: 6px; }
-      .filter-btn { padding: 6px 14px; font-size: 10px; }
+      .filter-btn { padding: 6px 14px; font-size: var(--fs-label); }
 
       /* SPECIALER STRIP — 1 column stacked */
       .specialer-strip { grid-template-columns: 1fr; }
@@ -287,7 +287,7 @@ foreach ($projects as $p) {
   <footer id="global-footer" class="footer"></footer>
 
 
-  <script src="js/main.js?v=1.2.0"></script>
+  <script src="js/main.js?v=1.3.0"></script>
   <script>
     function esc(str) {
       if (!str) return '';
