@@ -84,9 +84,18 @@
   const trail = svgEl('path', { class: 'origami-trail' });
   route.append(defs, guide, trail);
 
+  // Fælles lag for rute og fugl: klipper alt, der stikker ud over skærmkanten
+  // (fx den roterede fugl), så siden aldrig kan scrolles sidelæns.
+  const layer = document.createElement('div');
+  layer.className = 'origami-layer';
+
   const bird = document.createElement('div');
   bird.className = 'origami-bird is-idle';
+  // Fuglen kan klikkes med mus/touch, men holdes ude af tab-rækkefølgen og
+  // skærmlæsere: sedlen og CTA-knapperne giver samme vej til kontakt.
   bird.setAttribute('aria-hidden', 'true');
+  bird.setAttribute('data-track', 'origami-bird-click');
+  bird.title = 'Flyv til kontakt';
   const bob = document.createElement('span');
   bob.className = 'origami-bob';
   const svg = svgEl('svg', { viewBox: '80 90 320 340', focusable: 'false' });
@@ -123,7 +132,7 @@
   const state = {
     samples: [], knots: [], total: 0, start: null, end: null,
     arrive: 0, cur: 0, lastY: window.scrollY, vel: 0, dir: 1, face: 1,
-    frame: null, active: false
+    frame: null, active: false, flyUntil: 0
   };
 
   // Dokument-position uden transforms (scroll-reveal forskyder sektioner midlertidigt)
@@ -139,12 +148,14 @@
   function buildRoute() {
     // Ruten må ikke selv holde siden høj, når indholdet krymper
     route.setAttribute('height', 0);
+    layer.style.height = '0';
     const W = document.documentElement.clientWidth;
     const H = document.documentElement.scrollHeight;
     const narrow = isNarrow();
     route.setAttribute('width', W);
     route.setAttribute('height', H);
     route.setAttribute('viewBox', `0 0 ${W} ${H}`);
+    layer.style.height = H + 'px';
     grad.setAttribute('y2', H);
 
     // Højre margen: fuglens "motorvej" ned gennem siden
@@ -169,7 +180,7 @@
       if (narrow) {
         // På mobil fylder kortene hele bredden: fuglen bliver i højre margen
         // og sætter sig på stregen over overskriften
-        perches.push({ x: lane, y: docTop(header) - birdSize() * 0.3 });
+        perches.push({ x: lane, y: docTop(header) - birdSize() * 0.5 });
         return;
       }
       const range = document.createRange();
@@ -213,6 +224,8 @@
     }
     Object.assign(state, { samples, total, start, end, knots });
     state.cur = lenForScroll();
+    // Ændrer siden højde, mens fuglen flyver til kontakt, rettes målet til
+    if (performance.now() < state.flyUntil) flyToNote();
     requestTick();
   }
 
@@ -297,10 +310,14 @@
       ? `translate(${x - size / 2}px, ${y - size / 2}px) scale(${scale}) rotate(${-8 * (1 - fold)}deg)`
       : `translate(${x - size / 2}px, ${y - size * 0.62}px) scaleX(${face}) rotate(${heading}deg)`;
     landing.classList.toggle('is-open', u > 0.8);
+    bird.classList.toggle('is-unfolding', u > 0); // kan ikke klikkes, mens den bliver til sedlen
 
     const perched = fold > 0.95 && settled && Math.abs(state.vel) < 2 &&
       state.knots.some(k => k.hold && Math.abs(state.cur - k.len) < 1);
     bird.classList.toggle('is-perched', perched);
+    // "Hviler": sidder ved en overskrift eller ved starten i hero'en.
+    // På touch-skærme kan fuglen kun trykkes på her (se CSS).
+    bird.classList.toggle('is-resting', perched || (settled && state.cur < 1));
     const flapping = !perched && fold > 0.95 && (!settled || Math.abs(state.vel) > 1);
     bird.classList.toggle('is-flapping', flapping);
     bird.style.setProperty('--flap', clamp(0.7 - Math.abs(state.vel) * 0.012, 0.22, 0.7) + 's');
@@ -313,6 +330,27 @@
     if (flapping) bird.classList.remove('is-idle');
   }
 
+  /* ---- Klik på fuglen: en looping, og så flyver den (og siden) ned til sedlen ---- */
+  bird.addEventListener('click', () => {
+    if (bird.classList.contains('is-unfolding')) return;
+    bob.classList.remove('is-looping');
+    void bob.offsetWidth; // genstart animationen ved hurtige gentagne klik
+    bob.classList.add('is-looping');
+    state.flyUntil = performance.now() + 3000;
+    flyToNote();
+  });
+  // Scroller sedlen så langt op, at fuglen er landet og foldet helt ud
+  function flyToNote() {
+    const vh = window.innerHeight;
+    const maxScroll = document.documentElement.scrollHeight - vh;
+    window.scrollTo({ top: Math.min(state.arrive + vh * 0.2, maxScroll), behavior: 'smooth' });
+  }
+  // Tager brugeren selv over (hjul/touch/taster), stopper vi med at rette målet
+  const cancelFly = () => { state.flyUntil = 0; };
+  bob.addEventListener('animationend', e => {
+    if (e.animationName === 'origamiLoop') bob.classList.remove('is-looping');
+  });
+
   /* ---- Til/fra efter brugerens bevægelsespræference ---- */
   let rTimer = null;
   const rebuild = () => { clearTimeout(rTimer); rTimer = setTimeout(buildRoute, 150); };
@@ -321,7 +359,9 @@
   function enable() {
     state.active = true;
     document.documentElement.classList.add('has-origami');
-    document.body.append(route, bird);
+    layer.append(route, bird);
+    document.body.append(layer);
+    ['wheel', 'touchstart', 'keydown'].forEach(ev => window.addEventListener(ev, cancelFly, { passive: true }));
     ro.observe(document.body);
     window.addEventListener('scroll', requestTick, { passive: true });
     window.addEventListener('resize', rebuild);
@@ -332,8 +372,8 @@
     if (state.frame) cancelAnimationFrame(state.frame);
     state.frame = null;
     document.documentElement.classList.remove('has-origami');
-    route.remove();
-    bird.remove();
+    layer.remove();
+    ['wheel', 'touchstart', 'keydown'].forEach(ev => window.removeEventListener(ev, cancelFly));
     ro.disconnect();
     window.removeEventListener('scroll', requestTick);
     window.removeEventListener('resize', rebuild);

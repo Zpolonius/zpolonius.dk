@@ -1178,7 +1178,12 @@ textarea.input { resize: none; height: 100px; line-height: 1.6; }
 
 /* ---- ORIGAMI-TRANE (forsiden, js/origami.js) ----
    Ruten ligger bag indholdet (z-index -1), så sporet "væver" sig ind bag
-   kortene. Fuglen ligger over indholdet, men under nav (50) og overlays. */
+   kortene. Fuglen ligger over indholdet, men under nav (50) og overlays.
+   Laget har ingen z-index, så det ikke danner sin egen stacking context. */
+.origami-layer {
+  position: absolute; left: 0; top: 0; width: 100%;
+  overflow: hidden; overflow: clip; pointer-events: none;
+}
 .origami-route {
   position: absolute; left: 0; top: 0; z-index: -1;
   pointer-events: none; overflow: visible;
@@ -1188,9 +1193,28 @@ textarea.input { resize: none; height: 100px; line-height: 1.6; }
 .origami-stop-a { stop-color: var(--origami-b); }
 .origami-stop-b { stop-color: var(--origami-a); }
 
+/* Fuglen kan klikkes (flyver til kontakt). ::before gør trykfladen mindst
+   44px, så den også er let at ramme med en finger på mobil. */
 .origami-bird {
   position: absolute; left: 0; top: 0; z-index: 40;
-  pointer-events: none; will-change: transform, opacity;
+  pointer-events: auto; cursor: pointer; -webkit-tap-highlight-color: transparent;
+  will-change: transform, opacity;
+}
+.origami-bird::before { content: ""; position: absolute; inset: min(-6px, calc((100% - 44px) / 2)); }
+.origami-bird.is-unfolding { pointer-events: none; }
+@media (hover: hover) {
+  .origami-bird:hover .origami-wing-l { animation: origamiFlapL 0.4s ease-in-out infinite; }
+  .origami-bird:hover .origami-wing-b { animation: origamiFlapB 0.4s ease-in-out infinite; }
+}
+/* Touch: i flugt ligger fuglen over kortkanter og links — dér skal tryk gå
+   igennem. Den kan kun trykkes på, mens den hviler. */
+@media (hover: none) {
+  .origami-bird:not(.is-resting) { pointer-events: none; }
+}
+.origami-bob.is-looping { animation: origamiLoop 0.7s cubic-bezier(0.5, 0, 0.3, 1); }
+@keyframes origamiLoop {
+  40%  { transform: translateY(-18px) rotate(-200deg) scale(1.15); }
+  100% { transform: none; }
 }
 .origami-bob { display: block; width: 100%; height: 100%; }
 .origami-bird svg { display: block; width: 100%; height: 100%; overflow: visible; filter: drop-shadow(0 8px 16px var(--origami-glow)); }
