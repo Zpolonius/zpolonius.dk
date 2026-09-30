@@ -628,6 +628,7 @@
       }
       .cv-strip {
         grid-template-columns: 1fr;
+        margin: 0; /* style.css' mobil-"bleed" (-20px) stak ud over skærmkanten her */
       }
       .cv-item {
         border-right: none;
@@ -760,6 +761,7 @@
         grid-template-columns: 1fr;
         padding: 20px;
         gap: 16px;
+        margin: 0; /* se .cv-strip: forsiden har ingen 20px-padding at "bleede" ud af */
       }
     }
 
@@ -945,7 +947,7 @@
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.0/vanilla-tilt.min.js"></script>
   <script src="js/main.js?v=1.0.9"></script>
-  <script src="js/origami.js?v=1.0.0"></script>
+  <script src="js/origami.js?v=1.0.1"></script>
   <script>
     // Sikkerheds-funktioner
     function esc(str) {

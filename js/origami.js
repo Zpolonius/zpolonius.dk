@@ -271,8 +271,10 @@
     const [a, b] = segmentAt(state.cur);
     const t = clamp((state.cur - a.len) / ((b.len - a.len) || 1), 0, 1);
     const size = birdSize();
-    // Hold fuglen inden for skærmens bredde, så mobilen aldrig kan scrolle sidelæns
-    const x = clamp(mix(a.x, b.x, t), size / 2 + 4, document.documentElement.clientWidth - size / 2 - 4);
+    // Hold fuglen inden for skærmens bredde, så mobilen aldrig kan scrolle sidelæns.
+    // Ekstra luft, fordi den roterede (og vuggende) fugl er bredere end sin boks.
+    const edge = size * 0.75 + 2;
+    const x = clamp(mix(a.x, b.x, t), edge, document.documentElement.clientWidth - edge);
     const y = mix(a.y, b.y, t);
     // Næbbet peger den vej, fuglen flyver — også når man scroller op
     const dx = (b.x - a.x) * state.dir, dyp = (b.y - a.y) * state.dir;
