@@ -9,3 +9,6 @@ Thumbs.db
 # Logs
 *.log
 
+
+# Besøgsstatistik — skrives af api/track.php og lever kun på serveren
+data/analytics.json
