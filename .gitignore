@@ -9,3 +9,6 @@ Thumbs.db
 # Logs
 *.log
 
+
+# Runtime-data (besøgsstatistik) — må aldrig committes/deployes oven i produktionens
+data/analytics.json
