@@ -10,5 +10,5 @@ Thumbs.db
 *.log
 
 
-# Besøgsstatistik — skrives af api/track.php og lever kun på serveren
+# Runtime-data (besøgsstatistik) — må aldrig committes/deployes oven i produktionens
 data/analytics.json

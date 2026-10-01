@@ -72,7 +72,7 @@ foreach ($faqs as $f) {
 }
 ?>
   <script type="application/ld+json"><?= json_encode($faqSchema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) ?></script>
-  <link rel="stylesheet" href="css/style.css?v=1.3.0">
+  <link rel="stylesheet" href="css/style.css?v=1.4.0">
   <style>
     /* SPLIT HERO */
     .about-hero {
@@ -351,7 +351,7 @@ foreach ($faqs as $f) {
   <!-- CONTACT OVERLAY PLACEHOLDER REMOVED - NOW IN MAIN.JS -->
   <!-- BOTTOM NAV PLACEHOLDER REMOVED - NOW IN MAIN.JS -->
   
-  <script src="js/main.js?v=1.3.0"></script>
+  <script src="js/main.js?v=1.4.0"></script>
   <script>
     function esc(str) {
       if (!str) return '';

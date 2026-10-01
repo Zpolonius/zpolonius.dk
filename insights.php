@@ -67,7 +67,7 @@ foreach ($articles as $a) {
 }
 ?>
   <script type="application/ld+json"><?= json_encode($collection, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) ?></script>
-  <link rel="stylesheet" href="css/style.css?v=1.3.0">
+  <link rel="stylesheet" href="css/style.css?v=1.4.0">
   <style>
     /* PAGE HERO */
     .page-hero {
@@ -238,7 +238,7 @@ foreach ($articles as $a) {
   <!-- SHARED FOOTER -->
   <footer id="global-footer" class="footer"></footer>
 
-  <script src="js/main.js?v=1.3.0"></script>
+  <script src="js/main.js?v=1.4.0"></script>
   <script>
     function esc(str) {
       if (!str) return '';

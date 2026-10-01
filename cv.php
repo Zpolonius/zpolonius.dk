@@ -53,7 +53,7 @@ $recs = array_slice(array_values(array_filter($cv['recommendations'] ?? [], func
     ]
   }
   </script>
-  <link rel="stylesheet" href="css/style.css?v=1.3.0">
+  <link rel="stylesheet" href="css/style.css?v=1.4.0">
   <style>
     /* CV SPECIFIC REFINEMENTS */
     .page-hero {
@@ -582,7 +582,7 @@ $recs = array_slice(array_values(array_filter($cv['recommendations'] ?? [], func
   <footer id="global-footer" class="footer"></footer>
 
 
-  <script src="js/main.js?v=1.3.0"></script>
+  <script src="js/main.js?v=1.4.0"></script>
   <script>
     function esc(str) {
       if (!str) return '';

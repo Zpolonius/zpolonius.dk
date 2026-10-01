@@ -20,7 +20,7 @@ Ingen filer skal slettes. **`data/content.json` skal ikke røres.**
 |---|---|
 | `css/style.css` | mappen `css/` |
 | `js/main.js` | mappen `js/` |
-| `js/origami.js` (**ny fil**) | mappen `js/` |
+| `js/origami.js` (ny eller opdateret) | mappen `js/` |
 | `index.html` | webroden |
 | `contact.html` | webroden |
 | `vacation-reply.html` | webroden |
@@ -34,7 +34,7 @@ Ingen filer skal slettes. **`data/content.json` skal ikke røres.**
 | `recommendations.php` | webroden |
 
 Upload **alle** filerne i samme omgang. Siderne henter nu
-`style.css?v=1.2.0`, `main.js?v=1.2.0` og `origami.js?v=1.0.2` — det tvinger browsere til at hente
+`style.css?v=1.4.0`, `main.js?v=1.4.0` og `origami.js?v=1.0.4` — det tvinger browsere til at hente
 de nye versioner (serveren cacher CSS og JS i et år).
 
 ## ⚠️ Rør ALDRIG disse på serveren
