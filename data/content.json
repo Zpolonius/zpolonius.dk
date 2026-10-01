@@ -109,6 +109,7 @@
             "sub": "Brobyggeren",
             "desc": "De fleste er enten tekniske eller kommercielle. Jeg vil være i midten og det er præcis der hvor de bedste løsninger opstår.",
             "accent": "blue",
+            "featured": true,
             "detail": "erfaring",
             "cta": "",
             "key": "10+ års erfaring",
@@ -119,7 +120,8 @@
             "value": "Jeg siger det ingen andre tør",
             "sub": "Ærlig sparring",
             "desc": "Jeg er ikke interesseret i at sælge dig en løsning du ikke har brug for. Jeg er interesseret i at finde det der faktisk virker.",
-            "accent": "green",
+            "accent": "blue",
+            "featured": false,
             "detail": "rolle",
             "cta": "",
             "info_val": "Altid klar på en god kop kaffe"
@@ -129,7 +131,8 @@
             "value": "Din checkout fortæller en historie",
             "sub": "Checkout & CRO",
             "desc": "Tallene lyver ikke. Men de fortæller dig heller ikke hvorfor kunden forlod kurven. \nJeg hjælper jer med at fortælle den rigtige historie og øge jeres konverteringsrate.",
-            "accent": "green",
+            "accent": "blue",
+            "featured": true,
             "detail": "pspo",
             "cta": "",
             "info_val": "Checkout & CRO"
@@ -140,6 +143,7 @@
             "sub": "Altid",
             "desc": "Uanset om det er et checkout-flow, et AI-system eller et stykke software, spørger jeg altid først: hvem skal bruge det, og hvad har de egentlig brug for?\nFordi de bedste løsninger bygges til mennesker. ",
             "accent": "green",
+            "featured": false,
             "detail": "uddannelse",
             "cta": "",
             "info_val": "Altid"
@@ -150,6 +154,7 @@
             "sub": " Det er i dag",
             "desc": "Det er ikke svaret på alt, men brugt rigtigt er det det skarpeste værktøj til at optimere, bygge og effektivisere. \nAltid med mennesket i fokus.",
             "accent": "blue",
+            "featured": true,
             "detail": "ai",
             "cta": "",
             "info_val": "AI & Automation"
@@ -159,7 +164,8 @@
             "value": "Familiefar fra Bjæverskov",
             "sub": "Bjæverskov · Gift · To sønner",
             "desc": "Jeg bor i Bjæverskov med min kone og to sønner. Når jeg ikke optimerer checkout-flows eller bygger apps, nyder jeg tiden med familien. Det er den samme nysgerrighed der driver begge dele.",
-            "accent": "none",
+            "accent": "green",
+            "featured": false,
             "detail": "om",
             "url": "",
             "cta": "",

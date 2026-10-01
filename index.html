@@ -84,14 +84,14 @@
 
   <!-- Resource Prioritization -->
   <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" as="style">
-  <link rel="preload" href="css/style.css?v=1.1.2" as="style">
+  <link rel="preload" href="css/style.css?v=1.4.0" as="style">
 
   <!-- Preconnect for faster font loading -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="css/style.css?v=1.1.2">
+  <link rel="stylesheet" href="css/style.css?v=1.4.0">
   <style>
     /* ---- HERO ----
        Fuldbredde-hero med fritlagt portræt. Tekstsøjlen har sit eget felt til
@@ -242,7 +242,7 @@
       align-items: center;
       gap: 9px;
       margin: 0 0 24px;
-      font-size: 11px;
+      font-size: var(--fs-label);
       font-weight: 600;
       letter-spacing: 0.14em;
       text-transform: uppercase;
@@ -262,6 +262,10 @@
     /* min-width svarer til den bredeste af de korte roller, så pillens højre
        kant står helt i ro mens skrivemaskinen kører. */
     .hero-roles { display: inline-block; min-width: 152px; }
+    /* Usynligt tegn: holder pillens linjehøjde, når skrivemaskinen har
+       slettet al tekst. Ellers falder pillen sammen, og hele hero'en
+       hopper 7px ved hvert rolleskift. */
+    .hero-roles::after { content: "\200b"; }
 
     .hero .hero-name {
       font-size: clamp(38px, 6.4vw, 76px);
@@ -283,11 +287,15 @@
     .hero-pitch em { font-style: normal; font-weight: 600; color: var(--hero-ink); }
 
     .hero-actions { display: flex; align-items: center; gap: 26px; flex-wrap: wrap; }
+    /* Knap + "Gratis og uforpligtende" lige under den. "Gratis" står her i
+       stedet for i knapteksten, så knappen holder sig på én linje ned til 320px. */
+    .hero-cta { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; }
+    .hero-cta-note { font-size: 13px; color: var(--hero-muted); padding-left: 28px; }
     .hero-btn-primary {
       display: inline-flex;
       align-items: center;
       gap: 10px;
-      background: var(--blue);
+      background: var(--blue-solid);
       color: #fff;
       border: none;
       border-radius: 100px;
@@ -299,7 +307,7 @@
       box-shadow: 0 4px 14px rgba(59, 130, 246, 0.20);
     }
     .hero-btn-primary:hover {
-      background: #1d4ed8;
+      background: var(--blue-solid-hover);
       transform: translateY(-1px);
       box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4), 0 0 10px rgba(59, 130, 246, 0.2);
     }
@@ -336,7 +344,7 @@
       display: flex;
       align-items: stretch;
       border-top: 1px solid var(--hero-line);
-      font-size: 12px;
+      font-size: var(--fs-label);
       letter-spacing: 0.06em;
       text-transform: uppercase;
       font-weight: 500;
@@ -401,11 +409,13 @@
     @media (max-width: 560px) {
       .hero { padding: 40px 20px 0; min-height: 0; }
       .hero-copy { padding-bottom: 88px; }
-      .hero-eyebrow { font-size: 10px; letter-spacing: 0.11em; padding: 6px 12px; margin-bottom: 20px; }
+      .hero-eyebrow { font-size: var(--fs-label); letter-spacing: 0.11em; padding: 6px 12px; margin-bottom: 20px; }
       .hero-roles { min-width: 134px; }
       .hero .hero-name { font-size: clamp(34px, 11vw, 46px); line-height: 1; }
       .hero-pitch { font-size: 17px; margin-bottom: 26px; }
       .hero-actions { gap: 18px; }
+      .hero-cta { width: 100%; align-items: center; }
+      .hero-cta-note { padding-left: 0; }
       .hero-btn-primary { padding: 14px 22px; font-size: 14px; width: 100%; justify-content: center; }
       .hero-btn-secondary { font-size: 13px; }
       /* På telefon er hero'en høj, fordi teksten ombrydes — en højde-baseret
@@ -425,7 +435,7 @@
         -webkit-mask-composite: source-in;
         mask-composite: intersect;
       }
-      .hero-meta span { padding: 14px 20px; font-size: 11px; }
+      .hero-meta span { padding: 14px 20px; font-size: var(--fs-label); }
       .hero .scroll-hint { display: none; }
     }
 
@@ -448,7 +458,7 @@
     }
     .detail-tag {
       display: inline-block;
-      font-size: 9px;
+      font-size: var(--fs-label);
       letter-spacing: 0.15em;
       text-transform: uppercase;
       padding: 3px 8px;
@@ -472,7 +482,7 @@
     }
     .detail-actions { display: flex; gap: 10px; }
     .detail-btn {
-      background: var(--blue);
+      background: var(--blue-solid);
       color: #fff;
       border: none;
       padding: 9px 18px;
@@ -480,7 +490,7 @@
       font-weight: 500;
       transition: background 0.2s;
     }
-    .detail-btn:hover { background: #2d7ae8; }
+    .detail-btn:hover { background: var(--blue-solid-hover); }
     .detail-close {
       background: transparent;
       color: var(--text-muted);
@@ -500,7 +510,7 @@
     }
     .detail-row:last-child { border-bottom: none; }
     .detail-key {
-      font-size: 10px;
+      font-size: var(--fs-label);
       letter-spacing: 0.1em;
       text-transform: uppercase;
       color: var(--text-faint);
@@ -592,7 +602,7 @@
       box-shadow: 0 15px 40px rgba(0,0,0,0.2);
       background: rgba(255,255,255,0.05);
     }
-    .cv-year { font-size: 12px; color: var(--blue); letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 8px; }
+    .cv-year { font-size: var(--fs-label); color: var(--blue); letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 8px; }
     .cv-role { font-size: 20px; font-weight: 600; color: var(--text); letter-spacing: -0.02em; margin-bottom: 6px; line-height: 1.3; }
     .cv-company { font-size: 15px; color: var(--text-muted); margin-bottom: 8px; }
     .cv-desc { font-size: 16px; color: var(--text-faint); line-height: 1.65; }
@@ -810,7 +820,10 @@
         <h1 class="hero-name" id="heroName">Zacharias<br>Polonius</h1>
         <p class="hero-pitch">Jeg taler både <em>API</em> og <em>EBITDA</em> — fra forladte kurve til loyale kunder, fordi de rigtige tekniske valg ikke bare løser problemer, de skaber omsætning.</p>
         <div class="hero-actions">
-          <button class="hero-btn-primary" data-contact>Book et gratis checkout-review →</button>
+          <div class="hero-cta">
+            <button class="hero-btn-primary" data-contact>Tjek min checkout →</button>
+            <span class="hero-cta-note">Gratis og uforpligtende</span>
+          </div>
           <a href="#projectsSection" class="hero-btn-secondary">Se business cases ↓</a>
         </div>
       </div>
@@ -825,12 +838,15 @@
     </div>
   </section>
 
-  <!-- BENTO GRID -->
+  <!-- BENTO GRID — synlig H2 over profilkortene (roadmap N3) -->
+  <section class="bento-section" aria-labelledby="bentoTitle">
+  <div class="section-header"><h2 class="section-title" id="bentoTitle">Kort fortalt</h2></div>
   <div class="bento-grid" id="bentoGrid">
     <div class="bento-cell" style="height: 180px; background: var(--bg-card); opacity: 0.5;"></div>
     <div class="bento-cell" style="height: 180px; background: var(--bg-card); opacity: 0.5;"></div>
     <div class="bento-cell" style="height: 180px; background: var(--bg-card); opacity: 0.5;"></div>
   </div>
+  </section>
 
   <!-- ANBEFALINGER -->
   <div id="recSection" style="min-height: 300px;" data-reveal>
@@ -946,8 +962,8 @@
   <footer id="global-footer" class="footer"></footer>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.0/vanilla-tilt.min.js"></script>
-  <script src="js/main.js?v=1.0.9"></script>
-  <script src="js/origami.js?v=1.0.3"></script>
+  <script src="js/main.js?v=1.4.0"></script>
+  <script src="js/origami.js?v=1.0.4"></script>
   <script>
     // Sikkerheds-funktioner
     function esc(str) {
@@ -1011,7 +1027,7 @@
       if (bentoGrid) {
         const items = data.bento || [];
         bentoGrid.innerHTML = items.map((b, idx) => `
-          <div class="bento-cell fade-up fade-up-${idx+1} ${b.accent && b.accent !== 'none' ? 'accent-' + b.accent : ''}" tabindex="0" role="button" aria-expanded="false">
+          <div class="bento-cell fade-up fade-up-${idx+1} ${b.accent && b.accent !== 'none' ? 'accent-' + b.accent : ''}${b.featured ? ' bento-featured' : ''}" tabindex="0" role="button" aria-expanded="false">
             <div class="cell-label">${esc(b.label)}</div>
             <h3 class="cell-title">${esc(b.value)}</h3>
             <div class="cell-sub">${esc(b.sub)}</div>

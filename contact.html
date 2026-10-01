@@ -41,7 +41,7 @@
     ]
   }
   </script>
-  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/style.css?v=1.4.0">
   <style>
     /* SPLIT LAYOUT */
     .contact-wrap {
@@ -54,7 +54,7 @@
       padding: 52px 48px; border-right: 0.5px solid var(--border);
       display: flex; flex-direction: column; justify-content: space-between;
     }
-    .contact-label { font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--blue); margin-bottom: 14px; }
+    .contact-label { font-size: var(--fs-label); letter-spacing: 0.15em; text-transform: uppercase; color: var(--blue); margin-bottom: 14px; }
     .contact-title { font-size: 44px; font-weight: 700; letter-spacing: -0.04em; color: var(--text); line-height: 1.0; margin-bottom: 20px; }
     .contact-desc  { font-size: 14px; color: var(--text-muted); line-height: 1.8; max-width: 400px; margin-bottom: 40px; }
 
@@ -65,7 +65,7 @@
     }
     .contact-detail-row:first-child { border-top: 0.5px solid var(--border); }
     .contact-detail-icon { font-size: 16px; width: 20px; text-align: center; flex-shrink: 0; }
-    .contact-detail-label { font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-faint); margin-bottom: 2px; }
+    .contact-detail-label { font-size: var(--fs-label); letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-faint); margin-bottom: 2px; }
     .contact-detail-val   { font-size: 13px; color: var(--text-muted); }
     .contact-detail-val a { color: var(--blue); transition: opacity 0.2s; }
     .contact-detail-val a:hover { opacity: 0.75; }
@@ -100,7 +100,7 @@
       border-top: 0.5px solid var(--border);
     }
     .contact-submit {
-      width: 100%; background: var(--blue); color: #fff; border: none;
+      width: 100%; background: var(--blue-solid); color: #fff; border: none;
       padding: 13px; font-size: 14px; font-weight: 500; cursor: pointer;
       font-family: var(--font); letter-spacing: 0.02em; transition: opacity 0.2s;
     }
@@ -128,7 +128,7 @@
   <!-- SHARED HEADER -->
   <header id="global-header"></header>
 
-  <div class="contact-wrap">
+  <main class="contact-wrap">
     <!-- LEFT -->
     <div class="contact-left fade-up fade-up-1">
       <div>
@@ -180,24 +180,24 @@
           <div class="contact-form-title">Send en besked</div>
           <div class="contact-form-sub">Udfyld formularen — jeg vender tilbage inden for 24 timer.</div>
         </div>
-        <div class="contact-progress"><div class="contact-progress-bar" id="contactProgressBar"></div></div>
+        <div class="contact-progress"><div class="contact-progress-bar" id="cpProgressBar"></div></div>
 
         <div class="contact-form-body">
           <div class="field-row" style="margin-bottom:16px;">
             <div class="field" style="margin-bottom:0;">
               <label class="field-label">Navn</label>
-              <input class="input" type="text" id="f-name" placeholder="Dit fulde navn">
+              <input class="input" type="text" id="cp-name" placeholder="Dit fulde navn">
             </div>
             <div class="field" style="margin-bottom:0;">
               <label class="field-label">Firma</label>
-              <input class="input" type="text" id="f-company" placeholder="Virksomhedsnavn">
+              <input class="input" type="text" id="cp-company" placeholder="Virksomhedsnavn">
             </div>
           </div>
           <div class="field">
             <label class="field-label">Email</label>
-            <input class="input" type="email" id="f-email" placeholder="din@email.dk">
+            <input class="input" type="email" id="cp-email" placeholder="din@email.dk">
           </div>
-          <div class="field"><label class="field-label">Webshop URL (valgfrit)</label><input class="input" type="text" id="f-url" placeholder="https://dinshop.dk"></div>
+          <div class="field"><label class="field-label">Webshop URL (valgfrit)</label><input class="input" type="text" id="cp-url" placeholder="https://dinshop.dk"></div>
           <div class="field">
             <label class="field-label">Emne</label>
             <div class="pills" style="margin-top:4px;">
@@ -210,12 +210,12 @@
           </div>
           <div class="field" style="margin-top:16px;">
             <label class="field-label">Besked</label>
-            <textarea class="input" id="f-msg" style="height:120px;" placeholder="Fortæl mig lidt om hvad du har i tankerne..."></textarea>
+            <textarea class="input" id="cp-msg" style="height:120px;" placeholder="Fortæl mig lidt om hvad du har i tankerne..."></textarea>
           </div>
         </div>
 
         <div class="contact-form-footer">
-          <button class="contact-submit" id="contactSubmit" onclick="submitContactPage()">Send besked →</button>
+          <button class="contact-submit" id="cpSubmit" onclick="submitContactPage()">Send besked →</button>
           <div class="contact-submit-hint">Ingen spam. Kun ægte svar.</div>
         </div>
       </div>
@@ -229,7 +229,7 @@
         <p class="contact-success-sub">Tak for din henvendelse, <span id="senderName"></span>. Jeg vender tilbage inden for 24 timer.</p>
       </div>
     </div>
-  </div>
+  </main>
 
 
   <!-- SHARED FOOTER -->
@@ -240,16 +240,8 @@
   <nav id="global-bottom-nav"></nav>
   <div id="global-floating-cta"></div>
 
-  <script src="js/main.js?v=1.0.8"></script>
+  <script src="js/main.js?v=1.4.0"></script>
   <script>
-    // Fallback
-    const esc = window.esc || ((str) => {
-      if (!str) return '';
-      const div = document.createElement('div');
-      div.textContent = str;
-      return div.innerHTML;
-    });
-
     // CSRF Fetch
     let pageCSRFToken = '';
     fetch('api/csrf.php').then(r=>r.json()).then(d=>{ if(d.ok) pageCSRFToken = d.token; });
@@ -269,44 +261,44 @@
     });
 
     // Pills
-    document.querySelectorAll('.pill').forEach(pill => {
+    document.querySelectorAll('#formSection .pill').forEach(pill => {
       pill.addEventListener('click', () => {
-        document.querySelectorAll('.pill').forEach(p => p.classList.remove('selected'));
+        document.querySelectorAll('#formSection .pill').forEach(p => p.classList.remove('selected'));
         pill.classList.add('selected');
         updateContactProgress();
       });
     });
 
-    ['f-name','f-email','f-url','f-msg'].forEach(id => {
+    ['cp-name','cp-email','cp-url','cp-msg'].forEach(id => {
       document.getElementById(id)?.addEventListener('input', updateContactProgress);
     });
 
     function updateContactProgress() {
       const vals = [
-        document.getElementById('f-name')?.value.trim(),
-        document.getElementById('f-email')?.value.trim(),
-        document.getElementById('f-msg')?.value.trim(),
-        document.querySelector('.pill.selected') ? 'x' : ''
+        document.getElementById('cp-name')?.value.trim(),
+        document.getElementById('cp-email')?.value.trim(),
+        document.getElementById('cp-msg')?.value.trim(),
+        document.querySelector('#formSection .pill.selected') ? 'x' : ''
       ];
       const pct = (vals.filter(v => v && v.length).length / vals.length) * 100;
-      document.getElementById('contactProgressBar').style.width = pct + '%';
-      const emailEl = document.getElementById('f-email');
+      document.getElementById('cpProgressBar').style.width = pct + '%';
+      const emailEl = document.getElementById('cp-email');
       if (emailEl) emailEl.classList.toggle('valid', emailEl.value.includes('@'));
     }
 
     function submitContactPage() {
-      const name  = document.getElementById('f-name').value.trim();
-      const email = document.getElementById('f-email').value.trim();
-      const msg   = document.getElementById('f-msg').value.trim();
+      const name  = document.getElementById('cp-name').value.trim();
+      const email = document.getElementById('cp-email').value.trim();
+      const msg   = document.getElementById('cp-msg').value.trim();
       let valid = true;
 
-      [['f-name', name], ['f-email', email], ['f-msg', msg]].forEach(([id, val]) => {
+      [['cp-name', name], ['cp-email', email], ['cp-msg', msg]].forEach(([id, val]) => {
         const el = document.getElementById(id);
         if (!val) { el.classList.add('error'); setTimeout(() => el.classList.remove('error'), 1500); valid = false; }
       });
       if (!valid) return;
 
-      const btn = document.getElementById('contactSubmit');
+      const btn = document.getElementById('cpSubmit');
       btn.classList.add('sending');
       btn.textContent = 'Sender...';
 
@@ -315,9 +307,9 @@
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           name, email,
-          company: document.getElementById('f-company').value.trim(),
-          url: document.getElementById('f-url').value.trim(),
-          subject: document.querySelector('.pill.selected')?.textContent || 'Generel henvendelse',
+          company: document.getElementById('cp-company').value.trim(),
+          url: document.getElementById('cp-url').value.trim(),
+          subject: document.querySelector('#formSection .pill.selected')?.textContent || 'Generel henvendelse',
           message: msg,
           csrf_token: pageCSRFToken
         })

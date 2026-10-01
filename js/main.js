@@ -107,19 +107,33 @@ function initCookieConsent() {
 function showCookieBanner() {
   const banner = document.createElement('div');
   banner.className = 'cookie-banner';
+  // Første lag er kort (roadmap X3); detaljerne ligger bag "Læs mere".
+  // Teksten er den oprindelige samtykketekst — kun opdelt, ikke omskrevet.
   banner.innerHTML = `
     <div class="cookie-content">
       <div class="cookie-title">Cookies & Privatliv 🍪</div>
-      <div class="cookie-text">
-        Jeg bruger cookies til at forbedre din oplevelse, herunder indlejret indhold fra Spotify. 
-        Ved at klikke "Acceptér", giver du samtykke til dette.
-      </div>
+      <p class="cookie-text">
+        Jeg bruger cookies, bl.a. til indlejret indhold fra Spotify.
+        <button type="button" class="cookie-more" aria-expanded="false" aria-controls="cookieDetails">Læs mere</button>
+      </p>
+      <p class="cookie-details" id="cookieDetails" hidden>
+        Jeg bruger cookies til at forbedre din oplevelse, herunder indlejret indhold fra Spotify.
+        Ved at klikke "Acceptér alle", giver du samtykke til dette. Vælger du "Kun nødvendige",
+        vises Spotify-indholdet ikke.
+      </p>
     </div>
     <div class="cookie-actions">
       <button class="btn-cookie-decline" onclick="handleConsent('declined')">Kun nødvendige</button>
       <button class="btn-primary" onclick="handleConsent('accepted')">Acceptér alle</button>
     </div>
   `;
+  const more = banner.querySelector('.cookie-more');
+  more.addEventListener('click', () => {
+    const open = more.getAttribute('aria-expanded') !== 'true';
+    more.setAttribute('aria-expanded', String(open));
+    banner.querySelector('#cookieDetails').hidden = !open;
+    more.textContent = open ? 'Vis mindre' : 'Læs mere';
+  });
   document.body.appendChild(banner);
   setTimeout(() => banner.classList.add('show'), 1000);
 }
@@ -191,6 +205,8 @@ function showDeferredPlaceholders() {
 
 function initPageTransitions() {
   document.addEventListener('click', e => {
+    // Et andet script har allerede håndteret klikket (fx skip-linket)
+    if (e.defaultPrevented) return;
     const a = e.target.closest('a');
     if (!a) return;
     
@@ -241,7 +257,7 @@ function initSharedLayout() {
           <svg class="icon-close" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
         </button>
         <button class="theme-switch" onclick="toggleTheme()" title="Skift tema">☀</button>
-        <button class="nav-btn desktop-only" data-contact data-track="contact-open-header-cta">Gratis checkout tjek →</button>
+        <button class="nav-btn desktop-only" data-contact data-track="contact-open-header-cta">Tjek min checkout →</button>
       </div>
     </nav>
   `;
@@ -266,10 +282,12 @@ function initSharedLayout() {
     <div class="footer-col footer-brand">
       <a href="/" class="nav-logo">Z<span>.</span>Polonius</a>
       <p class="footer-tagline">Bygger bro mellem kompleks teknologi og målbar forretningsværdi.</p>
-      <div class="footer-left" style="margin-top: 24px;">
-        Bjæverskov, Danmark<br>
-        zacharias@polonius.dk · 3068 7041
-      </div>
+      <div class="footer-left" style="margin-top: 24px;">Bjæverskov, Danmark</div>
+      <!-- Kontaktdata som klikbar brødtekst, ikke som label (roadmap S2) -->
+      <ul class="footer-contact">
+        <li><a href="mailto:zacharias@polonius.dk" data-track="email-footer">zacharias@polonius.dk</a></li>
+        <li><a href="tel:+4530687041" data-track="phone-footer">3068 7041</a></li>
+      </ul>
     </div>
 
     <div class="footer-col">
@@ -394,7 +412,7 @@ function initSharedLayout() {
         <span class="bottom-nav-label">Indsigter</span>
       </a>
       <div class="bottom-nav-divider"></div>
-      <button class="bottom-nav-contact" data-contact-mobile data-track="contact-open-bottom-nav">
+      <button class="bottom-nav-contact" data-contact-mobile data-track="contact-open-bottom-nav" aria-label="Kontakt – tjek min checkout">
         <span class="bottom-nav-icon">✉</span>
         <span class="bottom-nav-label">Kontakt</span>
       </button>
@@ -409,7 +427,7 @@ function initSharedLayout() {
   const floatingCtaHtml = `
     <button class="floating-cta" data-contact data-track="contact-open-floating">
       <img class="floating-cta-avatar" src="assets/photo/avatar.jpg" alt="Zacharias Polonius" onerror="this.style.display='none'">
-      Book en ærlig snak →
+      Tjek min checkout →
     </button>
   `;
 
@@ -419,11 +437,16 @@ function initSharedLayout() {
         <p class="cta-bar-title">Klar til at optimere jeres digitale setup?</p>
         <p class="cta-bar-sub">Lad os tage en uforpligtende snak om jeres forretningsmål.</p>
       </div>
-      <button class="btn-primary" data-contact data-track="contact-open-cta-bar">Gratis checkout tjek →</button>
+      <button class="btn-primary" data-contact data-track="contact-open-cta-bar">Tjek min checkout →</button>
     </div>
   `;
 
-  const bentoHtml = `<div class="bento-grid" id="bentoGrid"></div>`;
+  // Synlig H2 over profilkortene (roadmap N3): kortenes titler er H3
+  const bentoHtml = `
+    <section class="bento-section" aria-labelledby="bentoTitle">
+      <div class="section-header"><h2 class="section-title" id="bentoTitle">Kort fortalt</h2></div>
+      <div class="bento-grid" id="bentoGrid"></div>
+    </section>`;
   
   const detailPanelHtml = `
     <div class="detail-panel" id="detailPanel">
@@ -454,6 +477,9 @@ function initSharedLayout() {
   if (bentoGlobal) bentoGlobal.innerHTML = bentoHtml;
   if (detailPanelGlobal) detailPanelGlobal.innerHTML = detailPanelHtml;
 
+  initSkipLink();
+  initCtaVisibility();
+
   // Re-init interactive parts
   initHamburger();
   initBottomNav();
@@ -464,13 +490,73 @@ function initSharedLayout() {
   if (!isIndex) initGlobalBento();
 }
 
+/* ---- ÉN PRIMÆR CTA AD GANGEN (roadmap X1) ----
+   Der må kun være én "Tjek min checkout"-knap i billedet ad gangen:
+   - Menuknappen skjules, mens sidens egen hero-knap er i billedet.
+   - Den flydende knap skjules, så længe en anden kontaktknap er i billedet,
+     og på forsiden indtil man har scrollet forbi hero'en.
+   Klasserne sættes på <body>, og selve skjulningen ligger i style.css. */
+const PAGE_HERO_CTA = '.hero-btn-primary, .about-hero-btn-p';
+const INLINE_CTAS = '.nav-btn, .hero-btn-primary, .about-hero-btn-p, ' +
+  '.cta-bar-central .btn-primary, .detail-cta .btn-primary, .origami-note';
+
+function initCtaVisibility() {
+  if (!('IntersectionObserver' in window)) return; // gammel browser: alle knapper som før
+  const body = document.body;
+  const heroCta = document.querySelector(PAGE_HERO_CTA);
+  const hero = document.querySelector('.hero');
+
+  // Startværdier svarer til en frisk indlæsning øverst på siden, så
+  // knapperne ikke blinker frem, før observeren har meldt tilbage.
+  body.classList.add('inline-cta-in-view');
+  if (heroCta) body.classList.add('hero-cta-in-view');
+  if (hero) body.classList.add('has-hero');
+
+  const inView = new Set();
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => (e.isIntersecting ? inView.add(e.target) : inView.delete(e.target)));
+    body.classList.toggle('inline-cta-in-view', inView.size > 0);
+    if (heroCta) body.classList.toggle('hero-cta-in-view', inView.has(heroCta));
+  });
+  document.querySelectorAll(INLINE_CTAS).forEach(el => io.observe(el));
+
+  if (hero) {
+    new IntersectionObserver(([entry]) => {
+      // Forbi hero = hero'en er ude af skærmen OG ligger over den
+      body.classList.toggle('past-hero', !entry.isIntersecting && entry.boundingClientRect.top < 0);
+    }).observe(hero);
+  }
+}
+
+/* ---- SKIP-LINK (WCAG 2.4.1) ----
+   Første Tab på siden viser et link, der springer navigationen over.
+   Fokus flyttes med JS: siderne har <base href="/">, så et rent
+   href="#main-content" ville navigere til forsiden i stedet. */
+function initSkipLink() {
+  const main = document.querySelector('main');
+  if (!main || document.querySelector('.skip-link')) return;
+
+  if (!main.id) main.id = 'main-content';
+  main.setAttribute('tabindex', '-1'); // kan modtage fokus, men er ikke et Tab-stop
+
+  const link = document.createElement('a');
+  link.className = 'skip-link';
+  link.href = location.pathname + location.search + '#' + main.id;
+  link.textContent = 'Spring til hovedindhold';
+  link.addEventListener('click', e => {
+    e.preventDefault();
+    main.focus();
+  });
+  document.body.prepend(link);
+}
+
 window.initGlobalBento = function() {
   const bGrid = document.getElementById('bentoGrid');
   if (!bGrid) return;
 
   const render = (data) => {
     bGrid.innerHTML = data.bento.map((b, i) => `
-      <div class="bento-cell ${b.accent && b.accent !== 'none' ? 'accent-' + b.accent : ''}" tabindex="0" 
+      <div class="bento-cell ${b.accent && b.accent !== 'none' ? 'accent-' + b.accent : ''}${b.featured ? ' bento-featured' : ''}" tabindex="0" 
            onclick="window.innerWidth <= 768 ? toggleBentoExpand(this) : openDetail('${i}')" 
            onkeydown="if(event.key==='Enter'||event.key===' ') { event.preventDefault(); window.innerWidth <= 768 ? toggleBentoExpand(this) : openDetail('${i}'); }">
         <div class="cell-label">${esc(b.label)}</div>
@@ -793,6 +879,16 @@ function initBottomNav() {
   }
 
   nav.querySelector('[data-contact-mobile]')?.addEventListener('click', openContact);
+
+  // Del navens faktiske højde med CSS, så footeren kan reservere præcis
+  // den plads navigationen dækker (se footer.footer i style.css).
+  // ResizeObserver fanger også skift mellem desktop (skjult) og mobil.
+  if ('ResizeObserver' in window) {
+    new ResizeObserver(() => {
+      const h = nav.offsetHeight;
+      if (h > 0) document.documentElement.style.setProperty('--bottom-nav-h', Math.ceil(h) + 'px');
+    }).observe(nav);
+  }
 }
 
 /* ---- CONTACT OVERLAY ---- */

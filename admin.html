@@ -1306,7 +1306,7 @@ function renderForside(area) {
               <div class="bento-label-txt">${box.label}</div>
               <div class="bento-main-txt">${box.value}</div>
             </div>
-            <div class="bento-sub-txt">${box.sub}</div>
+            <div class="bento-sub-txt">${box.featured ? '★ Fremhævet · ' : ''}${box.sub}</div>
             <button class="btn-edit" onclick="editBento(${i})">Rediger</button>
           </div>
         `).join('')}
@@ -1345,6 +1345,12 @@ function editBento(i) {
         <option value="blue" ${box.accent==='blue'?'selected':''}>Blå (Highlight)</option>
         <option value="green" ${box.accent==='green'?'selected':''}>Grøn (Success)</option>
       </select>
+      <div class="field-hint">Blå = fag (kommercielt/teknisk). Grøn = menneske (værdier/person).</div>
+    </div>
+    <div class="field"><label class="field-label" style="display:flex;align-items:center;gap:8px;cursor:pointer;">
+      <input type="checkbox" id="fb-featured" ${box.featured?'checked':''}> Fremhæv boksen
+    </label>
+      <div class="field-hint">Fremhævede bokse er dobbelt så brede på computer. Brug højst tre.</div>
     </div>`;
   openFormPanel('Rediger bento-boks', () => {
     data.bento[i].label    = document.getElementById('fb-label').value;
@@ -1354,6 +1360,7 @@ function editBento(i) {
     data.bento[i].desc     = document.getElementById('fb-desc').value;
     data.bento[i].cta      = document.getElementById('fb-cta').value;
     data.bento[i].accent   = document.getElementById('fb-accent').value;
+    data.bento[i].featured = document.getElementById('fb-featured').checked;
     closeForm(); renderSection('forside'); showToast('Bento-boks opdateret');
   });
 }

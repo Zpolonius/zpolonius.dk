@@ -67,7 +67,7 @@ foreach ($articles as $a) {
 }
 ?>
   <script type="application/ld+json"><?= json_encode($collection, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) ?></script>
-  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/style.css?v=1.4.0">
   <style>
     /* PAGE HERO */
     .page-hero {
@@ -79,7 +79,7 @@ foreach ($articles as $a) {
       gap: 32px;
     }
     .page-hero-label {
-      font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase;
+      font-size: var(--fs-label); letter-spacing: 0.15em; text-transform: uppercase;
       color: var(--blue); margin-bottom: 14px;
     }
     .page-hero-title {
@@ -91,7 +91,7 @@ foreach ($articles as $a) {
     }
     .page-hero-stat { text-align: right; }
     .page-hero-stat-num { font-size: 36px; font-weight: 700; color: var(--blue); letter-spacing: -0.03em; }
-    .page-hero-stat-lbl { font-size: 11px; color: var(--text-faint); letter-spacing: 0.08em; text-transform: uppercase; margin-top: 2px; }
+    .page-hero-stat-lbl { font-size: var(--fs-label); color: var(--text-faint); letter-spacing: 0.08em; text-transform: uppercase; margin-top: 2px; }
 
     /* ARTICLES GRID */
     .articles-grid {
@@ -128,7 +128,7 @@ foreach ($articles as $a) {
       justify-content: space-between;
     }
     .article-date {
-      font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase;
+      font-size: var(--fs-label); letter-spacing: 0.12em; text-transform: uppercase;
       color: var(--blue); margin-bottom: 12px;
     }
     .article-title {
@@ -238,7 +238,7 @@ foreach ($articles as $a) {
   <!-- SHARED FOOTER -->
   <footer id="global-footer" class="footer"></footer>
 
-  <script src="js/main.js?v=1.0.8"></script>
+  <script src="js/main.js?v=1.4.0"></script>
   <script>
     function esc(str) {
       if (!str) return '';

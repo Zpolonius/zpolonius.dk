@@ -53,7 +53,7 @@ $recs = array_slice(array_values(array_filter($cv['recommendations'] ?? [], func
     ]
   }
   </script>
-  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/style.css?v=1.4.0">
   <style>
     /* CV SPECIFIC REFINEMENTS */
     .page-hero {
@@ -63,7 +63,7 @@ $recs = array_slice(array_values(array_filter($cv['recommendations'] ?? [], func
     }
 
     .page-hero-label {
-      font-size: 10px;
+      font-size: var(--fs-label);
       letter-spacing: 0.15em;
       text-transform: uppercase;
       color: var(--blue);
@@ -301,14 +301,14 @@ $recs = array_slice(array_values(array_filter($cv['recommendations'] ?? [], func
     .detail-panel { display: none; border-bottom: 0.5px solid var(--border); background: var(--bg-card); }
     .detail-panel.active { display: block; }
     .detail-inner { padding: 36px 40px; display: grid; grid-template-columns: 1fr 320px; gap: 40px; }
-    .detail-tag { display: inline-block; font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase; padding: 3px 8px; margin-bottom: 14px; border: 0.5px solid var(--border-blue); color: var(--blue); }
+    .detail-tag { display: inline-block; font-size: var(--fs-label); letter-spacing: 0.15em; text-transform: uppercase; padding: 3px 8px; margin-bottom: 14px; border: 0.5px solid var(--border-blue); color: var(--blue); }
     .detail-title { font-size: 26px; font-weight: 700; color: var(--text); margin-bottom: 12px; line-height: 1.1; }
     .detail-desc { font-size: 13px; color: var(--text-muted); line-height: 1.75; margin-bottom: 22px; }
     .detail-close { background: transparent; color: var(--text-muted); border: 0.5px solid var(--border-md); padding: 9px 18px; font-size: 12px; transition: all 0.2s; border-radius: 4px; cursor: pointer; }
     .detail-close:hover { color: var(--text); border-color: var(--blue); color: var(--blue); }
     .detail-meta { display: flex; flex-direction: column; }
     .detail-row { display: flex; gap: 12px; padding: 12px 0; border-bottom: 0.5px solid var(--border); align-items: baseline; }
-    .detail-key { font-size: 10px; text-transform: uppercase; color: var(--text-faint); min-width: 80px; }
+    .detail-key { font-size: var(--fs-label); text-transform: uppercase; color: var(--text-faint); min-width: 80px; }
     .detail-val { font-size: 13px; color: var(--text-muted); }
 
     @media (max-width: 768px) {
@@ -376,7 +376,7 @@ $recs = array_slice(array_values(array_filter($cv['recommendations'] ?? [], func
     }
 
     .skill-group-title {
-      font-size: 10px;
+      font-size: var(--fs-label);
       letter-spacing: 0.15em;
       text-transform: uppercase;
       color: var(--text-faint);
@@ -582,7 +582,7 @@ $recs = array_slice(array_values(array_filter($cv['recommendations'] ?? [], func
   <footer id="global-footer" class="footer"></footer>
 
 
-  <script src="js/main.js?v=1.0.8"></script>
+  <script src="js/main.js?v=1.4.0"></script>
   <script>
     function esc(str) {
       if (!str) return '';

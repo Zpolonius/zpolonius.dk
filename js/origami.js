@@ -207,27 +207,58 @@
        ind til næste hvilepunkt. Fuglen krydser altså kun siden i overskrifts-
        rækkerne og kan aldrig parkere oven på brødtekst i et kort. */
     const pts = [start, ...perches.filter(p => p.y > start.y + 40 && p.y < end.y - 40), end];
+
+    // Siden ændrer højde af mange grunde (karusellen, skrivemaskinen). Er
+    // hverken bredde, højde eller hvilepunkter flyttet, er ruten den samme.
+    const sig = [W, H, ...pts.map(p => Math.round(p.x) + ':' + Math.round(p.y))].join(',');
+    if (sig === state.sig) { requestTick(); return; }
+    state.sig = sig;
+
+    /* Ruten er kun linjer og kvadratiske kurver, så punkterne langs den
+       regnes ud direkte. getPointAtLength() på den lange sti kostede ca.
+       200 ms pr. opbygning på desktop og gav hak ved hver genopbygning. */
+    const poly = [{ x: start.x, y: start.y, len: 0 }];
+    const lineTo = (x, y) => {
+      const a = poly[poly.length - 1];
+      poly.push({ x, y, len: a.len + Math.hypot(x - a.x, y - a.y) });
+    };
+    const quadTo = (cx, cy, x, y) => {
+      const a = poly[poly.length - 1], ax = a.x, ay = a.y, steps = 48;
+      for (let s = 1; s <= steps; s++) {
+        const t = s / steps, u = 1 - t;
+        lineTo(u * u * ax + 2 * u * t * cx + t * t * x, u * u * ay + 2 * u * t * cy + t * t * y);
+      }
+    };
+
     let d = `M${start.x},${start.y}`;
     const knots = [{ y: start.y, len: 0, hold: 0 }];
     for (let i = 1; i < pts.length; i++) {
       const p = pts[i - 1], q = pts[i];
       const r = Math.min(70, (q.y - p.y) / 3);
-      d += Math.abs(p.x - lane) > 1 ? ` Q${lane},${p.y} ${lane},${p.y + r}` : ` L${lane},${p.y + r}`;
-      d += ` L${lane},${q.y - r}`;
-      d += Math.abs(q.x - lane) > 1 ? ` Q${lane},${q.y} ${q.x},${q.y}` : ` L${q.x},${q.y}`;
-      trail.setAttribute('d', d);
-      knots.push({ y: q.y, len: trail.getTotalLength(), hold: i === pts.length - 1 ? 0 : 45 });
+      if (Math.abs(p.x - lane) > 1) { d += ` Q${lane},${p.y} ${lane},${p.y + r}`; quadTo(lane, p.y, lane, p.y + r); }
+      else { d += ` L${lane},${p.y + r}`; lineTo(lane, p.y + r); }
+      d += ` L${lane},${q.y - r}`; lineTo(lane, q.y - r);
+      if (Math.abs(q.x - lane) > 1) { d += ` Q${lane},${q.y} ${q.x},${q.y}`; quadTo(lane, q.y, q.x, q.y); }
+      else { d += ` L${q.x},${q.y}`; lineTo(q.x, q.y); }
+      knots.push({ y: q.y, len: poly[poly.length - 1].len, hold: i === pts.length - 1 ? 0 : 45 });
     }
+    trail.setAttribute('d', d);
     guide.setAttribute('d', d);
+    // Én måling af den rigtige længde, så trail-stregen slutter præcist ved fuglen
     const total = trail.getTotalLength();
     trail.style.strokeDasharray = total;
+    const k = total / (poly[poly.length - 1].len || 1);
+    poly.forEach(pt => { pt.len *= k; });
+    knots.forEach(kn => { kn.len *= k; });
 
     // Opslagstabel over punkter langs ruten, så tick() ikke skal måle hver frame
     const n = 800, samples = [];
-    for (let i = 0; i <= n; i++) {
+    for (let i = 0, j = 0; i <= n; i++) {
       const len = total * i / n;
-      const pt = trail.getPointAtLength(len);
-      samples.push({ len, x: pt.x, y: pt.y });
+      while (j < poly.length - 2 && poly[j + 1].len < len) j++;
+      const a = poly[j], b = poly[j + 1] || a;
+      const t = b.len > a.len ? clamp((len - a.len) / (b.len - a.len), 0, 1) : 0;
+      samples.push({ len, x: mix(a.x, b.x, t), y: mix(a.y, b.y, t) });
     }
     Object.assign(state, { samples, total, start, end, knots });
     state.cur = lenForScroll();
