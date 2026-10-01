@@ -37,6 +37,11 @@
   --paper:        #efedf7;
   --paper-ink:    #17151f;
 
+  /* ---- TYPOGRAFI ----
+     Alle labels i versaler (PROFIL, SIDER, KONTAKT …) bruger samme størrelse.
+     11px er mindstestørrelsen: 9px versaler var under læsegrænsen (roadmap S1). */
+  --fs-label:     11px;
+
   /* ---- RADIUS TOKENS ---- */
   --radius-pill:  100px;
   --radius-lg:    24px;
@@ -291,14 +296,14 @@ p, li {
 .btn-outline:hover { color: var(--text); border-color: var(--text-muted); }
 
 /* ---- TAGS ---- */
-.tag { display: inline-block; font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; padding: 3px 8px; border: 0.5px solid var(--border-md); color: var(--text-faint); }
+.tag { display: inline-block; font-size: var(--fs-label); letter-spacing: 0.14em; text-transform: uppercase; padding: 3px 8px; border: 0.5px solid var(--border-md); color: var(--text-faint); }
 .tag-ai    { border-color: var(--border-blue); color: var(--blue); }
 .tag-work  { border-color: var(--border-green); color: var(--green); }
 .tag-vol   { border-color: var(--border); color: var(--text-faint); }
 .tag-edu   { border-color: var(--border-md); color: var(--text-muted); }
 
 /* ---- STATUS PILL ---- */
-.status-pill { display: inline-flex; align-items: center; gap: 6px; font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-muted); border: 0.5px solid var(--border-md); padding: 6px 10px; background: var(--bg-card); }
+.status-pill { display: inline-flex; align-items: center; gap: 6px; font-size: var(--fs-label); letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-muted); border: 0.5px solid var(--border-md); padding: 6px 10px; background: var(--bg-card); }
 .status-dot { width: 6px; height: 6px; background: var(--green); border-radius: 50%; }
 
 /* ---- SKILL TAGS ---- */
@@ -317,7 +322,7 @@ p, li {
   z-index: 10;
 }
 .footer-col-title {
-  font-size: 10px;
+  font-size: var(--fs-label);
   font-weight: 600;
   letter-spacing: 0.15em;
   text-transform: uppercase;
@@ -352,6 +357,15 @@ p, li {
 }
 
 .footer-left { font-size: 11px; color: var(--text-ghost); letter-spacing: 0.04em; }
+/* E-mail og telefon: brødtekststørrelse og mindst 44px høje trykflader */
+.footer-contact { list-style: none; margin: 4px 0 0; padding: 0; }
+.footer-contact li { max-width: none; }
+.footer-contact a {
+  display: inline-flex; align-items: center; min-height: 44px;
+  font-size: 15px; color: var(--text-muted); text-decoration: none;
+  transition: color 0.2s;
+}
+.footer-contact a:hover { color: var(--blue); text-decoration: underline; }
 
 /* ---- BUTTONS ---- */
 .btn-primary { background: var(--blue-solid); color: #fff; border: none; border-radius: var(--radius-pill) !important; padding: 12px 32px; font-size: 13px; font-weight: 600; letter-spacing: 0.02em; transition: all 0.2s; display: inline-block; text-align: center; box-shadow: 0 4px 14px rgba(65, 143, 255, 0.2); }
@@ -408,7 +422,7 @@ p, li {
 .modal { position: relative; width: 100%; max-width: 620px; background: var(--bg); border: 0.5px solid var(--border-md); border-radius: var(--radius-lg); transform: translateY(24px) scale(0.98); transition: transform 0.4s cubic-bezier(0.16,1,0.3,1), opacity 0.35s ease, background 0.3s ease; opacity: 0; margin: 20px; max-height: 90vh; overflow-y: auto; }
 .overlay.active .modal { transform: translateY(0) scale(1); opacity: 1; }
 .modal-header { padding: 28px 32px 0; display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 6px; }
-.modal-label { font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--blue); margin-bottom: 8px; }
+.modal-label { font-size: var(--fs-label); letter-spacing: 0.15em; text-transform: uppercase; color: var(--blue); margin-bottom: 8px; }
 .modal-title { font-size: 26px; font-weight: 700; letter-spacing: -0.03em; color: var(--text); line-height: 1.1; }
 .modal-sub { font-size: 13px; color: var(--text-faint); margin-top: 6px; line-height: 1.5; }
 .modal-close { background: transparent; border: 0.5px solid var(--border-md); color: var(--text-muted); width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; margin-left: 16px; transition: all 0.2s; border-radius: 50%; }
@@ -419,7 +433,7 @@ p, li {
 .modal-body { padding: 24px 32px 32px; }
 .field { margin-bottom: 18px; }
 .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 18px; }
-.field-label { display: block; font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-faint); margin-bottom: 7px; transition: color 0.2s; }
+.field-label { display: block; font-size: var(--fs-label); letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-faint); margin-bottom: 7px; transition: color 0.2s; }
 .field:focus-within .field-label { color: var(--blue); }
 .input { width: 100%; background: var(--bg-deep); border: 0.5px solid var(--border); color: var(--text); font-size: 13px; font-family: var(--font); padding: 11px 14px; outline: none; transition: border-color 0.2s, background 0.2s; -webkit-appearance: none; border-radius: var(--radius-md); }
 .input::placeholder { color: var(--text-ghost); }
@@ -553,7 +567,7 @@ textarea.input { resize: none; height: 100px; line-height: 1.6; }
   margin-top: 16px; 
 }
 .bento-grid .cell-label {
-  font-size: 12px;
+  font-size: var(--fs-label);
   letter-spacing: 0.15em;
   text-transform: uppercase;
   color: var(--text-faint);
@@ -597,12 +611,24 @@ textarea.input { resize: none; height: 100px; line-height: 1.6; }
 .bento-grid .accent-blue .cell-title { color: var(--blue); }
 .bento-grid .accent-green .cell-title { color: var(--green); }
 
+/* ---- FREMHÆVEDE PROFILKORT (roadmap X5) ----
+   Sættes i admin ("Fremhæv boksen"). På computer er de dobbelt så brede,
+   så tre fremhævede + tre almindelige går op i tre rækker. Kanten og den
+   større titel følger kortets accentfarve (X4: blå = fag, grøn = menneske). */
+.bento-grid .bento-featured { grid-column: span 2; border-color: var(--border-blue); }
+.bento-grid .bento-featured.accent-green { border-color: var(--border-green); }
+.bento-grid .bento-featured .cell-title { font-size: 24px; line-height: 1.2; }
+.bento-grid .bento-featured .cell-sub { font-size: 16px; }
+
 @media (max-width: 768px) { 
   .bento-grid { grid-template-columns: 1fr 1fr; gap: 16px; padding: 0 20px; margin: 24px 0; } 
   .bento-grid .bento-cell { padding: 24px 24px 48px; }
   .bento-grid .cell-title { font-size: 16px; }
   .bento-grid .cell-desc { font-size: 14px; }
   .bento-grid .cell-arrow { bottom: 16px; right: 16px; font-size: 12px; }
+  /* To kolonner: dobbelt bredde ville give huller — kant og titel bærer vægten */
+  .bento-grid .bento-featured { grid-column: auto; }
+  .bento-grid .bento-featured .cell-title { font-size: 19px; }
 }
 @media (max-width: 480px) { 
   .bento-grid { grid-template-columns: 1fr; } 
@@ -856,7 +882,7 @@ textarea.input { resize: none; height: 100px; line-height: 1.6; }
     border-radius: var(--radius-lg);
     align-items: center;
     justify-content: space-around;
-    padding: 10px 8px;
+    padding: 10px 6px;
     box-shadow: 0 8px 40px rgba(0,0,0,0.5), 0 1px 0 rgba(255,255,255,0.06) inset;
     z-index: 90;
   }
@@ -873,7 +899,8 @@ textarea.input { resize: none; height: 100px; line-height: 1.6; }
     flex-direction: column;
     align-items: center;
     gap: 3px;
-    padding: 6px 10px;
+    padding: 6px 4px;
+    min-width: 0;
     border-radius: var(--radius-md);
     cursor: pointer;
     transition: background 0.2s;
@@ -892,10 +919,12 @@ textarea.input { resize: none; height: 100px; line-height: 1.6; }
     font-size: 17px;
     line-height: 1;
   }
+  /* Små bogstaver: i versaler var 11px for bredt, og menuen løb ud over
+     skærmen på alle telefoner (roadmap S1 kræver mindst 11px). */
   .bottom-nav-label {
-    font-size: 8px;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
+    font-size: var(--fs-label);
+    letter-spacing: 0;
+    white-space: nowrap;
     color: var(--text-faint);
     font-family: var(--font);
   }
@@ -911,7 +940,7 @@ textarea.input { resize: none; height: 100px; line-height: 1.6; }
   .bottom-nav-contact {
     background: var(--blue-solid);
     border-radius: var(--radius-md);
-    padding: 7px 14px;
+    padding: 7px 10px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -960,7 +989,7 @@ textarea.input { resize: none; height: 100px; line-height: 1.6; }
 
 .tag-chip {
   display: inline-block;
-  font-size: 9px;
+  font-size: var(--fs-label);
   letter-spacing: 0.12em;
   text-transform: uppercase;
   padding: 3px 10px;
@@ -1113,6 +1142,12 @@ textarea.input { resize: none; height: 100px; line-height: 1.6; }
 .cookie-content { flex: 1; }
 .cookie-title { font-size: 16px; font-weight: 600; color: var(--text); margin-bottom: 4px; }
 .cookie-text { font-size: 13px; color: var(--text-muted); line-height: 1.5; }
+.cookie-more {
+  background: none; border: none; padding: 0; margin-left: 2px;
+  font: inherit; color: var(--blue); text-decoration: underline;
+  border-radius: 0 !important;
+}
+.cookie-details { font-size: 13px; color: var(--text-muted); line-height: 1.5; margin-top: 8px; }
 .cookie-actions { display: flex; gap: 12px; flex-shrink: 0; }
 .btn-cookie-decline { 
   background: transparent; 
@@ -1127,15 +1162,22 @@ textarea.input { resize: none; height: 100px; line-height: 1.6; }
 .btn-cookie-decline:hover { border-color: var(--text-faint); color: var(--text); }
 
 @media (max-width: 768px) {
+  /* Højst ~25% af skærmen og altid over bundnavigationen (roadmap X3).
+     --bottom-nav-space er navhøjde + afstand + safe area + 24px luft. */
   .cookie-banner {
     flex-direction: column;
-    bottom: 80px; /* Over bottom nav */
-    padding: 20px;
-    text-align: center;
+    align-items: stretch;
+    bottom: calc(var(--bottom-nav-space, 108px) - 16px);
+    padding: 14px 16px;
+    gap: 12px;
+    text-align: left;
     left: 16px; right: 16px;
+    max-height: calc(100vh - var(--bottom-nav-space, 108px) - 24px);
+    overflow-y: auto;
   }
-  .cookie-actions { width: 100%; }
-  .cookie-actions button { flex: 1; }
+  .cookie-title { font-size: 15px; }
+  .cookie-actions { width: 100%; gap: 8px; }
+  .cookie-actions button { flex: 1; padding: 10px 12px; }
 }
 
 /* ---- DEFERRED CONTENT (Spotify Placeholder) ---- */
@@ -1286,3 +1328,18 @@ textarea.input { resize: none; height: 100px; line-height: 1.6; }
 .origami-note:focus-visible { outline: 2px solid var(--blue); outline-offset: 4px; }
 
 @media print { .origami-route, .origami-bird, .origami-landing { display: none; } }
+
+/* ---- ÉN PRIMÆR CTA AD GANGEN (roadmap X1, initCtaVisibility i main.js) ----
+   visibility:hidden fjerner også knappen fra Tab-rækkefølgen, så man ikke
+   kan fokusere en usynlig knap. Menuknappen beholder sin plads, så resten
+   af menuen ikke hopper, når den kommer frem. */
+/* .floating-cta har allerede transition: all, som også dækker dette */
+.hero-cta-in-view .nav-btn,
+.inline-cta-in-view .floating-cta,
+.has-hero:not(.past-hero) .floating-cta {
+  opacity: 0;
+  visibility: hidden;
+}
+.nav-btn { transition: opacity 0.25s ease, visibility 0.25s; }
+.inline-cta-in-view .floating-cta,
+.has-hero:not(.past-hero) .floating-cta { transform: translateY(16px); }

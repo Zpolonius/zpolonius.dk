@@ -162,7 +162,7 @@ if ($item) {
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
   <link rel="manifest" href="/site.webmanifest" />
 
-  <link rel="stylesheet" href="css/style.css?v=1.2.0">
+  <link rel="stylesheet" href="css/style.css?v=1.3.0">
   <style>
     /* BREADCRUMB */
     .breadcrumb {
@@ -224,7 +224,7 @@ if ($item) {
       z-index: 10;
     }
     .cover-tag {
-      font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase;
+      font-size: var(--fs-label); letter-spacing: 0.15em; text-transform: uppercase;
       color: var(--blue); margin-bottom: 12px; font-weight: 600;
     }
     .cover-title {
@@ -234,7 +234,7 @@ if ($item) {
     .cover-company { font-size: 18px; color: rgba(255,255,255,0.7); }
     .cover-right { text-align: right; }
     .cover-period { font-size: 14px; color: rgba(255,255,255,0.6); margin-bottom: 4px; }
-    .cover-photo-credit { font-size: 10px; color: rgba(255,255,255,0.4); text-transform: uppercase; letter-spacing: 0.05em; }
+    .cover-photo-credit { font-size: var(--fs-label); color: rgba(255,255,255,0.4); text-transform: uppercase; letter-spacing: 0.05em; }
 
     /* NEW DETAIL GRID LAYOUT */
     .detail-grid {
@@ -288,7 +288,7 @@ if ($item) {
     }
     .sidebar-block { margin-bottom: 0; }
     .sidebar-title {
-      font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em;
+      font-size: var(--fs-label); text-transform: uppercase; letter-spacing: 0.1em;
       color: var(--text-faint); margin-bottom: 20px;
       padding-bottom: 12px; border-bottom: 0.5px solid var(--border);
     }
@@ -319,7 +319,7 @@ if ($item) {
       pointer-events: none;
     }
     .detail-cta-label {
-      font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase;
+      font-size: var(--fs-label); letter-spacing: 0.15em; text-transform: uppercase;
       color: var(--blue); margin-bottom: 16px; font-weight: 600;
     }
     .detail-cta-title {
@@ -349,7 +349,7 @@ if ($item) {
     .entry-nav-item:hover { background: rgba(65,143,255,0.03); }
     .entry-nav-item:first-child { border-right: 0.5px solid var(--border); }
     .entry-nav-dir {
-      font-size: 10px;
+      font-size: var(--fs-label);
       color: var(--text-ghost);
       letter-spacing: 0.1em;
       text-transform: uppercase;
@@ -460,7 +460,7 @@ if ($item) {
         <div class="detail-cta-label">Klar til næste skridt?</div>
         <h2 class="detail-cta-title">Lad os se på dine tal</h2>
         <p class="detail-cta-desc">Er du nysgerrig på, hvordan lignende optimeringer kan hjælpe din forretning? Lad os tage en uforpligtende snak om dit checkout-flow.</p>
-        <button class="btn-primary" data-contact>Book et review →</button>
+        <button class="btn-primary" data-contact>Tjek min checkout →</button>
       </div>
     </div>
 
@@ -479,7 +479,7 @@ if ($item) {
   <div id="global-cta-bar"></div>
   <footer id="global-footer" class="footer"></footer>
 
-  <script src="js/main.js?v=1.2.0"></script>
+  <script src="js/main.js?v=1.3.0"></script>
   <script>
     const urlParams = new URLSearchParams(window.location.search);
     let itemId = urlParams.get('id');

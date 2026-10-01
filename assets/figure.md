@@ -23,7 +23,7 @@ udfyldes af den der lavede billedet.
 
 | Trin | Værdi |
 |---|---|
-| Kildefil (navn, opløsning, hvor den ligger) | **UKENDT** |
+| Kildefil | Foto af Zacharias i et podcaststudie. Filnavn, opløsning og placering: **UKENDT** |
 | Fritlægningsmodel / værktøj | **UKENDT** |
 | Beskæring (udsnit i kildefilen) | **UKENDT** |
 | Alfa-erodering (px / metode) | **UKENDT** |

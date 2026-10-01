@@ -62,6 +62,9 @@ RewriteRule ^sitemap\.xml$ sitemap.php [L]
 <IfModule mod_expires.c>
     ExpiresActive On
     ExpiresDefault "access plus 1 month"
+    # Sider skal altid tjekkes mod serveren. Ellers ser besøgende den gamle
+    # side (og dens gamle ?v=-links) i op til en måned efter en opdatering.
+    ExpiresByType text/html "access plus 0 seconds"
     ExpiresByType text/css "access plus 1 year"
     ExpiresByType application/javascript "access plus 1 year"
     ExpiresByType image/webp "access plus 1 year"

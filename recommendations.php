@@ -65,7 +65,7 @@ foreach ($recs as $r) {
 }
 ?>
   <script type="application/ld+json"><?= json_encode($collection, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) ?></script>
-  <link rel="stylesheet" href="css/style.css?v=1.2.0">
+  <link rel="stylesheet" href="css/style.css?v=1.3.0">
   <style>
     .page-hero {
       padding: 52px 40px 44px;
@@ -76,7 +76,7 @@ foreach ($recs as $r) {
       gap: 32px;
     }
     .page-hero-label {
-      font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase;
+      font-size: var(--fs-label); letter-spacing: 0.15em; text-transform: uppercase;
       color: var(--blue); margin-bottom: 14px;
     }
     .page-hero-title {
@@ -88,7 +88,7 @@ foreach ($recs as $r) {
     }
     .page-hero-stat { text-align: right; }
     .page-hero-stat-num { font-size: 36px; font-weight: 700; color: var(--blue); letter-spacing: -0.03em; }
-    .page-hero-stat-lbl { font-size: 11px; color: var(--text-faint); letter-spacing: 0.08em; text-transform: uppercase; margin-top: 2px; }
+    .page-hero-stat-lbl { font-size: var(--fs-label); color: var(--text-faint); letter-spacing: 0.08em; text-transform: uppercase; margin-top: 2px; }
 
     /* RECOMMENDATIONS GRID */
     .rec-grid { display: grid; grid-template-columns: repeat(2, 1fr); }
@@ -107,7 +107,7 @@ foreach ($recs as $r) {
       margin-bottom: 20px; display: block;
     }
     .rec-skills { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 20px; border-top: 0.5px solid var(--border); padding-top: 16px; }
-    .rec-skill { font-size: 9px; letter-spacing: 0.06em; padding: 3px 7px; border: 0.5px solid var(--border); color: var(--text-faint); text-transform: uppercase; }
+    .rec-skill { font-size: var(--fs-label); letter-spacing: 0.06em; padding: 3px 7px; border: 0.5px solid var(--border); color: var(--text-faint); text-transform: uppercase; }
 
     @media (max-width: 768px) {
       .page-hero {
@@ -181,7 +181,7 @@ foreach ($recs as $r) {
   <footer id="global-footer" class="footer"></footer>
 
 
-  <script src="js/main.js?v=1.2.0"></script>
+  <script src="js/main.js?v=1.3.0"></script>
   <script>
     function esc(str) {
       if (!str) return '';
