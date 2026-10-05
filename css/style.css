@@ -1303,7 +1303,6 @@ textarea.input { resize: none; height: 100px; line-height: 1.6; }
   position: absolute; left: 0; top: 0; z-index: -1;
   pointer-events: none; overflow: visible;
 }
-.origami-guide { fill: none; stroke: var(--border-md); stroke-width: 1.5; stroke-dasharray: 2 9; stroke-linecap: round; }
 .origami-trail { fill: none; stroke: url(#origamiTrail); stroke-width: 2; stroke-linecap: round; }
 .origami-stop-a { stop-color: var(--origami-b); }
 .origami-stop-b { stop-color: var(--origami-a); }
