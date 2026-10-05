@@ -53,7 +53,7 @@ $recs = array_slice(array_values(array_filter($cv['recommendations'] ?? [], func
     ]
   }
   </script>
-  <link rel="stylesheet" href="css/style.css?v=1.4.0">
+  <link rel="stylesheet" href="css/style.css?v=1.5.0">
   <style>
     /* CV SPECIFIC REFINEMENTS */
     .page-hero {
@@ -432,7 +432,7 @@ $recs = array_slice(array_values(array_filter($cv['recommendations'] ?? [], func
       }
 
       /* TIMELINE — compact sidebar */
-      .timeline { grid-template-columns: 72px 1fr; }
+      .timeline { grid-template-columns: 72px minmax(0, 1fr); }
       .timeline-year { padding: 20px 12px; }
       .timeline-year-val { font-size: 10px; }
       .timeline-content { padding: 20px; }
@@ -582,7 +582,7 @@ $recs = array_slice(array_values(array_filter($cv['recommendations'] ?? [], func
   <footer id="global-footer" class="footer"></footer>
 
 
-  <script src="js/main.js?v=1.4.0"></script>
+  <script src="js/main.js?v=1.5.0"></script>
   <script>
     function esc(str) {
       if (!str) return '';
