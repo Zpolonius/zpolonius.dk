@@ -87,9 +87,8 @@
   grad.append(stopA, stopB);
   const defs = svgEl('defs');
   defs.appendChild(grad);
-  const guide = svgEl('path', { class: 'origami-guide' });
   const trail = svgEl('path', { class: 'origami-trail' });
-  route.append(defs, guide, trail);
+  route.append(defs, trail);
 
   // Fælles lag for rute og fugl: klipper alt, der stikker ud over skærmkanten
   // (fx den roterede fugl), så siden aldrig kan scrolles sidelæns.
@@ -139,7 +138,7 @@
   const state = {
     samples: [], knots: [], total: 0, start: null, end: null,
     arrive: 0, cur: 0, lastY: window.scrollY, vel: 0, dir: 1, face: 1,
-    frame: null, active: false, flyUntil: 0, returnTo: null
+    frame: null, lastT: 0, active: false, flyUntil: 0, returnTo: null
   };
 
   // Dokument-position uden transforms (scroll-reveal forskyder sektioner midlertidigt)
@@ -178,8 +177,10 @@
       start = { x: narrow ? lane : r.right + 48, y: docTop(cue) + cue.offsetHeight / 2 - birdSize() * 0.3 };
     }
 
-    // Hvilepunkter: lige efter teksten i hver synlig sektionsoverskrift.
-    // Overskrifts-rækkerne er luftige, så det er her fuglen må krydse siden.
+    // Hvilepunkter: i højre side af hver synlig sektionsoverskrift, foran
+    // "Se alle →"-linket. Fuglen bliver tæt på sin margen, så ruten ikke er
+    // meget længere end scrollet — før satte den sig lige efter teksten i
+    // venstre side og måtte krydse hele siden to gange pr. sektion.
     const perches = [];
     document.querySelectorAll('main .section-title').forEach(h => {
       if (!h.offsetParent || !h.textContent.trim()) return;
@@ -190,12 +191,13 @@
         perches.push({ x: lane, y: docTop(header) - birdSize() * 0.5 });
         return;
       }
+      const link = header.querySelector('.section-link');
+      // Aldrig oven på selve overskriften, hvis den er lang
       const range = document.createRange();
       range.selectNodeContents(h);
-      const r = range.getBoundingClientRect();
-      const link = header.querySelector('.section-link');
-      const limit = link ? link.getBoundingClientRect().left - 44 : W - 40;
-      perches.push({ x: Math.min(r.right + 42, limit), y: docTop(h) + h.offsetHeight / 2 - birdSize() * 0.3 });
+      const textEnd = range.getBoundingClientRect().right + 42;
+      const x = Math.min(lane, Math.max(textEnd, link ? link.getBoundingClientRect().left - 44 : W - 90));
+      perches.push({ x, y: docTop(h) + h.offsetHeight / 2 - birdSize() * 0.3 });
     });
 
     // Slut: midt på sedlen
@@ -243,7 +245,6 @@
       knots.push({ y: q.y, len: poly[poly.length - 1].len, hold: i === pts.length - 1 ? 0 : 45 });
     }
     trail.setAttribute('d', d);
-    guide.setAttribute('d', d);
     // Én måling af den rigtige længde, så trail-stregen slutter præcist ved fuglen
     const total = trail.getTotalLength();
     trail.style.strokeDasharray = total;
@@ -304,7 +305,7 @@
     if (state.active && !state.frame) state.frame = requestAnimationFrame(tick);
   }
 
-  function tick() {
+  function tick(now) {
     state.frame = null;
     if (!state.total) return;
     const sy = window.scrollY;
@@ -314,7 +315,10 @@
     if (Math.abs(dy) > 0.5) state.dir = dy > 0 ? 1 : -1;
 
     const target = lenForScroll();
-    state.cur = mix(state.cur, target, 0.14);
+    // Samme blødhed på 60, 120 og 144 Hz (svarer til 14 % pr. frame ved 60 Hz)
+    const dt = state.lastT && now - state.lastT < 100 ? now - state.lastT : 1000 / 60;
+    state.lastT = now;
+    state.cur = mix(state.cur, target, 1 - Math.pow(0.86, dt * 60 / 1000));
     const settled = Math.abs(target - state.cur) < 0.5;
     if (settled) state.cur = target;
     trail.style.strokeDashoffset = state.total - state.cur;
