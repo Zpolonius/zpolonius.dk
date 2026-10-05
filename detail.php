@@ -162,7 +162,7 @@ if ($item) {
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
   <link rel="manifest" href="/site.webmanifest" />
 
-  <link rel="stylesheet" href="css/style.css?v=1.4.0">
+  <link rel="stylesheet" href="css/style.css?v=1.5.0">
   <style>
     /* BREADCRUMB */
     .breadcrumb {
@@ -269,6 +269,9 @@ if ($item) {
       line-height: 1.8;
       color: var(--text-muted);
       max-width: 720px; /* Perfekt læsebredde */
+      /* Teksten kommer fra admin: lange ord (fx "(Forretningsværdien)")
+         må bryde, i stedet for at stikke ud af skærmen på telefoner */
+      overflow-wrap: break-word;
     }
     .content-main h2 { font-size: 32px; color: var(--text); margin: 48px 0 24px; letter-spacing: -0.02em; }
     .content-main h3 { font-size: 26px; color: var(--text); margin: 32px 0 16px; }
@@ -371,7 +374,9 @@ if ($item) {
       .cover-right { display: none; }
 
       .detail-grid {
-        grid-template-columns: 1fr;
+        /* minmax(0, 1fr): kolonnen må blive smallere end sit bredeste
+           indhold, ellers blev den låst til 375px og gav vandret scroll */
+        grid-template-columns: minmax(0, 1fr);
         padding: 40px 20px;
         gap: 40px;
       }
@@ -384,6 +389,8 @@ if ($item) {
         border-bottom: 0.5px solid var(--border);
       }
       .intro-text { font-size: 18px; margin-bottom: 32px; }
+      .content-main h2 { font-size: 24px; margin: 36px 0 16px; }
+      .content-main h3 { font-size: 20px; }
       .sidebar { grid-template-columns: 1fr; }
 
       .detail-cta { margin: 40px 20px 60px; padding: 48px 24px; border-radius: 20px; }
@@ -479,7 +486,7 @@ if ($item) {
   <div id="global-cta-bar"></div>
   <footer id="global-footer" class="footer"></footer>
 
-  <script src="js/main.js?v=1.4.0"></script>
+  <script src="js/main.js?v=1.5.0"></script>
   <script>
     const urlParams = new URLSearchParams(window.location.search);
     let itemId = urlParams.get('id');
@@ -594,6 +601,9 @@ if ($item) {
       // Intro with Typewriter
       const introEl = document.getElementById('introText');
       const fullIntro = item.intro || item.desc || "";
+      // Den server-renderede tekst har allerede den rigtige højde. Den låses,
+      // før teksten tømmes, så siden ikke krymper og vokser under skrivningen.
+      introEl.style.minHeight = introEl.offsetHeight + 'px';
       introEl.innerHTML = ""; // Reset
 
       let introIdx = 0;
@@ -612,12 +622,15 @@ if ($item) {
           introEl.innerHTML += fullIntro.charAt(introIdx);
           introIdx++;
           setTimeout(typeIntro, 15); // Hurtigere fart til den lange tekst
+        } else {
+          introEl.style.minHeight = '';
         }
       }
 
       // Title typewriter (allerede implementeret tidligere)
       const titleEl = document.getElementById('coverTitle');
       const fullTitle = displayTitle;
+      titleEl.style.minHeight = titleEl.offsetHeight + 'px';
       titleEl.textContent = "";
 
       let charIdx = 0;
@@ -627,6 +640,7 @@ if ($item) {
           charIdx++;
           setTimeout(typeTitle, 40);
         } else {
+          titleEl.style.minHeight = '';
           // Når titlen er færdig, start introen!
           setTimeout(typeIntro, 200);
         }

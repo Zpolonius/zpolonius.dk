@@ -41,7 +41,7 @@
     ]
   }
   </script>
-  <link rel="stylesheet" href="css/style.css?v=1.4.0">
+  <link rel="stylesheet" href="css/style.css?v=1.5.0">
   <style>
     /* SPLIT LAYOUT */
     .contact-wrap {
@@ -121,6 +121,18 @@
     .success-icon-lg svg { width: 24px; height: 24px; stroke: var(--green); fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
     .contact-success-title { font-size: 22px; font-weight: 600; color: var(--text); letter-spacing: -0.02em; margin-bottom: 10px; }
     .contact-success-sub   { font-size: 13px; color: var(--text-muted); line-height: 1.6; max-width: 300px; }
+    /* Mobil: én kolonne. Sidens egne regler ovenfor overskriver mobilreglerne
+       i style.css, så de gentages her — sidst i blokken, så de vinder. Uden dem
+       lå formularen 480px ude til højre for skærmen på telefoner. */
+    @media (max-width: 768px) {
+      .contact-wrap { grid-template-columns: minmax(0, 1fr); min-height: 0; }
+      .contact-social { flex-wrap: wrap; }
+      .contact-left { padding: 32px 20px; border-right: none; border-bottom: 0.5px solid var(--border); }
+      .contact-right { min-height: auto; }
+      .contact-form-header { padding: 24px 20px 20px; }
+      .contact-form-body { padding: 16px 20px; }
+      .contact-form-footer { padding: 16px 20px 24px; }
+    }
   </style>
 </head>
 <body>
@@ -240,7 +252,7 @@
   <nav id="global-bottom-nav"></nav>
   <div id="global-floating-cta"></div>
 
-  <script src="js/main.js?v=1.4.0"></script>
+  <script src="js/main.js?v=1.5.0"></script>
   <script>
     // CSRF Fetch
     let pageCSRFToken = '';

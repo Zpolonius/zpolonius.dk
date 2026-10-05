@@ -1,98 +1,173 @@
-# Upload-guide til Simply.com — AI-synligheds-opdatering
+# Deploy-plan til Simply.com
 
-Denne guide viser præcis hvilke filer du skal lægge op, og — vigtigst — hvilke du
-**aldrig** må overskrive (ellers mister du indhold og statistik fra den live side).
+Én samlet plan for at få alt fra PR #9–#12 i luften: tilgængelighed, roadmap-
+beslutningerne, origami-tranen og oprydningen. Den erstatter de tidligere
+guides (`DEPLOY_SIMPLY_HERO.md`, `_A11Y.md` og `_ROADMAP.md`).
 
-## Sådan kommer du til filerne på Simply
-1. Log ind på **mit.simply.com** → vælg dit webhotel for `zpolonius.dk`.
-2. Åbn **Filhåndtering** (eller brug FTP/SFTP med fx FileZilla — login-oplysninger står under "FTP" i kontrolpanelet).
-3. Gå ind i webroden — typisk mappen **`public_html`** (nogle gange `www` eller en mappe opkaldt efter domænet). Det er den mappe hvor `index.html` allerede ligger.
-
----
-
-## 1) NYE filer — skal lægges op (findes ikke på serveren endnu)
-
-| Lokal fil | Læg i (på serveren) |
-|-----------|---------------------|
-| `detail.php` | webroden (samme sted som `index.html`) |
-| `llms.txt` | webroden |
-| `api/log_ai_bot.php` | mappen `api/` |
-| `detail.php` | webroden |
-| `projects.php` | webroden |
-| `insights.php` | webroden |
-| `cv.php` | webroden |
-| `recommendations.php` | webroden |
-| `about.php` | webroden |
-
-## 2) ÆNDREDE filer — upload og overskriv de gamle
-
-Webroden:
-- `index.html`
-- `contact.html`
-- `robots.txt`
-- `sitemap.php`
-- `.htaccess`  ← se note nedenfor
-- `admin.html`
-
-Mappen `api/`:
-- `api/track.php`
-- `api/analytics.php`
-
-## 3) SLET disse filer på serveren
-
-De er erstattet af `.php`-versioner. Hvis de gamle `.html`-filer bliver liggende,
-kan serveren komme til at vise den forkerte (gamle) version.
-
-- **`detail.html`** → erstattet af `detail.php`
-- **`projects.html`** → erstattet af `projects.php`
-- **`insights.html`** → erstattet af `insights.php`
-- **`cv.html`** → erstattet af `cv.php`
-- **`recommendations.html`** → erstattet af `recommendations.php`
-- **`about.html`** → erstattet af `about.php`
-
-> `index.html` og `contact.html` forbliver `.html` — dem skal du IKKE slette.
+**Tid:** ca. 30 minutter inkl. backup og test.
+**Hvornår:** når alle PR'er er merget til `main`. Upload fra en frisk kopi af `main`.
 
 ---
 
-## ⚠️ Rør ALDRIG disse på serveren (vil ødelægge live data)
+## Trin 0 — Hent den nyeste kode
 
-Disse filer "lever" på serveren og bliver ændret af admin-panelet og af de besøgende.
-Hvis du uploader dine lokale kopier oven i dem, **sletter du indhold og statistik**:
+Upload altid fra `main`, ikke fra en feature-branch.
 
-- ❌ `data/content.json` — alt dit indhold (redigeres via admin på den live side)
-- ❌ `data/analytics.json` — din besøgsstatistik (oprettes automatisk)
-- ❌ `api/config.php` — adgangskode og hemmeligheder (server-specifik)
-
-Kort sagt: **upload ikke mappen `data/`, og rør ikke `api/config.php`.**
+- **GitHub:** gå til repoet → grøn **Code**-knap → **Download ZIP**. Pak den ud.
+- **Eller lokalt:** `git checkout main && git pull`.
 
 ---
 
-## Vigtige noter
+## Trin 1 — Tag backup (5 min) ⚠️ spring ikke over
 
-**.htaccess**
-Hvis Simply's filhåndtering ikke vil vise/uploade en fil der starter med punktum, så
-upload den evt. som `htaccess.txt` og **omdøb den til `.htaccess`** bagefter. Tjek at
-der findes en `.htaccess` i både webroden og i `api/` og `data/`.
+Så kan du altid rulle tilbage, hvis noget ser forkert ud.
 
-**PHP-version**
-Under webhotellets indstillinger på Simply: sørg for **PHP 7.4 eller nyere** er valgt.
-`detail.php` bruger ingen eksotiske funktioner, men 7.4+ er forudsætningen.
-
-**Cache**
-Efter upload: lav en hard refresh i browseren (Ctrl+F5). HTML-filerne har allerede
-`?v=1.0.7` på `main.js`, så JS opdateres automatisk.
+1. Log ind på **mit.simply.com** → vælg webhotellet for `zpolonius.dk`.
+2. Åbn **Filhåndtering** (eller FTP/SFTP med fx FileZilla — login står under
+   "FTP" i kontrolpanelet). Gå ind i webroden, typisk **`public_html`** — mappen
+   hvor `index.html` ligger.
+3. **Download** disse til en mappe på din computer, fx `backup-2026-10-05`:
+   - hele webroden **undtagen** `assets/` (billederne ændres ikke)
+   - `data/content.json` og `data/analytics.json` (dit indhold og din statistik)
 
 ---
 
-## Test bagefter (5 minutter)
+## Trin 2 — Tjek PHP-versionen (1 min)
 
-1. **SSR virker:** åbn `https://zpolonius.dk/projects/bring-checkout-advisory` →
-   højreklik → **Vis sidekilde** (View Source). Du skal kunne se titel, brødtekst og
-   en `<script type="application/ld+json">` direkte i kilden (ikke bare tomme div'er).
-2. **Schema er gyldigt:** indsæt samme URL i
-   [Google Rich Results Test](https://search.google.com/test/rich-results).
-3. **llms.txt:** åbn `https://zpolonius.dk/llms.txt` — skal vise din profiltekst.
-4. **robots.txt:** åbn `https://zpolonius.dk/robots.txt` — skal nævne GPTBot, ClaudeBot osv.
-5. **AI-tracking:** log ind i admin → **Statistik**. Det nye kort "AI-trafik (30 dage)"
-   skal være synligt. (Tallene starter på 0 og vokser, efterhånden som AI-bots crawler
-   og folk klikker ind fra AI-svar.)
+Under webhotellets indstillinger på Simply: vælg **PHP 8.1 eller nyere**
+(minimum 7.4). Statistik-koden er nu skrevet, så den virker på alle nyere
+versioner uden advarsler.
+
+---
+
+## Trin 3 — Upload 17 filer (10 min)
+
+Upload **alle** i samme omgang, og overskriv de gamle. Siderne henter nye
+versioner af CSS og JavaScript (`?v=1.5.0`), så alle dele skal være på plads
+samtidig.
+
+### Webroden
+
+| Fil | Bemærkning |
+|---|---|
+| `.htaccess` | Starter med punktum — se note nedenfor |
+| `index.html` | |
+| `contact.html` | |
+| `vacation-reply.html` | |
+| `404.html` | |
+| `cv-print.html` | |
+| `admin.html` | |
+| `about.php` | |
+| `cv.php` | |
+| `detail.php` | |
+| `insights.php` | |
+| `projects.php` | |
+| `recommendations.php` | |
+
+### Mapper
+
+| Fil | Læg i |
+|---|---|
+| `css/style.css` | `css/` |
+| `js/main.js` | `js/` |
+| `js/origami.js` | `js/` (ny, hvis tranen ikke er oppe endnu) |
+| `api/track.php` | `api/` |
+
+**Note om `.htaccess`:** filen er skjult i mange FTP-programmer — slå "vis
+skjulte filer" til. Vil Simply's filhåndtering ikke tage imod den, så upload den
+som `htaccess.txt` og omdøb den til `.htaccess` bagefter.
+
+**Tjek også:** at `assets/figure.webp` (hero-portrættet) findes på serveren.
+Den kom med hero-opdateringen i september. Mangler den, så upload den til `assets/`.
+
+---
+
+## ⛔ Rør ALDRIG disse på serveren
+
+De "lever" på serveren og ændres af admin og besøgende. Uploader du dine lokale
+kopier, **sletter du indhold eller statistik**:
+
+- ❌ `data/content.json` — alt dit indhold (heller ikke selvom den er ændret i repoet)
+- ❌ `data/analytics.json` — din besøgsstatistik
+- ❌ `api/config.php` — adgangskode og hemmeligheder
+
+Upload heller ikke `.md`-filerne, `generate-hash.php` eller mappen `.claude/`.
+De bruges kun under udvikling.
+
+---
+
+## Trin 4 — Sæt profilkortene i admin (5 min)
+
+Farver og fremhævning ligger i dit indhold, ikke i koden.
+
+1. Log ind på `zpolonius.dk/admin` → **Forside**.
+2. Tryk **Rediger** ud for hvert kort, sæt værdierne og tryk **Gem**:
+
+| Kort | Accent-farve | Fremhæv boksen |
+|---|---|---|
+| Mellem kode og krone | Blå | ✅ |
+| Jeg siger det ingen andre tør | Blå | – |
+| Din checkout fortæller en historie | Blå | ✅ |
+| Mennesket før løsningen | Grøn | – |
+| AI er ikke fremtiden | Blå | ✅ |
+| Familiefar fra Bjæverskov | Grøn | – |
+
+Listen viser "★ Fremhævet" ved de tre.
+
+---
+
+## Trin 5 — Test (10 min)
+
+Åbn siderne i et **privat vindue** (så du ser det som en ny besøgende), og lav
+en hard refresh (**Ctrl+F5**) i dit normale vindue.
+
+**Vigtigst — kontaktformularen**
+1. Gå til `/contact` **på din telefon**. Formularen "Send en besked" skal stå
+   under kontaktoplysningerne — ikke ude til højre.
+2. Udfyld og send en testbesked til dig selv. Du skal se "tak"-visningen og
+   modtage **præcis én** mail.
+
+**Forsiden**
+3. Kun én blå "Tjek min checkout →" er synlig ved første visning, med
+   "Gratis og uforpligtende" under.
+4. Cookiebanneret fylder ca. en femtedel af telefonskærmen. "Læs mere" folder
+   teksten ud.
+5. "Kort fortalt" står over profilkortene. Tre kort er bredere med blå kant
+   (efter trin 4).
+6. Scroll ned: tranen følger med og folder sig ud til en seddel. Klik på
+   tranen → siden flyver ned. "Tilbage til hvor du var" bringer dig tilbage.
+
+**Tastatur og mobil**
+7. Tryk **Tab** én gang: "Spring til hovedindhold" dukker op øverst til venstre.
+8. På telefonen: siden kan ikke skubbes sidelæns, og footerens ikoner, e-mail
+   og telefon står frit over bundmenuen. E-mail og telefon kan trykkes på.
+
+**Tablet / lille laptop** (eller gør browservinduet ca. 900px bredt)
+9. Topmenuen står på én linje. "Om mig", "CV", "Anbefalinger" og
+   "Ferie-autosvar" ligger under ☰-knappen.
+
+**Admin**
+10. Log ind → **Statistik**. Siden indlæses normalt. Står der underlige
+    sidenavne med `<` eller `>`, er det gamle forsøg på at misbruge statistikken —
+    de vises nu som harmløs tekst.
+
+---
+
+## Hvis noget går galt — rul tilbage
+
+1. Upload filerne fra din backup-mappe (trin 1) oven i de nye.
+2. **Upload ikke** `data/`-filerne fra backuppen, medmindre de faktisk er blevet
+   ødelagt — ellers mister du det, der er kommet til siden.
+3. Hard refresh (**Ctrl+F5**).
+
+Fortæl mig, hvad der så forkert ud, så finder vi fejlen før næste forsøg.
+
+---
+
+## Godt at vide bagefter
+
+- **Sider caches ikke længere i en måned.** Næste gang du opdaterer, ser
+  besøgende ændringen med det samme. CSS og JavaScript caches stadig i et år —
+  derfor skal versionsnummeret (`?v=…`) altid op, når de ændres.
+- **Statistik fra lokal test** kan aldrig komme med i en upload:
+  `data/analytics.json` er udelukket i git.

@@ -68,7 +68,7 @@ foreach ($projects as $p) {
 }
 ?>
   <script type="application/ld+json"><?= json_encode($collection, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) ?></script>
-  <link rel="stylesheet" href="css/style.css?v=1.4.0">
+  <link rel="stylesheet" href="css/style.css?v=1.5.0">
   <style>
     .page-hero {
       padding: 52px 40px 44px;
@@ -242,7 +242,18 @@ foreach ($projects as $p) {
     <h2 class="section-title">Mine specialer</h2>
   </div>
   <div class="specialer-strip" id="specialerStrip">
-    <!-- Rendered by JS -->
+<?php /* Server-renderet, så striben ikke skubber projekterne ned efter indlæsning */
+foreach ($data['specialer'] ?? [] as $s):
+  if (($s['visible'] ?? true) === false) continue;
+  $sDesc = html_entity_decode($plainText($s['desc'] ?? ''), ENT_QUOTES | ENT_HTML5, 'UTF-8'); ?>
+    <div class="special-cell">
+      <div class="special-icon-wrap <?= ($s['color'] ?? '') === 'green' ? 'green' : '' ?>"><?= $h(($s['icon'] ?? '') ?: '◆') ?></div>
+      <div>
+        <div class="special-cell-title"><?= $h($s['label'] ?? '') ?></div>
+        <div class="special-cell-desc"><?= $h($sDesc) ?></div>
+      </div>
+    </div>
+<?php endforeach; ?>
   </div>
 
   <!-- FILTER + PROJEKTER -->
@@ -287,7 +298,7 @@ foreach ($projects as $p) {
   <footer id="global-footer" class="footer"></footer>
 
 
-  <script src="js/main.js?v=1.4.0"></script>
+  <script src="js/main.js?v=1.5.0"></script>
   <script>
     function esc(str) {
       if (!str) return '';
@@ -315,14 +326,15 @@ foreach ($projects as $p) {
 
         // Specialer
         const strip = document.getElementById('specialerStrip');
-        (data.specialer||[]).forEach(s => {
+        // Striben er normalt allerede renderet af PHP; kun som reserve her
+        if (!strip.children.length) (data.specialer||[]).forEach(s => {
           if (s.visible === false) return;
           strip.innerHTML += `
             <div class="special-cell">
               <div class="special-icon-wrap ${s.color==='green'?'green':''}">${esc(s.icon||'◆')}</div>
               <div>
                 <div class="special-cell-title">${esc(s.label)}</div>
-                <div class="special-cell-desc">${stripHtml(s.desc||'')}</div>
+                <div class="special-cell-desc">${esc(stripHtml(s.desc||''))}</div>
               </div>
             </div>`;
         });

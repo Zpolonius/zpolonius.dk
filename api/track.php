@@ -13,9 +13,16 @@ $input = json_decode($raw, true);
 $page  = $input['page'] ?? null;
 $event = $input['event'] ?? null;
 
-// Rens strings for sikkerhed
-if ($page)  $page  = filter_var($page, FILTER_SANITIZE_URL);
-if ($event) $event = filter_var($event, FILTER_SANITIZE_STRING);
+// Valider input. Kun tekststrenge accepteres; alt andet ignoreres.
+// Sidenavnet er browserens location.pathname, fx "/" eller "/projects/min-case".
+// Alt andet afvises. FILTER_SANITIZE_URL alene lod "<", ">" og anførselstegn
+// passere, så en besøgende kunne gemme HTML, som blev kørt i admin-statistikken.
+$page = (is_string($page) && preg_match('#^/[A-Za-z0-9._~%/-]{0,200}$#', $page)) ? $page : null;
+// Event-navne svarer til sitets data-track-attributter (fx "contact-open-header"):
+// små bogstaver, tal og bindestreg, højst 64 tegn. Andet afvises i stedet for at
+// blive "renset" — FILTER_SANITIZE_STRING er forældet siden PHP 8.1 og lavede
+// fx "<script>x</script>" om til en falsk event "x".
+$event = (is_string($event) && preg_match('/^[a-z0-9][a-z0-9-]{0,63}$/', $event)) ? $event : null;
 
 // Hent besøgendes data til hashing (anonymisering)
 $ip = $_SERVER['REMOTE_ADDR'] ?? '0.0.0.0';

@@ -203,7 +203,7 @@ p, li {
 .nav-logo { font-size: 15px; font-weight: 600; letter-spacing: -0.03em; color: var(--text); }
 .nav-logo span { color: var(--blue); }
 .nav-links { display: flex; gap: 24px; list-style: none; align-items: center; }
-.nav-links a { color: var(--text-muted); font-size: 13px; letter-spacing: 0.01em; transition: color 0.2s; }
+.nav-links a { color: var(--text-muted); font-size: 13px; letter-spacing: 0.01em; transition: color 0.2s; white-space: nowrap; }
 .nav-links a:hover, .nav-links a.active { color: var(--text); }
 .nav-right { display: flex; align-items: center; gap: 10px; }
 
@@ -239,7 +239,26 @@ p, li {
 }
 .mobile-only { display: none !important; }
 
+/* ---- TOPMENUENS HØJDE ----
+   Menuen indsættes af main.js. Den tomme <header> reserverer samme højde,
+   så siden ikke hopper ned, når menuen dukker op (layoutskift/CLS).
+   Menuen holdes på én linje ved alle bredder, så højden altid er denne. */
+:root { --nav-h: 71px; }
+.nav { min-height: var(--nav-h); }
+#global-header:empty { min-height: var(--nav-h); }
+
+/* ---- MELLEMSTORE SKÆRME (769–1150px) ----
+   Alle otte menupunkter kan ikke være på én linje her. De fire sekundære
+   flyttes ind i "Mere"-menuen, som på mobil. */
+@media (min-width: 769px) and (max-width: 1150px) {
+  .nav-links .nav-secondary { display: none; }
+  .nav-right .nav-hamburger.mobile-only { display: flex !important; }
+  .nav-burger-links { position: fixed; top: var(--nav-h); right: 24px; margin-top: 4px; z-index: 60; }
+  .burger-close-row { display: none; }
+}
+
 @media (max-width: 768px) {
+  :root { --nav-h: 63px; }
   .desktop-only { display: none !important; }
   .mobile-only { display: block !important; }
 }
@@ -262,6 +281,7 @@ p, li {
 .theme-switch:hover { border-color: var(--blue); color: var(--blue); }
 
 .nav-btn {
+  white-space: nowrap;
   background: var(--blue-solid);
   color: #fff;
   border: none;
@@ -745,7 +765,9 @@ textarea.input { resize: none; height: 100px; line-height: 1.6; }
     -ms-overflow-style: none;
     padding: 0 20px 32px;
     gap: 16px;
-    margin: 0 -20px; /* Bleed out to edges */
+    /* Ingen negativ "bleed"-margin: ingen af siderne har den 20px-polstring,
+       den forudsatte, så striben stak 20px ud og gav vandret scroll. */
+    margin: 0;
   }
   .cv-strip::-webkit-scrollbar, .rec-grid::-webkit-scrollbar, .skills-strip::-webkit-scrollbar { display: none; }
   

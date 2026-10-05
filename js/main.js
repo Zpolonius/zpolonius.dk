@@ -245,10 +245,10 @@ function initSharedLayout() {
         <li><a href="/">Hjem</a></li>
         <li><a href="projects">Projekter</a></li>
         <li><a href="insights">Indsigter</a></li>
-        <li><a href="about">Om mig</a></li>
-        <li><a href="cv">CV & Erfaring</a></li>
-        <li><a href="recommendations">Anbefalinger</a></li>
-        <li><a href="vacation-reply">Ferie-autosvar 🏖</a></li>
+        <li class="nav-secondary"><a href="about">Om mig</a></li>
+        <li class="nav-secondary"><a href="cv">CV & Erfaring</a></li>
+        <li class="nav-secondary"><a href="recommendations">Anbefalinger</a></li>
+        <li class="nav-secondary"><a href="vacation-reply">Ferie-autosvar 🏖</a></li>
         <li><a href="#" data-contact data-track="contact-open-header">Kontakt</a></li>
       </ul>
       <div class="nav-right">
