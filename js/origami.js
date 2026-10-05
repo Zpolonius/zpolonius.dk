@@ -41,6 +41,8 @@
     ['wing-l', ['A', 'E', 'W'], '#6a5cf2'], ['wing-l', ['A', 'W', 'G'], '#8b3ff1']
   ];
 
+  const MAX_SPEED = 0.9; // px pr. ms (ca. 900 px i sekundet)
+  const CATCH_UP = 250;  // ms: jo lavere, jo hurtigere indhenter fuglen et stort spring
   const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
   const mix = (a, b, t) => a + (b - a) * t;
   const smooth = (a, b, x) => {
@@ -87,9 +89,8 @@
   grad.append(stopA, stopB);
   const defs = svgEl('defs');
   defs.appendChild(grad);
-  const guide = svgEl('path', { class: 'origami-guide' });
   const trail = svgEl('path', { class: 'origami-trail' });
-  route.append(defs, guide, trail);
+  route.append(defs, trail);
 
   // Fælles lag for rute og fugl: klipper alt, der stikker ud over skærmkanten
   // (fx den roterede fugl), så siden aldrig kan scrolles sidelæns.
@@ -139,7 +140,7 @@
   const state = {
     samples: [], knots: [], total: 0, start: null, end: null,
     arrive: 0, cur: 0, lastY: window.scrollY, vel: 0, dir: 1, face: 1,
-    frame: null, active: false, flyUntil: 0, returnTo: null
+    frame: null, active: false, flyUntil: 0, returnTo: null, lastT: 0
   };
 
   // Dokument-position uden transforms (scroll-reveal forskyder sektioner midlertidigt)
@@ -178,24 +179,40 @@
       start = { x: narrow ? lane : r.right + 48, y: docTop(cue) + cue.offsetHeight / 2 - birdSize() * 0.3 };
     }
 
-    // Hvilepunkter: lige efter teksten i hver synlig sektionsoverskrift.
-    // Overskrifts-rækkerne er luftige, så det er her fuglen må krydse siden.
+    // Hvilepunkter: fuglen bliver i højre margen og sætter sig på stregen
+    // over hver sektionsoverskrift. Før krydsede den hele siden ved hver
+    // overskrift, og det gav en hurtig, svimmel zigzag frem og tilbage.
+    // Fuglen må ikke sidde oven på et link eller en knap (fx "Se alle"): det ser
+    // rodet ud, og et klik dér ville ramme fuglen. Vi måler derfor, hvad den dækker.
+    // Den roterede fugl fylder ca. 1,4 x sin størrelse, og x holdes inden for
+    // skærmen ligesom i tick(). Lodret bruges docTop(), da scroll-reveal
+    // forskyder elementer midlertidigt.
+    const size = birdSize();
+    const edge = size * 0.75 + 2;
+    const blockers = [...document.querySelectorAll('main a, main button, main input, main .section-title')]
+      .map(el => ({ el, r: el.getBoundingClientRect() }))
+      .filter(({ r }) => r.width && r.height)
+      .map(({ el, r }) => { const t = docTop(el); return { l: r.left, r: r.right, t, b: t + r.height }; });
+    const covered = (x, y) => {
+      const bx = clamp(x, edge, W - edge);
+      const box = { l: bx - size * 0.7, r: bx + size * 0.7, t: y - size * 0.52, b: y + size * 0.86 };
+      return blockers.reduce((sum, r) => {
+        const w = Math.min(r.r, box.r) - Math.max(r.l, box.l);
+        const h = Math.min(r.b, box.b) - Math.max(r.t, box.t);
+        return sum + (w > 0 && h > 0 ? w * h : 0);
+      }, 0);
+    };
     const perches = [];
     document.querySelectorAll('main .section-title').forEach(h => {
       if (!h.offsetParent || !h.textContent.trim()) return;
       const header = h.closest('.section-header') || h;
-      if (narrow) {
-        // På mobil fylder kortene hele bredden: fuglen bliver i højre margen
-        // og sætter sig på stregen over overskriften
-        perches.push({ x: lane, y: docTop(header) - birdSize() * 0.5 });
-        return;
+      // Helst på stregen over overskriften; ellers den nærmeste frie plads lidt
+      // over eller under. Er der ingen, flyver fuglen bare forbi uden at sætte sig.
+      const line = docTop(header) - size * 0.5;
+      for (let off = 0; off <= size; off += 6) {
+        const y = [line - off, line + off].find(v => covered(lane, v) === 0);
+        if (y !== undefined) { perches.push({ x: lane, y }); break; }
       }
-      const range = document.createRange();
-      range.selectNodeContents(h);
-      const r = range.getBoundingClientRect();
-      const link = header.querySelector('.section-link');
-      const limit = link ? link.getBoundingClientRect().left - 44 : W - 40;
-      perches.push({ x: Math.min(r.right + 42, limit), y: docTop(h) + h.offsetHeight / 2 - birdSize() * 0.3 });
     });
 
     // Slut: midt på sedlen
@@ -203,10 +220,13 @@
     const nr = note.getBoundingClientRect();
     const end = { x: nr.left + nr.width / 2, y: docTop(note) + note.offsetHeight / 2 };
 
-    /* Ruten: vandret ud til højre margen, lodret ned i margenen og vandret
-       ind til næste hvilepunkt. Fuglen krydser altså kun siden i overskrifts-
-       rækkerne og kan aldrig parkere oven på brødtekst i et kort. */
-    const pts = [start, ...perches.filter(p => p.y > start.y + 40 && p.y < end.y - 40), end];
+    /* Ruten: vandret ud til højre margen, lodret ned i margenen og til sidst
+       ind til sedlen. Fuglen krydser kun siden ved start og slut og kan aldrig
+       parkere oven på brødtekst i et kort. */
+    // Starter fuglen inde på siden, skal den have god plads til turen ud til
+    // margenen: hvilepunkter tættere på end ca. 60 % af en skærmhøjde springes over.
+    const gap = Math.abs(start.x - lane) > 1 ? window.innerHeight * 0.6 : 40;
+    const pts = [start, ...perches.filter(p => p.y > start.y + gap && p.y < end.y - 40), end];
 
     // Siden ændrer højde af mange grunde (karusellen, skrivemaskinen). Er
     // hverken bredde, højde eller hvilepunkter flyttet, er ruten den samme.
@@ -237,13 +257,25 @@
       const r = Math.min(70, (q.y - p.y) / 3);
       if (Math.abs(p.x - lane) > 1) { d += ` Q${lane},${p.y} ${lane},${p.y + r}`; quadTo(lane, p.y, lane, p.y + r); }
       else { d += ` L${lane},${p.y + r}`; lineTo(lane, p.y + r); }
+      // Turene mellem margenen og siden (fra hero'en og ind til sedlen) kan være
+      // 700-1000 px brede. Et ekstra knudepunkt i margenen fordeler hver tur over
+      // et længere stykke scroll, så fuglen glider i stedet for at skyde afsted.
+      const spread = Math.min(window.innerHeight * 0.6, (q.y - p.y) * 0.6);
+      if (i === 1 && Math.abs(p.x - lane) > 1 && p.y + spread < q.y - r) {
+        d += ` L${lane},${p.y + spread}`; lineTo(lane, p.y + spread);
+        knots.push({ y: p.y + spread, len: poly[poly.length - 1].len, hold: 0 });
+      }
+      const last = poly[poly.length - 1];
+      if (i === pts.length - 1 && Math.abs(q.x - lane) > 1 && q.y - spread > last.y && q.y - spread < q.y - r) {
+        d += ` L${lane},${q.y - spread}`; lineTo(lane, q.y - spread);
+        knots.push({ y: q.y - spread, len: poly[poly.length - 1].len, hold: 0 });
+      }
       d += ` L${lane},${q.y - r}`; lineTo(lane, q.y - r);
       if (Math.abs(q.x - lane) > 1) { d += ` Q${lane},${q.y} ${q.x},${q.y}`; quadTo(lane, q.y, q.x, q.y); }
       else { d += ` L${q.x},${q.y}`; lineTo(q.x, q.y); }
       knots.push({ y: q.y, len: poly[poly.length - 1].len, hold: i === pts.length - 1 ? 0 : 45 });
     }
     trail.setAttribute('d', d);
-    guide.setAttribute('d', d);
     // Én måling af den rigtige længde, så trail-stregen slutter præcist ved fuglen
     const total = trail.getTotalLength();
     trail.style.strokeDasharray = total;
@@ -260,11 +292,31 @@
       const t = b.len > a.len ? clamp((len - a.len) / (b.len - a.len), 0, 1) : 0;
       samples.push({ len, x: mix(a.x, b.x, t), y: mix(a.y, b.y, t) });
     }
+    // Hvor sidder fuglen på den gamle rute? (null ved første opbygning)
+    const was = state.total ? pointAt(state.cur) : null;
     Object.assign(state, { samples, total, start, end, knots });
-    state.cur = lenForScroll();
+    // Første gang starter fuglen, hvor den skal være. Bygges ruten om (siden
+    // ændrer højde, når billeder og karusel indlæses), fortsætter den fra det
+    // nærmeste punkt på den nye rute og flyver blødt videre — før blev den
+    // "teleporteret" op til 400 px på én frame.
+    state.cur = was ? nearestLen(was) : lenForScroll();
     // Ændrer siden højde, mens fuglen flyver til kontakt, rettes målet til
     if (performance.now() < state.flyUntil) flyToNote();
     requestTick();
+  }
+
+  function pointAt(len) {
+    const [a, b] = segmentAt(len);
+    const t = clamp((len - a.len) / ((b.len - a.len) || 1), 0, 1);
+    return { x: mix(a.x, b.x, t), y: mix(a.y, b.y, t) };
+  }
+  function nearestLen(pt) {
+    let best = state.samples[0], bestD = Infinity;
+    state.samples.forEach(s => {
+      const dd = (s.x - pt.x) ** 2 + (s.y - pt.y) ** 2;
+      if (dd < bestD) { bestD = dd; best = s; }
+    });
+    return best.len;
   }
 
   function segmentAt(len) {
@@ -314,7 +366,17 @@
     if (Math.abs(dy) > 0.5) state.dir = dy > 0 ? 1 : -1;
 
     const target = lenForScroll();
-    state.cur = mix(state.cur, target, 0.14);
+    // Blød opfølgning med en fartgrænse: tæt på flyver fuglen højst MAX_SPEED
+    // px/ms langs ruten, så den glider roligt i stedet for at fare hen over
+    // skærmen. Er den langt bagud (End-tasten, klik på fuglen), stiger grænsen
+    // jævnt med afstanden, så den hurtigt indhenter (End-tasten: sedlen er
+    // foldet ud efter ca. 1,7 sek.).
+    const now = performance.now();
+    const dt = Math.min(50, now - (state.lastT || now - 16));
+    state.lastT = now;
+    const gap = target - state.cur;
+    const cap = Math.max(MAX_SPEED, Math.abs(gap) / CATCH_UP) * dt;
+    state.cur += clamp(gap * 0.1, -cap, cap);
     const settled = Math.abs(target - state.cur) < 0.5;
     if (settled) state.cur = target;
     trail.style.strokeDashoffset = state.total - state.cur;
@@ -362,6 +424,7 @@
 
     if (!settled || Math.abs(state.vel) > 0.3) requestTick();
     else {
+      state.lastT = 0; // løkken holder pause; næste start regnes som én frame
       bird.classList.remove('is-flapping');
       bird.classList.toggle('is-idle', u === 0);
     }

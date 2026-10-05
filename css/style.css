@@ -1303,7 +1303,6 @@ textarea.input { resize: none; height: 100px; line-height: 1.6; }
   position: absolute; left: 0; top: 0; z-index: -1;
   pointer-events: none; overflow: visible;
 }
-.origami-guide { fill: none; stroke: var(--border-md); stroke-width: 1.5; stroke-dasharray: 2 9; stroke-linecap: round; }
 .origami-trail { fill: none; stroke: url(#origamiTrail); stroke-width: 2; stroke-linecap: round; }
 .origami-stop-a { stop-color: var(--origami-b); }
 .origami-stop-b { stop-color: var(--origami-a); }
@@ -1321,11 +1320,9 @@ textarea.input { resize: none; height: 100px; line-height: 1.6; }
   .origami-bird:hover .origami-wing-l { animation: origamiFlapL 0.4s ease-in-out infinite; }
   .origami-bird:hover .origami-wing-b { animation: origamiFlapB 0.4s ease-in-out infinite; }
 }
-/* Touch: i flugt ligger fuglen over kortkanter og links — dér skal tryk gå
-   igennem. Den kan kun trykkes på, mens den hviler. */
-@media (hover: none) {
-  .origami-bird:not(.is-resting) { pointer-events: none; }
-}
+/* I flugt ligger fuglen over kortkanter og links — dér skal klik og tryk gå
+   igennem til siden. Den kan kun klikkes, mens den hviler. */
+.origami-bird:not(.is-resting) { pointer-events: none; }
 .origami-bob.is-looping { animation: origamiLoop 0.7s cubic-bezier(0.5, 0, 0.3, 1); }
 @keyframes origamiLoop {
   40%  { transform: translateY(-18px) rotate(-200deg) scale(1.15); }
