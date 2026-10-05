@@ -668,6 +668,14 @@
     div.textContent = str;
     return div.innerHTML;
   }
+  // Escaper en værdi til brug i HTML — både som tekst og inde i attributter
+  // (value="…", src="…"). Til forskel fra esc() escapes anførselstegn også,
+  // og 0 bliver vist som "0". Bruges på alt, der kommer fra content.json
+  // eller analytics.json — sidstnævnte indeholder data sendt af besøgende.
+  function escAttr(v) {
+    if (v === null || v === undefined) return '';
+    return String(v).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  }
 
   /* ---- AI OPTIMIZATION ---- */
   let lastAIContext = '';
@@ -720,7 +728,7 @@
         if (res.model_used) document.getElementById('modalAIModel').value = res.model_used;
       } else {
         showToast('AI Fejl: ' + res.error, true);
-        document.getElementById('aiPreview').innerHTML = `<div style="color:var(--red);padding:20px;text-align:center;"><strong>AI-tjenesten svarede med en fejl:</strong><br>${res.error}<br><br><small>Prøv eventuelt at skifte model nedenfor.</small></div>`;
+        document.getElementById('aiPreview').innerHTML = `<div style="color:var(--red);padding:20px;text-align:center;"><strong>AI-tjenesten svarede med en fejl:</strong><br>${escAttr(res.error)}<br><br><small>Prøv eventuelt at skifte model nedenfor.</small></div>`;
       }
       } catch (err) {
       showToast('Kunne ikke forbinde til AI-tjenesten', true);
@@ -741,7 +749,7 @@
         if (res.ok) {
           const sel = document.getElementById('modalAIModel');
           const current = data.site?.ai_model || 'gemini-3.5-flash';
-          sel.innerHTML = res.models.map(m => `<option value="${m.id}" ${m.id===current?'selected':''}>${m.name}</option>`).join('');
+          sel.innerHTML = res.models.map(m => `<option value="${escAttr(m.id)}" ${m.id===current?'selected':''}>${escAttr(m.name)}</option>`).join('');
         }
       });
     }
@@ -785,7 +793,7 @@
     
     if (typeof Quill === 'undefined') {
       console.warn('Quill library not loaded. Falling back to textarea.');
-      container.innerHTML = `<textarea id="legacyEditor" style="width:100%;height:300px;background:var(--bg-input);color:var(--text);border:0.5px solid var(--border-md);padding:12px;font-family:inherit;font-size:14px;outline:none;">${content}</textarea>`;
+      container.innerHTML = `<textarea id="legacyEditor" style="width:100%;height:300px;background:var(--bg-input);color:var(--text);border:0.5px solid var(--border-md);padding:12px;font-family:inherit;font-size:14px;outline:none;">${escAttr(content)}</textarea>`;
       return;
     }
 
@@ -1032,7 +1040,7 @@ async function renderAnalytics(area) {
     const res = await response.json();
     
     if (!res.ok) {
-      area.innerHTML = `<div class="empty"><h3 style="color:var(--red);">Fejl</h3><p>${res.error || 'Kunne ikke hente statistik'}</p></div>`;
+      area.innerHTML = `<div class="empty"><h3 style="color:var(--red);">Fejl</h3><p>${escAttr(res.error || 'Kunne ikke hente statistik')}</p></div>`;
       return;
     }
 
@@ -1112,9 +1120,9 @@ async function renderAnalytics(area) {
                 return `
                   <div class="entry-card" style="padding:16px 20px;">
                     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; padding-bottom:10px; border-bottom:0.5px solid var(--border);">
-                      <div style="font-weight:600; font-size:13px;">${date}</div>
+                      <div style="font-weight:600; font-size:13px;">${escAttr(date)}</div>
                       <div style="display:flex; gap:12px;">
-                        <div style="font-size:10px; color:var(--muted);"><span style="color:var(--blue); font-weight:600;">${day.unique_visitors}</span> besøg</div>
+                        <div style="font-size:10px; color:var(--muted);"><span style="color:var(--blue); font-weight:600;">${escAttr(day.unique_visitors)}</span> besøg</div>
                         <div style="font-size:10px; color:var(--muted);"><span style="color:var(--green); font-weight:600;">${totalViews}</span> visninger</div>
                       </div>
                     </div>
@@ -1125,7 +1133,7 @@ async function renderAnalytics(area) {
                          const isConv = convKeywords.some(k => ev.toLowerCase().includes(k));
                          return `
                            <div style="display:flex; justify-content:space-between; font-size:10px; margin-bottom:4px;">
-                             <span style="color:${isConv?'var(--amber)':'var(--muted)'};">${isConv?'✨ ':''}${ev}</span>
+                             <span style="color:${isConv?'var(--amber)':'var(--muted)'};">${isConv?'✨ ':''}${escAttr(ev)}</span>
                              <span style="color:var(--blue); font-weight:600;">${count}</span>
                            </div>
                          `;
@@ -1136,7 +1144,7 @@ async function renderAnalytics(area) {
                        <div style="font-size:9px; text-transform:uppercase; color:var(--faint); margin-bottom:6px; letter-spacing:0.05em;">Trafikkilder</div>
                        ${Object.entries(day.referrers || {}).sort((a,b) => b[1] - a[1]).map(([ref, count]) => `
                          <div style="display:flex; justify-content:space-between; font-size:10px; margin-bottom:4px;">
-                           <span style="color:var(--muted); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width:80%;">${ref}</span>
+                           <span style="color:var(--muted); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width:80%;">${escAttr(ref)}</span>
                            <span style="color:var(--blue); font-weight:600;">${count}</span>
                          </div>
                        `).join('') || '<div style="font-size:10px; color:var(--faint);">Ingen data</div>'}
@@ -1147,13 +1155,13 @@ async function renderAnalytics(area) {
                        <div style="font-size:9px; text-transform:uppercase; color:var(--purple, #a855f7); margin-bottom:6px; letter-spacing:0.05em;">🤖 AI-trafik (LLM)</div>
                        ${Object.entries(day.ai_referrers || {}).sort((a,b) => b[1] - a[1]).map(([src, count]) => `
                          <div style="display:flex; justify-content:space-between; font-size:10px; margin-bottom:4px;">
-                           <span style="color:var(--muted);">↳ Besøg fra ${src}</span>
+                           <span style="color:var(--muted);">↳ Besøg fra ${escAttr(src)}</span>
                            <span style="color:var(--purple, #a855f7); font-weight:600;">${count}</span>
                          </div>
                        `).join('')}
                        ${Object.entries(day.ai_bots || {}).sort((a,b) => b[1] - a[1]).map(([bot, count]) => `
                          <div style="display:flex; justify-content:space-between; font-size:10px; margin-bottom:4px;">
-                           <span style="color:var(--faint);">⚙ Crawl: ${bot}</span>
+                           <span style="color:var(--faint);">⚙ Crawl: ${escAttr(bot)}</span>
                            <span style="color:var(--faint); font-weight:600;">${count}</span>
                          </div>
                        `).join('')}
@@ -1164,7 +1172,7 @@ async function renderAnalytics(area) {
                        <div style="font-size:9px; text-transform:uppercase; color:var(--faint); margin-bottom:6px; letter-spacing:0.05em;">Enheder</div>
                        ${Object.entries(day.devices || {}).sort((a,b) => b[1] - a[1]).map(([dev, count]) => `
                          <div style="display:flex; justify-content:space-between; font-size:10px; margin-bottom:4px;">
-                           <span style="color:var(--muted);">${dev}</span>
+                           <span style="color:var(--muted);">${escAttr(dev)}</span>
                            <span style="color:var(--amber); font-weight:600;">${count}</span>
                          </div>
                        `).join('') || '<div style="font-size:10px; color:var(--faint);">Ingen data</div>'}
@@ -1174,7 +1182,7 @@ async function renderAnalytics(area) {
                        <div style="font-size:9px; text-transform:uppercase; color:var(--faint); margin-bottom:6px; letter-spacing:0.05em;">Lokationer</div>
                        ${Object.entries(day.locations || {}).sort((a,b) => b[1] - a[1]).map(([loc, count]) => `
                          <div style="display:flex; justify-content:space-between; font-size:10px; margin-bottom:4px;">
-                           <span style="color:var(--muted);">${loc}</span>
+                           <span style="color:var(--muted);">${escAttr(loc)}</span>
                            <span style="color:var(--text); font-weight:600; opacity:0.8;">${count}</span>
                          </div>
                        `).join('') || '<div style="font-size:10px; color:var(--faint);">Ingen data</div>'}
@@ -1184,7 +1192,7 @@ async function renderAnalytics(area) {
                        <div style="font-size:9px; text-transform:uppercase; color:var(--faint); margin-bottom:6px; letter-spacing:0.05em;">Sidevisninger</div>
                        ${Object.entries(day.page_views).sort((a,b) => b[1] - a[1]).map(([path, count]) => `
                          <div style="display:flex; justify-content:space-between; font-size:10px; margin-bottom:4px;">
-                           <span style="color:var(--faint); font-family:monospace; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width:85%;">${path}</span>
+                           <span style="color:var(--faint); font-family:monospace; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width:85%;">${escAttr(path)}</span>
                            <span style="color:var(--green); font-weight:600;">${count}</span>
                          </div>
                        `).join('')}
@@ -1268,23 +1276,23 @@ function renderForside(area) {
     <div style="max-width:720px;">
       <div class="hero-preview">
         <div class="hero-preview-label">Live preview</div>
-        <div class="hero-preview-name" id="prev-name">${data.site?.name || ''}</div>
-        <div class="hero-preview-role" id="prev-role">${h.role || ''}</div>
-        <div class="hero-preview-tag"  id="prev-intro">${h.intro || ''}</div>
+        <div class="hero-preview-name" id="prev-name">${escAttr(data.site?.name || '')}</div>
+        <div class="hero-preview-role" id="prev-role">${escAttr(h.role || '')}</div>
+        <div class="hero-preview-tag"  id="prev-intro">${escAttr(stripHtml(h.intro || ''))}</div>
       </div>
 
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px;">
         <div class="field">
           <label class="field-label">Tagline / intro-tekst</label>
-          <textarea class="f-textarea" id="fe-intro" style="height:70px;" oninput="document.getElementById('prev-intro').textContent=this.value">${h.intro||''}</textarea>
+          <textarea class="f-textarea" id="fe-intro" style="height:70px;" oninput="document.getElementById('prev-intro').textContent=this.value">${escAttr(h.intro||'')}</textarea>
         </div>
         <div class="field">
           <label class="field-label">Rolle (vises under navn)</label>
-          <input class="f-input" id="fe-role" value="${h.role||''}" oninput="document.getElementById('prev-role').textContent=this.value">
+          <input class="f-input" id="fe-role" value="${escAttr(h.role||'')}" oninput="document.getElementById('prev-role').textContent=this.value">
         </div>
         <div class="field">
           <label class="field-label">Status-tekst</label>
-          <input class="f-input" id="fe-status" value="${h.status||''}">
+          <input class="f-input" id="fe-status" value="${escAttr(h.status||'')}">
           <div class="field-hint">Vises som en grøn prik-label på forsiden</div>
         </div>
         <div class="field">
@@ -1303,10 +1311,10 @@ function renderForside(area) {
           <div class="bento-row" data-i="${i}">
             <div class="bento-handle">⠿</div>
             <div class="bento-label-val">
-              <div class="bento-label-txt">${box.label}</div>
-              <div class="bento-main-txt">${box.value}</div>
+              <div class="bento-label-txt">${escAttr(box.label)}</div>
+              <div class="bento-main-txt">${escAttr(box.value)}</div>
             </div>
-            <div class="bento-sub-txt">${box.featured ? '★ Fremhævet · ' : ''}${box.sub}</div>
+            <div class="bento-sub-txt">${box.featured ? '★ Fremhævet · ' : ''}${escAttr(box.sub)}</div>
             <button class="btn-edit" onclick="editBento(${i})">Rediger</button>
           </div>
         `).join('')}
@@ -1333,12 +1341,12 @@ function editBento(i) {
   const box = data.bento[i];
   document.getElementById('formTitle').textContent = 'Rediger bento-boks';
   document.getElementById('formBody').innerHTML = `
-    <div class="field"><label class="field-label">Label (lille tekst over)</label><input class="f-input" id="fb-label" value="${box.label||''}"></div>
-    <div class="field"><label class="field-label">Værdi (stor tekst)</label><input class="f-input" id="fb-value" value="${box.value||''}"></div>
-    <div class="field"><label class="field-label">Undertekst (vises på selve boksen)</label><input class="f-input" id="fb-sub" value="${box.sub||''}"></div>
-    <div class="field"><label class="field-label">Info-tekst (vises i popup ved siden af 'Info')</label><input class="f-input" id="fb-info-val" value="${box.info_val||''}" placeholder="Hvad skal der stå ved siden af 'Info'?"></div>
-    <div class="field"><label class="field-label">Beskrivelse (vises i popup)</label><textarea class="f-textarea" id="fb-desc" style="height:100px;">${box.desc||''}</textarea></div>
-    <div class="field"><label class="field-label">Call to Action (Knap-tekst)</label><input class="f-input" id="fb-cta" value="${box.cta||''}" placeholder="f.eks. Se værdien her →"></div>
+    <div class="field"><label class="field-label">Label (lille tekst over)</label><input class="f-input" id="fb-label" value="${escAttr(box.label||'')}"></div>
+    <div class="field"><label class="field-label">Værdi (stor tekst)</label><input class="f-input" id="fb-value" value="${escAttr(box.value||'')}"></div>
+    <div class="field"><label class="field-label">Undertekst (vises på selve boksen)</label><input class="f-input" id="fb-sub" value="${escAttr(box.sub||'')}"></div>
+    <div class="field"><label class="field-label">Info-tekst (vises i popup ved siden af 'Info')</label><input class="f-input" id="fb-info-val" value="${escAttr(box.info_val||'')}" placeholder="Hvad skal der stå ved siden af 'Info'?"></div>
+    <div class="field"><label class="field-label">Beskrivelse (vises i popup)</label><textarea class="f-textarea" id="fb-desc" style="height:100px;">${escAttr(box.desc||'')}</textarea></div>
+    <div class="field"><label class="field-label">Call to Action (Knap-tekst)</label><input class="f-input" id="fb-cta" value="${escAttr(box.cta||'')}" placeholder="f.eks. Se værdien her →"></div>
     <div class="field"><label class="field-label">Accent-farve</label>
       <select class="f-select" id="fb-accent">
         <option value="none" ${box.accent==='none'?'selected':''}>Ingen (Muted)</option>
@@ -1370,13 +1378,13 @@ function renderSpecialer(area) {
   const list = data.specialer || [];
   area.innerHTML = list.length ? `<div class="special-grid">${list.map((s,i) => `
     <div class="special-card">
-      <div class="special-icon">${s.icon||'◆'}</div>
+      <div class="special-icon">${escAttr(s.icon||'◆')}</div>
       <div class="special-info">
         <div class="special-title">
-          ${s.label}
+          ${escAttr(s.label)}
           ${s.visible===false?'<span style="font-size:9px;color:var(--amber);border:1px solid var(--amber);padding:1px 4px;border-radius:4px;margin-left:6px;font-weight:normal;">Udkast</span>':''}
         </div>
-        <div class="special-desc">${s.desc||''}</div>
+        <div class="special-desc">${escAttr(stripHtml(s.desc||''))}</div>
         <div class="special-actions">
           <button class="btn-edit" onclick="editSpecial(${i})">Rediger</button>
           <button class="btn-del"  onclick="deleteEntry('specialer',${i})">Slet</button>
@@ -1420,7 +1428,7 @@ function openSpecialForm(isEdit, idx, item={}) {
   document.getElementById('formBody').innerHTML = `
     <div class="form-layout">
       <div class="form-main">
-        <div class="field"><label class="field-label">Titel / label</label><input class="f-input" id="sp-label" value="${item.label||''}"></div>
+        <div class="field"><label class="field-label">Titel / label</label><input class="f-input" id="sp-label" value="${escAttr(item.label||'')}"></div>
         <div class="field">
           <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
             <label class="field-label" style="margin-bottom:0;">Beskrivelse</label>
@@ -1429,7 +1437,7 @@ function openSpecialForm(isEdit, idx, item={}) {
           <div id="quillEditor" style="height:200px;"></div>
         </div>
         <div class="field-row">
-          <div class="field"><label class="field-label">Ikon (emoji)</label><input class="f-input" id="sp-icon" value="${item.icon||'◆'}"></div>
+          <div class="field"><label class="field-label">Ikon (emoji)</label><input class="f-input" id="sp-icon" value="${escAttr(item.icon||'◆')}"></div>
           <div class="field"><label class="field-label">Farve</label>
             <select class="f-select" id="sp-color">
               <option value="blue" ${item.color==='blue'?'selected':''}>Blå</option>
@@ -1448,7 +1456,7 @@ function openSpecialForm(isEdit, idx, item={}) {
         <div class="field"><label class="field-label">Keywords / Tags</label><input class="f-input" id="sp-skills" value="${(item.skills||[]).join(', ')}" placeholder="F.eks. B2B, Salg, API"></div>
         <div class="field"><label class="field-label">Cover-billede</label>${createUploadZone('sp-cover','cover',item.cover||'')}</div>
         ${createPositionSelector('sp-cover-pos', item.cover_pos, item.cover)}
-        <div class="field"><label class="field-label">Billede Alt-tekst</label><input class="f-input" id="sp-cover-alt" value="${item.cover_alt||''}" placeholder="Til SEO og skærmlæsere"></div>
+        <div class="field"><label class="field-label">Billede Alt-tekst</label><input class="f-input" id="sp-cover-alt" value="${escAttr(item.cover_alt||'')}" placeholder="Til SEO og skærmlæsere"></div>
         <div class="field"><label class="field-label">Vedhæftet fil (PDF)</label>${createFileZone('sp-file', item.file||'')}</div>
       </div>
     </div>`;
@@ -1479,7 +1487,7 @@ function renderProjekter(area) {
         <div style="flex:1;min-width:0;">
           <div class="entry-card-header">
             <div style="display:flex;flex-wrap:wrap;gap:4px;align-items:center;">
-              <span class="entry-card-tag ${p.category||''}">${p.tag||p.category}</span>
+              <span class="entry-card-tag ${escAttr(p.category||'')}">${escAttr(p.tag||p.category)}</span>
               ${p.visible===false?'<span class="entry-card-tag" style="border-color:var(--amber);color:var(--amber);">Udkast</span>':''}
             </div>
             <div class="entry-card-actions">
@@ -1489,9 +1497,9 @@ function renderProjekter(area) {
               <button class="btn-del"  onclick="deleteEntry('projekter',${i})">Slet</button>
             </div>
           </div>
-          <div class="entry-card-title">${p.title}</div>
-          <div class="entry-card-sub">${p.period||''}</div>
-          <div class="entry-card-desc">${p.desc||''}</div>
+          <div class="entry-card-title">${escAttr(p.title)}</div>
+          <div class="entry-card-sub">${escAttr(p.period||'')}</div>
+          <div class="entry-card-desc">${escAttr(stripHtml(p.desc||''))}</div>
         </div>
       </div>
     </div>`).join('')}</div>`;
@@ -1555,7 +1563,7 @@ function openProjectForm(isEdit, idx, item={}) {
   document.getElementById('formBody').innerHTML = `
     <div class="form-layout">
       <div class="form-main">
-        <div class="field"><label class="field-label">Titel</label><input class="f-input" id="pj-title" value="${item.title||''}"></div>
+        <div class="field"><label class="field-label">Titel</label><input class="f-input" id="pj-title" value="${escAttr(item.title||'')}"></div>
         <div class="field-row">
           <div class="field"><label class="field-label">Kategori</label>
             <select class="f-select" id="pj-cat">
@@ -1565,10 +1573,10 @@ function openProjectForm(isEdit, idx, item={}) {
               <option value="volunteer"${item.category==='volunteer'?'selected':''}>Frivillig</option>
             </select>
           </div>
-          <div class="field"><label class="field-label">Periode</label><input class="f-input" id="pj-period" value="${item.period||''}"></div>
+          <div class="field"><label class="field-label">Periode</label><input class="f-input" id="pj-period" value="${escAttr(item.period||'')}"></div>
         </div>
-        <div class="field"><label class="field-label">Kort beskrivelse (forside)</label><textarea class="f-textarea" style="height:60px;" id="pj-desc">${item.desc||''}</textarea></div>
-        <div class="field"><label class="field-label">Intro (vises øverst på detailside)</label><textarea class="f-textarea" id="pj-intro">${item.intro||''}</textarea></div>
+        <div class="field"><label class="field-label">Kort beskrivelse (forside)</label><textarea class="f-textarea" style="height:60px;" id="pj-desc">${escAttr(item.desc||'')}</textarea></div>
+        <div class="field"><label class="field-label">Intro (vises øverst på detailside)</label><textarea class="f-textarea" id="pj-intro">${escAttr(item.intro||'')}</textarea></div>
         <div class="field">
           <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
             <label class="field-label" style="margin-bottom:0;">Indhold / brødtekst</label>
@@ -1585,7 +1593,7 @@ function openProjectForm(isEdit, idx, item={}) {
               <div class="bento-row" style="display:grid; grid-template-columns: 1fr; gap:8px; padding:12px; border:0.5px solid var(--border-md); border-radius:12px;">
                 <div class="bento-label-txt">Celle ${i + 1}</div>
                 <div class="field-row">
-                  <div class="field"><label class="field-label">Label</label><input class="f-input" id="pj-bento-${i}-label" value="${(c.label||'').replace(/"/g,'&quot;')}" placeholder="f.eks. Den Kommercielle Vinkel"></div>
+                  <div class="field"><label class="field-label">Label</label><input class="f-input" id="pj-bento-${i}-label" value="${escAttr(c.label)}" placeholder="f.eks. Den Kommercielle Vinkel"></div>
                   <div class="field"><label class="field-label">Accent</label>
                     <select class="f-select" id="pj-bento-${i}-accent">
                       <option value="none"  ${c.accent==='none'||!c.accent?'selected':''}>Ingen</option>
@@ -1594,9 +1602,9 @@ function openProjectForm(isEdit, idx, item={}) {
                     </select>
                   </div>
                 </div>
-                <div class="field"><label class="field-label">Titel (stor tekst)</label><input class="f-input" id="pj-bento-${i}-value" value="${(c.value||'').replace(/"/g,'&quot;')}"></div>
-                <div class="field"><label class="field-label">Undertitel</label><input class="f-input" id="pj-bento-${i}-sub" value="${(c.sub||'').replace(/"/g,'&quot;')}"></div>
-                <div class="field"><label class="field-label">Beskrivelse (vises ved klik)</label><textarea class="f-textarea" style="height:60px;" id="pj-bento-${i}-desc">${c.desc||''}</textarea></div>
+                <div class="field"><label class="field-label">Titel (stor tekst)</label><input class="f-input" id="pj-bento-${i}-value" value="${escAttr(c.value)}"></div>
+                <div class="field"><label class="field-label">Undertitel</label><input class="f-input" id="pj-bento-${i}-sub" value="${escAttr(c.sub)}"></div>
+                <div class="field"><label class="field-label">Beskrivelse (vises ved klik)</label><textarea class="f-textarea" style="height:60px;" id="pj-bento-${i}-desc">${escAttr(c.desc||'')}</textarea></div>
               </div>`;
             }).join('')}
           </div>
@@ -1611,10 +1619,10 @@ function openProjectForm(isEdit, idx, item={}) {
           </select>
         </div>
         <div class="field"><label class="field-label">Kompetencer / Keywords</label><input class="f-input" id="pj-skills" value="${(item.skills||[]).join(', ')}" placeholder="f.eks. AI, Scrum, React"><div class="field-hint">Kommasepareret</div></div>
-        <div class="field"><label class="field-label">Link URL (valgfrit)</label><input class="f-input" id="pj-url" value="${item.url||''}" placeholder="https://..."></div>
+        <div class="field"><label class="field-label">Link URL (valgfrit)</label><input class="f-input" id="pj-url" value="${escAttr(item.url||'')}" placeholder="https://..."></div>
         <div class="field"><label class="field-label">Cover-billede</label>${createUploadZone('pj-cover','projects',item.cover||'')}</div>
         ${createPositionSelector('pj-cover-pos', item.cover_pos)}
-        <div class="field"><label class="field-label">Billede Alt-tekst</label><input class="f-input" id="pj-cover-alt" value="${item.cover_alt||''}" placeholder="Til SEO og skærmlæsere"></div>
+        <div class="field"><label class="field-label">Billede Alt-tekst</label><input class="f-input" id="pj-cover-alt" value="${escAttr(item.cover_alt||'')}" placeholder="Til SEO og skærmlæsere"></div>
         <div class="field"><label class="field-label">Vedhæftet fil (PDF)</label>${createFileZone('pj-file', item.file||'')}</div>
       </div>
     </div>`;
@@ -1665,7 +1673,7 @@ function renderAnsaettelser(area) {
   area.innerHTML = list.length ? `<div class="entry-grid">${list.map((j,i) => `
     <div class="entry-card">
       <div class="entry-card-header">
-        <span class="entry-card-tag ${j.category||'work'} ${j.visible===false?'draft':''}">
+        <span class="entry-card-tag ${escAttr(j.category||'work')} ${j.visible===false?'draft':''}">
           ${j.category==='volunteer' ? 'Frivillig' : 'Arbejde'}
         </span>
         ${j.visible===false?'<span class="entry-card-tag draft" style="border-color:var(--amber);color:var(--amber);margin-left:6px;">Udkast</span>':''}
@@ -1674,10 +1682,10 @@ function renderAnsaettelser(area) {
           <button class="btn-del"  onclick="deleteEntry('ansaettelser',${i})">Slet</button>
         </div>
       </div>
-      <div class="entry-card-title">${j.role}</div>
-      <div class="entry-card-sub">${j.company}</div>
-      <div class="entry-card-desc">${j.desc||''}</div>
-      <div class="entry-card-period">${j.period}</div>
+      <div class="entry-card-title">${escAttr(j.role)}</div>
+      <div class="entry-card-sub">${escAttr(j.company)}</div>
+      <div class="entry-card-desc">${escAttr(stripHtml(j.desc||''))}</div>
+      <div class="entry-card-period">${escAttr(j.period)}</div>
     </div>`).join('')}</div>`
   : emptyState('💼','Ingen ansættelser endnu','Tilføj din arbejdserfaring her.');
 }
@@ -1689,12 +1697,12 @@ function openJobForm(isEdit, idx, item={}) {
     <div class="form-layout">
       <div class="form-main">
         <div class="field-row">
-          <div class="field"><label class="field-label">Jobtitel</label><input class="f-input" id="jb-role" value="${item.role||''}"></div>
-          <div class="field"><label class="field-label">Virksomhed</label><input class="f-input" id="jb-company" value="${item.company||''}"></div>
+          <div class="field"><label class="field-label">Jobtitel</label><input class="f-input" id="jb-role" value="${escAttr(item.role||'')}"></div>
+          <div class="field"><label class="field-label">Virksomhed</label><input class="f-input" id="jb-company" value="${escAttr(item.company||'')}"></div>
         </div>
-        <div class="field"><label class="field-label">Periode</label><input class="f-input" id="jb-period" value="${item.period||''}"></div>
-        <div class="field"><label class="field-label">Kort beskrivelse (forside)</label><textarea class="f-textarea" style="height:60px;" id="jb-desc">${item.desc||''}</textarea></div>
-        <div class="field"><label class="field-label">Intro (detailside)</label><textarea class="f-textarea" id="jb-intro">${item.intro||''}</textarea></div>
+        <div class="field"><label class="field-label">Periode</label><input class="f-input" id="jb-period" value="${escAttr(item.period||'')}"></div>
+        <div class="field"><label class="field-label">Kort beskrivelse (forside)</label><textarea class="f-textarea" style="height:60px;" id="jb-desc">${escAttr(item.desc||'')}</textarea></div>
+        <div class="field"><label class="field-label">Intro (detailside)</label><textarea class="f-textarea" id="jb-intro">${escAttr(item.intro||'')}</textarea></div>
         <div class="field">
           <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
             <label class="field-label" style="margin-bottom:0;">Indhold / brødtekst</label>
@@ -1719,7 +1727,7 @@ function openJobForm(isEdit, idx, item={}) {
         <div class="field"><label class="field-label">Kompetencer / Keywords</label><input class="f-input" id="jb-skills" value="${(item.skills||[]).join(', ')}"></div>
         <div class="field"><label class="field-label">Cover-billede</label>${createUploadZone('jb-cover','projects',item.cover||'')}</div>
         ${createPositionSelector('jb-cover-pos', item.cover_pos)}
-        <div class="field"><label class="field-label">Billede Alt-tekst</label><input class="f-input" id="jb-cover-alt" value="${item.cover_alt||''}"></div>
+        <div class="field"><label class="field-label">Billede Alt-tekst</label><input class="f-input" id="jb-cover-alt" value="${escAttr(item.cover_alt||'')}"></div>
         <div class="field"><label class="field-label">Vedhæftet fil (PDF)</label>${createFileZone('jb-file', item.file||'')}</div>
       </div>
     </div>`;
@@ -1762,10 +1770,10 @@ function renderUddannelse(area) {
           <button class="btn-del"  onclick="deleteEntry('uddannelse',${i})">Slet</button>
         </div>
       </div>
-      <div class="entry-card-title">${e.title}</div>
-      <div class="entry-card-sub">${e.institution}</div>
-      <div class="entry-card-desc">${e.desc||''}</div>
-      <div class="entry-card-period">${e.period}</div>
+      <div class="entry-card-title">${escAttr(e.title)}</div>
+      <div class="entry-card-sub">${escAttr(e.institution)}</div>
+      <div class="entry-card-desc">${escAttr(stripHtml(e.desc||''))}</div>
+      <div class="entry-card-period">${escAttr(e.period)}</div>
     </div>`).join('')}</div>`
   : emptyState('🎓','Ingen uddannelse endnu','Tilføj din uddannelse og certificeringer her.');
 }
@@ -1776,10 +1784,10 @@ function openEduForm(isEdit, idx, item={}) {
   document.getElementById('formBody').innerHTML = `
     <div class="form-layout">
       <div class="form-main">
-        <div class="field"><label class="field-label">Titel / uddannelse</label><input class="f-input" id="ed-title" value="${item.title||''}"></div>
+        <div class="field"><label class="field-label">Titel / uddannelse</label><input class="f-input" id="ed-title" value="${escAttr(item.title||'')}"></div>
         <div class="field-row">
-          <div class="field"><label class="field-label">Institution</label><input class="f-input" id="ed-inst" value="${item.institution||''}"></div>
-          <div class="field"><label class="field-label">Periode</label><input class="f-input" id="ed-period" value="${item.period||''}"></div>
+          <div class="field"><label class="field-label">Institution</label><input class="f-input" id="ed-inst" value="${escAttr(item.institution||'')}"></div>
+          <div class="field"><label class="field-label">Periode</label><input class="f-input" id="ed-period" value="${escAttr(item.period||'')}"></div>
         </div>
         <div class="field">
           <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
@@ -1799,7 +1807,7 @@ function openEduForm(isEdit, idx, item={}) {
         <div class="field"><label class="field-label">Kompetencer / Keywords</label><input class="f-input" id="ed-skills" value="${(item.skills||[]).join(', ')}"></div>
         <div class="field"><label class="field-label">Cover-billede</label>${createUploadZone('ed-cover','cover',item.cover||'')}</div>
         ${createPositionSelector('ed-cover-pos', item.cover_pos)}
-        <div class="field"><label class="field-label">Billede Alt-tekst</label><input class="f-input" id="ed-cover-alt" value="${item.cover_alt||''}"></div>
+        <div class="field"><label class="field-label">Billede Alt-tekst</label><input class="f-input" id="ed-cover-alt" value="${escAttr(item.cover_alt||'')}"></div>
         <div class="field"><label class="field-label">Vedhæftet fil (PDF)</label>${createFileZone('ed-file', item.file||'')}</div>
       </div>
     </div>`;
@@ -1834,17 +1842,17 @@ function renderAnbefalinger(area) {
       <div class="quote-row-header">
         <div>
           <div class="quote-name">
-            ${r.name}
+            ${escAttr(r.name)}
             ${r.visible===false?'<span style="font-size:9px;color:var(--amber);border:1px solid var(--amber);padding:1px 4px;border-radius:4px;margin-left:6px;font-weight:normal;">Udkast</span>':''}
           </div>
-          <div class="quote-role-txt">${r.role||''}</div>
+          <div class="quote-role-txt">${escAttr(r.role||'')}</div>
         </div>
         <div class="entry-card-actions">
           <button class="btn-edit" onclick="editRec(${i})">Rediger</button>
           <button class="btn-del"  onclick="deleteEntry('anbefalinger',${i})">Slet</button>
         </div>
       </div>
-      <div class="quote-text-preview">"${r.text}"</div>
+      <div class="quote-text-preview">"${escAttr(stripHtml(r.text))}"</div>
     </div>`).join('')}</div>`
   : emptyState('💬','Ingen anbefalinger endnu','Tilføj anbefalinger fra kolleger og samarbejdspartnere.');
 }
@@ -1856,10 +1864,10 @@ function openRecForm(isEdit, idx, item={}) {
     <div class="form-layout">
       <div class="form-main">
         <div class="field-row">
-          <div class="field"><label class="field-label">Navn</label><input class="f-input" id="rc-name" value="${item.name||''}"></div>
-          <div class="field"><label class="field-label">Titel / rolle</label><input class="f-input" id="rc-role" value="${item.role||''}"></div>
+          <div class="field"><label class="field-label">Navn</label><input class="f-input" id="rc-name" value="${escAttr(item.name||'')}"></div>
+          <div class="field"><label class="field-label">Titel / rolle</label><input class="f-input" id="rc-role" value="${escAttr(item.role||'')}"></div>
         </div>
-        <div class="field"><label class="field-label">Intro / Kort tekst (vises på forsiden)</label><textarea class="f-textarea" style="height:60px;" id="rc-intro">${item.intro||''}</textarea></div>
+        <div class="field"><label class="field-label">Intro / Kort tekst (vises på forsiden)</label><textarea class="f-textarea" style="height:60px;" id="rc-intro">${escAttr(item.intro||'')}</textarea></div>
         <div class="field">
           <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
             <label class="field-label" style="margin-bottom:0;">Fuld anbefalingstekst (vises på detaljesiden)</label>
@@ -1879,10 +1887,10 @@ function openRecForm(isEdit, idx, item={}) {
         ${createLinkEditor(item.links)}
         <div class="field"><label class="field-label">Profilbillede (Avatar)</label>${createUploadZone('rc-photo','photo',item.photo||'')}</div>
         ${createPositionSelector('rc-photo-pos', item.photo_pos, item.photo)}
-        <div class="field"><label class="field-label">Profilbillede Alt-tekst</label><input class="f-input" id="rc-photo-alt" value="${item.photo_alt||''}"></div>
+        <div class="field"><label class="field-label">Profilbillede Alt-tekst</label><input class="f-input" id="rc-photo-alt" value="${escAttr(item.photo_alt||'')}"></div>
         <div class="field"><label class="field-label">Virksomhedslogo</label>${createUploadZone('rc-logo','logo',item.logo||'')}</div>
         <div class="field"><label class="field-label">Cover-billede</label>${createUploadZone('rc-cover','cover',item.cover||'')}</div>
-        ${createPositionSelector('rc-cover-pos', item.cover_pos, item.cover)}        <div class="field"><label class="field-label">Cover Alt-tekst</label><input class="f-input" id="rc-cover-alt" value="${item.cover_alt||''}"></div>
+        ${createPositionSelector('rc-cover-pos', item.cover_pos, item.cover)}        <div class="field"><label class="field-label">Cover Alt-tekst</label><input class="f-input" id="rc-cover-alt" value="${escAttr(item.cover_alt||'')}"></div>
         <div class="field"><label class="field-label">Vedhæftet fil (PDF)</label>${createFileZone('rc-file', item.file||'')}</div>
       </div>
     </div>`;
@@ -1931,9 +1939,9 @@ function renderOm(area) {
 
   area.innerHTML = `
     <div style="max-width:680px;">
-      <div class="field"><label class="field-label">Biografi</label><textarea class="f-textarea" style="height:180px;" id="om-bio">${o.bio||''}</textarea><div class="field-hint">Brug dobbelt linjeskift til afsnit</div></div>
+      <div class="field"><label class="field-label">Biografi</label><textarea class="f-textarea" style="height:180px;" id="om-bio">${escAttr(o.bio||'')}</textarea><div class="field-hint">Brug dobbelt linjeskift til afsnit</div></div>
       <div class="field"><label class="field-label">Profilbillede</label>${createUploadZone('om-photo','photo', o.photo||'')}</div>
-      ${createPositionSelector('om-photo-pos', o.photo_pos, o.photo)}      <div class="field"><label class="field-label">Persontype / beskrivelse</label><textarea class="f-textarea" style="height:60px;" id="om-type">${o.persontype||''}</textarea></div>
+      ${createPositionSelector('om-photo-pos', o.photo_pos, o.photo)}      <div class="field"><label class="field-label">Persontype / beskrivelse</label><textarea class="f-textarea" style="height:60px;" id="om-type">${escAttr(o.persontype||'')}</textarea></div>
       <div class="field-row">
         <div class="field"><label class="field-label">Sprog (kommasepareret)</label><input class="f-input" id="om-sprog" value="${(o.sprog||[]).join(', ')}"></div>
         <div class="field"><label class="field-label">Interesser (kommasepareret)</label><input class="f-input" id="om-int" value="${(o.interesser||[]).join(', ')}"></div>
@@ -1947,8 +1955,8 @@ function renderOm(area) {
         ${(o.facts||[]).map((f, i) => `
           <div style="display:flex; align-items:center; justify-content:space-between; padding:12px 16px; background:rgba(255,255,255,0.03); border:0.5px solid var(--border); border-radius:4px;">
             <div style="flex:1;">
-              <div style="font-size:10px; text-transform:uppercase; color:var(--blue); letter-spacing:0.05em; margin-bottom:2px;">${f.label}</div>
-              <div style="font-size:14px; color:#fff; font-weight:500;">${f.val} <span style="font-size:12px; color:var(--faint); font-weight:normal;">· ${f.sub}</span></div>
+              <div style="font-size:10px; text-transform:uppercase; color:var(--blue); letter-spacing:0.05em; margin-bottom:2px;">${escAttr(f.label)}</div>
+              <div style="font-size:14px; color:#fff; font-weight:500;">${escAttr(f.val)} <span style="font-size:12px; color:var(--faint); font-weight:normal;">· ${escAttr(f.sub)}</span></div>
             </div>
             <div style="display:flex; gap:8px; margin-left:20px;">
               <button class="btn-edit" onclick="editFact(${i})">Ret</button>
@@ -1968,7 +1976,7 @@ function renderOm(area) {
           <div class="bento-row">
             <div class="bento-handle">⠿</div>
             <div class="bento-label-val">
-              <div class="bento-label-txt">${grp.category}</div>
+              <div class="bento-label-txt">${escAttr(grp.category)}</div>
               <div class="bento-main-txt" style="font-size:11px; font-weight:normal; color:var(--muted);">${grp.tags.join(', ')}</div>
             </div>
             <div style="display:flex; gap:6px;">
@@ -1991,9 +1999,9 @@ function editFact(i) {
   
   document.getElementById('formTitle').textContent = isEdit ? 'Rediger Fact' : 'Tilføj Fact';
   document.getElementById('formBody').innerHTML = `
-    <div class="field"><label class="field-label">Overskrift (f.eks. Bopæl)</label><input class="f-input" id="fact-label" value="${f.label}"></div>
-    <div class="field"><label class="field-label">Værdi (f.eks. Bjæverskov)</label><input class="f-input" id="fact-val" value="${f.val}"></div>
-    <div class="field"><label class="field-label">Undertekst (f.eks. Danmark)</label><input class="f-input" id="fact-sub" value="${f.sub}"></div>`;
+    <div class="field"><label class="field-label">Overskrift (f.eks. Bopæl)</label><input class="f-input" id="fact-label" value="${escAttr(f.label)}"></div>
+    <div class="field"><label class="field-label">Værdi (f.eks. Bjæverskov)</label><input class="f-input" id="fact-val" value="${escAttr(f.val)}"></div>
+    <div class="field"><label class="field-label">Undertekst (f.eks. Danmark)</label><input class="f-input" id="fact-sub" value="${escAttr(f.sub)}"></div>`;
     
   openFormPanel(isEdit ? 'Rediger' : 'Tilføj', () => {
     const newF = {
@@ -2014,7 +2022,7 @@ function editKomp(i) {
   
   document.getElementById('formTitle').textContent = isEdit ? 'Rediger kompetence-gruppe' : 'Tilføj kompetence-gruppe';
   document.getElementById('formBody').innerHTML = `
-    <div class="field"><label class="field-label">Kategori / Titel</label><input class="f-input" id="komp-cat" value="${grp.category}"></div>
+    <div class="field"><label class="field-label">Kategori / Titel</label><input class="f-input" id="komp-cat" value="${escAttr(grp.category)}"></div>
     <div class="field"><label class="field-label">Kompetencer (tags)</label>
       <textarea class="f-textarea" id="komp-tags" style="height:100px;" placeholder="Skriv kompetencer adskilt af komma...">${grp.tags.join(', ')}</textarea>
       <div class="field-hint">Kommasepareret liste</div>
@@ -2048,14 +2056,14 @@ function renderKontakt(area) {
   area.innerHTML = `
     <div style="max-width:560px;">
       <div class="field-row">
-        <div class="field"><label class="field-label">Email</label><input class="f-input" id="kt-email" value="${s.email||''}"></div>
-        <div class="field"><label class="field-label">Telefon</label><input class="f-input" id="kt-phone" value="${s.phone||''}"></div>
+        <div class="field"><label class="field-label">Email</label><input class="f-input" id="kt-email" value="${escAttr(s.email||'')}"></div>
+        <div class="field"><label class="field-label">Telefon</label><input class="f-input" id="kt-phone" value="${escAttr(s.phone||'')}"></div>
       </div>
       <div style="margin-bottom:20px;padding-bottom:20px;border-bottom:0.5px solid var(--border);">
         <div style="font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:var(--faint);margin-bottom:14px;">Sociale medier</div>
-        <div class="field"><label class="field-label">LinkedIn URL</label><input class="f-input" id="kt-li" value="${s.social?.linkedin||''}"></div>
-        <div class="field"><label class="field-label">Instagram URL</label><input class="f-input" id="kt-ig" value="${s.social?.instagram||''}"></div>
-        <div class="field"><label class="field-label">Facebook URL</label><input class="f-input" id="kt-fb" value="${s.social?.facebook||''}"></div>
+        <div class="field"><label class="field-label">LinkedIn URL</label><input class="f-input" id="kt-li" value="${escAttr(s.social?.linkedin||'')}"></div>
+        <div class="field"><label class="field-label">Instagram URL</label><input class="f-input" id="kt-ig" value="${escAttr(s.social?.instagram||'')}"></div>
+        <div class="field"><label class="field-label">Facebook URL</label><input class="f-input" id="kt-fb" value="${escAttr(s.social?.facebook||'')}"></div>
       </div>
       <div style="display:flex;justify-content:flex-end;">
         <button class="btn-submit" style="width:auto;padding:9px 24px;" onclick="saveKontakt()">Gem kontaktinfo</button>
@@ -2079,13 +2087,13 @@ function renderSite(area) {
   area.innerHTML = `
     <div style="max-width:600px;">
       <div class="settings-grid" style="margin-bottom:20px;">
-        <div class="field"><label class="field-label">Sitenavn</label><input class="f-input" id="st-name" value="${s.name||''}"></div>
-        <div class="field"><label class="field-label">Tagline</label><input class="f-input" id="st-tag" value="${s.tagline||''}"></div>
+        <div class="field"><label class="field-label">Sitenavn</label><input class="f-input" id="st-name" value="${escAttr(s.name||'')}"></div>
+        <div class="field"><label class="field-label">Tagline</label><input class="f-input" id="st-tag" value="${escAttr(s.tagline||'')}"></div>
         <div class="field"><label class="field-label">Logo</label>${createUploadZone('st-logo','general', s.logo||'')}</div>
         <div class="field"><label class="field-label">Accent-farve</label>
           <div class="color-row">
-            <input type="color" class="color-swatch" id="st-color" value="${s.accent_color||'#418FFF'}" oninput="document.getElementById('st-colorhex').value=this.value">
-            <input class="f-input" id="st-colorhex" value="${s.accent_color||'#418FFF'}" style="flex:1;" oninput="document.getElementById('st-color').value=this.value">
+            <input type="color" class="color-swatch" id="st-color" value="${escAttr(s.accent_color||'#418FFF')}" oninput="document.getElementById('st-colorhex').value=this.value">
+            <input class="f-input" id="st-colorhex" value="${escAttr(s.accent_color||'#418FFF')}" style="flex:1;" oninput="document.getElementById('st-color').value=this.value">
           </div>
           <div class="color-presets">
             ${['#418FFF','#41A447','#e05555','#e09a30','#9b59b6','#1abc9c'].map(c=>`<div class="color-preset" style="background:${c}" onclick="document.getElementById('st-color').value='${c}';document.getElementById('st-colorhex').value='${c}';" title="${c}"></div>`).join('')}
@@ -2094,7 +2102,7 @@ function renderSite(area) {
         <div class="field">
           <label class="field-label">AI Model</label>
           <select class="f-select" id="st-ai-model">
-            <option value="${s.ai_model || 'gemini-3.5-flash'}">${s.ai_model || 'gemini-3.5-flash'}</option>
+            <option value="${escAttr(s.ai_model || 'gemini-3.5-flash')}">${escAttr(s.ai_model || 'gemini-3.5-flash')}</option>
           </select>
           <div class="field-hint">Henter liste fra Google AI Studio...</div>
         </div>
@@ -2111,7 +2119,7 @@ function renderSite(area) {
       if (res.ok) {
         const sel = document.getElementById('st-ai-model');
         if (sel) {
-          sel.innerHTML = res.models.map(m => `<option value="${m.id}" ${m.id===(s.ai_model||'gemini-3.5-flash')?'selected':''}>${m.name} (${m.id})</option>`).join('');
+          sel.innerHTML = res.models.map(m => `<option value="${escAttr(m.id)}" ${m.id===(s.ai_model||'gemini-3.5-flash')?'selected':''}>${escAttr(m.name)} (${escAttr(m.id)})</option>`).join('');
           const hint = sel.nextElementSibling;
           if (hint) hint.textContent = 'Liste over aktive tekst-modeller hentet.';
         }
@@ -2185,14 +2193,14 @@ function createUploadZone(id, folder, currentPath='') {
     </div>
     <div class="upload-error" id="err-${id}"></div>
     <div class="upload-preview ${currentPath?'show':''}" id="prev-${id}">
-      ${currentPath ? `<img src="${currentPath}" style="object-position: center;">` : '<img style="display:none">'}
+      ${currentPath ? `<img src="${escAttr(currentPath)}" style="object-position: center;">` : '<img style="display:none">'}
       <div style="flex:1;">
         <div class="upload-preview-name" id="prevname-${id}">${currentPath ? currentPath.split('/').pop() : ''}</div>
-        <div class="upload-preview-path" id="prevpath-${id}">${currentPath}</div>
+        <div class="upload-preview-path" id="prevpath-${id}">${escAttr(currentPath)}</div>
       </div>
       <button class="upload-preview-clear" onclick="clearUpload('${id}','${folder}')">✕</button>
     </div>
-    <input type="hidden" id="imgpath-${id}" value="${currentPath}">`;
+    <input type="hidden" id="imgpath-${id}" value="${escAttr(currentPath)}">`;
 }
 
 function handleDrop(e, id, folder) {
@@ -2303,12 +2311,12 @@ function createFileZone(id, currentPath='') {
     <div class="upload-preview ${currentPath?'show':''}" id="prev-${id}">
       <div style="font-size:22px;flex-shrink:0;">📄</div>
       <div style="flex:1;">
-        <div class="upload-preview-name" id="prevname-${id}">${filename}</div>
-        <div class="upload-preview-path" id="prevpath-${id}">${currentPath}</div>
+        <div class="upload-preview-name" id="prevname-${id}">${escAttr(filename)}</div>
+        <div class="upload-preview-path" id="prevpath-${id}">${escAttr(currentPath)}</div>
       </div>
       <button class="upload-preview-clear" onclick="clearUpload('${id}')">✕</button>
     </div>
-    <input type="hidden" id="imgpath-${id}" value="${currentPath}">`;
+    <input type="hidden" id="imgpath-${id}" value="${escAttr(currentPath)}">`;
 }
 
 function handleFileDrop(e, id) {
@@ -2393,10 +2401,10 @@ function createPositionSelector(id, val='50% 50%', imgUrl='') {
     <div class="focus-picker-wrap">
       <label class="focus-picker-label">Billedfokus (klik på billedet)</label>
       <div class="focus-picker-container" onclick="setFocusPoint(event, '${id}')">
-        <img src="${currentImg}" class="focus-picker-img" id="focus-img-${id}" onerror="this.src='data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22200%22%20height%3D%22112%22%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20fill%3D%22%23222%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2250%25%22%20fill%3D%22%23444%22%20font-family%3D%22sans-serif%22%20font-size%3D%2210%22%20text-anchor%3D%22middle%22%3EIngen%20billede%3C%2Ftext%3E%3C%2Fsvg%3E'">
+        <img src="${escAttr(currentImg)}" class="focus-picker-img" id="focus-img-${id}" onerror="this.src='data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22200%22%20height%3D%22112%22%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20fill%3D%22%23222%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2250%25%22%20fill%3D%22%23444%22%20font-family%3D%22sans-serif%22%20font-size%3D%2210%22%20text-anchor%3D%22middle%22%3EIngen%20billede%3C%2Ftext%3E%3C%2Fsvg%3E'">
         <div class="focus-picker-dot" id="focus-dot-${id}" style="left:${x}; top:${y};"></div>
       </div>
-      <input type="hidden" id="${id}" value="${val}">
+      <input type="hidden" id="${id}" value="${escAttr(val)}">
     </div>`;
 }
 
@@ -2477,16 +2485,16 @@ function renderArtikler(area) {
   area.innerHTML = list.length ? `<div class="entry-grid">${list.map((a,i) => `
     <div class="entry-card">
       <div class="entry-card-header">
-        <span class="entry-card-tag ${a.visible===false?'draft':''}">${a.date||'Ingen dato'}</span>
-        ${a.reading_time ? `<span class="entry-card-tag" style="border-color:var(--blue);color:var(--blue);margin-left:6px;">${a.reading_time} min.</span>` : '<span class="entry-card-tag" style="margin-left:6px; opacity:0.5;">Auto</span>'}
+        <span class="entry-card-tag ${a.visible===false?'draft':''}">${escAttr(a.date||'Ingen dato')}</span>
+        ${a.reading_time ? `<span class="entry-card-tag" style="border-color:var(--blue);color:var(--blue);margin-left:6px;">${escAttr(a.reading_time)} min.</span>` : '<span class="entry-card-tag" style="margin-left:6px; opacity:0.5;">Auto</span>'}
         ${a.visible===false?'<span class="entry-card-tag draft" style="border-color:var(--amber);color:var(--amber);margin-left:6px;">Udkast</span>':''}
         <div class="entry-card-actions">
           <button class="btn-edit" onclick="editArticle(${i})">Rediger</button>
           <button class="btn-del"  onclick="deleteEntry('artikler',${i})">Slet</button>
         </div>
       </div>
-      <div class="entry-card-title">${a.title}</div>
-      <div class="entry-card-desc">${a.excerpt||''}</div>
+      <div class="entry-card-title">${escAttr(a.title)}</div>
+      <div class="entry-card-desc">${escAttr(stripHtml(a.excerpt||''))}</div>
     </div>`).join('')}</div>`
   : emptyState('📝','Ingen artikler endnu','Skriv dit første indlæg her.');
 }
@@ -2497,9 +2505,9 @@ function openArticleForm(isEdit, idx, item={}) {
   document.getElementById('formBody').innerHTML = `
     <div class="form-layout">
       <div class="form-main">
-        <div class="field"><label class="field-label">Titel</label><input class="f-input" id="ar-title" value="${item.title||''}"></div>
-        <div class="field"><label class="field-label">Dato</label><input class="f-input" id="ar-date" placeholder="F.eks. 12. maj 2026" value="${item.date||''}"></div>
-        <div class="field"><label class="field-label">Kort resumé (Uddrag)</label><textarea class="f-textarea" id="ar-excerpt" style="height:60px;">${item.excerpt||''}</textarea></div>
+        <div class="field"><label class="field-label">Titel</label><input class="f-input" id="ar-title" value="${escAttr(item.title||'')}"></div>
+        <div class="field"><label class="field-label">Dato</label><input class="f-input" id="ar-date" placeholder="F.eks. 12. maj 2026" value="${escAttr(item.date||'')}"></div>
+        <div class="field"><label class="field-label">Kort resumé (Uddrag)</label><textarea class="f-textarea" id="ar-excerpt" style="height:60px;">${escAttr(item.excerpt||'')}</textarea></div>
         <div class="field">
           <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
             <label class="field-label" style="margin-bottom:0;">Artikel Indhold</label>
@@ -2516,15 +2524,15 @@ function openArticleForm(isEdit, idx, item={}) {
           </select>
         </div>
         <div class="field"><label class="field-label">Læsetid (minutter)</label>
-          <input class="f-input" type="number" id="ar-reading-time" value="${item.reading_time||''}" placeholder="Auto">
+          <input class="f-input" type="number" id="ar-reading-time" value="${escAttr(item.reading_time||'')}" placeholder="Auto">
           <div class="field-hint">Lad stå tom for automatisk beregning</div>
         </div>
         <div class="field"><label class="field-label">Cover-billede</label>${createUploadZone('ar-cover','articles',item.cover||'')}</div>
         ${createPositionSelector('ar-cover-pos', item.cover_pos)}
-        <div class="field"><label class="field-label">Billede Alt-tekst</label><input class="f-input" id="ar-cover-alt" value="${item.cover_alt||''}"></div>
+        <div class="field"><label class="field-label">Billede Alt-tekst</label><input class="f-input" id="ar-cover-alt" value="${escAttr(item.cover_alt||'')}"></div>
         <div class="field" style="margin-top:16px; padding-top:16px; border-top:1px solid var(--border);">
           <label class="field-label" style="color:var(--blue);">SEO-Metabeskrivelse</label>
-          <textarea class="f-textarea" id="ar-meta-desc" style="height:80px; font-size:12px;" placeholder="Beskrivelse til Google (anbefalet 150-160 tegn)">${item.meta_desc||''}</textarea>
+          <textarea class="f-textarea" id="ar-meta-desc" style="height:80px; font-size:12px;" placeholder="Beskrivelse til Google (anbefalet 150-160 tegn)">${escAttr(item.meta_desc||'')}</textarea>
           <div class="field-hint">Hvis tom, bruges resuméet automatisk.</div>
         </div>
       </div>
