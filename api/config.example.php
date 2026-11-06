@@ -24,3 +24,9 @@ define('GEMINI_API_KEY', 'INDSÆT_DIN_GEMINI_API_KEY_HER');
 // Absolut sti til assets-mappen — bruges til sikkerhedsvalidering i save.php
 define('ASSETS_DIR', realpath(__DIR__ . '/../assets'));
 
+// Database (MySQL) — findes under Databaser i Simply's kontrolpanel.
+// Bruges af api/db.php. Del aldrig disse værdier — heller ikke med AI.
+define('DB_HOST', 'INDSÆT_HOST_HER');
+define('DB_NAME', 'INDSÆT_DATABASENAVN_HER');
+define('DB_USER', 'INDSÆT_BRUGERNAVN_HER');
+define('DB_PASS', 'INDSÆT_PASSWORD_HER');

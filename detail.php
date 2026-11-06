@@ -50,6 +50,18 @@ $company  = $item['company'] ?? $item['institution'] ?? '';
 $companyLine = $titleRaw !== '' ? trim(($role ? $role . ' @ ' : '') . $company) : $company;
 $period   = $item['period'] ?? '';
 $date     = $item['date'] ?? '';
+// Dansk dato ("5. maj 2026" / "januar 2026") -> ISO 8601 til Google. Ukendt format -> null (udelades).
+$isoDate = function ($s) {
+    $m = ['januar'=>1,'februar'=>2,'marts'=>3,'april'=>4,'maj'=>5,'juni'=>6,'juli'=>7,'august'=>8,'september'=>9,'oktober'=>10,'november'=>11,'december'=>12];
+    $s = trim(strtolower((string) $s)); // månedsnavne er rene a-z, så mbstring er ikke nødvendig
+    if (preg_match('/^(\d{1,2})\.?\s+([a-zæøå]+)\.?\s+(\d{4})$/u', $s, $x) && isset($m[$x[2]]) && checkdate($m[$x[2]], (int) $x[1], (int) $x[3])) {
+        return sprintf('%04d-%02d-%02d', $x[3], $m[$x[2]], $x[1]);
+    }
+    if (preg_match('/^([a-zæøå]+)\s+(\d{4})$/u', $s, $x) && isset($m[$x[1]])) {
+        return sprintf('%04d-%02d', $x[2], $m[$x[1]]);
+    }
+    return null;
+};
 $skills   = $item['skills'] ?? [];
 $bento    = $item['bento'] ?? [];
 
@@ -80,7 +92,7 @@ if ($item) {
             'headline' => $title,
             'description' => $metaDesc ?: null,
             'image'    => $cover ? $coverAbs : null,
-            'datePublished' => $date ?: null,
+            'datePublished' => $isoDate($date),
             'author'   => $person,
             'publisher'=> $person,
             'inLanguage' => 'da',
