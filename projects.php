@@ -282,7 +282,7 @@ foreach ($data['specialer'] ?? [] as $s):
       </div>
     </a>
 <?php endforeach; ?>
-    <div class="no-results" id="noResults">Ingen projekter i denne kategori endnu.</div>
+    <div class="no-results<?= $projects ? '' : ' show' ?>" id="noResults"><?= $projects ? '' : 'Ingen projekter i denne kategori endnu.' ?></div>
   </div>
 
   <!-- GLOBAL BENTO -->

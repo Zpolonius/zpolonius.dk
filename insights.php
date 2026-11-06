@@ -227,7 +227,7 @@ foreach ($articles as $a) {
       </div>
     </a>
 <?php endforeach; ?>
-    <div class="no-articles" id="noArticles">Ingen artikler endnu — kom tilbage snart.</div>
+    <div class="no-articles<?= $articles ? '' : ' show' ?>" id="noArticles"><?= $articles ? '' : 'Ingen artikler endnu — kom tilbage snart.' ?></div>
   </div>
 
   </main>

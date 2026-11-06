@@ -505,7 +505,7 @@ $recs = array_slice(array_values(array_filter($cv['recommendations'] ?? [], func
 
   <!-- KOMPETENCER -->
   <div class="section-header">
-    <h2 class="section-title">Kernerkompetencer</h2>
+    <h2 class="section-title">Kernekompetencer</h2>
   </div>
   <div class="skills-strip" id="skillsStrip">
     <!-- Rendered dynamically by JS -->
