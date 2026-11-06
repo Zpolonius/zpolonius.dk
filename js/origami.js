@@ -88,6 +88,9 @@
   const defs = svgEl('defs');
   defs.appendChild(grad);
   const trail = svgEl('path', { class: 'origami-trail' });
+  // Sporet bag fuglen tegnes ikke — fuglen flyver uden linje. Stien beholdes
+  // usynlig i DOM'en, fordi getTotalLength() bruges til at kalibrere ruten.
+  trail.style.stroke = 'none';
   route.append(defs, trail);
 
   // Fælles lag for rute og fugl: klipper alt, der stikker ud over skærmkanten
