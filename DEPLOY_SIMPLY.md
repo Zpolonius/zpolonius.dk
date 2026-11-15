@@ -1,5 +1,8 @@
 # Deploy-plan til Simply.com
 
+> **Nyeste opdatering:** [PR #29 — luk `data/` (2026-11-15)](#opdatering-pr-29--luk-data-2026-11-15)
+> står nederst i denne fil. Er PR #9–#12 allerede i luften, så spring direkte dertil.
+
 Én samlet plan for at få alt fra PR #9–#12 i luften: tilgængelighed, roadmap-
 beslutningerne, origami-tranen og oprydningen. Den erstatter de tidligere
 guides (`DEPLOY_SIMPLY_HERO.md`, `_A11Y.md` og `_ROADMAP.md`).
@@ -171,3 +174,83 @@ Fortæl mig, hvad der så forkert ud, så finder vi fejlen før næste forsøg.
   derfor skal versionsnummeret (`?v=…`) altid op, når de ændres.
 - **Statistik fra lokal test** kan aldrig komme med i en upload:
   `data/analytics.json` er udelukket i git.
+- **`data/` er lukket** (fra PR #29). Intet i mappen kan hentes direkte i
+  browseren. Siderne henter indhold via `api/content.php`, som fjerner alt, der
+  er skjult i admin.
+
+---
+
+## Opdatering: PR #29 — luk `data/` (2026-11-15)
+
+Lukker for direkte adgang til `data/`, så backups og skjult indhold
+(`visible: false`) ikke længere kan hentes af alle. Issue #14.
+
+**Tid:** ca. 15 minutter. **Hvornår:** når PR #29 er merget. Upload fra en
+frisk kopi af `main`.
+
+### 1. Tag backup
+
+På **mit.simply.com** → `zpolonius.dk` → **Filhåndtering** → `public_html`.
+Download til fx `backup-2026-11-15`:
+
+- hele mappen `data/`
+- `js/main.js`
+- alle `.html`- og `.php`-filer i webroden
+
+### 2. Upload — i præcis denne rækkefølge
+
+Rækkefølgen er vigtig: kommer `data/.htaccess` op først, kan siden ikke hente
+sit indhold, før de nye filer er på plads.
+
+**A. Nye filer i `api/`**
+
+- `api/content.php`
+- `api/public_content.php`
+
+**B. Overskriv i `js/` og webroden** (versionsnummeret er nu `main.js?v=1.5.1`,
+så alle sider skal med)
+
+- `js/main.js`
+- `about.php`, `cv.php`, `detail.php`, `insights.php`, `projects.php`,
+  `recommendations.php`
+- `index.html`, `contact.html`, `cv-print.html`, `vacation-reply.html`, `404.html`
+
+**C. Til sidst: `data/.htaccess`**
+
+Filen starter med punktum — slå "vis skjulte filer" til. Vil Simply ikke tage
+imod den, så upload den som `htaccess.txt` og omdøb den bagefter.
+
+### 3. Slet de gamle backups på serveren
+
+Slet disse tre filer i `data/`:
+
+- `content-2026-11-06.bak.json`
+- `content.oprydning.json`
+- `content.oprydning-2.json`
+
+### ⛔ Rør ikke
+
+- `data/content.json` — dit indhold
+- `data/analytics.json` — din statistik
+- `data/content.json.bak` — admins automatiske backup (stadig beskyttet)
+- `api/config.php` — dine kodeord
+- `tests/` — kun til udvikling, skal ikke uploades
+
+### 4. Test (5 min)
+
+I et **privat vindue**:
+
+1. `zpolonius.dk/data/content.json` → **403 Forbidden**
+2. `zpolonius.dk/data/content.oprydning.json` → **403** eller **404**
+3. `zpolonius.dk/api/content.php` → viser JSON-tekst
+4. Forsiden, `/projects`, `/about` og `/recommendations` viser indhold som
+   før — ingen "Hov! Indholdet kunne ikke indlæses"
+5. I dit normale vindue: **Ctrl+F5** og tjek forsiden igen
+6. `/admin` → log ind → tryk **Gem** én gang. Det skal lykkes uden fejl.
+
+### Hvis noget går galt
+
+1. Slet `data/.htaccess` på serveren. Det åbner `data/` igen midlertidigt.
+2. Upload filerne fra backuppen (ikke `data/content.json`, medmindre den er
+   ødelagt).
+3. Fortæl mig, hvad du så.

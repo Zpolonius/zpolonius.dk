@@ -14,13 +14,13 @@ function esc(str) {
 }
 
 /**
- * Centraliseret indlæsning af content.json med fejlhåndtering og caching
+ * Centraliseret indlæsning af indhold (api/content.php, skjulte elementer filtreret) med fejlhåndtering og caching
  */
 window.loadContentData = async function() {
   if (window.contentData) return window.contentData;
   
   try {
-    const response = await fetch('data/content.json?t=' + Date.now());
+    const response = await fetch('api/content.php?t=' + Date.now());
     if (!response.ok) throw new Error('Kunne ikke hente data-filen (HTTP ' + response.status + ')');
     const data = await response.json();
     window.contentData = data;
@@ -577,7 +577,7 @@ window.initGlobalBento = function() {
   if (window.contentData) {
     render(window.contentData);
   } else {
-    fetch('data/content.json?t=' + Date.now())
+    fetch('api/content.php?t=' + Date.now())
       .then(r => r.json())
       .then(data => {
         window.contentData = data;
