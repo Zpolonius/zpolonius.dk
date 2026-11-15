@@ -367,7 +367,7 @@ foreach ($faqs as $f) {
       return div.textContent || div.innerText || "";
     }
 
-    fetch('data/content.json?t=' + Date.now())
+    fetch('api/content.php?t=' + Date.now())
       .then(r => r.json())
       .then(data => {
         const om = data.om || {};
