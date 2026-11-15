@@ -582,7 +582,7 @@ $recs = array_slice(array_values(array_filter($cv['recommendations'] ?? [], func
   <footer id="global-footer" class="footer"></footer>
 
 
-  <script src="js/main.js?v=1.5.0"></script>
+  <script src="js/main.js?v=1.5.1"></script>
   <script>
     function esc(str) {
       if (!str) return '';

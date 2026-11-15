@@ -498,7 +498,7 @@ if ($item) {
   <div id="global-cta-bar"></div>
   <footer id="global-footer" class="footer"></footer>
 
-  <script src="js/main.js?v=1.5.0"></script>
+  <script src="js/main.js?v=1.5.1"></script>
   <script>
     const urlParams = new URLSearchParams(window.location.search);
     let itemId = urlParams.get('id');

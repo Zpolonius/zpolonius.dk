@@ -351,7 +351,7 @@ foreach ($faqs as $f) {
   <!-- CONTACT OVERLAY PLACEHOLDER REMOVED - NOW IN MAIN.JS -->
   <!-- BOTTOM NAV PLACEHOLDER REMOVED - NOW IN MAIN.JS -->
   
-  <script src="js/main.js?v=1.5.0"></script>
+  <script src="js/main.js?v=1.5.1"></script>
   <script>
     function esc(str) {
       if (!str) return '';
