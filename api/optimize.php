@@ -81,7 +81,7 @@ curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($payload));
 
 $response = curl_exec($ch);
 $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-curl_close($ch);
+unset($ch);
 
 if ($http_code !== 200) {
     echo json_encode(['ok' => false, 'error' => 'Fejl fra Gemini API (HTTP ' . $http_code . ')', 'details' => $response]);
