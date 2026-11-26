@@ -65,7 +65,8 @@ file_put_contents($rate_file, json_encode(array_values($attempts)));
 $raw  = file_get_contents('php://input');
 $data = json_decode($raw, true);
 
-session_start();
+require_once __DIR__ . '/session.php';
+start_session();
 
 if (!$data || empty($data['name']) || empty($data['email']) || empty($data['message'])) {
     echo json_encode(['ok' => false, 'error' => 'Udfyld venligst alle felter']); exit;
