@@ -26,9 +26,11 @@ check(
   !/http:\/\/[^\s'"]*\{\$ip\}/.test(trackPhp),
   'api/track.php sender ikke rå $ip over ukrypteret HTTP'
 );
+const storePath = path.join(root, 'api', 'analytics_store.php');
+const storePhp = fs.existsSync(storePath) ? fs.readFileSync(storePath, 'utf8') : '';
 check(
-  trackPhp.includes("'locations' => []"),
-  'api/track.php bevarer locations-nøglen i dagens datastruktur for bagudkompatibilitet'
+  trackPhp.includes("'locations' => []") || storePhp.includes("'locations'       => []") || storePhp.includes("'locations' => []"),
+  'api/track.php (via analytics_store.php) bevarer locations-nøglen i dagens datastruktur for bagudkompatibilitet'
 );
 
 // ---- 2. Bento-grid: Alle celler er lige store på desktop og mobil ----

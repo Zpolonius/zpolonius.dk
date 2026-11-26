@@ -4,8 +4,49 @@
  */
 header('Content-Type: application/json');
 
+require_once __DIR__ . '/analytics_store.php';
+
 // Definer sti til analytics filen
 $analyticsFile = __DIR__ . '/../data/analytics.json';
+
+// --- RATE LIMITING ---
+// Max 60 tracking-kald per IP per minut
+$ip = $_SERVER['REMOTE_ADDR'] ?? '0.0.0.0';
+$rateDir = sys_get_temp_dir() . '/zp_track_rate/';
+if (!is_dir($rateDir)) {
+    @mkdir($rateDir, 0700, true);
+}
+$rateFile = $rateDir . hash('sha256', $ip . 'zp_rate_2026') . '.json';
+$now = time();
+$rateWindow = 60;
+$rateMaxReqs = 60;
+
+$rateFp = @fopen($rateFile, 'c+');
+if ($rateFp && flock($rateFp, LOCK_EX)) {
+    rewind($rateFp);
+    $rateRaw = stream_get_contents($rateFp);
+    $attempts = json_decode($rateRaw ?: '[]', true);
+    if (!is_array($attempts)) {
+        $attempts = [];
+    }
+    $attempts = array_values(array_filter($attempts, fn($t) => is_int($t) && $t > $now - $rateWindow));
+    if (count($attempts) >= $rateMaxReqs) {
+        flock($rateFp, LOCK_UN);
+        fclose($rateFp);
+        http_response_code(429);
+        echo json_encode(['ok' => false, 'error' => 'For mange forespørgsler']);
+        exit;
+    }
+    $attempts[] = $now;
+    rewind($rateFp);
+    ftruncate($rateFp, 0);
+    fwrite($rateFp, json_encode($attempts));
+    fflush($rateFp);
+    flock($rateFp, LOCK_UN);
+    fclose($rateFp);
+} elseif ($rateFp) {
+    fclose($rateFp);
+}
 
 // Hent input data
 $raw = file_get_contents('php://input');
@@ -25,7 +66,6 @@ $page = (is_string($page) && preg_match('#^/[A-Za-z0-9._~%/-]{0,200}$#', $page))
 $event = (is_string($event) && preg_match('/^[a-z0-9][a-z0-9-]{0,63}$/', $event)) ? $event : null;
 
 // Hent besøgendes data til hashing (anonymisering)
-$ip = $_SERVER['REMOTE_ADDR'] ?? '0.0.0.0';
 $ua = $_SERVER['HTTP_USER_AGENT'] ?? 'unknown';
 $date = date('Y-m-d');
 
@@ -33,115 +73,107 @@ $date = date('Y-m-d');
 // Vi gemmer aldrig den rå IP.
 $visitorHash = hash('sha256', $ip . $ua . 'zp_salt_2026' . $date);
 
-// Hent eksisterende data eller start forfra
-if (file_exists($analyticsFile)) {
-    $data = json_decode(file_get_contents($analyticsFile), true);
-} else {
-    $data = [];
-}
+$maxUniqueVisitorsPerDay = 5000;
+$maxReferrersPerDay = 200;
 
-// Initialiser dagens data hvis den ikke findes
-if (!isset($data[$date])) {
-    $data[$date] = [
-        'unique_visitors' => [],
-        'page_views' => [],
-        'locations' => [],
-        'referrers' => [],
-        'ai_referrers' => [],
-        'devices' => [],
-        'events' => []
-    ];
-}
+$saved = zp_update_analytics($analyticsFile, function (array &$data) use (
+    $date,
+    $visitorHash,
+    $ua,
+    $page,
+    $event,
+    $maxUniqueVisitorsPerDay,
+    $maxReferrersPerDay
+) {
+    zp_ensure_analytics_day($data, $date);
 
-// Registrer unik besøgende hvis ikke set før i dag
-if (!in_array($visitorHash, $data[$date]['unique_visitors'])) {
-    $data[$date]['unique_visitors'][] = $visitorHash;
+    // Registrer unik besøgende hvis ikke set før i dag (med dagligt loft mod ubegrænset vækst)
+    if (
+        !in_array($visitorHash, $data[$date]['unique_visitors'], true) &&
+        count($data[$date]['unique_visitors']) < $maxUniqueVisitorsPerDay
+    ) {
+        $data[$date]['unique_visitors'][] = $visitorHash;
 
-    // 1. Hent Referrer (Hvor kommer de fra?)
-    $ref = $_SERVER['HTTP_REFERER'] ?? 'Direkte / Ukendt';
-    if ($ref !== 'Direkte / Ukendt') {
-        $refHost = parse_url($ref, PHP_URL_HOST);
-        if ($refHost) {
-            // Fjern 'www.' for at gruppere dem
-            $refHost = str_replace('www.', '', $refHost);
+        // 1. Hent Referrer (Hvor kommer de fra?)
+        $ref = $_SERVER['HTTP_REFERER'] ?? 'Direkte / Ukendt';
+        if ($ref !== 'Direkte / Ukendt') {
+            $refHost = parse_url($ref, PHP_URL_HOST);
+            if ($refHost) {
+                // Fjern 'www.' for at gruppere dem
+                $refHost = str_replace('www.', '', $refHost);
 
-            // Er kilden en AI-assistent / LLM? Så labeller vi trafikken særskilt.
-            // (Dette er rigtige mennesker, der klikker et link i et AI-svar.)
-            $aiSources = [
-                'chatgpt.com'           => 'ChatGPT',
-                'chat.openai.com'       => 'ChatGPT',
-                'perplexity.ai'         => 'Perplexity',
-                'gemini.google.com'     => 'Gemini',
-                'claude.ai'             => 'Claude',
-                'copilot.microsoft.com' => 'Microsoft Copilot',
-                'you.com'               => 'You.com',
-                'poe.com'               => 'Poe',
-                'phind.com'             => 'Phind',
-                'grok.com'              => 'Grok',
-                'x.ai'                  => 'Grok',
-            ];
-            foreach ($aiSources as $needle => $label) {
-                if (strpos($refHost, $needle) !== false) {
-                    if (!isset($data[$date]['ai_referrers'][$label])) {
-                        $data[$date]['ai_referrers'][$label] = 0;
+                // Er kilden en AI-assistent / LLM? Så labeller vi trafikken særskilt.
+                // (Dette er rigtige mennesker, der klikker et link i et AI-svar.)
+                $aiSources = [
+                    'chatgpt.com'           => 'ChatGPT',
+                    'chat.openai.com'       => 'ChatGPT',
+                    'perplexity.ai'         => 'Perplexity',
+                    'gemini.google.com'     => 'Gemini',
+                    'claude.ai'             => 'Claude',
+                    'copilot.microsoft.com' => 'Microsoft Copilot',
+                    'you.com'               => 'You.com',
+                    'poe.com'               => 'Poe',
+                    'phind.com'             => 'Phind',
+                    'grok.com'              => 'Grok',
+                    'x.ai'                  => 'Grok',
+                ];
+                foreach ($aiSources as $needle => $label) {
+                    if (strpos($refHost, $needle) !== false) {
+                        if (!isset($data[$date]['ai_referrers'][$label])) {
+                            $data[$date]['ai_referrers'][$label] = 0;
+                        }
+                        $data[$date]['ai_referrers'][$label]++;
+                        break;
                     }
-                    $data[$date]['ai_referrers'][$label]++;
-                    break;
+                }
+
+                $ref = $refHost;
+                // Hvis det er dit eget domæne, tæl det som interne links eller 'Direkte'
+                if (isset($_SERVER['HTTP_HOST']) && strpos($ref, $_SERVER['HTTP_HOST']) !== false) {
+                    $ref = 'Intern navigation';
                 }
             }
-
-            $ref = $refHost;
-            // Hvis det er dit eget domæne, tæl det som interne links eller 'Direkte'
-            if (isset($_SERVER['HTTP_HOST']) && strpos($ref, $_SERVER['HTTP_HOST']) !== false) {
-                $ref = 'Intern navigation';
-            }
         }
-    }
-    if (!isset($data[$date]['referrers'][$ref])) {
-        $data[$date]['referrers'][$ref] = 0;
-    }
-    $data[$date]['referrers'][$ref]++;
+        if (!isset($data[$date]['referrers'][$ref]) && count($data[$date]['referrers']) >= $maxReferrersPerDay) {
+            $ref = 'Andre';
+        }
+        if (!isset($data[$date]['referrers'][$ref])) {
+            $data[$date]['referrers'][$ref] = 0;
+        }
+        $data[$date]['referrers'][$ref]++;
 
-    // 3. Hent Enhedstype
-    $device = 'Desktop';
-    if (preg_match('/(tablet|ipad|playbook|silk)|(android(?!.*mobi))/i', $ua)) {
-        $device = 'Tablet';
-    } else if (preg_match('/Mobile|Android|iP(hone|od)|IEMobile|BlackBerry|Kindle|Silk-Accelerated|(hpw|web)OS|Opera M(obi|ini)/i', $ua)) {
-        $device = 'Mobil';
+        // 3. Hent Enhedstype
+        $device = 'Desktop';
+        if (preg_match('/(tablet|ipad|playbook|silk)|(android(?!.*mobi))/i', $ua)) {
+            $device = 'Tablet';
+        } else if (preg_match('/Mobile|Android|iP(hone|od)|IEMobile|BlackBerry|Kindle|Silk-Accelerated|(hpw|web)OS|Opera M(obi|ini)/i', $ua)) {
+            $device = 'Mobil';
+        }
+        if (!isset($data[$date]['devices'][$device])) {
+            $data[$date]['devices'][$device] = 0;
+        }
+        $data[$date]['devices'][$device]++;
     }
-    if (!isset($data[$date]['devices'][$device])) {
-        $data[$date]['devices'][$device] = 0;
+
+    // Tæl sidevisning (hvis det er en page ping)
+    if ($page) {
+        if (!isset($data[$date]['page_views'][$page])) {
+            $data[$date]['page_views'][$page] = 0;
+        }
+        $data[$date]['page_views'][$page]++;
     }
-    $data[$date]['devices'][$device]++;
-}
 
-// Tæl sidevisning (hvis det er en page ping)
-if ($page) {
-    if (!isset($data[$date]['page_views'][$page])) {
-        $data[$date]['page_views'][$page] = 0;
+    // Tæl event (hvis det er en event ping)
+    if ($event) {
+        if (!isset($data[$date]['events'][$event])) {
+            $data[$date]['events'][$event] = 0;
+        }
+        $data[$date]['events'][$event]++;
     }
-    $data[$date]['page_views'][$page]++;
-}
+});
 
-// Tæl event (hvis det er en event ping)
-if ($event) {
-    if (!isset($data[$date]['events'][$event])) {
-        $data[$date]['events'][$event] = 0;
-    }
-    $data[$date]['events'][$event]++;
-}
-
-// Gem data (kun de sidste 30 dage for at holde filen lille)
-ksort($data);
-if (count($data) > 30) {
-    $data = array_slice($data, -30, null, true);
-}
-
-// Vi gemmer hashes i unique_visitors midlertidigt for at tælle dem, 
-// men i den endelige rapport vil vi måske bare have antallet.
-// For nu gemmer vi dem for at kunne tjekke "uniqueness" over hele dagen.
-
-if (file_put_contents($analyticsFile, json_encode($data, JSON_PRETTY_PRINT)) === false) {
+if (!$saved) {
+    http_response_code(500);
     echo json_encode(['ok' => false, 'error' => 'Kunne ikke gemme statistik']);
     exit;
 }
