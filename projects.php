@@ -68,7 +68,7 @@ foreach ($projects as $p) {
 }
 ?>
   <script type="application/ld+json"><?= json_encode($collection, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) ?></script>
-  <link rel="stylesheet" href="css/style.css?v=1.5.0">
+  <link rel="stylesheet" href="css/style.css?v=1.5.2">
   <style>
     .page-hero {
       padding: 52px 40px 44px;
@@ -298,7 +298,7 @@ foreach ($data['specialer'] ?? [] as $s):
   <footer id="global-footer" class="footer"></footer>
 
 
-  <script src="js/main.js?v=1.5.1"></script>
+  <script src="js/main.js?v=1.5.2"></script>
   <script>
     function esc(str) {
       if (!str) return '';

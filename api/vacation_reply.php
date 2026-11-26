@@ -72,7 +72,8 @@ if (count($attempts) >= $max_reqs) {
 }
 
 // --- CSRF ---
-session_start();
+require_once __DIR__ . '/session.php';
+start_session();
 $raw  = file_get_contents('php://input');
 $data = json_decode($raw, true);
 

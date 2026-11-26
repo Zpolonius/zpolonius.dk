@@ -2,7 +2,8 @@
 /**
  * api/csrf.php — Genererer og returnerer et CSRF-token
  */
-session_start();
+require_once __DIR__ . '/session.php';
+start_session();
 
 header('Content-Type: application/json');
 
