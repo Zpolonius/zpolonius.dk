@@ -174,7 +174,7 @@ if ($item) {
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
   <link rel="manifest" href="/site.webmanifest" />
 
-  <link rel="stylesheet" href="css/style.css?v=1.5.0">
+  <link rel="stylesheet" href="css/style.css?v=1.5.2">
   <style>
     /* BREADCRUMB */
     .breadcrumb {
@@ -498,7 +498,7 @@ if ($item) {
   <div id="global-cta-bar"></div>
   <footer id="global-footer" class="footer"></footer>
 
-  <script src="js/main.js?v=1.5.1"></script>
+  <script src="js/main.js?v=1.5.2"></script>
   <script>
     const urlParams = new URLSearchParams(window.location.search);
     let itemId = urlParams.get('id');

@@ -632,13 +632,11 @@ textarea.input { resize: none; height: 100px; line-height: 1.6; }
 .bento-grid .accent-green .cell-title { color: var(--green); }
 
 /* ---- FREMHÆVEDE PROFILKORT (roadmap X5) ----
-   Sættes i admin ("Fremhæv boksen"). På computer er de dobbelt så brede,
-   så tre fremhævede + tre almindelige går op i tre rækker. Kanten og den
-   større titel følger kortets accentfarve (X4: blå = fag, grøn = menneske). */
-.bento-grid .bento-featured { grid-column: span 2; border-color: var(--border-blue); }
+   Sættes i admin ("Fremhæv boksen"). Kanten følger kortets accentfarve
+   (X4: blå = fag, grøn = menneske), mens alle kort i griddet beholder
+   samme størrelse. */
+.bento-grid .bento-featured { border-color: var(--border-blue); }
 .bento-grid .bento-featured.accent-green { border-color: var(--border-green); }
-.bento-grid .bento-featured .cell-title { font-size: 24px; line-height: 1.2; }
-.bento-grid .bento-featured .cell-sub { font-size: 16px; }
 
 @media (max-width: 768px) { 
   .bento-grid { grid-template-columns: 1fr 1fr; gap: 16px; padding: 0 20px; margin: 24px 0; } 
@@ -646,9 +644,6 @@ textarea.input { resize: none; height: 100px; line-height: 1.6; }
   .bento-grid .cell-title { font-size: 16px; }
   .bento-grid .cell-desc { font-size: 14px; }
   .bento-grid .cell-arrow { bottom: 16px; right: 16px; font-size: 12px; }
-  /* To kolonner: dobbelt bredde ville give huller — kant og titel bærer vægten */
-  .bento-grid .bento-featured { grid-column: auto; }
-  .bento-grid .bento-featured .cell-title { font-size: 19px; }
 }
 @media (max-width: 480px) { 
   .bento-grid { grid-template-columns: 1fr; } 
