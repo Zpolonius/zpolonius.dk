@@ -12,3 +12,8 @@ Thumbs.db
 
 # Runtime-data (besøgsstatistik) — må aldrig committes/deployes oven i produktionens
 data/analytics.json
+
+# Mellemfiler og backups i data/
+data/*.bak*
+data/content.*.json
+data/content (*).json
