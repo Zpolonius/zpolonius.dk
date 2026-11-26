@@ -57,24 +57,7 @@ if (!isset($data[$date])) {
 if (!in_array($visitorHash, $data[$date]['unique_visitors'])) {
     $data[$date]['unique_visitors'][] = $visitorHash;
 
-    // 1. Hent lokation (kun for nye unikke besøgende)
-    if ($ip !== '127.0.0.1' && $ip !== '::1' && $ip !== '0.0.0.0') {
-        try {
-            $locRaw = @file_get_contents("http://ip-api.com/json/{$ip}?fields=status,country,city");
-            if ($locRaw) {
-                $locData = json_decode($locRaw, true);
-                if (($locData['status'] ?? '') === 'success') {
-                    $locKey = $locData['country'] . ($locData['city'] ? ' (' . $locData['city'] . ')' : '');
-                    if (!isset($data[$date]['locations'][$locKey])) {
-                        $data[$date]['locations'][$locKey] = 0;
-                    }
-                    $data[$date]['locations'][$locKey]++;
-                }
-            }
-        } catch (Exception $e) {}
-    }
-
-    // 2. Hent Referrer (Hvor kommer de fra?)
+    // 1. Hent Referrer (Hvor kommer de fra?)
     $ref = $_SERVER['HTTP_REFERER'] ?? 'Direkte / Ukendt';
     if ($ref !== 'Direkte / Ukendt') {
         $refHost = parse_url($ref, PHP_URL_HOST);

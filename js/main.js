@@ -118,7 +118,8 @@ function showCookieBanner() {
       </p>
       <p class="cookie-details" id="cookieDetails" hidden>
         Jeg bruger cookies til at forbedre din oplevelse, herunder indlejret indhold fra Spotify.
-        Ved at klikke "Acceptér alle", giver du samtykke til dette. Vælger du "Kun nødvendige",
+        Anonymiseret besøgsstatistik registreres uden cookies og uden deling af IP-adresser med tredjeparter.
+        Ved at klikke "Acceptér alle", giver du samtykke til Spotify-indhold. Vælger du "Kun nødvendige",
         vises Spotify-indholdet ikke.
       </p>
     </div>
