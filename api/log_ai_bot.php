@@ -39,26 +39,16 @@
     }
     if ($label === null) return; // ikke en AI-bot — gør intet
 
+    require_once __DIR__ . '/analytics_store.php';
+
     $file = __DIR__ . '/../data/analytics.json';
     $date = date('Y-m-d');
 
-    $data = [];
-    if (is_readable($file)) {
-        $data = json_decode(@file_get_contents($file), true) ?: [];
-    }
-    if (!isset($data[$date])) {
-        $data[$date] = [
-            'unique_visitors' => [], 'page_views' => [], 'locations' => [],
-            'referrers' => [], 'ai_referrers' => [], 'devices' => [],
-            'events' => [], 'ai_bots' => []
-        ];
-    }
-    if (!isset($data[$date]['ai_bots'])) $data[$date]['ai_bots'] = [];
-    if (!isset($data[$date]['ai_bots'][$label])) $data[$date]['ai_bots'][$label] = 0;
-    $data[$date]['ai_bots'][$label]++;
-
-    ksort($data);
-    if (count($data) > 30) $data = array_slice($data, -30, null, true);
-
-    @file_put_contents($file, json_encode($data, JSON_PRETTY_PRINT), LOCK_EX);
+    zp_update_analytics($file, function (array &$data) use ($date, $label) {
+        zp_ensure_analytics_day($data, $date);
+        if (!isset($data[$date]['ai_bots'][$label])) {
+            $data[$date]['ai_bots'][$label] = 0;
+        }
+        $data[$date]['ai_bots'][$label]++;
+    });
 })();
