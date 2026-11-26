@@ -194,7 +194,7 @@ foreach ($models as $model) {
 
     $response  = curl_exec($ch);
     $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-    curl_close($ch);
+    unset($ch);
     $last_code = $http_code;
 
     if ($http_code !== 200) {

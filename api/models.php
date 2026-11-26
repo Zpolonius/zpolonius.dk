@@ -17,7 +17,7 @@ $ch = curl_init('https://generativelanguage.googleapis.com/v1beta/models?key=' .
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 $response = curl_exec($ch);
 $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-curl_close($ch);
+unset($ch);
 
 if ($http_code !== 200) {
     echo json_encode(['ok' => false, 'error' => 'Kunne ikke hente modeller fra Google API (HTTP ' . $http_code . ')']);
