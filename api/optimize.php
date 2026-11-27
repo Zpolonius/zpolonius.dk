@@ -18,7 +18,7 @@ $data = json_decode(file_get_contents('php://input'), true);
 $text = $data['text'] ?? '';
 $context = $data['context'] ?? 'generelt';
 $instruction = $data['instruction'] ?? ''; // Brugerens specifikke feedback/kommentar
-$model = $data['model'] ?? 'gemini-3.5-flash'; // Fallback: nyeste fungerende flash-model (rent 'gemini-3.1-flash' findes ikke / 404)
+$model = $data['model'] ?? 'gemini-4-hydrogen'; // Fallback: nyeste hurtige Gemini 4-model
 
 if (empty($text)) {
     echo json_encode(['ok' => false, 'error' => 'Ingen tekst at optimere']);
@@ -59,6 +59,7 @@ $prompt .= "\n\nFormater outputtet i ren HTML, så det passer direkte ind i en R
 Original tekst:
 " . $text;
 
+$model_id = preg_replace('/[^a-zA-Z0-9.-]/', '', $model);
 $payload = [
     'contents' => [
         ['parts' => [['text' => $prompt]]]
@@ -66,13 +67,12 @@ $payload = [
     'generationConfig' => [
         'temperature' => 0.7,
         'maxOutputTokens' => 2048,
-        // gemini-3.5-flash er en "thinking"-model; slå tænkning fra,
-        // ellers kan interne overvejelser lække ind i outputtet (samme mønster som vacation_reply.php).
-        'thinkingConfig' => ['thinkingBudget' => 0],
+        // Gemini 4 bruger thinkingLevel ('low' = lavest latency), mens ældre modeller bruger thinkingBudget.
+        'thinkingConfig' => (strpos($model_id, 'gemini-4') === 0)
+            ? ['thinkingLevel' => 'low']
+            : ['thinkingBudget' => 0],
     ]
 ];
-
-$model_id = preg_replace('/[^a-zA-Z0-9.-]/', '', $model);
 $ch = curl_init("https://generativelanguage.googleapis.com/v1beta/models/{$model_id}:generateContent?key=" . GEMINI_API_KEY);
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 curl_setopt($ch, CURLOPT_POST, true);

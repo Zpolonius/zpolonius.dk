@@ -706,7 +706,7 @@
     try {
       // Brug model fra modalen hvis den er åben, ellers site-indstilling
       const modalModel = document.getElementById('modalAIModel').value;
-      const aiModel = modalModel || data.site?.ai_model || 'gemini-3.5-flash';
+      const aiModel = modalModel || data.site?.ai_model || 'gemini-4-hydrogen';
 
       const response = await fetch('api/optimize.php', {
         method: 'POST',
@@ -748,7 +748,7 @@
       .then(res => {
         if (res.ok) {
           const sel = document.getElementById('modalAIModel');
-          const current = data.site?.ai_model || 'gemini-3.5-flash';
+          const current = data.site?.ai_model || 'gemini-4-hydrogen';
           sel.innerHTML = res.models.map(m => `<option value="${escAttr(m.id)}" ${m.id===current?'selected':''}>${escAttr(m.name)}</option>`).join('');
         }
       });
@@ -2102,7 +2102,7 @@ function renderSite(area) {
         <div class="field">
           <label class="field-label">AI Model</label>
           <select class="f-select" id="st-ai-model">
-            <option value="${escAttr(s.ai_model || 'gemini-3.5-flash')}">${escAttr(s.ai_model || 'gemini-3.5-flash')}</option>
+            <option value="${escAttr(s.ai_model || 'gemini-4-hydrogen')}">${escAttr(s.ai_model || 'gemini-4-hydrogen')}</option>
           </select>
           <div class="field-hint">Henter liste fra Google AI Studio...</div>
         </div>
@@ -2119,7 +2119,7 @@ function renderSite(area) {
       if (res.ok) {
         const sel = document.getElementById('st-ai-model');
         if (sel) {
-          sel.innerHTML = res.models.map(m => `<option value="${escAttr(m.id)}" ${m.id===(s.ai_model||'gemini-3.5-flash')?'selected':''}>${escAttr(m.name)} (${escAttr(m.id)})</option>`).join('');
+          sel.innerHTML = res.models.map(m => `<option value="${escAttr(m.id)}" ${m.id===(s.ai_model||'gemini-4-hydrogen')?'selected':''}>${escAttr(m.name)} (${escAttr(m.id)})</option>`).join('');
           const hint = sel.nextElementSibling;
           if (hint) hint.textContent = 'Liste over aktive tekst-modeller hentet.';
         }
