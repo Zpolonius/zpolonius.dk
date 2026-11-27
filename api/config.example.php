@@ -5,8 +5,8 @@
  * Omdøb denne fil til config.php og indsæt dine egne værdier.
  */
 
-// Generer et nyt password-hash ved at køre dette i terminalen:
-// php -r "echo password_hash('DIT_PASSWORD', PASSWORD_BCRYPT);"
+// Generer et nyt password-hash med scripts/generate-hash.php (læser kodeordet fra tastaturet).
+// Se DEPLOY_SIMPLY.md, afsnittet "Generer hash til admin-kodeordet".
 define('ADMIN_PASSWORD_HASH', 'INDSÆT_DIT_HASH_HER');
 
 // Session navn — gør det unikt
