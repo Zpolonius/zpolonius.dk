@@ -176,8 +176,16 @@ $payload = [
 ];
 
 // Fallback-kæde: prøv modellerne i rækkefølge til én svarer med tekst.
-// NB: rent 'gemini-3.1-flash' findes ikke (404) — den rigtige "3.1 flash" er -lite.
-$models = ['gemini-3.5-flash', 'gemini-3.1-flash-lite', 'gemini-2.5-flash'];
+// Gemini 4 Hydrogen først for hurtigst muligt svar, med 3.5/3.1/2.5 som fallback.
+$models = ['gemini-4-hydrogen', 'gemini-3.5-flash', 'gemini-3.1-flash-lite', 'gemini-2.5-flash'];
+if (defined('CONTENT_FILE') && is_readable(CONTENT_FILE)) {
+    $siteContent = json_decode(@file_get_contents(CONTENT_FILE), true);
+    $configuredModel = trim((string)($siteContent['site']['ai_model'] ?? ''));
+    if ($configuredModel !== '') {
+        array_unshift($models, $configuredModel);
+        $models = array_values(array_unique($models));
+    }
+}
 
 $reply       = '';
 $model_used  = '';
@@ -185,12 +193,19 @@ $last_code   = 0;
 
 foreach ($models as $model) {
     $model_id = preg_replace('/[^a-zA-Z0-9.-]/', '', $model);
+    $modelPayload = $payload;
+    // Gemini 4 bruger thinkingLevel ('low' = lavest latency), mens ældre modeller bruger thinkingBudget.
+    $modelPayload['generationConfig']['thinkingConfig'] = (strpos($model_id, 'gemini-4') === 0)
+        ? ['thinkingLevel' => 'low']
+        : ['thinkingBudget' => 0];
+
     $ch = curl_init("https://generativelanguage.googleapis.com/v1beta/models/{$model_id}:generateContent?key=" . GEMINI_API_KEY);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_POST, true);
     curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
-    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($payload));
-    curl_setopt($ch, CURLOPT_TIMEOUT, 30);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($modelPayload));
+    curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
+    curl_setopt($ch, CURLOPT_TIMEOUT, 15);
 
     $response  = curl_exec($ch);
     $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
