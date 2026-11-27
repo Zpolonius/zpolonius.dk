@@ -43,6 +43,31 @@ versioner uden advarsler.
 
 ---
 
+## Generer hash til admin-kodeordet (lokalt, 2 min)
+
+Kodeordet skal gemmes som en hash i `api/config.php`, ikke i klar tekst. Hashen
+laves lokalt med scriptet `scripts/generate-hash.php`. Det læser kodeordet fra
+tastaturet (STDIN) og skriver kun hashen ud. Kodeordet bliver aldrig gemt i en fil.
+
+Har du PHP installeret lokalt:
+
+```bash
+php scripts/generate-hash.php
+```
+
+Har du ikke PHP, men Docker, kan du køre det i en container (fra webprojektets mappe):
+
+```bash
+docker run --rm -it -v "$PWD/scripts:/s" php:8-cli php /s/generate-hash.php
+```
+
+På Windows PowerShell: erstat `"$PWD/scripts:/s"` med `"${PWD}/scripts:/s"`.
+
+Skriv kodeordet, tryk Enter, og kopier den hash, der kommer ud. Indsæt hashen i
+`api/config.php` som `ADMIN_PASSWORD_HASH`. Scriptet må ikke uploades til serveren.
+
+---
+
 ## Trin 3 — Upload 17 filer (10 min)
 
 Upload **alle** i samme omgang, og overskriv de gamle. Siderne henter nye
@@ -94,7 +119,7 @@ kopier, **sletter du indhold eller statistik**:
 - ❌ `data/analytics.json` — din besøgsstatistik
 - ❌ `api/config.php` — adgangskode og hemmeligheder
 
-Upload heller ikke `.md`-filerne, `generate-hash.php` eller mappen `.claude/`.
+Upload heller ikke `.md`-filerne, mappen `scripts/` (heri `generate-hash.php`) eller mappen `.claude/`.
 De bruges kun under udvikling.
 
 ---
