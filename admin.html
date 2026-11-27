@@ -316,6 +316,11 @@
       text-transform:uppercase; color:var(--faint); margin-bottom:6px;
     }
     .field-hint { font-size:10px; color:var(--faint); margin-top:4px; }
+    .spor-fieldset { border:0.5px solid var(--border); padding:10px 12px; margin:0 0 18px; min-width:0; }
+    .spor-fieldset legend { font-size:10px; letter-spacing:0.12em; text-transform:uppercase; color:var(--faint); padding:0 6px; }
+    .spor-option { display:flex; align-items:center; gap:8px; font-size:12px; color:var(--text); padding:4px 0; cursor:pointer; }
+    .spor-option input { accent-color:var(--blue); width:14px; height:14px; margin:0; cursor:pointer; }
+    .spor-option input:focus-visible { outline:2px solid var(--blue); outline-offset:2px; }
     .f-input, .f-select, .f-textarea {
       width:100%; background:var(--bg-input); border:0.5px solid var(--border);
       color:#fff; font-size:12px; font-family:'Inter',sans-serif;
@@ -641,6 +646,7 @@
   <span id="toastMsg">Gemt!</span>
 </div>
 
+<script src="js/spor.js?v=1"></script>
 <script src="https://cdn.jsdelivr.net/npm/quill@1.3.6/dist/quill.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
@@ -667,6 +673,16 @@
     const div = document.createElement('div');
     div.textContent = str;
     return div.innerHTML;
+  }
+  // Spor-felt (js/spor.js): fieldset med tre afkrydsningsfelter. prefix = pj / ar / rc.
+  function sporFieldset(prefix, item) {
+    const valgt = Spor.normalizeSpor(item && item.spor);
+    return `<fieldset class="spor-fieldset"><legend>Vis i spor</legend>${Spor.SPOR.map(s => `
+      <label class="spor-option"><input type="checkbox" id="${escAttr(prefix)}-spor-${escAttr(s)}" value="${escAttr(s)}" ${valgt.includes(s) ? 'checked' : ''}> ${esc(Spor.LABELS[s])}</label>`).join('')}
+      <div class="field-hint">Vælg ingen = vises i alle spor.</div></fieldset>`;
+  }
+  function readSpor(prefix) {
+    return Spor.SPOR.filter(s => { const el = document.getElementById(prefix + '-spor-' + s); return el && el.checked; });
   }
   // Escaper en værdi til brug i HTML — både som tekst og inde i attributter
   // (value="…", src="…"). Til forskel fra esc() escapes anførselstegn også,
@@ -1618,6 +1634,7 @@ function openProjectForm(isEdit, idx, item={}) {
             <option value="0" ${!isVis?'selected':''}>Skjult (Udkast)</option>
           </select>
         </div>
+        ${sporFieldset('pj', item)}
         <div class="field"><label class="field-label">Kompetencer / Keywords</label><input class="f-input" id="pj-skills" value="${(item.skills||[]).join(', ')}" placeholder="f.eks. AI, Scrum, React"><div class="field-hint">Kommasepareret</div></div>
         <div class="field"><label class="field-label">Link URL (valgfrit)</label><input class="f-input" id="pj-url" value="${escAttr(item.url||'')}" placeholder="https://..."></div>
         <div class="field"><label class="field-label">Cover-billede</label>${createUploadZone('pj-cover','projects',item.cover||'')}</div>
@@ -1658,6 +1675,7 @@ function openProjectForm(isEdit, idx, item={}) {
       visible: document.getElementById('pj-vis').value === "1",
       bento: hasBento ? bentoCells : undefined
     };
+    Spor.applySpor(obj, readSpor('pj'));
     if (isEdit) data.projects[idx] = obj;
     else data.projects.push(obj);
     closeForm(); updateBadges(); renderSection('projekter'); showToast(isEdit ? 'Projekt opdateret' : 'Projekt tilføjet');
@@ -1883,6 +1901,7 @@ function openRecForm(isEdit, idx, item={}) {
             <option value="0" ${!isVis?'selected':''}>Skjult (Udkast)</option>
           </select>
         </div>
+        ${sporFieldset('rc', item)}
         <div class="field"><label class="field-label">Keywords / Tags</label><input class="f-input" id="rc-skills" value="${(item.skills||[]).join(', ')}"></div>
         ${createLinkEditor(item.links)}
         <div class="field"><label class="field-label">Profilbillede (Avatar)</label>${createUploadZone('rc-photo','photo',item.photo||'')}</div>
@@ -1916,6 +1935,7 @@ function openRecForm(isEdit, idx, item={}) {
       visible:   document.getElementById('rc-vis').value === "1",
       category:  'recommendation'
     };
+    Spor.applySpor(obj, readSpor('rc'));
     if (isEdit) data.cv.recommendations[idx] = obj;
     else data.cv.recommendations.push(obj);
     closeForm(); updateBadges(); renderSection('anbefalinger'); showToast(isEdit ? 'Anbefaling opdateret' : 'Anbefaling tilføjet');
@@ -2523,6 +2543,7 @@ function openArticleForm(isEdit, idx, item={}) {
             <option value="0" ${!isVis?'selected':''}>Skjult (Udkast)</option>
           </select>
         </div>
+        ${sporFieldset('ar', item)}
         <div class="field"><label class="field-label">Læsetid (minutter)</label>
           <input class="f-input" type="number" id="ar-reading-time" value="${escAttr(item.reading_time||'')}" placeholder="Auto">
           <div class="field-hint">Lad stå tom for automatisk beregning</div>
@@ -2555,6 +2576,7 @@ function openArticleForm(isEdit, idx, item={}) {
       body: bodyContent,
       visible: document.getElementById('ar-vis').value === "1"
     };
+    Spor.applySpor(obj, readSpor('ar'));
     if(!data.articles) data.articles = [];
     if(isEdit) data.articles[idx] = obj;
     else data.articles.push(obj);
